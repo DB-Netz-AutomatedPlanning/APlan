@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,9 +20,62 @@ namespace APLan.Views
     /// </summary>
     public partial class EulynxValidator : Window
     {
+        private SolidColorBrush themeColor;
         public EulynxValidator()
         {
             InitializeComponent();
+            themeColor = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textbox = ((TextBox)sender);
+            if (File.Exists(textbox.Text))
+            {
+                textbox.Background = themeColor;
+                if (outputBox.Background== themeColor)
+                {
+                    activeDeactiveValidation(true);
+                }
+            }
+            else
+            {
+                textbox.Background = Brushes.White;
+                activeDeactiveValidation(false);
+            }
+        }
+
+        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
+        {
+            TextBox textbox = ((TextBox)sender);
+            if (Directory.Exists(textbox.Text))
+            {
+                textbox.Background = themeColor;
+                if (fileBox.Background == themeColor)
+                {
+                    activeDeactiveValidation(true);
+                }
+            }
+            else
+            {
+                textbox.Background = Brushes.White;
+                activeDeactiveValidation(false);
+            }
+        }
+        /// <summary>
+        /// activate and deactivate the validation button according to validitiy of input paths
+        /// </summary>
+        /// <param name="active"></param>
+        private void activeDeactiveValidation(bool active)
+        {
+            if (active==true)
+            {
+                validate.IsEnabled = true;
+            }
+            else
+            {
+                validate.IsEnabled = false;
+            }
         }
     }
 }

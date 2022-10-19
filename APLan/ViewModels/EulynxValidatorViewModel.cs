@@ -3,10 +3,8 @@ using APLan.Commands;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -31,6 +29,7 @@ namespace APLan.ViewModels
         private string xml;
         private string path;
         private string report;
+        private string report_rules;
         public string XML
         {
             get { return xml; }
@@ -58,8 +57,17 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string Report_rules
+        {
+            get { return report_rules; }
+            set
+            {
+                report_rules = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
-        
+
         #region commands
         public ICommand FilePath { get; set; }
         public ICommand OutputPath { get; set; }
@@ -97,23 +105,11 @@ namespace APLan.ViewModels
         public void ExecuteValidate(object parameter)
         {
             //define XSD validation version based on the imported xml.
-            Report= validate(XML);
-            //Schematron Validation
-            //add % exit at the end to close the cmd after finishing
-            //string command = $"/k cd validate & eulynx-validator.exe -s{xml} -o{path}";
-            //var myProcess = Process.Start("cmd.exe", command);
+            Report = validate(XML);
 
+            //validate according to the rules in German book.
+            Report_rules = RulesValidate(XML);
 
-            //Report += "Schematron Validation : " + "\n";
-
-            //while (!File.Exists(path + "/Schematron Report.txt"))
-            //{
-            //    Thread.Sleep(1000);
-            //}
-
-            //Report += File.ReadAllText(path+ "/Schematron Report.txt");
-
-            //File.Delete(path + "/Schematron Report.txt");
         }
         public void ExecuteCancel(object parameter)
         {
@@ -161,6 +157,18 @@ namespace APLan.ViewModels
             }
             
             return validationReport;
+        }
+        /// <summary>
+        /// Run the rule to be tested according to German book.
+        /// </summary>
+        /// <param name="euxmlPath"></param>
+        /// <returns></returns>
+        public string RulesValidate(string euxmlPath)
+        {
+            string report = null;
+            HelperClasses.RulesValidator validator = new HelperClasses.RulesValidator(euxmlPath);
+            report=validator.runRulesTesting();
+            return report;
         }
         #endregion
     }

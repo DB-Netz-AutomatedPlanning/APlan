@@ -1,19 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using APLan.ViewModels;
-using System.Collections;
 using System.IO;
 
 namespace APLan.Views
@@ -31,8 +19,6 @@ namespace APLan.Views
             themeColor = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
             InitializeComponent();
             fileType.SelectedIndex = 0;
-
-
         }
         private void fileType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
