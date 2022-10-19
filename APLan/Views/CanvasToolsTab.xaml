@@ -1,0 +1,179 @@
+﻿<UserControl x:Class="APLan.Views.CanvasToolsTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:APLan.Views"
+             xmlns:commands="clr-namespace:APLan.Commands"
+             xmlns:converters="clr-namespace:APLan.Converters" 
+             mc:Ignorable="d"  
+             DataContext="{StaticResource canvasToolsTabViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
+            <Border Background="{TemplateBinding Background}" 
+                x:Name="Bd" BorderBrush="black"
+                BorderThickness="1" CornerRadius="5">
+                <ScrollViewer x:Name="PART_ContentHost"/>
+            </Border>
+        </ControlTemplate>
+        <Style TargetType="Viewbox" x:Key="viewbox1">
+            <Setter Property="Width" Value="75"></Setter>
+            <Setter Property="Height" Value="75"></Setter>
+        </Style>
+        <Style TargetType="Viewbox" x:Key="viewbox2">
+            <Setter Property="Width" Value="200"></Setter>
+            <Setter Property="Height" Value="75"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        <Style x:Key="TextImageProperites" TargetType="Image">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="Border" x:Key="internalBorder">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+    </UserControl.Resources>
+
+    <WrapPanel Background="White" VerticalAlignment="Top">
+        <Viewbox Style="{StaticResource viewbox1}">
+            <Button x:Name="select"
+                ToolTip="Activate selection"
+                HorizontalAlignment="Center"
+                Background="{Binding SelectBrush, Mode=TwoWay}"
+                Command="{Binding SelectButton}" BorderBrush="White">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource multiBindingConverter}">
+                        <Binding ElementName="select"/>
+                        <Binding ElementName="drag"/>
+                        <Binding ElementName="move"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+                <Image Source="/Resources/Icons/select.png" Stretch="Fill"/>
+            </Button>
+        </Viewbox>
+        <Viewbox Style="{StaticResource viewbox1}">
+            <Button x:Name="move"
+                ToolTip="Move selected items"
+                HorizontalAlignment="Center"
+                Background="{Binding MoveBrush, Mode=TwoWay}"
+                Command="{Binding MoveButton}" BorderBrush="White">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource multiBindingConverter}">
+                        <Binding ElementName="move"/>
+                        <Binding ElementName="drag"/>
+                        <Binding ElementName="select"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+                <Image Source="/Resources/Icons/move.png" Stretch="Fill"/>
+            </Button>
+        </Viewbox>
+        <Viewbox Style="{StaticResource viewbox1}">
+        <Button x:Name="drag"   
+                HorizontalAlignment="Center"
+                ToolTip="Drag items"
+                Background="{Binding DragBrush, Mode=TwoWay}"
+                Command="{Binding DragButton}" BorderBrush="White">
+            <Image Source="/Resources/Icons/drag.png" Stretch="Fill"/>
+        </Button>
+        </Viewbox>
+        <Viewbox Style="{StaticResource viewbox1}">
+            <Image x:Name="Text"
+                Style="{StaticResource TextImageProperites}"
+                Source="/Resources/Icons/text.png" Stretch="Fill"
+                HorizontalAlignment="Center"
+                ToolTip="drag and drop a Text"
+                commands:MouseBehaviour.MouseDownCommand="{Binding Source={StaticResource canvasToolsTabViewModel}, Path=MouseDownCommand}">
+            </Image>
+        </Viewbox>
+        <!--<Button ToolTip="Delete selected items (press delete)"
+                HorizontalAlignment="Center">
+            <Image Source="/Resources/Icons/delete.png" Stretch="Fill"></Image>
+        </Button>-->
+        <Viewbox Style="{StaticResource viewbox2}">
+            <StackPanel>
+                <WrapPanel HorizontalAlignment="Center">
+
+                    <TextBox x:Name="rotateInput"
+                     Template="{StaticResource TextBoxBaseControlTemplate}"
+                     TextAlignment="Center"
+                     DataContext="{StaticResource drawViewModel}"
+                     Text="{Binding RotateTextBox}"
+                     Width="100"></TextBox>
+                    <Button x:Name="rotateSelection" 
+                    ToolTip="Rotate Selection"
+                    HorizontalAlignment="Center"
+                    DataContext="{StaticResource drawViewModel}"
+                    Command="{Binding RotateSelectionButton}">
+                        <Image Source="/Resources/Icons/rotate.png" Stretch="Fill"></Image>
+                    </Button>
+                </WrapPanel>
+                <Slider   x:Name="ItemRotateSlider"  
+                            Width="200"
+                            DataContext="{StaticResource drawViewModel}"
+                            Value="{Binding ElementName=rotateInput, Path=Text, Converter={StaticResource stringToDoubleconverter}}" Minimum="0" Maximum="360" SmallChange="1"
+                            commands:SliderBehaviour.ItemRotateSliderCommand="{Binding RotateItemSlider}"/>
+            </StackPanel>
+        </Viewbox>
+
+        <!--<StackPanel DataContext="{StaticResource drawViewModel}">
+                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBox x:Name="scaleInput"
+                          Width="100" 
+                         Text="{Binding ScaleTextBox}"/>
+                <Button x:Name="scale" 
+                         Margin="5" 
+                         ToolTip="Scale Selection" 
+                         HorizontalAlignment="Center">
+                        <Image Source="/Resources/Icons/scale.png" Stretch="Fill"></Image>
+                    </Button>
+                </WrapPanel>
+                <Slider   x:Name="ItemScaleSlider"  
+                            Width="200"
+                            Value="{Binding ElementName=scaleInput, Path=Text, Converter={StaticResource stringToDoubleconverter}}" Minimum="0.1" Maximum="10" SmallChange="0.1"
+                            commands:SliderBehaviour.ItemScaleSliderCommand="{Binding ScaleItemSlider}"/>
+            </StackPanel>-->
+        <Viewbox Style="{StaticResource viewbox2}">
+            <StackPanel>
+                <WrapPanel HorizontalAlignment="Center">
+                    <TextBlock
+                            x:Name="canvasRotationText"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource themeColor}"
+                            TextAlignment="Center"
+                            VerticalAlignment="Center"> Rotate Canvas</TextBlock>
+                    <TextBox x:Name="CanvasRotateText"
+                            Template="{StaticResource TextBoxBaseControlTemplate}"
+                            Width="100"   
+                            HorizontalAlignment="Center"
+                            Text="{Binding ElementName=canvasRotateSlider, Path=Value, Mode=TwoWay}">
+                    </TextBox>
+                </WrapPanel>
+                <Slider   x:Name="canvasRotateSlider"  
+                      Width="200"
+                      ValueChanged="canvasRotateSlider_ValueChanged"
+                      Minimum="0" Maximum="360" SmallChange="1"
+                      />
+                <!--Value="{Binding ElementName=CanvasRotateText, Path=Text, Converter={StaticResource stringToDoubleconverter}}" Minimum="0" Maximum="360" SmallChange="1"
+                            commands:SliderBehaviour.SliderCommand="{Binding RotateCanvasSlider}"/>-->
+            </StackPanel>
+        </Viewbox>
+
+    </WrapPanel>
+</UserControl>
