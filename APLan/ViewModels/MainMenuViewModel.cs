@@ -45,18 +45,15 @@ namespace APLan.ViewModels
         public ICommand ExitProgram { get; set; }
         public ICommand AboutWPF { get; set; }
         public ICommand Save { get; set; }
-
-
+        public ICommand SaveAs { get; set; }
 
         #endregion
 
         #region Constructor
         public MainMenuViewModel()
         {
-
-
-
             Save = new RelayCommand(ExecuteSave);
+            SaveAs = new RelayCommand(ExecuteSaveAs);
             NewProject = new RelayCommand(ExecuteNewProjectWindow);
             AddData = new RelayCommand(ExecuteAddDataWindow);
             PreviewData = new RelayCommand(ExecutePreviewData);
@@ -112,10 +109,24 @@ namespace APLan.ViewModels
         }
         public void ExecuteSave(object parameter)
         {
-            System.Windows.MessageBox.Show(DrawViewModel.toBeStored.Count.ToString());
+            SavePath = NewProjectViewModel.currentProjectPath+"/"+ NewProjectViewModel.currentProjectName;
+            saveAndSaveAs(SavePath);  
+        }
+        public void ExecuteSaveAs(object parameter)
+        {
             folderBrowserDialog1.ShowDialog();
             SavePath = folderBrowserDialog1.SelectedPath;
-
+            if (!SavePath.Equals(""))
+            {
+                saveAndSaveAs(SavePath);
+            } 
+        }
+        /// <summary>
+        /// Preform saving action for Save or SaveAs.
+        /// </summary>
+        /// <param name="SavePath"></param>
+        private void saveAndSaveAs(string SavePath)
+        {
             if (Directory.Exists(SavePath))
             {
                 List<CanvasObjectInformation> allInfo = new();
@@ -157,7 +168,7 @@ namespace APLan.ViewModels
                 if (ModelViewModel.eulynx != null)
                 {
                     var eulynxService = EulynxService.getInstance();
-                    eulynxService.serialization(ModelViewModel.eulynx, "", SavePath);      
+                    eulynxService.serialization(ModelViewModel.eulynx, "", SavePath);
                 }
 
 
@@ -174,7 +185,7 @@ namespace APLan.ViewModels
             }
             else
             {
-                System.Windows.MessageBox.Show("Saving Directory don't Exist");
+                System.Windows.MessageBox.Show("Saving directory don't Exist. Please create a project.");
             }
         }
 

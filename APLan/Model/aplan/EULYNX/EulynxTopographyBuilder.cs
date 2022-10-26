@@ -35,11 +35,10 @@ namespace aplan.eulynx
             var m = referUnit(rsmEntities, "meter");
             var km = referUnit(rsmEntities, "kilometer");
             var gon = referUnit(rsmEntities, "gon");
-
+           
             // accessing database
             using (var db = database.accessDB())
             {
-
                 // get collection
                 var collection = db.GetCollection<database.HorizontalAlignment>("HorizontalAlignments").FindAll();
 
@@ -54,6 +53,7 @@ namespace aplan.eulynx
                         case horizontalAlignmentType.Line:
                             var horizontalSegmentLine = new HorizontalSegmentLine
                             {
+                                
                                 id = generateUUID(),
                                 length = new Length { value = item.length, unit = m },
                                 initialAzimuth = new Angle { value = item.initialAzimuth, unit = gon },

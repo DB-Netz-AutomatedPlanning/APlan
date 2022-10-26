@@ -31,12 +31,12 @@
                     <Image Source="/Resources/Icons/open.png"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="_Import"
+            <!--<MenuItem Header="_Import"
                       IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=ImportButtonActive}">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/import.png"/>
                 </MenuItem.Icon>
-            </MenuItem>
+            </MenuItem>-->
             <MenuItem Header="_Save"  
                       IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=SaveButtonActive}"
                       Command="{Binding Save}">
@@ -44,28 +44,33 @@
                     <Image Source="/Resources/Icons/save.png"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <!--<MenuItem Header="_Save as"
-                      IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=SaveAsButtonActive}">
+            <MenuItem Header="_Save as"
+                      IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=SaveAsButtonActive}"
+                      Command="{Binding SaveAs}">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/save_as.png"/>
                 </MenuItem.Icon>
-            </MenuItem>-->
-            <MenuItem Header="_Print"
+            </MenuItem>
+            <!--<MenuItem Header="_Print"
                       IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=PrintButtonActive}"
                       Command="{Binding  Print}">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/printer.png"/>
                 </MenuItem.Icon>
-            </MenuItem>
+            </MenuItem>-->
             <MenuItem Header="_Exit"
                       Command="{Binding ExitProgram}"
                       CommandParameter="{Binding RelativeSource=
                                         {RelativeSource
                                         Mode=FindAncestor,
-                                        AncestorType={x:Type Window}}}"/>
+                                        AncestorType={x:Type Window}}}">
+                <MenuItem.Icon>
+                    <Image Source="/Resources/Icons/exit.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
         </MenuItem>
         <MenuItem Header="_Edit">
-            <MenuItem Header="_Undo"
+            <!--<MenuItem Header="_Undo"
                       IsEnabled="False">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/undo.png"/>
@@ -76,12 +81,14 @@
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/redo.png"/>
                 </MenuItem.Icon>
-            </MenuItem>
+            </MenuItem>-->
         </MenuItem>
         <MenuItem Header="_View">
-            <MenuItem Header="_XML-JSON" IsEnabled="False"/>
+            <!--<MenuItem Header="_XML-JSON" IsEnabled="False"/>-->
             <MenuItem Header="_Visualized Data"
                           Click="MenuItem_VisualizedData"/>
+            <MenuItem Header="_Canvas Content"
+                          Click="MenuItem_CanvasContent"/>
             <MenuItem Header="_Planning/Canvas tabs"
                           IsChecked="True"
                           Click="MenuItem_Planningtab"/>
@@ -90,26 +97,34 @@
                           Click="MenuItem_Symbols"/>
             <!--<MenuItem Header="_Object parameters">-->
             <MenuItem Name="SignalItem"
-                      Header="_Signal object info" 
+                      Header="_Planned Signals info" 
                       Click="MenuItem_Signal"/>
 
             <!--</MenuItem>-->
         </MenuItem>
         <MenuItem Header="_Tools">
-            <MenuItem Header="_Access Data">
+            <!--<MenuItem Header="_Access Data">
                 <MenuItem Header="_Add Data"  
                           Command="{Binding AddData}"/>
                 <MenuItem Header="_Preview Data" 
                           Command="{Binding PreviewData}"/>
                 <MenuItem Header="_Remove Data" 
                           Command="{Binding RemoveData}"/>
-            </MenuItem>
+            </MenuItem>-->
             <MenuItem Header="_EULYNX Validator" 
-                      Command="{Binding EulynxValidator}"/>
+                      Command="{Binding EulynxValidator}">
+                <MenuItem.Icon>
+                    <Image Source="/Resources/Icons/validate.png"></Image>
+                </MenuItem.Icon>
+            </MenuItem>
         </MenuItem>
         <MenuItem Header="_Help">
             <MenuItem Header="_About WPF"  
-                          Command="{Binding AboutWPF}"/>
+                      Command="{Binding AboutWPF}">
+                <MenuItem.Icon>
+                    <Image Source="/Resources/Icons/info.png"></Image>
+                </MenuItem.Icon>
+            </MenuItem>
         </MenuItem>
     </Menu>
 </UserControl>

@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using APLan.ViewModels;
 using System.IO;
+using APLan.HelperClasses;
 
 namespace APLan.Views
 {
@@ -11,15 +12,39 @@ namespace APLan.Views
     /// </summary>
     public partial class NewProjectWindow : Window
     {
+        #region attributes
         private NewProjectViewModel newprojectClass;
         private SolidColorBrush themeColor;
+
+        //hints getters and setters
+        private string ProjectNameHint { get; set;}
+        private string DirPathHint { get; set; }
+        private string JsonFilesHint { get; set; }
+        private string EuxmlFileHint { get; set; }
+        private string MdbFileHint { get; set; }
+        private string PpxmlFileHint { get; set; }
+        #endregion
+
+        #region constructor
         public NewProjectWindow()
         {
+
+            //define the hint to the user.
+            ProjectNameHint = "please enter a project name";
+            DirPathHint = "please select a project directory";
+            JsonFilesHint = "please select all .json/.geojson files";
+            EuxmlFileHint = "please select .Euxml file";
+            MdbFileHint = "please select single .Mdb file";
+            PpxmlFileHint = "please select single .PPXML file";
+
             newprojectClass = System.Windows.Application.Current.FindResource("newProjectViewModel") as NewProjectViewModel;
             themeColor = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
             InitializeComponent();
             fileType.SelectedIndex = 0;
         }
+        #endregion
+
+        #region logic
         private void fileType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (createProject != null)
@@ -65,12 +90,17 @@ namespace APLan.Views
         {
             if (Directory.Exists(@$"{directortPath.Text}"))
             {
-                directortPath.Background = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
-                newprojectClass.HelperHintProjectPath = Brushes.Black;
+                directortPath.Foreground = Brushes.Black;
+                directortPath.Background = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;   
+            }
+            else if (directortPath.Text.Equals(DirPathHint))
+            {
+                directortPath.Foreground = Brushes.Gray;
+                directortPath.Background = Brushes.White;
             }
             else
             {
-                newprojectClass.HelperHintProjectPath = Brushes.Gray;
+                directortPath.Foreground = Brushes.Black;
                 directortPath.Background = Brushes.White;
             }
             activateCreation();
@@ -78,15 +108,21 @@ namespace APLan.Views
 
         private void Tmdbtext_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (File.Exists(@$"{Tmdbtext.Text}"))
+            if (File.Exists(@$"{Tmdbtext.Text}") && Path.GetExtension(@$"{Tmdbtext.Text}").EqualsIgnoreCase(".mdb"))
             {
-                newprojectClass.HelperHintMdb = Brushes.Black;
+                Tmdbtext.Foreground = Brushes.Black;
                 Tmdbtext.Background = themeColor;
                 
             }
-            else
+            else if(Tmdbtext.Text.Equals(MdbFileHint))
             {
-                newprojectClass.HelperHintMdb = Brushes.Gray;
+                Tmdbtext.Foreground = Brushes.Gray;
+                Tmdbtext.Background = Brushes.White;
+
+            }
+            else if (!File.Exists(@$"{Tmdbtext.Text}") || !Path.GetExtension(@$"{Tmdbtext.Text}").EqualsIgnoreCase(".mdb"))
+            {
+                Tmdbtext.Foreground = Brushes.Black;
                 Tmdbtext.Background = Brushes.White;
             }
             activateCreation();
@@ -94,30 +130,40 @@ namespace APLan.Views
 
         private void euxmltext_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (File.Exists(@$"{euxmltext.Text}"))
+            if (File.Exists(@$"{euxmltext.Text}") && Path.GetExtension(@$"{euxmltext.Text}").EqualsIgnoreCase(".euxml"))
             {
-                euxmltext.Background = themeColor;
-                newprojectClass.HelperHintEuxml = Brushes.Black;
+                euxmltext.Foreground = Brushes.Black;
+                euxmltext.Background = themeColor;  
+            }
+            else if (euxmltext.Text.Equals(EuxmlFileHint))
+            {
+                euxmltext.Foreground = Brushes.Gray;
+                euxmltext.Background = Brushes.White;
             }
             else
             {
-                euxmltext.Background = Brushes.White;
-                newprojectClass.HelperHintEuxml = Brushes.Gray;
+                euxmltext.Foreground = Brushes.Black;
+                euxmltext.Background = Brushes.White;   
             }
             activateCreation();
         }
 
         private void projetName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!projetName.Text.Equals("please enter a project name") && !projetName.Text.Equals(""))
+            if (!projetName.Text.Equals(ProjectNameHint) && !projetName.Text.Equals(""))
             {
-                projetName.Background = themeColor;
-                newprojectClass.HelperHintProjectName = Brushes.Black;
+                projetName.Foreground = Brushes.Black;
+                projetName.Background = themeColor;     
+            }
+            else if (projetName.Text.Equals(ProjectNameHint))
+            {
+                projetName.Foreground = Brushes.Gray;
+                projetName.Background = Brushes.White;
             }
             else
             {
-                projetName.Background = Brushes.White;
-                newprojectClass.HelperHintProjectName = Brushes.Gray;
+                projetName.Foreground = Brushes.Black;
+                projetName.Background = Brushes.White; 
             }
             activateCreation();
         }
@@ -130,7 +176,7 @@ namespace APLan.Views
                 string [] fileNames = Json.Text.Split("+~+");
                 foreach (string file in fileNames)
                 {
-                    if (!file.Equals("") && !File.Exists(file))
+                    if (!file.Equals("") && !File.Exists(file) && (Path.GetExtension(file).EqualsIgnoreCase(".json")|| Path.GetExtension(file).EqualsIgnoreCase(".geojson")))
                     {
                         check = false;
                     }
@@ -170,13 +216,13 @@ namespace APLan.Views
                 check = checkAllJson();
                 if (check==true)
                 {
-                    Json.Background = themeColor;
-                    newprojectClass.HelperHintJsonFiles = Brushes.Black;
+                    Json.Foreground = Brushes.Black;
+                    Json.Background = themeColor;  
                 }
                 else
                 {
-                    Json.Background = Brushes.White;
-                    newprojectClass.HelperHintJsonFiles = Brushes.Gray;
+                    Json.Foreground = Brushes.Gray;
+                    Json.Background = Brushes.White;     
                 }  
             }
             activateCreation();
@@ -250,6 +296,25 @@ namespace APLan.Views
                 }
             }
         }
+        private void newProjectWindow_Loaded(object sender, System.EventArgs e)
+        {
+            //reset Hints
+            newprojectClass.ProjectName = ProjectNameHint;
+            newprojectClass.ProjectPath = DirPathHint;
+            newprojectClass.JsonFiles = JsonFilesHint;
+            newprojectClass.EUXML = EuxmlFileHint;
+            newprojectClass.MDB = MdbFileHint;
+            newprojectClass.PPXML = PpxmlFileHint;
 
+            //reset inputBackground
+            directortPath.Background = Brushes.White;
+            projetName.Background = Brushes.White;
+            Json.Background = Brushes.White;
+            Tmdbtext.Background = Brushes.White;
+            euxmltext.Background = Brushes.White;
+            ppxmltext.Background = Brushes.White;
+        }
+
+        #endregion
     }
 }

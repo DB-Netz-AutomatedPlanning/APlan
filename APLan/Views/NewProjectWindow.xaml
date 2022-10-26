@@ -8,7 +8,7 @@
         DataContext="{StaticResource newProjectViewModel}"
         x:Name="newProjectWindow"
         Title="New Project"
-        
+        Loaded="newProjectWindow_Loaded"
         Height="400" 
         Width="500"
         Icon="/Resources/Icons/new.png"
