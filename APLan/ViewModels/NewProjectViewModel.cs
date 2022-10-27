@@ -474,9 +474,7 @@ namespace APLan.ViewModels
                 //WelcomeVisibility = Visibility.Collapsed;
                 activateButtons();
                 createModel(parameters[0].ToString());
-            }
-            
-            
+            }   
         }
         public void ExecuteCancel(object parameter)
         {
@@ -678,6 +676,7 @@ namespace APLan.ViewModels
         /// <param name="f"></param>
         public void loadEuxml(string f)
         {
+            var EulynxValidatorViewModel = System.Windows.Application.Current.FindResource("EulynxValidatorViewModel") as EulynxValidatorViewModel;
             string report = EulynxValidatorViewModel.validate(f);
             if (report.Contains("Validation is Successful"))
             {
@@ -697,6 +696,9 @@ namespace APLan.ViewModels
                 Entwurfselement_UH_list,
                 Entwurfselement_UHPointsList,
                 gleisknotenList);
+
+                var planningTabViewModel = System.Windows.Application.Current.FindResource("planTabViewModel") as PlanningTabViewModel;
+                planningTabViewModel.extractMainSignals(ModelViewModel.eulynx);
             }
             else
             {

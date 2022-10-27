@@ -1,10 +1,13 @@
 ﻿using aplan.eulynx.validator;
 using APLan.Commands;
+//using java.nio.file.attribute;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -121,7 +124,7 @@ namespace APLan.ViewModels
         /// <param name="report"></param>
         /// <param name="xml"></param>
         /// <returns></returns>
-        public static string validate(string xml)
+        public string validate(string xml)
         {
             string validationReport="";
             if (File.Exists(xml)) // if the file exists only.
@@ -140,7 +143,6 @@ namespace APLan.ViewModels
                         }
                     }
                 }
-
                 //XSD validation
                 EulynxXmlValidator validator = EulynxXmlValidator.getInstance();
                 ArrayList ValidationVersion_NameSpace = validator.XSDvalidationVersionCheck(nameSpaces);
@@ -155,7 +157,7 @@ namespace APLan.ViewModels
                     validationReport += "File don't contain the required name spaces";
                 }
             }
-            
+            createReportFile(validationReport, Path+"/"+nameof(validationReport)+".txt");
             return validationReport;
         }
         /// <summary>
@@ -165,10 +167,30 @@ namespace APLan.ViewModels
         /// <returns></returns>
         public string RulesValidate(string euxmlPath)
         {
-            string report = null;
+            string RulesReport = null;
             HelperClasses.RulesValidator validator = new HelperClasses.RulesValidator(euxmlPath);
-            report=validator.runRulesTesting();
-            return report;
+            RulesReport = validator.runRulesTesting();
+            createReportFile(RulesReport, Path + "/" + nameof(RulesReport) + ".txt");
+            return RulesReport;
+        }
+        /// <summary>
+        /// Create a file to contain a report.
+        /// </summary>
+        /// <param name="report"></param>
+        /// <param name="filePath"></param>
+        public void createReportFile(string report, string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                using (FileStream fs = File.Create(filePath))
+                {
+                    // Add some text to file    
+                    Byte[] title = new UTF8Encoding(true).GetBytes(report);
+                    fs.Write(title, 0, title.Length);
+                }
+            }
+
         }
         #endregion
     }

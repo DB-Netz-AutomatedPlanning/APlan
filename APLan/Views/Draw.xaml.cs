@@ -1,7 +1,11 @@
-﻿using System.Windows;
+﻿using System.Drawing;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using APLan.ViewModels;
+using Point = System.Windows.Point;
+
 namespace APLan.Views
 {
     /// <summary>
@@ -21,47 +25,16 @@ namespace APLan.Views
         public static RowDefinition signalresultsRow;
 
         public static ItemsControl myKantenLines;
+
+        public static SolidColorBrush canvasGridColor;
         public Draw()
         {
             InitializeComponent();
             drawing = mycanvas;
             drawingScrollViewer = DrawingViewer;
-            //hostToDraw = hostCanvas;
-            //baseToDraw = baseCanvas;
-
-            ////remove
-            //System.Windows.Controls.PrintDialog printDlg = new System.Windows.Controls.PrintDialog();
-            //if (printDlg.ShowDialog() == true)
-
-            //{
-            //    //get selected printer capabilities
-
-            //    System.Printing.PrintCapabilities capabilities = printDlg.PrintQueue.GetPrintCapabilities(printDlg.PrintTicket);
-
-
-
-            //    //get scale of the print wrt to screen of WPF visual
-
-            //    double scale = Math.Min(capabilities.PageImageableArea.ExtentWidth / Views.Draw.drawing.Width, capabilities.PageImageableArea.ExtentHeight /
-
-            //                   Views.Draw.drawing.Height);
-            //    Views.Draw.drawing.LayoutTransform = new ScaleTransform(scale, scale);
-
-            //    Size sz = new Size(capabilities.PageImageableArea.ExtentWidth, capabilities.PageImageableArea.ExtentHeight);
-            //    Views.Draw.drawing.Measure(sz);
-
-            //    //Views.Draw.drawing.Arrange(new Rect(new Point(capabilities.PageImageableArea.OriginWidth, capabilities.PageImageableArea.OriginHeight), sz));
-
-            //    printDlg.PrintVisual(Views.Draw.drawing, "First Fit to Page WPF Print");
-            //}
-            ///
-
-
-
-
-            //visualizedDataColumn = this.VisualizedDataColumn;
             signalresultsRow = this.SignalOutput;
             myKantenLines = KantenLines;
+            canvasGridColor = System.Windows.Application.Current.Resources["gridColor"] as SolidColorBrush;
         }
         private void drawingCanvas_DragOver(object sender, DragEventArgs e)
         {

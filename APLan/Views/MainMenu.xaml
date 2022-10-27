@@ -82,12 +82,27 @@
                     <Image Source="/Resources/Icons/redo.png"/>
                 </MenuItem.Icon>
             </MenuItem>-->
+
+            <!--<MenuItem Header="_Redo"
+                      IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="/Resources/Icons/redo.png"/>
+                </MenuItem.Icon>
+            </MenuItem>-->
+
+            <MenuItem Header="_Canvas">
+                <MenuItem Header="Grid"
+                          IsChecked="True"
+                          Click="MenuItem_Grid_Click"></MenuItem>
+            </MenuItem>
         </MenuItem>
         <MenuItem Header="_View">
             <!--<MenuItem Header="_XML-JSON" IsEnabled="False"/>-->
-            <MenuItem Header="_Visualized Data"
+            <MenuItem     x:Name="visualizedDataItem"
+                          Header="_Visualized Data"
                           Click="MenuItem_VisualizedData"/>
-            <MenuItem Header="_Canvas Content"
+            <MenuItem     x:Name="canvasContentItem"
+                          Header="_Canvas Content"
                           Click="MenuItem_CanvasContent"/>
             <MenuItem Header="_Planning/Canvas tabs"
                           IsChecked="True"

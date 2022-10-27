@@ -34,9 +34,9 @@ namespace APLan.HelperClasses
             List<XmlNode> mainRsmSignalLocation = getmainRsmSignalLocation(mainRsmSignal);
             ArrayList mainSignalFrame_ids = getmainSignalFrame_ids(mainSignalFrame);
 
-            report += Rule_4_8(mainSignalFrame, mainSignalAsset, mainRsmSignal);
+            report += Rule_4_8(mainSignalFrame, mainSignalAsset, mainRsmSignal)+"\n";
 
-            report += Rule_4_3(mainRsmSignalLocation, mainRsmSignal);
+            report += Rule_4_3(mainRsmSignalLocation, mainRsmSignal) + "\n";
 
             return report;
         }

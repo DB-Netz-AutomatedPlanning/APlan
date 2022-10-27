@@ -1,6 +1,7 @@
 ﻿using APLan.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,9 @@ namespace APLan.Views
             else
             {
                 ((MenuItem)sender).IsChecked = true;
-                Panel.SetZIndex(MainWindow.visualized_Data,0);
+                Panel.SetZIndex(MainWindow.visualized_Data, 0);
+                Panel.SetZIndex(MainWindow.Canvas_Content, -1);
+                canvasContentItem.IsChecked = false;
             }
 
         }
@@ -54,6 +57,8 @@ namespace APLan.Views
             {
                 ((MenuItem)sender).IsChecked = true;
                 Panel.SetZIndex(MainWindow.Canvas_Content, 0);
+                Panel.SetZIndex(MainWindow.visualized_Data, -1);
+                visualizedDataItem.IsChecked = false;
             }
 
         }
@@ -64,7 +69,7 @@ namespace APLan.Views
             if (item.IsChecked)
             {
                 ((MenuItem)sender).IsChecked = false;
-                MainWindow.c0.Width = new GridLength(0, GridUnitType.Star);
+                MainWindow.c0.Width = new GridLength(1, GridUnitType.Star);
                 MainWindow.c1.Width = new GridLength(6, GridUnitType.Star);
                 MainWindow.c2.Width = new GridLength(0, GridUnitType.Star);
                 MainWindow.c3.Width = new GridLength(0.01, GridUnitType.Star);
@@ -72,7 +77,7 @@ namespace APLan.Views
             else
             {
                 ((MenuItem)sender).IsChecked = true;
-                MainWindow.c0.Width = new GridLength(0, GridUnitType.Star);
+                MainWindow.c0.Width = new GridLength(1, GridUnitType.Star);
                 MainWindow.c1.Width = new GridLength(5, GridUnitType.Star);
                 MainWindow.c2.Width = new GridLength(0.01, GridUnitType.Star);
                 MainWindow.c3.Width = new GridLength(1, GridUnitType.Star);
@@ -114,6 +119,21 @@ namespace APLan.Views
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void MenuItem_Grid_Click(object sender, RoutedEventArgs e)
+        {
+            var menuItem = (MenuItem)sender;
+            if (menuItem.IsChecked)
+            {
+                System.Windows.Application.Current.Resources["gridColor"] = new SolidColorBrush(Colors.Transparent);
+                menuItem.IsChecked = false;
+            }
+            else
+            {
+                System.Windows.Application.Current.Resources["gridColor"] = new SolidColorBrush(Colors.Gray);
+                menuItem.IsChecked = true;
+            }
         }
     }
 }

@@ -121,6 +121,33 @@ namespace APLan.Views
             validatorViewModel.Report = "";
             validatorViewModel.Report_rules = "";
         }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var box = (TextBox)sender;
+            //remove content only if a hint is there.
+            if (box.Text.Contains("please"))
+            {
+                ((TextBox)sender).Text = "";
+            }
+        }
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var box = (TextBox)sender;
+            //check if the box has no input yet.
+            if (box.Text.Equals(""))
+            {
+                switch (box.Name)
+                {
+                    case nameof(fileBox):
+                        fileBox.Text = FilePathHint;
+                        break;
+                    case nameof(outputBox):
+                        outputBox.Text = OutputPathHint;
+                        break;
+                }
+            }
+        }
         #endregion
     }
 }

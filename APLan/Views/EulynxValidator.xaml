@@ -16,6 +16,8 @@
             <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="20"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <EventSetter Event="GotFocus" Handler="TextBox_GotFocus"></EventSetter>
+            <EventSetter Event="LostFocus" Handler="TextBox_LostFocus"></EventSetter>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"></Setter>

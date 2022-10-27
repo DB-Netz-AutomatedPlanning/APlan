@@ -42,7 +42,7 @@ namespace APLan.ViewModels
         private double xdiff;
         private double ydiff;
         private Point OldPoint = new Point(double.NegativeInfinity, double.NegativeInfinity);
-
+        private SolidColorBrush gridColor;
         private double _rotateItems = 0;
         private double canvasScale = 1;
         private double gridThicnkess = 0.5;
@@ -179,6 +179,16 @@ namespace APLan.ViewModels
             }
         }
 
+        public SolidColorBrush GridColor
+        {
+            get => gridColor;
+            set
+            {
+                gridColor = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion
 
         #region constructor
@@ -203,13 +213,16 @@ namespace APLan.ViewModels
             SignalSize = 10;
 
             RotateSelectionButton = new RelayCommand(rotateSelection);
-            
-            
+            GridColorActivation = new RelayCommand(ExecuteGridColorActivation);
+            GridColor = Brushes.Gray;
 
         }
         #endregion
 
         #region commands
+
+        public ICommand GridColorActivation { get; set; }
+
         private ICommand _MouseleftButtonDownCommand;
         private ICommand _MouserightButtonDownCommand;
         private ICommand _MouseMiddleDownCommand;
@@ -221,8 +234,6 @@ namespace APLan.ViewModels
         private ICommand _RotateItemSlider { get; set; }
         private ICommand _ScaleItemSlider { get; set; }
         public ICommand RotateSelectionButton { get; set; }
-
-        
         public ICommand KeyDownForMainWindow
         {
             get
@@ -335,8 +346,11 @@ namespace APLan.ViewModels
         }
 
 
+
+
+
         #endregion
- 
+
         #region mouse events logic
         /// <summary>
         /// logic whenever the mouse is moving. applied on the base canvas for hitTesting.
@@ -362,11 +376,11 @@ namespace APLan.ViewModels
 
             //update the mouse coordinates.
 
-            //Xlocation = ((e.GetPosition(element).X - canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.X).ToString();
-            //Ylocation = ((-e.GetPosition(element).Y + canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.Y).ToString();
+            Xlocation = ((e.GetPosition(element).X - canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.X).ToString();
+            Ylocation = ((-e.GetPosition(element).Y + canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.Y).ToString();
 
-            Xlocation = (e.GetPosition(element).X).ToString();
-            Ylocation = (e.GetPosition(element).Y).ToString();
+            //Xlocation = (e.GetPosition(element).X).ToString();
+            //Ylocation = (e.GetPosition(element).Y).ToString();
 
             //dragging
             if (tool == SelectedTool.Drag && e.LeftButton == MouseButtonState.Pressed)
@@ -952,6 +966,11 @@ namespace APLan.ViewModels
             Canvas.SetLeft(e, 0);
             Canvas.SetTop(e, 0);
             //canvas.Children.Add(e);
+        }
+
+        public void ExecuteGridColorActivation(object parameter)
+        {
+            var item= (MenuItem)parameter;
         }
         #endregion
 

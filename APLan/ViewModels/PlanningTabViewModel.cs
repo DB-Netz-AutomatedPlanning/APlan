@@ -96,7 +96,7 @@ namespace APLan.ViewModels
                 etcs = true;
                 eulynxService.plan(EulynxObject, dataBase, etcs);
                 extractMainSignals(EulynxObject);
-                extractOnTrackSignals(EulynxObject, dataBase);
+                extractOnTrackSignals(EulynxObject);
             }
             else
             {
@@ -186,7 +186,7 @@ namespace APLan.ViewModels
             }
         }
 
-        public void extractOnTrackSignals(EulynxDataPrepInterface EulynxObject,Database dataBase)
+        public void extractOnTrackSignals(EulynxDataPrepInterface EulynxObject)
         {
             var dataPrepEntities = EulynxObject.hasDataContainer.First().ownsDataPrepEntities;
             List<Unit> units = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesUnit;
@@ -223,7 +223,7 @@ namespace APLan.ViewModels
                 var element = spotLoc.associatedNetElements[0].netElement;
                 PositioningNetElement netElement = netElements.Find(x => x.id.Equals(element.@ref));
                 aplan.database.NetElement dataBaseElement = null;
-                using (var liteDB = dataBase.accessDB())
+                using (var liteDB = ModelViewModel.db.accessDB())
                 {
                     dataBaseElement = (liteDB).GetCollection<aplan.database.NetElement>("NetElements").Find(x => x.id == element.@ref).FirstOrDefault();
                 }

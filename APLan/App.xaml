@@ -8,9 +8,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
-
-
+        <SolidColorBrush x:Key="gridColor">gray</SolidColorBrush>
         <SolidColorBrush x:Key="themeColor">#cc54f4</SolidColorBrush>
         <Style TargetType="ScrollBar">
             <Setter Property="Background" Value="white"/>
