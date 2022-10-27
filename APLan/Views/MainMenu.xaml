@@ -85,9 +85,11 @@
         </MenuItem>
         <MenuItem Header="_View">
             <!--<MenuItem Header="_XML-JSON" IsEnabled="False"/>-->
-            <MenuItem Header="_Visualized Data"
+            <MenuItem     x:Name="visualizedDataItem"
+                          Header="_Visualized Data"
                           Click="MenuItem_VisualizedData"/>
-            <MenuItem Header="_Canvas Content"
+            <MenuItem     x:Name="canvasContentItem"
+                          Header="_Canvas Content"
                           Click="MenuItem_CanvasContent"/>
             <MenuItem Header="_Planning/Canvas tabs"
                           IsChecked="True"

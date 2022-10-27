@@ -362,11 +362,11 @@ namespace APLan.ViewModels
 
             //update the mouse coordinates.
 
-            //Xlocation = ((e.GetPosition(element).X - canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.X).ToString();
-            //Ylocation = ((-e.GetPosition(element).Y + canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.Y).ToString();
+            Xlocation = ((e.GetPosition(element).X - canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.X).ToString();
+            Ylocation = ((-e.GetPosition(element).Y + canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.Y).ToString();
 
-            Xlocation = (e.GetPosition(element).X).ToString();
-            Ylocation = (e.GetPosition(element).Y).ToString();
+            //Xlocation = (e.GetPosition(element).X).ToString();
+            //Ylocation = (e.GetPosition(element).Y).ToString();
 
             //dragging
             if (tool == SelectedTool.Drag && e.LeftButton == MouseButtonState.Pressed)

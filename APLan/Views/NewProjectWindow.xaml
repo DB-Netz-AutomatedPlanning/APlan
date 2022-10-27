@@ -26,6 +26,8 @@
             <Setter Property="Foreground" Value="Gray"></Setter>
             <Setter Property="Margin" Value="2"></Setter>
             <Setter Property="Template" Value="{StaticResource TextBoxBaseControlTemplate}"></Setter>
+            <EventSetter Event="GotFocus" Handler="TextBox_GotFocus"></EventSetter>
+            <EventSetter Event="LostFocus" Handler="TextBox_LostFocus"></EventSetter>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="2"></Setter>
@@ -33,7 +35,6 @@
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"></Setter>
                 </Style>
-
             </Style.Resources>
         </Style>
 
@@ -74,7 +75,7 @@
         <!--content Right-->
         <TextBox 
                 Template="{StaticResource TextBoxBaseControlTemplate}"
-                 x:Name="projetName"
+                 x:Name="projectNameBox"
                  Height="30" 
                  Grid.Row="0" 
                  Grid.Column="1"
@@ -87,7 +88,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="directortPath" 
+            <TextBox x:Name="directortPathBox" 
                      Grid.Column="0"
                      TextChanged="directortPath_TextChanged"
                      HorizontalAlignment="Stretch" 
@@ -120,7 +121,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox x:Name="Json"  
+            <TextBox x:Name="jsonFilesBox"  
                        Grid.Column="0" 
                        HorizontalAlignment="Stretch" 
                        VerticalAlignment="Stretch"
@@ -141,7 +142,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox  x:Name="Tmdbtext"  
+            <TextBox  x:Name="mdbFileBox"  
                         Grid.Column="0" 
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch"
@@ -162,7 +163,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox  x:Name="euxmltext"  
+            <TextBox  x:Name="euxmlFileBox"  
                         Grid.Column="0" 
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch"
@@ -183,7 +184,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBox  x:Name="ppxmltext"  
+            <TextBox  x:Name="ppxmlFileBox"  
                         Grid.Column="0" 
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch"

@@ -38,6 +38,8 @@ namespace APLan.Views
             {
                 ((MenuItem)sender).IsChecked = true;
                 Panel.SetZIndex(MainWindow.visualized_Data,0);
+                Panel.SetZIndex(MainWindow.Canvas_Content, -1);
+                canvasContentItem.IsChecked = false;
             }
 
         }
@@ -54,6 +56,8 @@ namespace APLan.Views
             {
                 ((MenuItem)sender).IsChecked = true;
                 Panel.SetZIndex(MainWindow.Canvas_Content, 0);
+                Panel.SetZIndex(MainWindow.visualized_Data, -1);
+                visualizedDataItem.IsChecked = false;
             }
 
         }
@@ -64,7 +68,7 @@ namespace APLan.Views
             if (item.IsChecked)
             {
                 ((MenuItem)sender).IsChecked = false;
-                MainWindow.c0.Width = new GridLength(0, GridUnitType.Star);
+                MainWindow.c0.Width = new GridLength(1, GridUnitType.Star);
                 MainWindow.c1.Width = new GridLength(6, GridUnitType.Star);
                 MainWindow.c2.Width = new GridLength(0, GridUnitType.Star);
                 MainWindow.c3.Width = new GridLength(0.01, GridUnitType.Star);
@@ -72,7 +76,7 @@ namespace APLan.Views
             else
             {
                 ((MenuItem)sender).IsChecked = true;
-                MainWindow.c0.Width = new GridLength(0, GridUnitType.Star);
+                MainWindow.c0.Width = new GridLength(1, GridUnitType.Star);
                 MainWindow.c1.Width = new GridLength(5, GridUnitType.Star);
                 MainWindow.c2.Width = new GridLength(0.01, GridUnitType.Star);
                 MainWindow.c3.Width = new GridLength(1, GridUnitType.Star);

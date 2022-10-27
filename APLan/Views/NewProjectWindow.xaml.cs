@@ -88,92 +88,92 @@ namespace APLan.Views
 
         private void directortPath_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Directory.Exists(@$"{directortPath.Text}"))
+            if (Directory.Exists(@$"{directortPathBox.Text}"))
             {
-                directortPath.Foreground = Brushes.Black;
-                directortPath.Background = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;   
+                directortPathBox.Foreground = Brushes.Black;
+                directortPathBox.Background = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;   
             }
-            else if (directortPath.Text.Equals(DirPathHint))
+            else if (directortPathBox.Text.Equals(DirPathHint))
             {
-                directortPath.Foreground = Brushes.Gray;
-                directortPath.Background = Brushes.White;
+                directortPathBox.Foreground = Brushes.Gray;
+                directortPathBox.Background = Brushes.White;
             }
             else
             {
-                directortPath.Foreground = Brushes.Black;
-                directortPath.Background = Brushes.White;
+                directortPathBox.Foreground = Brushes.Black;
+                directortPathBox.Background = Brushes.White;
             }
             activateCreation();
         }
 
         private void Tmdbtext_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (File.Exists(@$"{Tmdbtext.Text}") && Path.GetExtension(@$"{Tmdbtext.Text}").EqualsIgnoreCase(".mdb"))
+            if (File.Exists(@$"{mdbFileBox.Text}") && Path.GetExtension(@$"{mdbFileBox.Text}").EqualsIgnoreCase(".mdb"))
             {
-                Tmdbtext.Foreground = Brushes.Black;
-                Tmdbtext.Background = themeColor;
+                mdbFileBox.Foreground = Brushes.Black;
+                mdbFileBox.Background = themeColor;
                 
             }
-            else if(Tmdbtext.Text.Equals(MdbFileHint))
+            else if(mdbFileBox.Text.Equals(MdbFileHint))
             {
-                Tmdbtext.Foreground = Brushes.Gray;
-                Tmdbtext.Background = Brushes.White;
+                mdbFileBox.Foreground = Brushes.Gray;
+                mdbFileBox.Background = Brushes.White;
 
             }
-            else if (!File.Exists(@$"{Tmdbtext.Text}") || !Path.GetExtension(@$"{Tmdbtext.Text}").EqualsIgnoreCase(".mdb"))
+            else if (!File.Exists(@$"{mdbFileBox.Text}") || !Path.GetExtension(@$"{mdbFileBox.Text}").EqualsIgnoreCase(".mdb"))
             {
-                Tmdbtext.Foreground = Brushes.Black;
-                Tmdbtext.Background = Brushes.White;
+                mdbFileBox.Foreground = Brushes.Black;
+                mdbFileBox.Background = Brushes.White;
             }
             activateCreation();
         }
 
         private void euxmltext_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (File.Exists(@$"{euxmltext.Text}") && Path.GetExtension(@$"{euxmltext.Text}").EqualsIgnoreCase(".euxml"))
+            if (File.Exists(@$"{euxmlFileBox.Text}") && Path.GetExtension(@$"{euxmlFileBox.Text}").EqualsIgnoreCase(".euxml"))
             {
-                euxmltext.Foreground = Brushes.Black;
-                euxmltext.Background = themeColor;  
+                euxmlFileBox.Foreground = Brushes.Black;
+                euxmlFileBox.Background = themeColor;  
             }
-            else if (euxmltext.Text.Equals(EuxmlFileHint))
+            else if (euxmlFileBox.Text.Equals(EuxmlFileHint))
             {
-                euxmltext.Foreground = Brushes.Gray;
-                euxmltext.Background = Brushes.White;
+                euxmlFileBox.Foreground = Brushes.Gray;
+                euxmlFileBox.Background = Brushes.White;
             }
             else
             {
-                euxmltext.Foreground = Brushes.Black;
-                euxmltext.Background = Brushes.White;   
+                euxmlFileBox.Foreground = Brushes.Black;
+                euxmlFileBox.Background = Brushes.White;   
             }
             activateCreation();
         }
 
         private void projetName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!projetName.Text.Equals(ProjectNameHint) && !projetName.Text.Equals(""))
+            if (!projectNameBox.Text.Equals(ProjectNameHint) && !projectNameBox.Text.Equals(""))
             {
-                projetName.Foreground = Brushes.Black;
-                projetName.Background = themeColor;     
+                projectNameBox.Foreground = Brushes.Black;
+                projectNameBox.Background = themeColor;     
             }
-            else if (projetName.Text.Equals(ProjectNameHint))
+            else if (projectNameBox.Text.Equals(ProjectNameHint))
             {
-                projetName.Foreground = Brushes.Gray;
-                projetName.Background = Brushes.White;
+                projectNameBox.Foreground = Brushes.Gray;
+                projectNameBox.Background = Brushes.White;
             }
             else
             {
-                projetName.Foreground = Brushes.Black;
-                projetName.Background = Brushes.White; 
+                projectNameBox.Foreground = Brushes.Black;
+                projectNameBox.Background = Brushes.White; 
             }
             activateCreation();
         }
 
         private void Json_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (!Json.Text.Equals(""))
+            if (!jsonFilesBox.Text.Equals(""))
             {
                 bool check = true;
-                string [] fileNames = Json.Text.Split("+~+");
+                string [] fileNames = jsonFilesBox.Text.Split("+~+");
                 foreach (string file in fileNames)
                 {
                     if (!file.Equals("") && !File.Exists(file) && (Path.GetExtension(file).EqualsIgnoreCase(".json")|| Path.GetExtension(file).EqualsIgnoreCase(".geojson")))
@@ -211,18 +211,17 @@ namespace APLan.Views
                                 break;
                         }
                     }
-                    
                 }
                 check = checkAllJson();
                 if (check==true)
                 {
-                    Json.Foreground = Brushes.Black;
-                    Json.Background = themeColor;  
+                    jsonFilesBox.Foreground = Brushes.Black;
+                    jsonFilesBox.Background = themeColor;  
                 }
                 else
                 {
-                    Json.Foreground = Brushes.Gray;
-                    Json.Background = Brushes.White;     
+                    jsonFilesBox.Foreground = Brushes.Gray;
+                    jsonFilesBox.Background = Brushes.White;     
                 }  
             }
             activateCreation();
@@ -267,22 +266,22 @@ namespace APLan.Views
         public void activateCreation()
         {
             
-            if (fileType!=null && Json!=null && Tmdbtext!=null && euxmltext!=null && createProject!=null)
+            if (fileType!=null && jsonFilesBox != null && mdbFileBox != null && euxmlFileBox!=null && createProject!=null)
             {
                 bool check = true;
-                if (projetName.Background != themeColor || directortPath.Background != themeColor)
+                if (projectNameBox.Background != themeColor || directortPathBox.Background != themeColor)
                 {
                     check = false;
                 }
-                if (fileType.SelectedIndex== 0  && Json.Background!=themeColor)
+                if (fileType.SelectedIndex== 0  && jsonFilesBox.Background!=themeColor)
                 {
                     check = false;
                 }
-                else if(fileType.SelectedIndex == 1  && Tmdbtext.Background != themeColor)
+                else if(fileType.SelectedIndex == 1  && mdbFileBox.Background != themeColor)
                 {
                     check = false;
                 }
-                else if (fileType.SelectedIndex == 2  && euxmltext.Background != themeColor)
+                else if (fileType.SelectedIndex == 2  && euxmlFileBox.Background != themeColor)
                 {
                     check = false;
                 }
@@ -296,6 +295,44 @@ namespace APLan.Views
                 }
             }
         }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var box = (TextBox)sender;
+            //remove content only if a hint is there.
+            if (box.Text.Contains("please"))
+            {
+                ((TextBox)sender).Text = "";
+            }
+        }
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var box= (TextBox)sender;
+            //check if the box has no input yet.
+            if (box.Text.Equals(""))
+            {
+                switch (box.Name) {
+                    case nameof(projectNameBox):
+                        projectNameBox.Text = ProjectNameHint;
+                        break;
+                    case nameof(directortPathBox):
+                        directortPathBox.Text = DirPathHint;
+                        break;
+                    case nameof(jsonFilesBox):
+                        jsonFilesBox.Text = JsonFilesHint;
+                        break;
+                    case nameof(mdbFileBox):
+                        mdbFileBox.Text = MdbFileHint;
+                        break;
+                    case nameof(euxmlFileBox):
+                        euxmlFileBox.Text = EuxmlFileHint;
+                        break;
+                    case nameof(ppxmlFileBox):
+                        ppxmlFileBox.Text = PpxmlFileHint;
+                        break;
+                }
+            }
+        }
         private void newProjectWindow_Loaded(object sender, System.EventArgs e)
         {
             //reset Hints
@@ -306,15 +343,23 @@ namespace APLan.Views
             newprojectClass.MDB = MdbFileHint;
             newprojectClass.PPXML = PpxmlFileHint;
 
-            //reset inputBackground
-            directortPath.Background = Brushes.White;
-            projetName.Background = Brushes.White;
-            Json.Background = Brushes.White;
-            Tmdbtext.Background = Brushes.White;
-            euxmltext.Background = Brushes.White;
-            ppxmltext.Background = Brushes.White;
-        }
+            //reset jsonFiles
+            newprojectClass.Gleiskanten = null;
+            newprojectClass.Gleisknoten = null;
+            newprojectClass.Entwurfselement_KM = null;
+            newprojectClass.Entwurfselement_HO = null;
+            newprojectClass.Entwurfselement_LA = null;
+            newprojectClass.Entwurfselement_UH = null;
 
+
+            //reset inputBackground
+            directortPathBox.Background = Brushes.White;
+            projectNameBox.Background = Brushes.White;
+            jsonFilesBox.Background = Brushes.White;
+            mdbFileBox.Background = Brushes.White;
+            euxmlFileBox.Background = Brushes.White;
+            ppxmlFileBox.Background = Brushes.White;
+        }
         #endregion
     }
 }
