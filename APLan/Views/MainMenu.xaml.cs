@@ -42,6 +42,22 @@ namespace APLan.Views
 
         }
 
+        private void MenuItem_CanvasContent(object sender, RoutedEventArgs e)
+        {
+            MenuItem item = ((MenuItem)sender);
+            if (item.IsChecked)
+            {
+                ((MenuItem)sender).IsChecked = false;
+                Panel.SetZIndex(MainWindow.Canvas_Content, -1);
+            }
+            else
+            {
+                ((MenuItem)sender).IsChecked = true;
+                Panel.SetZIndex(MainWindow.Canvas_Content, 0);
+            }
+
+        }
+
         private void MenuItem_Symbols(object sender, RoutedEventArgs e)
         {
             MenuItem item = ((MenuItem)sender);
@@ -93,6 +109,11 @@ namespace APLan.Views
                 MainWindow.r2.Height = new GridLength(13, GridUnitType.Star);
                 MainWindow.r4.Height = new GridLength(7.5, GridUnitType.Star);
             }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

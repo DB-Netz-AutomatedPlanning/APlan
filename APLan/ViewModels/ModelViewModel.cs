@@ -163,9 +163,9 @@ namespace APLan.ViewModels
             ExtractPoints(Entwurfselement_HO_list, Entwurfselement_HOList);
             ExtractPoints(Entwurfselement_UH_list, Entwurfselement_UHPointsList);
 
-
-            Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(50000);
-            Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(50000);
+        
+            //Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(Views.Draw.drawingScrollViewer.ExtentWidth/2);
+            //Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(Views.Draw.drawingScrollViewer.ExtentHeight/2);
         }
 
 
@@ -189,8 +189,6 @@ namespace APLan.ViewModels
             PositioningSystemCoordinate positioningSystemCoordinate = new PositioningSystemCoordinate();
             List<Polyline> p = new List<Polyline>();
 
-
-            
             foreach (PositioningNetElement positioningNetElement in positioningNetElements)
             {     
                 CustomPolyLine polyline = new CustomPolyLine();
@@ -235,7 +233,7 @@ namespace APLan.ViewModels
                         }
                     }
                 }
-                polyline.Color = new SolidColorBrush() { Color = Colors.DarkOrange };
+                polyline.Color = new SolidColorBrush() { Color = Colors.Red};
                 customPolylines.Add(polyline);
             }
 
@@ -279,7 +277,7 @@ namespace APLan.ViewModels
                     polyline.Points.Add(newPoint);
                     extractBoundary(newPoint);
                 }
-                polyline.Color = new SolidColorBrush() { Color = Colors.DarkBlue };
+                polyline.Color = new SolidColorBrush() { Color = Colors.Red };
                 customPolylines.Add(polyline);
             }
 
@@ -326,7 +324,7 @@ namespace APLan.ViewModels
                         polyline.Points.Add(newPoint);
                         extractBoundary(newPoint);
                     }
-                    polyline.Color = new SolidColorBrush() { Color = Colors.DarkRed };
+                    polyline.Color = new SolidColorBrush() { Color = Colors.Red };
                     customPolylines.Add(polyline);
                 }
                
@@ -375,7 +373,7 @@ namespace APLan.ViewModels
                         polyline.Points.Add(newPoint);
                         extractBoundary(newPoint);
                     }
-                    polyline.Color = new SolidColorBrush() { Color= Colors.DarkViolet};
+                    polyline.Color = new SolidColorBrush() { Color= Colors.Red};
                     customPolylines.Add(polyline);
                 }
 
@@ -421,7 +419,7 @@ namespace APLan.ViewModels
                     polyline.Points.Add(newPoint);
                     extractBoundary(newPoint);
                 }
-                polyline.Color = new SolidColorBrush() { Color = Colors.Green };
+                polyline.Color = new SolidColorBrush() { Color = Colors.Red};
                 customPolylines.Add(polyline);
             }
 
@@ -477,6 +475,7 @@ namespace APLan.ViewModels
                         }
                         Point newPoint = new Point((((double)cartCoordinate.x) ), (((double)cartCoordinate.y) ));
                         node.NodePoint = newPoint;
+                        node.Color = Brushes.Red;
                         allNodes.Add(node);
                         extractBoundary(newPoint);
                     }

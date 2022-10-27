@@ -35,6 +35,7 @@ namespace APLan
 
         public static UserControl drawing;
         public static UserControl visualized_Data;
+        public static UserControl Canvas_Content;
 
         public static Canvas basCanvas;
         public MainWindow()
@@ -52,9 +53,12 @@ namespace APLan
             r4 = this.R4;
 
             drawing = this.drawingTab;
-            visualized_Data = this.visualizedData;
-
             basCanvas = this.baseCanvas;
+
+            visualized_Data = this.visualizedData;
+            Canvas_Content = this.CanvasContent;
+
+            
         }
 
         private void drawing_Loaded(object sender, RoutedEventArgs e)

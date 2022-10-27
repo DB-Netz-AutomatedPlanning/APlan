@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uoqFCNcZFhoLfq5zehYIaorKqtOowYiBEE/bWjDM1v6b3qv3AEKDRWj3vWLjvw86k+pfeEq7pRhUL6SjIPRRtA==",
+  "dgSpecHash": "jlTgeoPJ5xUnJ795CnE5axZAv2VHYvdGMQr06NPpIIuiQ8vXgDtfJfSjNbr0rcs5eSQyt7zHG6xs7gqiiAP6Uw==",
   "success": true,
   "projectFilePath": "C:\\APLan_3\\APLan\\APLan.csproj",
   "expectedPackageFiles": [
@@ -43,7 +43,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'Saxon-HE 10.8.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "message": "Package 'Saxon-HE 10.8.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "Saxon-HE",
       "targetGraphs": [
         "net6.0-windows7.0"

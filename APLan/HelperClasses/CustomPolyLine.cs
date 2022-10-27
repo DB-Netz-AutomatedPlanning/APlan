@@ -26,6 +26,7 @@ namespace APLan.HelperClasses
         }
         // name as in the Eulynx Object.
         private string name;
+        private SolidColorBrush color;
         public string Name
         {
             get => name;
@@ -38,8 +39,12 @@ namespace APLan.HelperClasses
         //color is selective
         public SolidColorBrush Color
         {
-            get;
-            set;
+            get => color;
+            set
+            {
+                color = value;
+                OnPropertyChanged();
+            }
         }
         //all points used to draw this polyline
         public PointCollection Points

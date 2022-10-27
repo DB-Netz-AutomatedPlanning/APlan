@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Media;
 
 namespace APLan.HelperClasses
 {
@@ -16,6 +17,7 @@ namespace APLan.HelperClasses
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         #endregion
         #region attributes
+        private SolidColorBrush color;
         /// <summary>
         /// Node location after removing the global point (first point to be evaluated in the station)
         /// </summary>
@@ -32,6 +34,15 @@ namespace APLan.HelperClasses
             get;
             set;
         }
+        public SolidColorBrush Color
+        {
+            get => color;
+            set
+            {
+                color = value;
+                OnPropertyChanged();
+            }
+        }
         /// <summary>
         /// all the data needed to be visualized.
         /// </summary>
@@ -47,6 +58,5 @@ namespace APLan.HelperClasses
             Data = new ObservableCollection<KeyValue>();
         }
         #endregion
-
     }
 }

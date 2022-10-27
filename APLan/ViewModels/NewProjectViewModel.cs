@@ -31,13 +31,8 @@ namespace APLan.ViewModels
 
         private FolderBrowserDialog folderBrowserDialog1;
         private OpenFileDialog openFileDialog1;
-        private SolidColorBrush helperHintProjectName;
-        private SolidColorBrush helperHintprojectPath;
-        private SolidColorBrush helperHintJsonFiles;
-        private SolidColorBrush helperHintMdb;
-        private SolidColorBrush helpeHintrEuxml;
 
-        private bool saveButtonActive = true;  //remove true.
+        private bool saveButtonActive;
         private bool saveAsButtonActive;
         private bool printButtonActive;
         private bool importButtonActive;
@@ -55,54 +50,10 @@ namespace APLan.ViewModels
         private string euxml = null;
         private string ppxml = null;
         private string projectPath = null;
-        private static string currentProjectPath = null;
+        public static string currentProjectPath = null; //this would be used to know our project path.
+        public static string currentProjectName = null; //this would be used to know our project path.
         private string projectName = null;
 
-        public SolidColorBrush HelperHintProjectName
-        {
-            get => helperHintProjectName;
-            set
-            {
-                helperHintProjectName = value;
-                OnPropertyChanged();
-            }
-        }
-        public SolidColorBrush HelperHintProjectPath
-        {
-            get => helperHintprojectPath;
-            set
-            {
-                helperHintprojectPath = value;
-                OnPropertyChanged();
-            }
-        }
-        public SolidColorBrush HelperHintJsonFiles
-        {
-            get => helperHintJsonFiles;
-            set
-            {
-                helperHintJsonFiles = value;
-                OnPropertyChanged();
-            }
-        }
-        public SolidColorBrush HelperHintMdb
-        {
-            get => helperHintMdb;
-            set
-            {
-                helperHintMdb = value;
-                OnPropertyChanged();
-            }
-        }
-        public SolidColorBrush HelperHintEuxml
-        {
-            get => helpeHintrEuxml;
-            set
-            {
-                helpeHintrEuxml = value;
-                OnPropertyChanged();
-            }
-        }
         private string OpenProjectPath { get; set; }
         public string ProjectName
         {
@@ -110,7 +61,7 @@ namespace APLan.ViewModels
             set
             {
                 projectName = value;
-                currentProjectPath = projectName;
+                currentProjectName = value;
                 OnPropertyChanged();
             }
         }
@@ -120,6 +71,7 @@ namespace APLan.ViewModels
             set
             {
                 projectPath = value;
+                currentProjectPath = value;
                 OnPropertyChanged();
             }
         }
@@ -378,7 +330,7 @@ namespace APLan.ViewModels
         public ICommand Cancel { get; set; }
         public ICommand Open { get; set; }
         #endregion
-
+        
         #region constructor
         public NewProjectViewModel()
         {
@@ -389,8 +341,9 @@ namespace APLan.ViewModels
             BrowsePpxml = new RelayCommand(ExecuteBrowsePpxml);
             Create = new RelayCommand(ExecuteCreate);
             Cancel = new RelayCommand(ExecuteCancel);
-            Open = new RelayCommand(openButton);
+            Open = new RelayCommand(ExecuteOpen);
             folderBrowserDialog1 = new FolderBrowserDialog();
+            folderBrowserDialog1.ShowNewFolderButton=true;
             openFileDialog1 = new OpenFileDialog();
 
             loadedObjects = new ObservableCollection<CanvasObjectInformation>(); //binded to view
@@ -414,21 +367,9 @@ namespace APLan.ViewModels
             KantenPoints = new RelayCommand(ExecuteKantenPoints);
 
             WelcomeInfo = "Welcome";
-
-            ProjectName = "please enter a project name";
-            ProjectPath = "please select a project directory";
-            JsonFiles = "please select all .json/.geojson files";
-            MDB = "please select single .mdb file";
-            EUXML = "please select single .euxml file";
-
-            helperHintProjectName = Brushes.Gray;
-            helperHintprojectPath = Brushes.Gray;
-            helperHintJsonFiles = Brushes.Gray;
-            helperHintMdb = Brushes.Gray;
-            helpeHintrEuxml = Brushes.Gray;
         }
         #endregion
-
+        
         #region logic
         public void createModel(string format)
         {
@@ -533,11 +474,6 @@ namespace APLan.ViewModels
                 //WelcomeVisibility = Visibility.Collapsed;
                 activateButtons();
                 createModel(parameters[0].ToString());
-                ProjectName = "please enter a project name";
-                ProjectPath = "please select a project directory";
-                JsonFiles = "please select all .json/.geojson files";
-                MDB = "please select single .mdb file";
-                EUXML = "please select single .euxml file";
             }
             
             
@@ -575,7 +511,7 @@ namespace APLan.ViewModels
         public bool creatProjectFolder()
         {
             bool flag = true;
-            string targetFolderPath = projectPath + "/" + $"{projectName}";
+            string targetFolderPath = projectPath + "/" + $"{projectName}"+"/"+"files";
             if (!Directory.Exists(targetFolderPath))
             {
                 Directory.CreateDirectory(targetFolderPath);
@@ -638,9 +574,9 @@ namespace APLan.ViewModels
         public void activateButtons()
         {
             SaveButtonActive = true;
-            //SaveAsButtonActive = true;
+            SaveAsButtonActive = true;
             //ImportButtonActive = true;
-            PrintButtonActive = true;
+            //PrintButtonActive = true;
         }
         public void ExecuteKantenPoints(object parameter)
         {
@@ -659,8 +595,9 @@ namespace APLan.ViewModels
                 KantenPointsHoaX.Clear();
             }
         }
-        public void openButton(object parameter)
+        public void ExecuteOpen(object parameter)
         {
+            folderBrowserDialog1.SelectedPath = null;
             folderBrowserDialog1.ShowDialog();
             OpenProjectPath = folderBrowserDialog1.SelectedPath;
 
@@ -735,13 +672,15 @@ namespace APLan.ViewModels
            Entwurfselement_UHPointsList,
            gleisknotenList);
         }
+        /// <summary>
+        /// load .euxml file representing the saved Eulynx model.
+        /// </summary>
+        /// <param name="f"></param>
         public void loadEuxml(string f)
         {
             string report = EulynxValidatorViewModel.validate(f);
             if (report.Contains("Validation is Successful"))
             {
-
-
                 var eulynxService = EulynxService.getInstance();
                 ModelViewModel.eulynx = eulynxService.deserialization(f);
 
@@ -777,8 +716,14 @@ namespace APLan.ViewModels
             }
             
         }
+        /// <summary>
+        /// load an APlan binary file representing the saved items.
+        /// </summary>
+        /// <param name="f"></param>
         public void loadAPlanFile(string f)
         {
+            loadedObjects.Clear(); //clear the previously loaded items.
+
             List<CanvasObjectInformation> importedObjects = new List<CanvasObjectInformation>();
             BinaryFormatter bfDeserialize = new BinaryFormatter();
             FileStream fsin = new FileStream(f, FileMode.Open, FileAccess.Read, FileShare.None);
@@ -787,12 +732,9 @@ namespace APLan.ViewModels
             foreach (CanvasObjectInformation ObjectInfo in importedObjects)
             {
                 loadedObjects.Add(ObjectInfo);
-
             }
             fsin.Close();
         }
-
-
         #endregion
     }
 }

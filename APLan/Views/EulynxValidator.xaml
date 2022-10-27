@@ -8,12 +8,14 @@
         mc:Ignorable="d"
         DataContext="{StaticResource EulynxValidatorViewModel}"
         ResizeMode="NoResize"
+        Loaded="Window_Loaded"
         Icon="/Resources/Icons/validate.png"
         Title="Eulynx Validator" Height="450" Width="800">
     <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="Height" Value="30"></Setter>
-            <Setter Property="Margin" Value="20"></Setter>
+        <Style TargetType="TextBox" x:Key="input">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Margin" Value="20"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Height" Value="30"></Setter>
@@ -42,7 +44,7 @@
             <Image Width="50" Height="50" Source="/Resources/Icons/info.png"></Image>
             <TextBlock TextWrapping="Wrap">
                 <TextBlock.Text>
-                    EULYNX Validator here was based on the first release (OLD) of the EULYNX Data Preparation model as can be found at https://www.eulynx.eu/index.php/dataprep. Expected Encoding: UTF-8 Ensure you have correct input (including path to the xsd) Also, wait for few seconds to process your input
+                    EULYNX Validator is intended to validate against version 1.0 and version 1.1 validation schemas (XSD) found at https://www.eulynx.eu/index.php/dataprep. Validation is done through auto-detection of the provided EUXML file version, and apply the corresponding schema. 
                 </TextBlock.Text>
             </TextBlock>
         </StackPanel>
@@ -63,11 +65,17 @@
                        VerticalContentAlignment="Center" HorizontalAlignment="Center"></Label>-->
             <!--<TextBox Margin="20" Grid.Column="0" Grid.Row="0"
                          Text="{Binding XSD, Mode=TwoWay}"/>-->
-            <TextBox     Template="{StaticResource TextBoxBaseControlTemplate}"
+            <TextBox     x:Name="fileBox"
+                         Template="{StaticResource TextBoxBaseControlTemplate}"
+                         Style="{StaticResource input}"
                          Grid.Column="0" Grid.Row="1"
-                         Text="{Binding XML, Mode=TwoWay}"/>
-            <TextBox      Template="{StaticResource TextBoxBaseControlTemplate}"
+                         Text="{Binding XML, Mode=TwoWay}"
+                         TextChanged="TextBox_TextChanged"/>
+            <TextBox      x:Name="outputBox"
+                          Template="{StaticResource TextBoxBaseControlTemplate}"
+                          Style="{StaticResource input}"
                           Grid.Column="0" Grid.Row="2"
+                          TextChanged="TextBox_TextChanged_1"
                           Text="{Binding Path, Mode=TwoWay}"/>
             <!--<Button Content="Add SXD" Margin="20" Grid.Column="1" Grid.Row="0"
                         Command="{Binding Path=AddXSD}"/>-->
@@ -76,14 +84,29 @@
                         Command="{Binding  Path=FilePath}"/>
             <Button Content="Output Path" Margin="20" Grid.Column="1" Grid.Row="2"
                         Command="{Binding  Path=OutputPath}"/>
-            <ScrollViewer Grid.Column="0" 
+                <TabControl
+                          Grid.Column="0" 
                           Grid.ColumnSpan="2"
                           Grid.Row="3"
-                          Margin="20"
+                          Margin="20,0,20,0"
+                          BorderBrush="{StaticResource themeColor}">
+                <TabItem Header="XSD validation" Background="{StaticResource themeColor}">
+                    <ScrollViewer 
                           VerticalScrollBarVisibility="Auto" 
                           HorizontalScrollBarVisibility="Auto">
-                <TextBox Text="{Binding Report}" IsReadOnly="True" VerticalAlignment="Top" BorderBrush="White"></TextBox>
-            </ScrollViewer>
+                        <TextBox Text="{Binding Report}" IsReadOnly="True" VerticalAlignment="Top" BorderBrush="White"></TextBox>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem Header="Rules validation" Background="{StaticResource themeColor}">
+                    <ScrollViewer 
+                          VerticalScrollBarVisibility="Auto" 
+                          HorizontalScrollBarVisibility="Auto">
+                        <TextBox Text="{Binding Report_rules}" IsReadOnly="True" VerticalAlignment="Top" BorderBrush="Transparent"></TextBox>
+                    </ScrollViewer>
+                </TabItem>
+
+            </TabControl>
+
             <Grid
                             Grid.ColumnSpan="2"
                             Grid.Row="4" 
@@ -100,12 +123,14 @@
                         CommandParameter="{Binding RelativeSource={RelativeSource
                                                    Mode=FindAncestor,
                                                    AncestorType={x:Type Window}}}"/>
-                <Button Grid.Column="1"
+                <Button x:Name="validate"
+                        Grid.Column="1"
                         Width="150"
                         FontWeight="Bold"
                         Foreground="{StaticResource themeColor}"
                         Content="Validate"                        
-                        Command="{Binding Validate}"/>
+                        Command="{Binding Validate}"
+                        IsEnabled="False"/>
             </Grid>
         </Grid>
     </Grid>

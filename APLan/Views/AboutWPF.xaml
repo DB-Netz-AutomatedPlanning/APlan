@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:APLan.Views"
         mc:Ignorable="d"
-        Title="AboutWPF" Height="450" Width="800">
-    <Grid Margin="20">
+        Icon="/Resources/Icons/info.png"
+        Title="AboutWPF" Height="300" Width="800">
+    <Grid Margin="20" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="4*"/>

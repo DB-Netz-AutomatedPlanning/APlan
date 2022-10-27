@@ -1,5 +1,4 @@
 ﻿using Models.TopoModels.EULYNX.generic;
-
 namespace aplan.core
 {
     public interface IModelService

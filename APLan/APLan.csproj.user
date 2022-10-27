@@ -13,6 +13,9 @@
     <Compile Update="Views\AddDataWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\CanvasContent.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\CanvasToolsTab.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -78,6 +81,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\AddDataWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\CanvasContent.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\CanvasToolsTab.xaml">

@@ -8,8 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Border BorderBrush="{StaticResource themeColor}" BorderThickness="2" CornerRadius="5">
         <TabControl>
-
-            <TabItem Header="symbols" Background="{StaticResource themeColor}" Height="20">
+            <TabItem Header="Symbols" Background="{StaticResource themeColor}" Height="20">
                 <local:SymbolsTab></local:SymbolsTab>
             </TabItem>
             <TabItem Header="Selected Items" Background="{StaticResource themeColor}" BorderThickness="5" Height="20">
@@ -17,9 +16,6 @@
                     <local:SelectedItems></local:SelectedItems>
                 </ScrollViewer>
             </TabItem>
-
         </TabControl>
     </Border>
-
-
 </UserControl>

@@ -32,6 +32,8 @@
         <converters:MultiBindingConverter x:Key="multiBindingConverter"></converters:MultiBindingConverter>
         <converters:StringToDoubleConverter x:Key="stringToDoubleconverter"></converters:StringToDoubleConverter>
 
+        <converters:HalfLengthConverter x:Key="HalfLengthConverter"></converters:HalfLengthConverter>
+        <converters:DrawUserControlSize x:Key="DrawUserControlSize"></converters:DrawUserControlSize>
         <!--export-->
         <viewModels:ExportWindowViewModel x:Key="exportWindowViewModel"/>
 
