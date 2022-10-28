@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\APLan_3\APLan\obj\Debug\net6.0-windows\
+D:\cloneAllmain\APLan\obj\Debug\net6.0-windows\
 APLan
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\APLan_3\APLan\App.xaml
+D:\cloneAllmain\APLan\App.xaml
+211076447862
 
+103-604350763
+212-650245439
+MainWindow.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\CanvasToolsTab.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\pdfDetail.xaml;Views\PlanningTab.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;
 
-711216619051
-2121428658519
-
-
-False
+True
 

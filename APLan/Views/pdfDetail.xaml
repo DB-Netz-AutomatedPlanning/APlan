@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="APLan.Views.pdfDetail"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:APLan.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" x:Name="pdfdetails">
+    <Canvas x:Name="pdfdetailCanva" Height="396" Width="720" Visibility="{Binding Source={StaticResource planTabViewModel}, Path=PdfDetailCanvasVisibility}">
+        <Grid Height="396" Width="720" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="180" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="140" />
+                <RowDefinition Height="192" />
+                <RowDefinition Height="32" />
+                <RowDefinition Height="32" />
+
+            </Grid.RowDefinitions>
+            <Border BorderBrush="Black" BorderThickness="1">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Top"  Text="Bauherr" Height="24" Width="168"/>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Bottom"  Text="Ort,Datum,Unterschrift"/>
+                    <Image Source="/Resources/Icons/dblogo.png" Stretch="fill" DockPanel.Dock="Top" Height="46" Width="162"/>
+                    <Label Content="Franfurt,03/2022" FontSize="10" Margin="0,0,0,0" Width="180" Height="26"/>
+                </DockPanel>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Column="1">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Top"  Text="Projektleitung"/>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Bottom"  Text="Ort,Datum,Unterschrift"/>
+                </DockPanel>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Column="2">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Top"  Text="Planung"/>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Bottom"  Text="Ort,Datum,Unterschrift"/>
+                </DockPanel>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Column="3">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Top"  Text="Aufragnehmer (AN)"/>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Bottom"  Text="Ort,Datum,Unterschrift"/>
+                </DockPanel>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="0,0,10,0" Height="192" Width="520" HorizontalAlignment="Left">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="1" FontSize="10" DockPanel.Dock="Top"  Text="lageskizze ummastablich"/>
+
+                </DockPanel>
+            </Border>
+            <DockPanel  Width="200" HorizontalAlignment="Right" Grid.Column="2" Grid.ColumnSpan="2" LastChildFill="False" Grid.Row="1" Grid.RowSpan="2" >
+                <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="32" DockPanel.Dock="Top">
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="1" FontSize="10" Text="Projecktnummer DB:"/>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="32" DockPanel.Dock="Top">
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="1" FontSize="10" Text="BIM-Datencodierung:"/>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="32" DockPanel.Dock="Top">
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="1" FontSize="10" Text="Planzeichen:"/>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="32" DockPanel.Dock="Top">
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="1" FontSize="10" Text="Planart:"/>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="32" DockPanel.Dock="Top">
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="1" FontSize="10" Text="Hohen-und koordinaten "/>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1" Width="200" Height="32" DockPanel.Dock="Top">
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="1" FontSize="10" Text="Einwirkungen (lastmodel): "/>
+                </Border>
+                <Border BorderBrush="Black" BorderThickness="1" Width="200">
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="1" FontSize="10" Text="Entwurfsgeschwindigkeit: "/>
+                </Border>
+
+
+
+            </DockPanel>
+            <Border BorderBrush="Black" HorizontalAlignment="Left" BorderThickness="1" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Width="240" Height="32">
+                <TextBlock  FontSize="10" Text="Bauwerksnummer "/>
+            </Border>
+            <Border BorderBrush="Black" HorizontalAlignment="Left" Width="80" BorderThickness="1" Grid.Column="1" Grid.Row="2" Margin="60,0,0,0">
+                <TextBlock  FontSize="10" Text="Bauwerks "/>
+            </Border>
+            <Border BorderBrush="Black" HorizontalAlignment="Left" Width="200" BorderThickness="1" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="2" Margin="140,0,0,0">
+                <TextBlock  FontSize="10" Text="Barcodenummer "/>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" Grid.Row="3" HorizontalAlignment="Left" Width="100">
+                <TextBlock  FontSize="10" Text="Strecke: "/>
+            </Border>
+            <Border HorizontalAlignment="Left" Width="420" BorderBrush="Black" BorderThickness="1" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Margin="100,0,0,0">
+                <TextBlock  FontSize="10" Text="Streckenabschnitt: "/>
+            </Border>
+            <Border Width="200" HorizontalAlignment="Right" BorderBrush="Black" BorderThickness="1" Grid.Column="2" Grid.ColumnSpan="2"  Grid.Row="3">
+                <TextBlock  FontSize="10" Text="Kilometer: "/>
+            </Border>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </Grid>
+    </Canvas>
+</UserControl>

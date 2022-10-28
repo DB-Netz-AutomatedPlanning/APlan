@@ -1,0 +1,750 @@
+﻿using APLan.Commands;
+using APLan.HelperClasses;
+using APLan.Views;
+
+using aplan.core;
+
+using Models.TopoModels.EULYNX.rsmCommon;
+using Models.TopoModels.EULYNX.generic;
+using Models.TopoModels.EULYNX.sig;
+using Models.TopoModels.EULYNX.db;
+
+using System;
+using System.Windows;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using System.IO;
+using System.Windows.Documents;
+using System.Windows.Xps.Packaging;
+using System.IO.Packaging;
+using System.Windows.Xps.Serialization;
+using System.Windows.Controls;
+using System.Windows.Xps;
+using System.Numerics;
+using System.Xml.Linq;
+using netDxf;
+using netDxf.Entities;
+using netDxf.Collections;
+
+using Microsoft.Win32;
+
+
+namespace APLan.ViewModels
+{
+    public class PlanningTabViewModel : INotifyPropertyChanged
+    {
+        #region INotify Essentials
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string name = "") =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        #endregion
+
+        #region attributes
+        private string planType;
+        private string exportType;
+        private Microsoft.Win32.SaveFileDialog safeFileDialog1;
+
+        public string PlanType
+        {
+            get => planType;
+            set
+            {
+                planType = value.Split(':')[1].Trim();
+                OnPropertyChanged();
+            }
+        }
+        public string ExportType
+        {
+            get => exportType;
+            set
+            {
+                exportType = value.Split(':')[1].Trim();
+                OnPropertyChanged();
+            }
+        }
+        List<PositioningNetElement> VisitedElements;
+        public System.Collections.ObjectModel.ObservableCollection<Signalinfo> Signals
+        {
+            get;
+            set;
+        }
+        PositioningNetElement neededElement = null;
+        private Visibility pdfDetailCanvasVisibility;
+
+        public Visibility PdfDetailCanvasVisibility
+        {
+            get { return pdfDetailCanvasVisibility; }
+            set
+            {
+                pdfDetailCanvasVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region commands
+        public ICommand PlanButton { get; set; }
+        public ICommand ExportButton { get; set; }
+        #endregion
+
+        #region constructor
+        public PlanningTabViewModel()
+        {
+            PlanButton = new RelayCommand(ExecutePlanButton);
+            ExportButton = new RelayCommand(ExecuteExportButton);
+            Signals = new System.Collections.ObjectModel.ObservableCollection<Signalinfo>();
+            VisitedElements = new List<PositioningNetElement>();
+            safeFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+            PdfDetailCanvasVisibility = Visibility.Collapsed;
+             
+
+
+
+        }
+        #endregion
+
+        #region logic
+        public void ExecutePlanButton(object parameter)
+        {
+            var EulynxObject= ModelViewModel.eulynx;
+            var eulynxService = ModelViewModel.eulynxService;
+            Database dataBase = ModelViewModel.db;
+            bool etcs = false;
+            if (EulynxObject == null)
+            {
+                MessageBox.Show("No current Eulynx object");
+
+            }else if (PlanType=="ETCS" && EulynxObject!=null)
+            {
+                etcs = true;
+                eulynxService.plan(EulynxObject, dataBase, etcs);
+                extractMainSignals(EulynxObject);
+                extractOnTrackSignals(EulynxObject, dataBase);
+            }
+            else
+            {
+                MessageBox.Show("Kindly Select a Plan type");
+            }       
+        }
+
+        public void ShowDialog()
+        {
+            try
+            {
+               
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        public void ExecuteExportButton(object parameter)
+        {
+            if (exportType == "Eulynx")
+            {
+                ExportWindow export = new ExportWindow();
+                export.ShowDialog();
+            }
+            else if (exportType == "pdf")
+            {
+
+                string fileName = System.IO.Path.GetRandomFileName();
+                try
+                {
+                    //PdfDetailCanvasVisibility = Visibility.Visible;
+                    //getting static resource to remove the tile in canvas
+                    
+                    pdfDetail.pdfdetailCan.Visibility = Visibility.Visible;
+
+                    object resourceCanvasGrid = Draw.drawing.TryFindResource("canvasGrid");
+                    DrawingBrush gridBrush = (DrawingBrush)resourceCanvasGrid;
+                    gridBrush.TileMode = TileMode.None;
+                    gridBrush.Viewport = new Rect(0, 0, 0, 0);
+
+
+                    // write the XPS document
+                    using (XpsDocument doc = new XpsDocument(fileName, FileAccess.ReadWrite))
+                    {
+                        XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
+                        writer.Write(MainWindow.basCanvas);
+                    }
+
+                    // Read the XPS document into a dynamically generated
+                    // preview Window 
+                    using (XpsDocument doc = new XpsDocument(fileName, FileAccess.Read))
+                    {
+                        FixedDocumentSequence fds = doc.GetFixedDocumentSequence();
+
+                        var window = new Window();
+
+                        window.Content = new DocumentViewer { Document = fds };
+
+                        window.ShowDialog();
+                         
+                    }
+
+
+                    //PdfDetailCanvasVisibility = Visibility.Collapsed;
+                    //adding the tile in canvas again
+                    pdfDetail.pdfdetailCan.Visibility = Visibility.Collapsed;
+                    gridBrush.TileMode = TileMode.Tile;
+                    gridBrush.Viewport = new Rect(0, 0, 100, 100);
+
+                }
+                finally
+                {
+                    if (File.Exists(fileName))
+                    {
+                        try
+                        {
+                            File.Delete(fileName);
+                        }
+                        catch (Exception exep)
+                        {
+                            Console.WriteLine(exep.Message);
+                        }
+                    }
+                }
+
+            }
+            else if (exportType == "pdf multipage")
+            {
+                string fileName = System.IO.Path.GetRandomFileName();
+                try
+                {   //getting static resource to remove the tile in canvas
+                    PdfDetailCanvasVisibility = Visibility.Visible;
+                    object res = Draw.drawing.TryFindResource("canvasGrid");
+                    DrawingBrush yellowBrush = (DrawingBrush)res;
+                    yellowBrush.TileMode = TileMode.None;
+                    yellowBrush.Viewport = new Rect(0, 0, 0, 0);
+
+
+                    // write the XPS document
+                    FrameworkElement fe = (MainWindow.basCanvas as FrameworkElement);
+                     
+                    fe.Measure(new Size(Int32.MaxValue, Int32.MaxValue));
+                    Size visualSize = new Size(2000,2000);
+                    fe.Arrange(new Rect(new System.Windows.Point(0, 0), visualSize));
+                    MemoryStream stream = new MemoryStream();
+                    string pack = "pack://temp.xps";
+                    Uri uri = new Uri(pack);
+                    DocumentPaginator paginator;
+                    XpsDocument xpsDoc;
+
+                    using (Package container = Package.Open(fileName, FileMode.Create))
+                    {
+                        PackageStore.AddPackage(uri, container);
+                        using (xpsDoc = new XpsDocument(container, CompressionOption.Fast, pack))
+                        {
+                            XpsSerializationManager rsm =
+                              new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
+                            rsm.SaveAsXaml(MainWindow.basCanvas);
+                            paginator = ((IDocumentPaginatorSource)
+                              xpsDoc.GetFixedDocumentSequence()).DocumentPaginator;
+                            paginator.PageSize = visualSize;
+                        }
+                        PackageStore.RemovePackage(uri);
+                    }
+
+                    using (Package container = Package.Open(fileName, FileMode.Create))
+                    {
+                        using (xpsDoc = new XpsDocument(container, CompressionOption.Fast, pack))
+                        {
+                            paginator = new VisualDocumentPaginator(paginator,
+                                            new Size(500, 500),
+                                                     new Size(48, 48));
+                            XpsSerializationManager rsm = new XpsSerializationManager(
+                                                     new XpsPackagingPolicy(xpsDoc), false);
+                            rsm.SaveAsXaml(paginator);
+                        }
+                        PackageStore.RemovePackage(uri);
+                    }
+                    System.Windows.Controls.PrintDialog m_PrintDialog = new System.Windows.Controls.PrintDialog();
+                    m_PrintDialog.PrintDocument(paginator, "Printing");
+                    //adding the tile in canvas again
+                    PdfDetailCanvasVisibility = Visibility.Collapsed;
+                    yellowBrush.TileMode = TileMode.Tile;
+                    yellowBrush.Viewport = new Rect(0, 0, 100, 100);
+
+                }
+                finally
+                {
+                    if (System.IO.File.Exists(fileName))
+                    {
+                        try
+                        {
+                            System.IO.File.Delete(fileName);
+                        }
+                        catch (Exception exep)
+                        {
+                            System.Console.WriteLine(exep.Message);
+                        }
+                    }
+                }
+            }
+            else if(exportType == "dxf")
+            {
+                DxfDocument dxf = new DxfDocument();
+                netDxf.Entities.Polyline p1 = new netDxf.Entities.Polyline();
+                PolylineVertex polylineVertex = new PolylineVertex();
+                List<netDxf.Vector3> polylineVertexList = new List<netDxf.Vector3>();
+
+                NewProjectViewModel currentInstanceofObject = System.Windows.Application.Current.FindResource("newProjectViewModel") as NewProjectViewModel;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_LA_list = currentInstanceofObject.Entwurfselement_LA_list;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_KM_list = currentInstanceofObject.Entwurfselement_KM_list;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_HO_list = currentInstanceofObject.Entwurfselement_HO_list;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_UH_list = currentInstanceofObject.Entwurfselement_UH_list;
+                System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Polyline> obsDxfpolyLine = new System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Polyline>();
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_LA_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_KM_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_HO_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_UH_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+
+                foreach (netDxf.Entities.Polyline polylne in obsDxfpolyLine)
+                {
+                    dxf.AddEntity(polylne);
+                }
+                if (safeFileDialog1.ShowDialog() == true)
+                {
+                    safeFileDialog1.Filter = "Data Files (*.dxf)|*.dxf";
+                    safeFileDialog1.DefaultExt = "dxf";
+                    safeFileDialog1.AddExtension = true;
+                    //File.WriteAllText(safeFileDialog1.FileName, txtEditor.Text);
+                    dxf.Save(safeFileDialog1.FileName);
+                }
+            
+            }
+
+
+        }
+        
+
+        public void extractOnTrackSignals(EulynxDataPrepInterface EulynxObject,Database dataBase)
+        {
+            var dataPrepEntities = EulynxObject.hasDataContainer.First().ownsDataPrepEntities;
+            List<Unit> units = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesUnit;
+            List<Models.TopoModels.EULYNX.rsmSig.OnTrackSignallingDevice> onTrackSignals = EulynxObject.hasDataContainer.First().ownsRsmEntities.ownsOnTrackSignallingDevice;
+            List<BaseLocation> locations = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesLocation;
+            List<PositioningSystemCoordinate> PSCoordinates = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTopography.usesPositioningSystemCoordinate;
+            List<IntrinsicCoordinate> intrCoordinates = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTopography.usesIntrinsicCoordinate;
+            List<PositioningNetElement> netElements = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTrackTopology.usesNetElement;
+            foreach (Models.TopoModels.EULYNX.rsmSig.OnTrackSignallingDevice signal in onTrackSignals)
+            {
+                //dp function
+                var euBalise = dataPrepEntities.ownsTrackAsset.First(x => x is EtcsBalise && ((EtcsBalise)x).refersToRsmTpsDevice.@ref == signal.id) as EtcsBalise;
+                var euBaliseGroupId = euBalise.implementsTpsDataTxSystem.@ref;
+                var euBaliseProperty = dataPrepEntities.ownsTpsDataTransmissionSystemProperties.First(x => x is EtcsBaliseGroupLevel2 && ((EtcsBaliseGroupLevel2)x).appliesToTpsDataTxSystem.@ref == euBaliseGroupId) as EtcsBaliseGroupLevel2;
+                var euBaliseFunction = euBaliseProperty.implementsFunction.First().type;
+
+
+                // get axle counter's location and print it
+                var spotLoc = locations.Find(item => item.id == signal.locations.First().@ref) as Models.TopoModels.EULYNX.rsmCommon.SpotLocation; // dereference
+                var tpsDeviceIntrinsicCoordinateRef = spotLoc.associatedNetElements.First().bounds.First();
+                var tpsDeviceIntrinsicCoordinate = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTopography.usesIntrinsicCoordinate.First(item => item.id == tpsDeviceIntrinsicCoordinateRef.@ref);
+                var tpsDeviceCoordinate = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTopography.usesPositioningSystemCoordinate.First(item => item.id == tpsDeviceIntrinsicCoordinate.coordinates.First().@ref) as LinearCoordinate;
+                var tpsDeviceKmValue = tpsDeviceCoordinate.measure.value.Value;
+
+
+                AssociatedNetElement assElement = spotLoc.associatedNetElements[0];
+                tElementWithIDref bound = assElement.bounds[0];
+                IntrinsicCoordinate intcoord = intrCoordinates.Find(x => x.id.Equals(bound.@ref));
+                LinearCoordinate SignalIntrensic = PSCoordinates.Find(x => x.id.Equals(intcoord.coordinates[0].@ref)) as LinearCoordinate;
+
+
+
+                //get relatedNetElement
+                var element = spotLoc.associatedNetElements[0].netElement;
+                PositioningNetElement netElement = netElements.Find(x => x.id.Equals(element.@ref));
+                aplan.database.NetElement dataBaseElement = null;
+                using (var liteDB = dataBase.accessDB())
+                {
+                    dataBaseElement = (liteDB).GetCollection<aplan.database.NetElement>("NetElements").Find(x => x.id == element.@ref).FirstOrDefault();
+                }
+                netElement = netElements.Find(x => x.id.Equals(dataBaseElement.uuid));
+
+                List<IntrinsicCoordinate> elementIntrensics_initial = netElement.associatedPositioning[0].intrinsicCoordinates;
+                LinearCoordinate elementStartKm_initial = PSCoordinates.Find(x => x.id.Equals(elementIntrensics_initial[0].coordinates[0].@ref)) as LinearCoordinate;
+                LinearCoordinate elementEndKm_initial = PSCoordinates.Find(x => x.id.Equals(elementIntrensics_initial[1].coordinates[0].@ref)) as LinearCoordinate;
+
+
+                // if the km value is not between the the NetElement range.
+                if ((double)intcoord.value > 1 || SignalIntrensic.measure.value<elementStartKm_initial.measure.value)
+                {
+                    getNeighbors(netElement, EulynxObject, SignalIntrensic);
+                    if (neededElement != null)
+                    {
+                        netElement = neededElement;
+                    }
+                }
+
+                Unit elementLenthunit = units.Find(x => x.id.Equals(((LinearElementWithLength)netElement).elementLength.quantiy[0].unit.@ref));
+                List<IntrinsicCoordinate> elementIntrensics = netElement.associatedPositioning[0].intrinsicCoordinates;
+                LinearCoordinate elementStartKm = PSCoordinates.Find(x => x.id.Equals(elementIntrensics[0].coordinates[0].@ref)) as LinearCoordinate;
+                LinearCoordinate elementEndKm = PSCoordinates.Find(x => x.id.Equals(elementIntrensics[1].coordinates[0].@ref)) as LinearCoordinate;
+                List<System.Windows.Point> points = getNetElementCartesianCoordinates(netElement, PSCoordinates);
+                var newSignal = new Signalinfo()
+                {
+                    SignalImageSource = new BitmapImage(new Uri(@"/Resources/SymbolsImages/BalisengruppeGesteuertTri.png", UriKind.RelativeOrAbsolute)),
+                    LongName = signal.longname,
+                    Name = signal.name,
+                    Function = euBaliseFunction,
+                    IntrinsicValue = tpsDeviceKmValue,
+                    AttachedToElementname = netElement.name,
+                    Side = assElement.isLocatedToSide.ToString(),
+                    Direction = assElement.appliesInDirection.ToString(),
+                    Coordinates = points,
+                    AttachedToElementLength = ((Length)((LinearElementWithLength)netElement).elementLength.quantiy[0]).value,
+                    LateralDistance = 3.1
+                    
+                };
+                calculateSignalLocation(newSignal, SignalIntrensic, elementStartKm, elementEndKm);
+                Signals.Add(newSignal);
+            }
+        }
+
+        public void extractMainSignals(EulynxDataPrepInterface EulynxObject)
+        {
+            List<Unit> units = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesUnit;
+            List<Models.TopoModels.EULYNX.sig.SignalFrame> signalFrames = EulynxObject.hasDataContainer.First().ownsDataPrepEntities.ownsSignalFrame;
+            List<PositioningSystemCoordinate> PSCoordinates = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTopography.usesPositioningSystemCoordinate;
+            List<PositioningNetElement> netElements = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTrackTopology.usesNetElement;
+            List<BaseLocation> locations = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesLocation;
+            List<IntrinsicCoordinate> intrCoordinates = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesTopography.usesIntrinsicCoordinate;
+            List<Models.TopoModels.EULYNX.rsmSig.Signal> mainSignals = EulynxObject.hasDataContainer.First().ownsRsmEntities.ownsSignal;
+
+            foreach (Models.TopoModels.EULYNX.rsmSig.Signal signal in mainSignals)
+            {
+
+                tElementWithIDref loc = signal.locations[0];
+                Models.TopoModels.EULYNX.rsmCommon.SpotLocation spotLoc = (Models.TopoModels.EULYNX.rsmCommon.SpotLocation)locations.Find(x => x.id.Equals(loc.@ref));
+                AssociatedNetElement assElement = spotLoc.associatedNetElements[0];
+                tElementWithIDref bound = assElement.bounds[0];
+                IntrinsicCoordinate intcoord = intrCoordinates.Find(x => x.id.Equals(bound.@ref));
+                LinearCoordinate SignalIntrensic = PSCoordinates.Find(x => x.id.Equals(intcoord.coordinates[0].@ref)) as LinearCoordinate;
+                PositioningNetElement element = netElements.Find(x => x.id.Equals(assElement.netElement.@ref));
+                if ((double)intcoord.value>1)
+                {
+                    getNeighbors(element, EulynxObject, SignalIntrensic);
+                    if (neededElement != null)
+                    {
+                        element = neededElement;
+                    } 
+                }
+                
+                Unit elementLenthunit = units.Find(x => x.id.Equals(((LinearElementWithLength)element).elementLength.quantiy[0].unit.@ref));
+                List<IntrinsicCoordinate> elementIntrensics = element.associatedPositioning[0].intrinsicCoordinates;
+                LinearCoordinate elementStartKm = PSCoordinates.Find(x => x.id.Equals(elementIntrensics[0].coordinates[0].@ref)) as LinearCoordinate;
+                LinearCoordinate elementEndKm = PSCoordinates.Find(x => x.id.Equals(elementIntrensics[1].coordinates[0].@ref)) as LinearCoordinate;
+                List<System.Windows.Point> points = getNetElementCartesianCoordinates(element, PSCoordinates);
+
+
+                //signal type.
+                var typeFunction = extractSignalTypeAndFunction(signal, EulynxObject);
+
+                var newSignal = new Signalinfo()
+                {
+                    SignalImageSource = new BitmapImage(new Uri(@"/Resources/SymbolsImages/mehraZugoderStellwerksbedient.png", UriKind.RelativeOrAbsolute)),
+                    LongName = signal.longname,
+                    Name = signal.name,
+                    Type= typeFunction[0],
+                    Function = typeFunction[1],
+                    AttachedToElementname = element.name,
+                    IntrinsicValue = (double)SignalIntrensic.measure.value,
+                    Side = assElement.isLocatedToSide.ToString(),
+                    Direction = assElement.appliesInDirection.ToString(),
+                    Coordinates = points,
+                    AttachedToElementLength = ((Length)((LinearElementWithLength)element).elementLength.quantiy[0]).value,
+                    LateralDistance = 3.1
+        };
+                calculateSignalLocation(newSignal, SignalIntrensic, elementStartKm, elementEndKm);
+                Signals.Add(newSignal);
+                //extract lateral distance
+                //foreach (SignalFrame s in signalFrames)
+                //{
+
+                //}
+            }
+
+        }
+
+        public void getNeighbors(PositioningNetElement element, EulynxDataPrepInterface EulynxObject, LinearCoordinate SignalIntrensic)
+        {
+            VisitedElements.Add(element);
+            PositioningNetElement hostElement =null;
+            List<PositionedRelation> relations=  EulynxObject.hasDataContainer[0].ownsRsmEntities.usesTrackTopology.usesPositionedRelation;
+            List<PositionedRelation> targetRelations= relations.FindAll(x => ((x.elementA.@ref== element.id) || (x.elementB.@ref == element.id)));
+            List<PositioningNetElement> relatedElements = new List<PositioningNetElement>();
+            foreach (PositionedRelation relation in targetRelations)
+            {
+                PositioningNetElement elementA = EulynxObject.hasDataContainer[0].ownsRsmEntities.usesTrackTopology.usesNetElement.Find(x=>x.id.Equals(relation.elementA.@ref));
+                PositioningNetElement elementB = EulynxObject.hasDataContainer[0].ownsRsmEntities.usesTrackTopology.usesNetElement.Find(x => x.id.Equals(relation.elementB.@ref));
+
+                if (!relatedElements.Contains(elementA) && !VisitedElements.Contains(elementA))
+                {
+                    relatedElements.Add(elementA);
+                }
+                if (!relatedElements.Contains(elementB) && !VisitedElements.Contains(elementB))
+                {
+                    relatedElements.Add(elementB);
+                }
+              // VisitedElements.Add(elementA);
+              
+            }
+            for ( int i=0; i< relatedElements.Count; i++)
+            {
+                List<IntrinsicCoordinate> intCoordiante= relatedElements[i].associatedPositioning[0].intrinsicCoordinates;
+                LinearCoordinate startKm =(LinearCoordinate) EulynxObject.hasDataContainer[0].ownsRsmEntities.usesTopography.usesPositioningSystemCoordinate.Find(pos => pos.id.Equals(intCoordiante[0].coordinates[0].@ref));
+                LinearCoordinate endKm = (LinearCoordinate)EulynxObject.hasDataContainer[0].ownsRsmEntities.usesTopography.usesPositioningSystemCoordinate.Find(pos => pos.id.Equals(intCoordiante[1].coordinates[0].@ref));
+                if (startKm.measure.value!=null)
+                {
+                    if (startKm.measure.value<= SignalIntrensic.measure.value && endKm.measure.value >= SignalIntrensic.measure.value)
+                    {
+                        neededElement = relatedElements[i];
+                        hostElement= relatedElements[i];
+                        break;
+                        //return hostElement;
+                    }
+                }
+                else
+                {
+                    relatedElements.Remove(relatedElements[i]);
+                    i--;
+                }
+            }
+
+            if (hostElement==null)
+            {
+                foreach (PositioningNetElement elem in relatedElements)
+
+                {
+                    getNeighbors(elem, EulynxObject, SignalIntrensic);
+                }
+            }
+        }
+        public List<System.Windows.Point> getNetElementCartesianCoordinates(PositioningNetElement positioningNetElements,List<PositioningSystemCoordinate> PSCoordinates)
+        {
+            List<System.Windows.Point> points = new List<System.Windows.Point>();
+            AssociatedPositioning associatedPositionings = positioningNetElements.associatedPositioning[1];
+            List<IntrinsicCoordinate> intrinsicCoordinates = associatedPositionings.intrinsicCoordinates;
+            foreach (IntrinsicCoordinate intrinsicCoordinate in intrinsicCoordinates)
+            {
+                List<tElementWithIDref> tElementWithIDrefs = intrinsicCoordinate.coordinates;
+                foreach (tElementWithIDref tElementWithIDref in tElementWithIDrefs)
+                {
+                    CartesianCoordinate cartCoordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(tElementWithIDref.@ref));
+                    System.Windows.Point newPoint = new System.Windows.Point((((double)cartCoordinate.x)), ((double)cartCoordinate.y));
+                    points.Add(newPoint);
+                }
+            }
+            return points;
+        }
+        public void calculateSignalLocation(Signalinfo signal, LinearCoordinate signalIntrensic, LinearCoordinate elementStart, LinearCoordinate elementEnd)
+        {
+
+            double? targetValue = (signalIntrensic.measure.value - elementStart.measure.value)*1000 / signal.AttachedToElementLength;
+       
+            double? targetLengthLocation = targetValue * signal.AttachedToElementLength;
+            
+            double currentLength = 0;
+            for (int i=0; i<signal.Coordinates.Count-1; i++)
+            {
+                currentLength += Math.Sqrt(Math.Pow((signal.Coordinates[i].X - signal.Coordinates[i + 1].X), 2.0) + Math.Pow((signal.Coordinates[i].Y - signal.Coordinates[i + 1].Y),2.0));
+                if (currentLength>targetLengthLocation)
+                {
+                    double? factor = targetLengthLocation / currentLength;
+                    double xdiff = signal.Coordinates[i+1].X - signal.Coordinates[i].X;
+                    double ydiff = signal.Coordinates[i+1].Y - signal.Coordinates[i].Y;
+                    applyRotation(signal, xdiff, ydiff);
+                    signal.LocationCoordinate = new System.Windows.Point((double)(signal.Coordinates[i].X+ xdiff* factor), (double)(signal.Coordinates[i].Y +ydiff * factor));
+                    applyHorizontalOffset(signal, signal.Coordinates[i + 1]);
+                    applyDirection(signal);
+                    break;
+                }
+            }
+            if (signal.LocationCoordinate.X == 0)
+            {
+                signal.LocationCoordinate = new System.Windows.Point((double)(signal.Coordinates[signal.Coordinates.Count - 1].X) - DrawViewModel.GlobalDrawingPoint.X, (double)(signal.Coordinates[signal.Coordinates.Count - 1].Y) - DrawViewModel.GlobalDrawingPoint.Y);
+            }
+        }
+        public void applyRotation(Signalinfo signal, double xdiff, double ydiff)
+        {
+            //negative sign for drawing
+            if (ydiff>=0 && xdiff>=0)
+            {
+                signal.Orientation = -Math.Atan((double)(Math.Abs(ydiff) / Math.Abs(xdiff))) * (180 / Math.PI);
+            }else if (ydiff < 0 && xdiff < 0)
+            {
+                signal.Orientation = -Math.Atan((double)(Math.Abs(ydiff) / Math.Abs(xdiff))) * (180 / Math.PI)-180;
+            }
+            else if (ydiff > 0 && xdiff < 0)
+            {
+                signal.Orientation = -(180-Math.Atan((double)(Math.Abs(ydiff) / Math.Abs(xdiff))) * (180 / Math.PI));
+            }
+            else if (ydiff < 0 && xdiff > 0)
+            {
+                signal.Orientation = Math.Atan((double)(Math.Abs(ydiff) / Math.Abs(xdiff))) * (180 / Math.PI);
+            }
+
+        }
+        public void applyHorizontalOffset(Signalinfo signal, System.Windows.Point backward)
+        {
+            var x = signal.LocationCoordinate.X;
+            var y = signal.LocationCoordinate.Y;
+            var shift = 10;
+
+            var shiftx = 0.0;
+            var shifty = 0.0;
+            if (signal.Side == "right")
+            {
+                if (Math.Abs(signal.Orientation) <= 90)
+                {
+                    shiftx = shift * Math.Sin(Math.Abs(signal.Orientation) * (Math.PI) / 180);
+                    shifty = -shift * Math.Cos(Math.Abs(signal.Orientation) * (Math.PI) / 180);
+                }
+                else if (Math.Abs(signal.Orientation) <= 180 && Math.Abs(signal.Orientation) > 90)
+                {
+                    shiftx = shift * Math.Cos((Math.Abs(signal.Orientation) - 90) * (Math.PI) / 180);
+                    shifty = shift * Math.Sin((Math.Abs(signal.Orientation) - 90) * (Math.PI) / 180);
+                }
+                else if (Math.Abs(signal.Orientation) <= 270 && Math.Abs(signal.Orientation) > 180)
+                {
+
+                    shiftx = -shift * Math.Sin((Math.Abs(signal.Orientation) - 180) * (Math.PI) / 180);
+                    shifty = shift * Math.Cos((Math.Abs(signal.Orientation) - 180) * (Math.PI) / 180);
+                }
+                else if (Math.Abs(signal.Orientation) <= 360 && Math.Abs(signal.Orientation) > 270)
+                {
+                    shiftx = -shift * Math.Cos((Math.Abs(signal.Orientation) - 270) * (Math.PI) / 180);
+                    shifty = -shift * Math.Sin((Math.Abs(signal.Orientation) - 270) * (Math.PI) / 180);
+                }
+
+                }
+                else if (signal.Side == "left")
+                {
+                if (Math.Abs(signal.Orientation) <= 90)
+                {
+                    shiftx = -shift * Math.Sin(Math.Abs(signal.Orientation) * (Math.PI) / 180);
+                    shifty = shift * Math.Cos(Math.Abs(signal.Orientation) * (Math.PI) / 180);
+                }
+                else if (Math.Abs(signal.Orientation) <= 180 && Math.Abs(signal.Orientation) > 90)
+                {
+                    shiftx = -shift * Math.Cos((Math.Abs(signal.Orientation) - 90) * (Math.PI) / 180);
+                    shifty = -shift * Math.Sin((Math.Abs(signal.Orientation) - 90) * (Math.PI) / 180);
+                }
+                else if (Math.Abs(signal.Orientation) <= 270 && Math.Abs(signal.Orientation) > 180)
+                {
+
+                    shiftx = shift * Math.Sin((Math.Abs(signal.Orientation) - 180) * (Math.PI) / 180);
+                    shifty = -shift * Math.Cos((Math.Abs(signal.Orientation) - 180) * (Math.PI) / 180);
+                }
+                else if (Math.Abs(signal.Orientation) <= 360 && Math.Abs(signal.Orientation) > 270)
+                {
+                    shiftx = shift * Math.Cos((Math.Abs(signal.Orientation) - 270) * (Math.PI) / 180);
+                    shifty = shift * Math.Sin((Math.Abs(signal.Orientation) - 270) * (Math.PI) / 180);
+                }
+
+            }
+            x += shiftx;
+            y += shifty;
+
+            signal.LocationCoordinate = new System.Windows.Point(x, y);
+        }
+        public void applyDirection(Signalinfo signal)
+        {
+            if (signal.Direction.Equals("2") || signal.Direction.Equals("reverse"))
+            {
+                signal.Orientation = signal.Orientation-180;
+            }
+        }
+        public string [] extractSignalTypeAndFunction(Models.TopoModels.EULYNX.rsmSig.Signal signal , EulynxDataPrepInterface EulynxObject)
+        {
+            string type = "notFound" ;
+            string function= "notFound";
+
+            var ownsSignal = EulynxObject.hasDataContainer[0].ownsRsmEntities.ownsSignal;
+            var ownsSignalType = EulynxObject.hasDataContainer[0].ownsDataPrepEntities.ownsSignalType;
+            var ownsSignalFunction = EulynxObject.hasDataContainer[0].ownsDataPrepEntities.ownsSignalFunction;
+            var ownsTrackAsset = EulynxObject.hasDataContainer[0].ownsDataPrepEntities.ownsTrackAsset;
+
+            LightSignalTyped trackAsset=null;
+            foreach (Models.TopoModels.EULYNX.db.SignalType signalType in ownsSignalType)
+            {
+                trackAsset = ownsTrackAsset.Find(x => x.id.Equals(signalType.appliesToSignal.@ref)) as LightSignalTyped;
+                Models.TopoModels.EULYNX.rsmSig.Signal current_signal = ownsSignal.Find(x => x.id.Equals(trackAsset.refersToRsmSignal.@ref));
+                if (current_signal.id == signal.id)
+                {
+                    foreach (Models.TopoModels.EULYNX.db.SignalFunction signalFunction in ownsSignalFunction)
+                    {
+                        if (signalFunction.appliesToSignal.@ref.Equals(signalType.appliesToSignal.@ref))
+                        {
+                            function = signalFunction.isOfSignalFunctionType?.ToString();
+                        }
+                    }
+                    type = signalType.isOfSignalTypeType?.ToString();
+                }
+            }
+
+            return  new string[2] { type, function };
+        }
+        #endregion
+    }
+}
