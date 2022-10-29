@@ -18,7 +18,7 @@ namespace APLan.ViewModels
         #endregion
 
         #region attributes
-        private double previousAngle; // store the current rotation of the canvas.
+        //private double previousAngle; // store the current rotation of the canvas.
         private Brush _selectBrush;
         private Brush _moveBrush;
         private Brush _dragBrush;
@@ -113,37 +113,6 @@ namespace APLan.ViewModels
         {
             var drawing = Draw.drawing;
             var scroll = Draw.drawingScrollViewer;
-            // //rotate around midpoint of drawing visible area.
-            // Point p = new((scroll.HorizontalOffset+ scroll.ActualWidth) / 2, (scroll.VerticalOffset + scroll.ActualHeight) / 2);
-            // //Point p = new(0, 0);
-            //// Point canvasPpint = scroll.TranslatePoint(p, drawing);
-            // Point canvasPpint= new(0, 0);
-            // TransformGroup transformGroup = (TransformGroup)drawing.LayoutTransform;
-            // RotateTransform rotateTransform = (RotateTransform)transformGroup.Children[1];
-
-            // rotateTransform.Angle = e.NewValue;
-            // //scroll.ScrollToHorizontalOffset(0);
-            // //scroll.ScrollToVerticalOffset(0);
-            // //rotateTransform.Angle = e.NewValue;
-            // drawing.UpdateLayout();
-            // scroll.UpdateLayout();
-
-            // var width= scroll.ScrollableWidth;
-            // var height = scroll.ScrollableHeight;
-            // Point ScrollViewerPoint = drawing.TranslatePoint(canvasPpint, scroll);
-
-
-            // scroll.ScrollToHorizontalOffset(ScrollViewerPoint.X);
-            // scroll.ScrollToVerticalOffset(ScrollViewerPoint.Y);
-            // scroll.UpdateLayout();
-            // //Matrix matrix = RotateTransform.Value;
-            // //matrix.RotateAtPrepend(-previousAngle, translatedP.X, translatedP.Y);
-            // //matrix.RotateAtPrepend(e.NewValue, translatedP.X, translatedP.Y);
-
-            // //update previous applied angle for next time use.
-            // previousAngle = e.NewValue;
-            // //transform.Matrix = matrix;
-
         }
         /// <summary>
         /// allow selection
@@ -151,17 +120,20 @@ namespace APLan.ViewModels
         /// <param name="parameter"></param>
         public void ExecuteSelectButton(object parameter)
         {
-            if (DrawViewModel.tool != DrawViewModel.SelectedTool.Select)
+            if (DrawViewModel.tool != DrawViewModel.SelectedTool.MultiSelect)
             {
-                DrawViewModel.tool = DrawViewModel.SelectedTool.Select;
+                DrawViewModel.tool = DrawViewModel.SelectedTool.MultiSelect;
                 SelectBrush = Brushes.Gray;
                 MoveBrush = Brushes.White;
                 DragBrush = Brushes.White;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+                
             }
-            else if (DrawViewModel.tool == DrawViewModel.SelectedTool.Select)
+            else if (DrawViewModel.tool == DrawViewModel.SelectedTool.MultiSelect)
             {
                 DrawViewModel.tool = DrawViewModel.SelectedTool.None;
                 SelectBrush = Brushes.White;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
             }
 
         }
@@ -177,11 +149,13 @@ namespace APLan.ViewModels
                 SelectBrush = Brushes.White;
                 MoveBrush = Brushes.Gray;
                 DragBrush = Brushes.White;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.SizeAll;
             }
             else if (DrawViewModel.tool == DrawViewModel.SelectedTool.Move)
             {
                 DrawViewModel.tool = DrawViewModel.SelectedTool.None;
                 MoveBrush = Brushes.White;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
             }
 
         }
@@ -197,11 +171,13 @@ namespace APLan.ViewModels
                 SelectBrush = Brushes.White;
                 MoveBrush = Brushes.White;
                 DragBrush = Brushes.Gray;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Hand;
             }
             else if (DrawViewModel.tool == DrawViewModel.SelectedTool.Drag)
             {
                 DrawViewModel.tool = DrawViewModel.SelectedTool.None;
                 DragBrush = Brushes.White;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
             }
         }
         /// <summary>

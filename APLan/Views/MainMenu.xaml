@@ -91,8 +91,8 @@
             </MenuItem>-->
 
             <MenuItem Header="_Canvas">
-                <MenuItem Header="Grid"
-                          IsChecked="True"
+                <MenuItem Header="BlackTheme"
+                          IsChecked="False"
                           Click="MenuItem_Grid_Click"></MenuItem>
             </MenuItem>
         </MenuItem>

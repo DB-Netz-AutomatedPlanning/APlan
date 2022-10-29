@@ -12,7 +12,6 @@ using System.Collections.ObjectModel;
 using System.Collections;
 using System.Collections.Generic;
 using APLan.HelperClasses;
-
 namespace APLan.ViewModels
 {
     public class DrawViewModel : INotifyPropertyChanged
@@ -22,18 +21,18 @@ namespace APLan.ViewModels
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         #endregion
-        
+
         #region enum
         public enum SelectedTool
         {
             None,
-            Select,
+            MultiSelect,
             Drag,
             Move,
             Rotate,
             Scale
         }
-        #endregion
+        #endregion  
 
         #region attributes
         public static ModelViewModel model;
@@ -53,6 +52,7 @@ namespace APLan.ViewModels
         public static double drawingScale = 1;
         public static double signalSizeForConverter;
         public static Point GlobalDrawingPoint = new Point(0, 0);
+        private Line indicationLine;
 
         //for mouse location.
         private System.Windows.Point pointer;
@@ -153,7 +153,6 @@ namespace APLan.ViewModels
                 signalSizeForConverter = value;
             }
         }
-
         public string Xlocation
         {
             get => _xLocation;
@@ -344,11 +343,6 @@ namespace APLan.ViewModels
                    });
             }
         }
-
-
-
-
-
         #endregion
 
         #region mouse events logic
@@ -358,7 +352,7 @@ namespace APLan.ViewModels
         /// <param name="e"></param>
         private void ExecuteMouseMoveBaseCanvas(MouseEventArgs e)
         {
-            if (tool==SelectedTool.Select)
+            if (tool==SelectedTool.MultiSelect)
             {
                 multiselectAlgo(e); // apply multiselection while the mouse if moving if selection is allowed.
             }
@@ -382,13 +376,19 @@ namespace APLan.ViewModels
             //Xlocation = (e.GetPosition(element).X).ToString();
             //Ylocation = (e.GetPosition(element).Y).ToString();
 
+            if (element.Children.Contains(indicationLine))
+            {
+                indicationLine.X2= Mouse.GetPosition(element).X;
+                indicationLine.Y2 = Mouse.GetPosition(element).Y;
+            }
+
             //dragging
             if (tool == SelectedTool.Drag && e.LeftButton == MouseButtonState.Pressed)
             {
                 dragSelection(e);
             }
 
-            if (tool == SelectedTool.Select)
+            if (tool == SelectedTool.MultiSelect)
             {
                 multiselectAlgo(e); // apply multiselection while the mouse if moving if selection is allowed.
             }
@@ -478,7 +478,7 @@ namespace APLan.ViewModels
                 case SelectedTool.Move:
                     moveSelection(e); //moving the selected items
                     break;
-                case SelectedTool.Select:
+                default:
                     singleSelection(e); // select an item.
                     break;
             }
@@ -499,6 +499,10 @@ namespace APLan.ViewModels
                     break;
                 case Key.Escape:
                     CancelSelected();
+                    resetToolSelection();
+                    removeHelperItemsFromCanvas();
+                    resetPointers();
+                    System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
                     break;
             }
         }
@@ -724,22 +728,26 @@ namespace APLan.ViewModels
                 // Perform the hit test against a given portion of the visual object tree.
                 HitTestResult result = VisualTreeHelper.HitTest(c, pt);
 
+                if (result==null)
+                {
+                    clearSelection(selected);
+                }
+
                 if (result != null && ((UIElement)result.VisualHit).IsVisible == true)
                 {
                     UIElement element = (UIElement)result.VisualHit;
-
-
-                    if (selected.Contains(element) == false)
+                    if (tool==SelectedTool.None)
                     {
-                        element.Opacity = 0.5;
-                        selected.Add(element);
-
+                        clearSelection(selected);
+                        addItemToSelection(selected, element);
                     }
-                    else
+                    else if (tool == SelectedTool.MultiSelect && !selected.Contains(element))
                     {
-                        element.Opacity = 1;
-                        selected.Remove(element);
-
+                        addItemToSelection(selected,element);
+                    }
+                    else if(tool == SelectedTool.MultiSelect && selected.Contains(element))
+                    {
+                        removeItemFromSelection(selected, element);
                     }
                 }
             }
@@ -764,14 +772,25 @@ namespace APLan.ViewModels
 
             if (InitialMovePoint.X == -1)
             {
-                InitialMovePoint = Mouse.GetPosition(drawingCanvas);
-
+                var position = Mouse.GetPosition(drawingCanvas);
+                InitialMovePoint = position;
+                indicationLine = new Line();
+                indicationLine.X1 = position.X;
+                indicationLine.Y1 = position.Y;
+                indicationLine.StrokeThickness = 0.5;
+                IEnumerable<double> dashing = new double[] { 10, 10 };
+                indicationLine.StrokeDashArray = new DoubleCollection(dashing);
+                indicationLine.Stroke = Brushes.Gray;
+                
+                drawingCanvas.Children.Add(indicationLine);
             }
             else if (InitialMovePoint.X != -1)
             {
                 MoveOffest.X = Mouse.GetPosition(drawingCanvas).X - InitialMovePoint.X;
                 MoveOffest.Y = Mouse.GetPosition(drawingCanvas).Y - InitialMovePoint.Y;
                 InitialMovePoint = new Point(-1, -1);
+
+                drawingCanvas.Children.Remove(indicationLine);
                 updateSelectionMoveOperation(MoveOffest.X, MoveOffest.Y);
             }
         }
@@ -828,7 +847,6 @@ namespace APLan.ViewModels
         /// </summary>
         public void deleteSelected()
         {
-
             for (int i = 0; i < selected.Count; i++)
             {
                 if (selected[i].GetType() != typeof(System.Windows.Shapes.Path) && selected[i].GetType() != typeof(APLan.HelperClasses.CustomSignal))
@@ -840,6 +858,7 @@ namespace APLan.ViewModels
                         c.Children.Remove(selected[i]);
                         toBeStored.Remove((UIElement)selected[i]);
                         selected.Remove(selected[i]);
+                        i--;
                     }
                     else // it is a loaded object
                     {
@@ -864,11 +883,7 @@ namespace APLan.ViewModels
         /// </summary>
         public void CancelSelected()
         {
-            foreach (UIElement e in selected)
-            {
-                e.Opacity = 1;
-            }
-            selected.Clear();
+            clearSelection(selected);
         }
         /// <summary>
         /// filtering the selection for a specific objects only.
@@ -967,10 +982,76 @@ namespace APLan.ViewModels
             Canvas.SetTop(e, 0);
             //canvas.Children.Add(e);
         }
-
         public void ExecuteGridColorActivation(object parameter)
         {
             var item= (MenuItem)parameter;
+        }
+        public void resetPreSelectionColor(ObservableCollection<UIElement> selected)
+        {
+            foreach (UIElement selec in selected)
+            {
+                selec.Opacity = 1;
+            }
+        }
+        public void colorSelection(ObservableCollection<UIElement> selected)
+        {
+            foreach (UIElement selec in selected)
+            {
+                selec.Opacity = 0.5;
+            }
+        }
+        public void clearSelection(ObservableCollection<UIElement> selected)
+        {
+            resetPreSelectionColor(selected);
+            selected.Clear();
+        }
+        public void addItemToSelection(ObservableCollection<UIElement> selected,UIElement element)
+        {
+            selected.Add(element);
+            element.Opacity = 0.5;
+        }
+        public void removeItemFromSelection(ObservableCollection<UIElement> selected, UIElement element)
+        {
+            selected.Remove(element);
+            element.Opacity = 1;
+        }
+        public void resetToolSelection()
+        {
+            DrawViewModel.tool = DrawViewModel.SelectedTool.None;
+            var canvasToolsTabViewModel = System.Windows.Application.Current.Resources["canvasToolsTabViewModel"] as CanvasToolsTabViewModel;
+            canvasToolsTabViewModel.SelectBrush = Brushes.White;
+            canvasToolsTabViewModel.MoveBrush = Brushes.White;
+            canvasToolsTabViewModel.DragBrush = Brushes.White;
+        }
+        /// <summary>
+        /// remove temporary items. like rectangles,lines.. used in drawing.
+        /// </summary>
+        public void removeHelperItemsFromCanvas()
+        {
+            childRemover(indicationLine);
+            childRemover(selectionRectangle);
+        }
+        /// <summary>
+        /// resent all the points that is used for drawing logic.
+        /// </summary>
+        public void resetPointers()
+        {
+            firsPoint = new Point(0, 0);
+            InitialMovePoint = new Point(-1, -1);
+            InitialDragPoint = new Point(-1, -1);
+            MoveOffest = new Point(-1, -1);
+            DraOffset = new Point(-1, -1);
+        }
+        public void childRemover(UIElement element)
+        {
+            if (element!=null)
+            {
+                var canvas = HelperClasses.VisualTreeHelpers.FindAncestor<Canvas>(element);
+                if (canvas != null && canvas.Children.Contains(element))
+                {
+                    canvas.Children.Remove(element);
+                }
+            }
         }
         #endregion
 

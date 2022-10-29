@@ -126,12 +126,12 @@ namespace APLan.Views
             var menuItem = (MenuItem)sender;
             if (menuItem.IsChecked)
             {
-                System.Windows.Application.Current.Resources["gridColor"] = new SolidColorBrush(Colors.Transparent);
+                System.Windows.Application.Current.Resources["backGround"] = new SolidColorBrush(Colors.White);
                 menuItem.IsChecked = false;
             }
             else
             {
-                System.Windows.Application.Current.Resources["gridColor"] = new SolidColorBrush(Colors.Gray);
+                System.Windows.Application.Current.Resources["backGround"] = new SolidColorBrush(Colors.Black);
                 menuItem.IsChecked = true;
             }
         }

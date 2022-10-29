@@ -8,8 +8,15 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <SolidColorBrush x:Key="gridColor">gray</SolidColorBrush>
+
+        <Cursor x:Key="arrow">Arrow</Cursor>
+        <SolidColorBrush x:Key="backGround">white</SolidColorBrush>
         <SolidColorBrush x:Key="themeColor">#cc54f4</SolidColorBrush>
+
+
+
+
+
         <Style TargetType="ScrollBar">
             <Setter Property="Background" Value="white"/>
         </Style>

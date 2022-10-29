@@ -14,6 +14,7 @@ using System;
 using System.Windows.Media;
 using aplan.core;
 using APLan.Views;
+using System.Threading.Tasks;
 
 namespace APLan.ViewModels
 {
@@ -366,6 +367,7 @@ namespace APLan.ViewModels
 
             KantenPoints = new RelayCommand(ExecuteKantenPoints);
 
+            WelcomeVisibility = Visibility.Visible;
             WelcomeInfo = "Welcome";
         }
         #endregion
@@ -614,6 +616,7 @@ namespace APLan.ViewModels
                     }
                 }
             }
+            WelcomeVisibility = Visibility.Collapsed;
         }
         public void createJSONproject()
         {
@@ -674,10 +677,11 @@ namespace APLan.ViewModels
         /// load .euxml file representing the saved Eulynx model.
         /// </summary>
         /// <param name="f"></param>
-        public void loadEuxml(string f)
+        public async void loadEuxml(string f)
         {
             var EulynxValidatorViewModel = System.Windows.Application.Current.FindResource("EulynxValidatorViewModel") as EulynxValidatorViewModel;
-            string report = EulynxValidatorViewModel.validate(f);
+            Task<string> reportTask =  EulynxValidatorViewModel.validate(f);
+            string report = await reportTask;
             if (report.Contains("Validation is Successful"))
             {
                 var eulynxService = EulynxService.getInstance();
@@ -716,7 +720,7 @@ namespace APLan.ViewModels
                 }
 
             }
-            
+
         }
         /// <summary>
         /// load an APlan binary file representing the saved items.

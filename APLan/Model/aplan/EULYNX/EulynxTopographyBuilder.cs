@@ -366,7 +366,6 @@ namespace aplan.eulynx
                 {
                     // get alignment type
                     var type = item.alignmentTypeText;
-
                     switch (type)
                     {
                         case verticalAlignmentType.Line:

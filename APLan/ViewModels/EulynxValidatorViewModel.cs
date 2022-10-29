@@ -8,10 +8,12 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
+using System.Timers;
 
 namespace APLan.ViewModels
 {
@@ -33,6 +35,10 @@ namespace APLan.ViewModels
         private string path;
         private string report;
         private string report_rules;
+        private string loadingStatus;
+        private int loadingIconAngle;
+        private System.Timers.Timer timer;
+        private Visibility loadingVisibility;
         public string XML
         {
             get { return xml; }
@@ -69,6 +75,33 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string LoadingStatus
+        {
+            get { return loadingStatus; }
+            set
+            {
+                loadingStatus = value;
+                OnPropertyChanged();
+            }
+        }
+        public int LoadingIconAngle
+        {
+            get { return loadingIconAngle; }
+            set
+            {
+                loadingIconAngle = value;
+                OnPropertyChanged();
+            }
+        }
+        public Visibility LoadingVisibility
+        {
+            get { return loadingVisibility; }
+            set
+            {
+                loadingVisibility = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region commands
@@ -90,6 +123,14 @@ namespace APLan.ViewModels
             Cancel = new RelayCommand(ExecuteCancel);
             folderBrowserDialog1 = new FolderBrowserDialog();
             openFileDialog1 = new OpenFileDialog();
+
+            LoadingVisibility = Visibility.Collapsed;
+            timer = new System.Timers.Timer
+            {
+                Interval = 50,
+                AutoReset = true
+            };
+            timer.Elapsed += Timer_Elapsed;
         }
         #endregion
 
@@ -105,13 +146,19 @@ namespace APLan.ViewModels
             folderBrowserDialog1.ShowDialog();
             Path = folderBrowserDialog1.SelectedPath;
         }
-        public void ExecuteValidate(object parameter)
+        public async void ExecuteValidate(object parameter)
         {
+            startLoading();
             //define XSD validation version based on the imported xml.
-            Report = validate(XML);
+            //Task<string> result= validate(XML);
+            validate(XML);
 
+            Task<bool> task = RulesValidate(XML);
+
+            bool finished = await task;
             //validate according to the rules in German book.
-            Report_rules = RulesValidate(XML);
+            //Report_rules = RulesValidate(XML);
+            stopLoading(finished);
 
         }
         public void ExecuteCancel(object parameter)
@@ -124,14 +171,17 @@ namespace APLan.ViewModels
         /// <param name="report"></param>
         /// <param name="xml"></param>
         /// <returns></returns>
-        public string validate(string xml)
+        public async Task<string> validate(string xml)
         {
-            string validationReport="";
-            if (File.Exists(xml)) // if the file exists only.
+            LoadingStatus = "Validating against XSD";
+            string validationReport = "";
+            await Task.Run(() =>
             {
-                XmlTextReader reader = new XmlTextReader(xml);
-                ArrayList nameSpaces = new ArrayList();
-                while (reader.Read())
+                if (File.Exists(xml)) // if the file exists only.
+                {
+                    XmlTextReader reader = new XmlTextReader(xml);
+                    ArrayList nameSpaces = new ArrayList();
+                    while (reader.Read())
                 {
                     if (reader.NodeType == XmlNodeType.Element)
                     {
@@ -143,21 +193,25 @@ namespace APLan.ViewModels
                         }
                     }
                 }
-                //XSD validation
-                EulynxXmlValidator validator = EulynxXmlValidator.getInstance();
-                ArrayList ValidationVersion_NameSpace = validator.XSDvalidationVersionCheck(nameSpaces);
-                validationReport = "XSD Validation : ";
-                if (ValidationVersion_NameSpace.Count != 0)
-                {
-                    validationReport += "Validation Version is " + ValidationVersion_NameSpace[0].ToString() + "\n";
-                    validationReport += validator.validate(xml, ValidationVersion_NameSpace[0].ToString(), (List<string>)ValidationVersion_NameSpace[1]) + "\n";
+                    //XSD validation
+                    EulynxXmlValidator validator = EulynxXmlValidator.getInstance();
+                    ArrayList ValidationVersion_NameSpace = validator.XSDvalidationVersionCheck(nameSpaces);
+                    validationReport = "XSD Validation : ";
+                    if (ValidationVersion_NameSpace.Count != 0)
+                    {
+                        validationReport += "Validation Version is " + ValidationVersion_NameSpace[0].ToString() + "\n";
+                        validationReport += validator.validate(xml, ValidationVersion_NameSpace[0].ToString(), (List<string>)ValidationVersion_NameSpace[1]) + "\n";
+                    }
+                    else
+                    {
+                        validationReport += "File don't contain the required name spaces";
+                    }
+
                 }
-                else
-                {
-                    validationReport += "File don't contain the required name spaces";
-                }
-            }
-            createReportFile(validationReport, Path+"/"+nameof(validationReport)+".txt");
+                createReportFile(validationReport, Path+"/"+nameof(validationReport)+".txt");
+
+            });
+            Report = validationReport;
             return validationReport;
         }
         /// <summary>
@@ -165,13 +219,18 @@ namespace APLan.ViewModels
         /// </summary>
         /// <param name="euxmlPath"></param>
         /// <returns></returns>
-        public string RulesValidate(string euxmlPath)
+        public async Task<bool> RulesValidate(string euxmlPath)
         {
-            string RulesReport = null;
-            HelperClasses.RulesValidator validator = new HelperClasses.RulesValidator(euxmlPath);
-            RulesReport = validator.runRulesTesting();
-            createReportFile(RulesReport, Path + "/" + nameof(RulesReport) + ".txt");
-            return RulesReport;
+            LoadingStatus = "Validating against Rules";
+            await Task.Run(() =>
+            {
+                string RulesReport = null;
+                HelperClasses.RulesValidator validator = new HelperClasses.RulesValidator(euxmlPath);
+                RulesReport = validator.runRulesTesting();
+                createReportFile(RulesReport, Path + "/" + nameof(RulesReport) + ".txt");
+                Report_rules = RulesReport;
+            });
+            return true;
         }
         /// <summary>
         /// Create a file to contain a report.
@@ -191,6 +250,31 @@ namespace APLan.ViewModels
                 }
             }
 
+        }
+
+        /// <summary>
+        /// start the loading sign.
+        /// </summary>
+        public void startLoading()
+        {
+            timer.Enabled = true;
+            LoadingVisibility = Visibility.Visible;
+            timer.Start();
+        }
+        /// <summary>
+        /// stop the loading sign.
+        /// </summary>
+        /// <param name="stop"></param>
+        public void stopLoading(bool stop)
+        {
+            timer.Stop();
+            LoadingIconAngle = 0;
+            LoadingStatus = "";
+            LoadingVisibility = Visibility.Collapsed;
+        }
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            LoadingIconAngle += 10;
         }
         #endregion
     }

@@ -12,6 +12,7 @@
         WindowState="Maximized"
         Icon="/Resources/Icons/eulynx-logo.png"
         Title="MainWindow" Height="2000" Width="2000">
+    
     <Window.DataContext>
         <StaticResource ResourceKey="drawViewModel"/>
     </Window.DataContext>
@@ -22,6 +23,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
+        
         <Grid.RowDefinitions >
             <RowDefinition x:Name="R0" Height="30"/>
             <RowDefinition x:Name="R1" Height="130"/>
@@ -35,14 +37,16 @@
             <ColumnDefinition x:Name="C2" Width="0.01*"/>
             <ColumnDefinition x:Name="C3" Width="*"/>
         </Grid.ColumnDefinitions>
-        <Border Visibility="{Binding WelcomeVisibility, Source={StaticResource newProjectViewModel}}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2" Background="White" Panel.ZIndex="0">
-            <StackPanel VerticalAlignment="Center">
-                <Image Source="/Resources/icons/eulynx-logo.png" Width="100" Height="100"/>
-                <TextBlock HorizontalAlignment="Center" FontSize="50" FontStyle="Italic" Text="{Binding WelcomeInfo, Source={StaticResource newProjectViewModel}, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-        </Border>
+        
+        
+
         <views:MainMenu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" 
                         Panel.ZIndex="2"/>
+
+        <views:Welcome Grid.Row="1"
+                       Grid.ColumnSpan="4" 
+                       Grid.RowSpan="4"
+                       Panel.ZIndex="3"></views:Welcome>
         <views:Tabs Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
@@ -68,7 +72,7 @@
             <views:Draw x:Name="drawingTab"
                         Panel.ZIndex="1"
                         Margin="-500"
-                        Background="Black"
+                        Background="{DynamicResource backGround}"
                         Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Converter={StaticResource DrawUserControlSize}}"
                         Height="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Converter={StaticResource DrawUserControlSize}}">
                 <views:Draw.RenderTransform>
