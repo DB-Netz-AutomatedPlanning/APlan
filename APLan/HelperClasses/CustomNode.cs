@@ -9,13 +9,8 @@ namespace APLan.HelperClasses
     /// <summary>
     /// Node to contain all the information about the GleisKnote
     /// </summary>
-    public class CustomNode : INotifyPropertyChanged
+    public class CustomNode : CustomItem
     {
-        #region INotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        #endregion
         #region attributes
         private SolidColorBrush color;
         /// <summary>

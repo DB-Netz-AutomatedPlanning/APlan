@@ -26,7 +26,6 @@
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"></Setter>
                 </Style>
-
             </Style.Resources>
         </Style>
         <ControlTemplate x:Key="TextBoxBaseControlTemplate" TargetType="{x:Type TextBoxBase}">
@@ -136,7 +135,7 @@
                                              CenterY="15"/>
                         </Image.RenderTransform>
                     </Image>
-                    <TextBlock Text="{Binding LoadingStatus}"></TextBlock>
+                    <TextBlock Text="{Binding LoadingReport}"></TextBlock>
                 </StackPanel>
                 <Button x:Name="validate"
                         Grid.Column="2"

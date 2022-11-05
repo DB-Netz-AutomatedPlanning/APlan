@@ -12,11 +12,12 @@
         WindowState="Maximized"
         Icon="/Resources/Icons/eulynx-logo.png"
         Title="MainWindow" Height="2000" Width="2000">
-    
+
     <Window.DataContext>
         <StaticResource ResourceKey="drawViewModel"/>
     </Window.DataContext>
     <i:Interaction.Triggers>
+        
         <i:EventTrigger EventName="KeyDown">
             <i:InvokeCommandAction Command="{Binding KeyDownForMainWindow}"
                                    PassEventArgsToCommand="True"/>
@@ -37,9 +38,6 @@
             <ColumnDefinition x:Name="C2" Width="0.01*"/>
             <ColumnDefinition x:Name="C3" Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        
-
         <views:MainMenu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" 
                         Panel.ZIndex="2"/>
 

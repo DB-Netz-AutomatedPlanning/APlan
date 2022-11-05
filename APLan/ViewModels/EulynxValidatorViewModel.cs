@@ -17,16 +17,8 @@ using System.Timers;
 
 namespace APLan.ViewModels
 {
-    public class EulynxValidatorViewModel : INotifyPropertyChanged
-    {
-        #region Inotify essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        #endregion
-        
+    public class EulynxValidatorViewModel : BaseViewModel
+    { 
         #region attributes
         private FolderBrowserDialog folderBrowserDialog1;
         private OpenFileDialog openFileDialog1;
@@ -35,10 +27,6 @@ namespace APLan.ViewModels
         private string path;
         private string report;
         private string report_rules;
-        private string loadingStatus;
-        private int loadingIconAngle;
-        private System.Timers.Timer timer;
-        private Visibility loadingVisibility;
         public string XML
         {
             get { return xml; }
@@ -75,33 +63,6 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-        public string LoadingStatus
-        {
-            get { return loadingStatus; }
-            set
-            {
-                loadingStatus = value;
-                OnPropertyChanged();
-            }
-        }
-        public int LoadingIconAngle
-        {
-            get { return loadingIconAngle; }
-            set
-            {
-                loadingIconAngle = value;
-                OnPropertyChanged();
-            }
-        }
-        public Visibility LoadingVisibility
-        {
-            get { return loadingVisibility; }
-            set
-            {
-                loadingVisibility = value;
-                OnPropertyChanged();
-            }
-        }
         #endregion
 
         #region commands
@@ -125,12 +86,6 @@ namespace APLan.ViewModels
             openFileDialog1 = new OpenFileDialog();
 
             LoadingVisibility = Visibility.Collapsed;
-            timer = new System.Timers.Timer
-            {
-                Interval = 50,
-                AutoReset = true
-            };
-            timer.Elapsed += Timer_Elapsed;
         }
         #endregion
 
@@ -150,16 +105,10 @@ namespace APLan.ViewModels
         {
             startLoading();
             //define XSD validation version based on the imported xml.
-            //Task<string> result= validate(XML);
-            validate(XML);
-
-            Task<bool> task = RulesValidate(XML);
-
-            bool finished = await task;
+            await validate(XML);
             //validate according to the rules in German book.
-            //Report_rules = RulesValidate(XML);
-            stopLoading(finished);
-
+            await RulesValidate(XML);
+            stopLoading();
         }
         public void ExecuteCancel(object parameter)
         {
@@ -173,7 +122,7 @@ namespace APLan.ViewModels
         /// <returns></returns>
         public async Task<string> validate(string xml)
         {
-            LoadingStatus = "Validating against XSD";
+            LoadingReport = "Validating against XSD";
             string validationReport = "";
             await Task.Run(() =>
             {
@@ -209,7 +158,6 @@ namespace APLan.ViewModels
 
                 }
                 createReportFile(validationReport, Path+"/"+nameof(validationReport)+".txt");
-
             });
             Report = validationReport;
             return validationReport;
@@ -221,7 +169,7 @@ namespace APLan.ViewModels
         /// <returns></returns>
         public async Task<bool> RulesValidate(string euxmlPath)
         {
-            LoadingStatus = "Validating against Rules";
+            LoadingReport = "Validating against Rules";
             await Task.Run(() =>
             {
                 string RulesReport = null;
@@ -251,31 +199,10 @@ namespace APLan.ViewModels
             }
 
         }
-
-        /// <summary>
-        /// start the loading sign.
-        /// </summary>
-        public void startLoading()
-        {
-            timer.Enabled = true;
-            LoadingVisibility = Visibility.Visible;
-            timer.Start();
-        }
         /// <summary>
         /// stop the loading sign.
         /// </summary>
         /// <param name="stop"></param>
-        public void stopLoading(bool stop)
-        {
-            timer.Stop();
-            LoadingIconAngle = 0;
-            LoadingStatus = "";
-            LoadingVisibility = Visibility.Collapsed;
-        }
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            LoadingIconAngle += 10;
-        }
         #endregion
     }
 }

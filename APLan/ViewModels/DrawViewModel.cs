@@ -14,14 +14,8 @@ using System.Collections.Generic;
 using APLan.HelperClasses;
 namespace APLan.ViewModels
 {
-    public class DrawViewModel : INotifyPropertyChanged
+    public class DrawViewModel : BaseViewModel
     {
-        #region Inotify essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        #endregion
-
         #region enum
         public enum SelectedTool
         {

@@ -7,6 +7,7 @@ using LiteDB;
 using aplan.database;
 
 using static aplan.core.Helper;
+using APLan.HelperClasses;
 
 // Linear Coordinate -> database
 
@@ -599,7 +600,6 @@ namespace aplan.core
                                 pad = reader["PAD"].ToString(),
                                 originNodeID = reader["KN0"].ToString()
                             };
-
                             // assigning node direction information for planning purpose
                             // help to identify which route the node belongs to
                             // p.s in this case is either 1 and 0

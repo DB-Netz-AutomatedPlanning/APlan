@@ -9,14 +9,8 @@ using APLan.HelperClasses;
 
 namespace APLan.ViewModels
 {
-    public class CanvasToolsTabViewModel : INotifyPropertyChanged
+    public class CanvasToolsTabViewModel : BaseViewModel
     {
-        #region INotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        #endregion
-
         #region attributes
         //private double previousAngle; // store the current rotation of the canvas.
         private Brush _selectBrush;

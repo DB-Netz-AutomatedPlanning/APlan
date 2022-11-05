@@ -9,14 +9,8 @@ namespace APLan.HelperClasses
     /// <summary>
     /// object to contain all information about the polylines.
     /// </summary>
-    public class CustomPolyLine  : INotifyPropertyChanged
+    public class CustomPolyLine  : CustomItem
     {
-        #region INotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        #endregion
-
         #region attributes
         //contains all information from the Eulynx Object.
         public ObservableCollection<KeyValue> Data

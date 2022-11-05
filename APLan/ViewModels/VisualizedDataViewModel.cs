@@ -7,14 +7,8 @@ using System.Windows.Input;
 
 namespace APLan.ViewModels
 {
-    public class VisualizedDataViewModel : INotifyPropertyChanged
+    public class VisualizedDataViewModel : BaseViewModel
     {
-        #region INotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        #endregion
-
         #region attributes
 
         private double lineThicnkess = 0.5;

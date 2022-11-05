@@ -15,24 +15,22 @@ using System.Windows.Media;
 using aplan.core;
 using APLan.Views;
 using System.Threading.Tasks;
+using System.Windows.Data;
+
+using static net.sf.saxon.trans.SymbolicName;
+using System.Threading;
+using System.Windows.Threading;
+using System.Timers;
 
 namespace APLan.ViewModels
 {
-    public class NewProjectViewModel : INotifyPropertyChanged
+    public class NewProjectViewModel : BaseViewModel
     {
-        #region Inotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        #endregion
-
         #region attributes
 
         private FolderBrowserDialog folderBrowserDialog1;
         private OpenFileDialog openFileDialog1;
-
+        private Loading loadingObject;
         private bool saveButtonActive;
         private bool saveAsButtonActive;
         private bool printButtonActive;
@@ -54,6 +52,7 @@ namespace APLan.ViewModels
         public static string currentProjectPath = null; //this would be used to know our project path.
         public static string currentProjectName = null; //this would be used to know our project path.
         private string projectName = null;
+        
 
         private string OpenProjectPath { get; set; }
         public string ProjectName
@@ -251,12 +250,6 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        public ObservableCollection<Point> KantenPointsHoaX
-        {
-            get;
-            set;
-        }
         public ObservableCollection<CanvasObjectInformation> loadedObjects
         {
             get;
@@ -335,6 +328,7 @@ namespace APLan.ViewModels
         #region constructor
         public NewProjectViewModel()
         {
+            loadingObject = System.Windows.Application.Current.FindResource("globalLoading") as Loading;
             AddPath = new RelayCommand(ExecuteAddPath);
             BrowseJson = new RelayCommand(ExecuteBrowseJson);
             BrowseMDB = new RelayCommand(ExecuteBrowseMDB);
@@ -350,45 +344,42 @@ namespace APLan.ViewModels
             loadedObjects = new ObservableCollection<CanvasObjectInformation>(); //binded to view
 
             gleiskantenList = new ObservableCollection<CustomPolyLine>();
-            gleiskantenPointsList = new ObservableCollection<Point>();
-
             Entwurfselement_LA_list = new ObservableCollection<CustomPolyLine>();
             Entwurfselement_KM_list = new ObservableCollection<CustomPolyLine>();
             Entwurfselement_HO_list = new ObservableCollection<CustomPolyLine>();
             Entwurfselement_UH_list = new ObservableCollection<CustomPolyLine>();
 
             gleisknotenList = new ObservableCollection<CustomNode>();
+
+            gleiskantenPointsList = new ObservableCollection<Point>();
             Entwurfselement_LAPointsList = new ObservableCollection<Point>();
             Entwurfselement_KMPointsList = new ObservableCollection<Point>();
             Entwurfselement_HOPointsList = new ObservableCollection<Point>();
             Entwurfselement_UHPointsList = new ObservableCollection<Point>();
-
-            KantenPointsHoaX = new ObservableCollection<Point>();
-
-            KantenPoints = new RelayCommand(ExecuteKantenPoints);
-
             WelcomeVisibility = Visibility.Visible;
-            WelcomeInfo = "Welcome";
+            loadingObject.LoadingReport = "Welcome";
+            
         }
         #endregion
-        
+
         #region logic
-        public void createModel(string format)
+        public async void createModel(string format)
         {
-
-            WelcomeInfo = "Creating Eulynx Object...";
-
+            loadingObject.LoadingReport = "Creating Eulynx Object...";
+            loadingObject.startLoading();
             if (format.Equals(".json"))
             {
-                createJSONproject();
+                await createJSONproject();
             }
             else if (format.Equals(".mdb"))
             {
-                createMDBproject();
+                await createMDBproject();
             }else if (format.Equals(".euxml"))
             {
-                loadEuxml(EUXML);
+                await loadEuxml(EUXML);
             }
+            loadingObject.LoadingReport = "Finished";
+            loadingObject.stopLoading();
             WelcomeVisibility = Visibility.Collapsed;   
         }
         public void ExecuteAddPath(object parameter)
@@ -402,8 +393,6 @@ namespace APLan.ViewModels
             {
                 ProjectPath = "please select a project directory";
             }
-            
-
         }
         public void ExecuteBrowseJson(object parameter)
         {
@@ -578,25 +567,9 @@ namespace APLan.ViewModels
             //ImportButtonActive = true;
             //PrintButtonActive = true;
         }
-        public void ExecuteKantenPoints(object parameter)
+        public async void ExecuteOpen(object parameter)
         {
-            System.Windows.Controls.CheckBox box = ((System.Windows.Controls.CheckBox)parameter);
-            if (box.IsChecked==true)
-            {
-                //for (int i = 0; i < gleiskantenPointsList.Count; i++)
-                //{
-                //    KantenPointsHoaX.Add(gleiskantenPointsList[i]);
-                //}
-                KantenPointsHoaX = gleiskantenPointsList;
-                System.Windows.MessageBox.Show("Hello");
-            }
-            else
-            {
-                KantenPointsHoaX.Clear();
-            }
-        }
-        public void ExecuteOpen(object parameter)
-        {
+            loadingObject.startLoading();
             folderBrowserDialog1.SelectedPath = null;
             folderBrowserDialog1.ShowDialog();
             OpenProjectPath = folderBrowserDialog1.SelectedPath;
@@ -612,39 +585,25 @@ namespace APLan.ViewModels
                     }
                     else if (System.IO.Path.GetExtension(f) == ".euxml")
                     {
-                        loadEuxml(f);
+                        loadingObject.LoadingReport = "Loading Eulynx Object...";
+                        bool finished = await loadEuxml(f);
                     }
                 }
             }
+            loadingObject.LoadingReport = "Finished...";
+            loadingObject.stopLoading();
             WelcomeVisibility = Visibility.Collapsed;
         }
-        public void createJSONproject()
+        public async Task<bool> createJSONproject()
         {
-            APLan.ViewModels.DrawViewModel.model = new ModelViewModel(
-                     country,
-                     format,
-                     entwurfselement_KM,
-                     gleiskanten,
-                     gleisknoten,
-                     entwurfselement_LA,
-                     entwurfselement_HO,
-                     entwurfselement_UH,
-                     null
-                     );
-            DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
-            gleiskantenList,
-            gleiskantenPointsList,
-            Entwurfselement_LA_list,
-            Entwurfselement_LAPointsList,
-            Entwurfselement_KM_list,
-            Entwurfselement_KMPointsList,
-            Entwurfselement_HO_list,
-            Entwurfselement_HOPointsList,
-            Entwurfselement_UH_list,
-            Entwurfselement_UHPointsList,
-            gleisknotenList);
+            
+            Task<bool> taskFinished1 = CreateJSONeulyxObject();
+            bool report1 = await taskFinished1;
+            Task<bool> taskFinished2 =DrawJSONeulyxObject();
+            bool report2 = await taskFinished2;
+            return true;
         }
-        public void createMDBproject()
+        public async Task<bool> createMDBproject()
         {
             WelcomeInfo = "Creating Eulynx Object...";
             APLan.ViewModels.DrawViewModel.model = new ModelViewModel(
@@ -660,7 +619,7 @@ namespace APLan.ViewModels
             );
 
             WelcomeInfo = "Drawing...";
-            DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
+            await DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
            gleiskantenList,
            gleiskantenPointsList,
            Entwurfselement_LA_list,
@@ -672,23 +631,24 @@ namespace APLan.ViewModels
            Entwurfselement_UH_list,
            Entwurfselement_UHPointsList,
            gleisknotenList);
+           return true;
         }
         /// <summary>
         /// load .euxml file representing the saved Eulynx model.
         /// </summary>
         /// <param name="f"></param>
-        public async void loadEuxml(string f)
+        public async Task<bool> loadEuxml(string f)
         {
+            loadingObject.LoadingReport = "Validating Euxml...";
             var EulynxValidatorViewModel = System.Windows.Application.Current.FindResource("EulynxValidatorViewModel") as EulynxValidatorViewModel;
             Task<string> reportTask =  EulynxValidatorViewModel.validate(f);
             string report = await reportTask;
             if (report.Contains("Validation is Successful"))
             {
-                var eulynxService = EulynxService.getInstance();
-                ModelViewModel.eulynx = eulynxService.deserialization(f);
+                await deserializeEuxml(f);
 
                 ModelViewModel model = new();
-                model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
+                await  model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
                 gleiskantenList,
                 gleiskantenPointsList,
                 Entwurfselement_LA_list,
@@ -718,9 +678,9 @@ namespace APLan.ViewModels
                 {
                     // close the window 
                 }
-
             }
-
+            
+            return true;
         }
         /// <summary>
         /// load an APlan binary file representing the saved items.
@@ -741,6 +701,55 @@ namespace APLan.ViewModels
             }
             fsin.Close();
         }
+
+        public async Task<bool> CreateJSONeulyxObject()
+        {
+            ((Loading)System.Windows.Application.Current.FindResource("globalLoading")).LoadingReport = "Creating Eulynx Object...";
+            await Task.Run(() =>
+            {
+                APLan.ViewModels.DrawViewModel.model = new ModelViewModel(
+                            country,
+                            format,
+                            entwurfselement_KM,
+                            gleiskanten,
+                            gleisknoten,
+                            entwurfselement_LA,
+                            entwurfselement_HO,
+                            entwurfselement_UH,
+                            null
+                            );
+            });
+            return true;
+        }
+
+        public async Task<bool> DrawJSONeulyxObject()
+        {
+           await DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
+                gleiskantenList,
+                gleiskantenPointsList,
+                Entwurfselement_LA_list,
+                Entwurfselement_LAPointsList,
+                Entwurfselement_KM_list,
+                Entwurfselement_KMPointsList,
+                Entwurfselement_HO_list,
+                Entwurfselement_HOPointsList,
+                Entwurfselement_UH_list,
+                Entwurfselement_UHPointsList,
+                gleisknotenList);
+
+            return true;
+        }
+
+        public async Task<bool> deserializeEuxml(string file)
+        {
+            await Task.Run(() =>
+            {
+                var eulynxService = EulynxService.getInstance();
+                ModelViewModel.eulynx = eulynxService.deserialization(file);
+            });
+            return true;
+        }
+
         #endregion
     }
 }

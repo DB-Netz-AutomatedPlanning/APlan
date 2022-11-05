@@ -8,14 +8,11 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
         <Cursor x:Key="arrow">Arrow</Cursor>
         <SolidColorBrush x:Key="backGround">white</SolidColorBrush>
-        <SolidColorBrush x:Key="themeColor">#cc54f4</SolidColorBrush>
+        <SolidColorBrush x:Key="themeColor">#cd7ef0</SolidColorBrush>
 
-
-
-
+        <helperClasses:Loading x:Key="globalLoading"></helperClasses:Loading>
 
         <Style TargetType="ScrollBar">
             <Setter Property="Background" Value="white"/>
@@ -39,6 +36,9 @@
 
         <converters:HalfLengthConverter x:Key="HalfLengthConverter"></converters:HalfLengthConverter>
         <converters:DrawUserControlSize x:Key="DrawUserControlSize"></converters:DrawUserControlSize>
+
+        <converters:LoadingAngleConverter x:Key="LoadingAngleConverter"></converters:LoadingAngleConverter>
+        <converters:TitleConverter x:Key="TitleConverter"></converters:TitleConverter>
         <!--export-->
         <viewModels:ExportWindowViewModel x:Key="exportWindowViewModel"/>
 
@@ -70,10 +70,13 @@
 
         <!--selection templates-->
         <!--for polyLines-->
-        <DataTemplate x:Key="CustomPolylineTempalte" DataType="{x:Type Path}">
-            <TreeView BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <TreeViewItem Header="{Binding DataContext.Name}" BorderThickness="0" IsExpanded="True">
-                    <ListView ItemsSource="{Binding DataContext.Data}" FontWeight="Bold" >
+        <DataTemplate  x:Key="CustomPolylineTempalte" DataType="{x:Type Path}">
+            <TreeView x:Name="myTree" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <TreeViewItem BorderThickness="0">
+                    <TreeViewItem.Header>
+                        <Binding Path="DataContext.ExtraInfo" Converter="{StaticResource TitleConverter}" />
+                    </TreeViewItem.Header>
+                    <ListView ItemsSource="{Binding DataContext.ExtraInfo}" FontWeight="Bold" >
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <WrapPanel Background="Transparent" IsHitTestVisible="False">
@@ -132,6 +135,11 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </helperClasses:CustomCanvasText>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CanvaContentTemplate" DataType="{x:Type helperClasses:CustomItem}">
+            <TextBlock Width="100" HorizontalAlignment="Stretch" Text="{Binding ExtraInfo, Converter={StaticResource TitleConverter}}">
+            </TextBlock>
         </DataTemplate>
     </Application.Resources>
 </Application>

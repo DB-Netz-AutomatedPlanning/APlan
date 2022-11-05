@@ -122,6 +122,7 @@
     <None Remove="Resources\Icons\save_as.png" />
     <None Remove="Resources\Icons\scale.png" />
     <None Remove="Resources\Icons\select.png" />
+    <None Remove="Resources\Icons\success.png" />
     <None Remove="Resources\Icons\text.png" />
     <None Remove="Resources\Icons\undo.png" />
     <None Remove="Resources\Icons\validate.png" />
@@ -477,6 +478,7 @@
     <Resource Include="Resources\Icons\save_as.png" />
     <Resource Include="Resources\Icons\scale.png" />
     <Resource Include="Resources\Icons\select.png" />
+    <Resource Include="Resources\Icons\success.png" />
     <Resource Include="Resources\Icons\text.png" />
     <Resource Include="Resources\Icons\undo.png" />
     <Resource Include="Resources\Icons\validate.png" />
@@ -702,6 +704,10 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Symbols\" />
   </ItemGroup>
 
 </Project>

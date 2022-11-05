@@ -15,17 +15,8 @@ using aplan.eulynx;
 
 namespace APLan.ViewModels
 {
-    public class MainMenuViewModel : INotifyPropertyChanged
+    public class MainMenuViewModel : BaseViewModel
     {
-
-        #region Inotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        #endregion
-
         #region attributes
         private FolderBrowserDialog folderBrowserDialog1;
         public string SavePath

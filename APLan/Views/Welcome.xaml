@@ -40,8 +40,9 @@
             
             <StackPanel VerticalAlignment="Center"
                         Grid.Column="1">
-                <Image Source="/Resources/icons/eulynx-logo.png" Width="100" Height="100"/>
-                <TextBlock HorizontalAlignment="Center" FontSize="50" FontStyle="Italic" Text="{Binding WelcomeInfo, Source={StaticResource newProjectViewModel}, UpdateSourceTrigger=PropertyChanged}" />
+                <Image Source="/Resources/icons/eulynx-logo.png" Width="100" Height="100">
+                </Image>
+                <TextBlock HorizontalAlignment="Center" FontSize="50" FontStyle="Italic" Text="Welcome" />
             </StackPanel>
         </Grid>
 

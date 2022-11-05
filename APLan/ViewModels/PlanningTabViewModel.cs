@@ -27,14 +27,8 @@ using System.Windows.Xps.Serialization;
 
 namespace APLan.ViewModels
 {
-    public class PlanningTabViewModel : INotifyPropertyChanged
+    public class PlanningTabViewModel : BaseViewModel
     {
-        #region INotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string name = "") =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        #endregion
-
         #region attributes
         private string planType;
         private string exportType;

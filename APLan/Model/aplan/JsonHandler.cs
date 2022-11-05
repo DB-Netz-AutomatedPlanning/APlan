@@ -8,6 +8,7 @@ using LiteDB;
 using aplan.database;
 
 using static aplan.core.Helper;
+using APLan.HelperClasses;
 
 namespace aplan.core
 {
@@ -176,6 +177,7 @@ namespace aplan.core
 
             foreach (Feature feature in collectionKM.Features)
             {
+                
                 var mileage = new Mileage()
                 {
                     id = fetchIndividualValue("ID", feature).ToString(),
@@ -187,6 +189,8 @@ namespace aplan.core
                     startKM = hmToKm_mileage(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm_mileage(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
+
+                InfoExtractor.getAllInfo().Add(mileage.id, feature); //store all info related to this id (khaled).
                 
                 // instantiate coordinate objects
                 handleLinearCoordinateMileage(db, feature);
@@ -379,7 +383,7 @@ namespace aplan.core
                     endKm = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                     geometryType = feature.Geometry.Type.ToString()
                 };
-
+                InfoExtractor.getAllInfo().Add(netElement.id, feature); //store all info related to this id (khaled).
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 netElement.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -418,7 +422,7 @@ namespace aplan.core
                     nodeType = Convert.ToInt32(fetchIndividualValue("KN_TYP", feature)),
                     geometryType = feature.Geometry.Type.ToString()
                 };
-
+                InfoExtractor.getAllInfo().Add(node.id, feature); //store all info related to this id (khaled).
                 // handle destination nodes
                 node.destinationNodeID = new ArrayList();
                 for (int i = 0; i < 3; i++)
@@ -464,7 +468,7 @@ namespace aplan.core
                     startKM = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
-
+                InfoExtractor.getAllInfo().Add(horizontalAlignment.id, feature); //store all info related to this id (khaled).
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 horizontalAlignment.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -504,7 +508,7 @@ namespace aplan.core
                     startKM = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
-
+                InfoExtractor.getAllInfo().Add(verticalAlignment.id, feature); //store all info related to this id (khaled).
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 verticalAlignment.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -542,7 +546,7 @@ namespace aplan.core
                     startKm = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKm = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
-
+                InfoExtractor.getAllInfo().Add(alignmentCant.id, feature); //store all info related to this id (khaled).
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 alignmentCant.lineCoordinates = handleCartesianCoordinateLine(db, feature);

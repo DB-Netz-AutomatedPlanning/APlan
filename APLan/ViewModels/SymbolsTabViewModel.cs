@@ -11,16 +11,8 @@ using System.Windows.Media.Imaging;
 
 namespace APLan.ViewModels
 {
-    public class SymbolsTabViewModel  : INotifyPropertyChanged
+    public class SymbolsTabViewModel : BaseViewModel
     {
-        #region Inotify Essentials
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
-        #endregion
-
         #region attributes
         public ObservableCollection<SymbolObject> items
         {

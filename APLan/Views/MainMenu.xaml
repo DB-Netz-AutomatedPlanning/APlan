@@ -13,64 +13,69 @@
             <Setter Property="Background" Value="White"></Setter>
         </Style>
     </UserControl.Resources>
-    <Menu VerticalAlignment="Stretch" Background="white" >
-        <MenuItem Header="_File">
-            <MenuItem Header="_New project" 
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Menu VerticalAlignment="Stretch" Background="white" >
+            <MenuItem Header="_File">
+                <MenuItem Header="_New project" 
                       Command="{Binding Source={StaticResource mainMenuViewModel}, Path=NewProject}"
                       CommandParameter="{Binding RelativeSource=
                                         {RelativeSource
                                         Mode=FindAncestor,
                                         AncestorType={x:Type Window}}}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/new.png"/>
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="_Open"
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/new.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Open"
                   Command="{Binding Source={StaticResource newProjectViewModel}, Path=Open}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/open.png"/>
-                </MenuItem.Icon>
-            </MenuItem>
-            <!--<MenuItem Header="_Import"
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/open.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!--<MenuItem Header="_Import"
                       IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=ImportButtonActive}">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/import.png"/>
                 </MenuItem.Icon>
             </MenuItem>-->
-            <MenuItem Header="_Save"  
+                <MenuItem Header="_Save"  
                       IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=SaveButtonActive}"
                       Command="{Binding Save}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/save.png"/>
-                </MenuItem.Icon>
-            </MenuItem>
-            <MenuItem Header="_Save as"
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/save.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Save as"
                       IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=SaveAsButtonActive}"
                       Command="{Binding SaveAs}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/save_as.png"/>
-                </MenuItem.Icon>
-            </MenuItem>
-            <!--<MenuItem Header="_Print"
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/save_as.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <!--<MenuItem Header="_Print"
                       IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=PrintButtonActive}"
                       Command="{Binding  Print}">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/printer.png"/>
                 </MenuItem.Icon>
             </MenuItem>-->
-            <MenuItem Header="_Exit"
+                <MenuItem Header="_Exit"
                       Command="{Binding ExitProgram}"
                       CommandParameter="{Binding RelativeSource=
                                         {RelativeSource
                                         Mode=FindAncestor,
                                         AncestorType={x:Type Window}}}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/exit.png"/>
-                </MenuItem.Icon>
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/exit.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
-        </MenuItem>
-        <MenuItem Header="_Edit">
-            <!--<MenuItem Header="_Undo"
+            <MenuItem Header="_Edit">
+                <!--<MenuItem Header="_Undo"
                       IsEnabled="False">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/undo.png"/>
@@ -83,42 +88,42 @@
                 </MenuItem.Icon>
             </MenuItem>-->
 
-            <!--<MenuItem Header="_Redo"
+                <!--<MenuItem Header="_Redo"
                       IsEnabled="False">
                 <MenuItem.Icon>
                     <Image Source="/Resources/Icons/redo.png"/>
                 </MenuItem.Icon>
             </MenuItem>-->
 
-            <MenuItem Header="_Canvas">
-                <MenuItem Header="BlackTheme"
+                <MenuItem Header="_Canvas">
+                    <MenuItem Header="BlackTheme"
                           IsChecked="False"
                           Click="MenuItem_Grid_Click"></MenuItem>
+                </MenuItem>
             </MenuItem>
-        </MenuItem>
-        <MenuItem Header="_View">
-            <!--<MenuItem Header="_XML-JSON" IsEnabled="False"/>-->
-            <MenuItem     x:Name="visualizedDataItem"
+            <MenuItem Header="_View">
+                <!--<MenuItem Header="_XML-JSON" IsEnabled="False"/>-->
+                <MenuItem     x:Name="visualizedDataItem"
                           Header="_Visualized Data"
                           Click="MenuItem_VisualizedData"/>
-            <MenuItem     x:Name="canvasContentItem"
+                <MenuItem     x:Name="canvasContentItem"
                           Header="_Canvas Content"
                           Click="MenuItem_CanvasContent"/>
-            <MenuItem Header="_Planning/Canvas tabs"
+                <MenuItem Header="_Planning/Canvas tabs"
                           IsChecked="True"
                           Click="MenuItem_Planningtab"/>
-            <MenuItem Header="_Symbols/Selection tabs"
+                <MenuItem Header="_Symbols/Selection tabs"
                           IsChecked="True"
                           Click="MenuItem_Symbols"/>
-            <!--<MenuItem Header="_Object parameters">-->
-            <MenuItem Name="SignalItem"
+                <!--<MenuItem Header="_Object parameters">-->
+                <MenuItem Name="SignalItem"
                       Header="_Planned Signals info" 
                       Click="MenuItem_Signal"/>
 
-            <!--</MenuItem>-->
-        </MenuItem>
-        <MenuItem Header="_Tools">
-            <!--<MenuItem Header="_Access Data">
+                <!--</MenuItem>-->
+            </MenuItem>
+            <MenuItem Header="_Tools">
+                <!--<MenuItem Header="_Access Data">
                 <MenuItem Header="_Add Data"  
                           Command="{Binding AddData}"/>
                 <MenuItem Header="_Preview Data" 
@@ -126,20 +131,41 @@
                 <MenuItem Header="_Remove Data" 
                           Command="{Binding RemoveData}"/>
             </MenuItem>-->
-            <MenuItem Header="_EULYNX Validator" 
+                <MenuItem Header="_EULYNX Validator" 
                       Command="{Binding EulynxValidator}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/validate.png"></Image>
-                </MenuItem.Icon>
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/validate.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
-        </MenuItem>
-        <MenuItem Header="_Help">
-            <MenuItem Header="_About WPF"  
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About WPF"  
                       Command="{Binding AboutWPF}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/info.png"></Image>
-                </MenuItem.Icon>
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/info.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
-        </MenuItem>
-    </Menu>
+        </Menu>
+        <Grid Grid.Column="1"
+              Background="White">
+            <WrapPanel
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    Visibility="{Binding Source={StaticResource globalLoading}, Path=LoadingVisibility}">
+                <Image Name="myImage" Source="/Resources/Icons/eulynx-logo.png">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="{Binding Source={StaticResource globalLoading}, Path=LoadingIconAngle}" 
+                                         CenterX="{Binding ElementName=myImage, Path=ActualWidth, Converter={StaticResource HalfLengthConverter}}"
+                                         CenterY="{Binding ElementName=myImage, Path=ActualHeight, Converter={StaticResource HalfLengthConverter}}">
+                        </RotateTransform>
+
+                    </Image.RenderTransform>
+                </Image>
+                <TextBlock VerticalAlignment="Center" 
+                    Text="{Binding Source={StaticResource globalLoading}, Path=LoadingReport}"/>
+            </WrapPanel>
+        </Grid>
+    </Grid>
+    
 </UserControl>

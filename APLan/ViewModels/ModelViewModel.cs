@@ -9,17 +9,25 @@ using Models.TopoModels.EULYNX.rsmCommon;
 using APLan.HelperClasses;
 using System.Collections;
 using System.Windows.Media;
+using System.Threading.Tasks;
+using System;
+using System.Threading;
+using java.lang;
+using System.ComponentModel;
+using javax.xml.transform;
+using net.sf.saxon.expr.instruct;
+using org.w3c.dom.css;
 
 namespace APLan.ViewModels
 {
-    public class ModelViewModel
+    public class ModelViewModel : BaseViewModel
     {
-
         #region attributes
-        bool start = false;
+        private bool start = false;
         public static int routeNumber;
         public static ArrayList boundPoints;
         public static Point firspoint = new Point(0, 0);
+        private Loading loadingObject;
         public static Database db { get; set; }
         private RsmEntities RsmEntities { get; set; }
         private List<DataContainer> DataContainer { get; set; }
@@ -28,29 +36,37 @@ namespace APLan.ViewModels
         private List<IntrinsicCoordinate> IntrensicCoordinates { get; set; }
         private List<PositioningNetElement> PositioningNetElements { get; set; }
         private List<PositioningSystemCoordinate> PositioningSystemCoordinates { get; set; }
+        List<Unit> units { get; set; }
         public ObservableCollection<Polyline> lines = new ObservableCollection<Polyline>();
         #endregion
 
         #region constructors
         public ModelViewModel()
         {
+            Globals.routeNumber = 6624;
+            eulynxService = EulynxService.getInstance();
+            db = Database.getInstance();
             assignInitialBoundary();
+            loadingObject = System.Windows.Application.Current.FindResource("globalLoading") as Loading;
         }
         public ModelViewModel(string country, string format,
                 string mileageFilePath, string edgesFilePath, string nodesFilePath,
                 string horizontalAlignmentsFilePath, string verticalAlignmentsFilePath, string cantAlingnmentsFilePath,
                 string mdbFilePath)
         {
+            Globals.routeNumber = 6624;
+            eulynxService = EulynxService.getInstance();
+            db = Database.getInstance();
+            loadingObject = System.Windows.Application.Current.FindResource("globalLoading") as Loading;
             assignInitialBoundary();
-
             generateAEuLynxObject(country, format,
-                mileageFilePath,  edgesFilePath,  nodesFilePath,
+                mileageFilePath, edgesFilePath, nodesFilePath,
                  horizontalAlignmentsFilePath, verticalAlignmentsFilePath, cantAlingnmentsFilePath,
                  mdbFilePath);
-           
+            
         }
         #endregion
-        
+
         /// <summary>
         /// assign initial infinity boundary at beginning
         /// </summary>
@@ -62,7 +78,7 @@ namespace APLan.ViewModels
             boundPoints.Add(double.PositiveInfinity);
             boundPoints.Add(double.NegativeInfinity);
         }
-        
+
         /// <summary>
         /// generate the Eulynx Object
         /// </summary>
@@ -75,26 +91,24 @@ namespace APLan.ViewModels
         /// <param name="verticalAlignmentsFilePath"></param>
         /// <param name="cantAlingnmentsFilePath"></param>
         /// <param name="mdbFilePath"></param>
-        public void generateAEuLynxObject(string country,string format,
+        public void generateAEuLynxObject(string country, string format,
                 string mileageFilePath, string edgesFilePath, string nodesFilePath,
                 string horizontalAlignmentsFilePath, string verticalAlignmentsFilePath, string cantAlingnmentsFilePath,
                 string mdbFilePath)
         {
             //routeNumber = 6624; // this is just example, in the end this should be generic
-            Globals.routeNumber = 6624;
-            eulynxService = EulynxService.getInstance();
-            db = Database.getInstance();
-      
+
+
             eulynxService.inputHandling(
-                format, db,
-                mileageFilePath, edgesFilePath, nodesFilePath,
-                horizontalAlignmentsFilePath, verticalAlignmentsFilePath, cantAlingnmentsFilePath,
-                mdbFilePath);
+            format, db,
+            mileageFilePath, edgesFilePath, nodesFilePath,
+            horizontalAlignmentsFilePath, verticalAlignmentsFilePath, cantAlingnmentsFilePath,
+            mdbFilePath);
 
             // eulynx object creation
-            eulynx = (EulynxDataPrepInterface)eulynxService.objectsCreation(country, db);            
+            eulynx = (EulynxDataPrepInterface)eulynxService.objectsCreation(country, db);
         }
-        
+
         /// <summary>
         /// draw the Eulynx Object
         /// </summary>
@@ -110,7 +124,7 @@ namespace APLan.ViewModels
         /// <param name="Entwurfselement_UH_list"></param>
         /// <param name="Entwurfselement_UHPointsList"></param>
         /// <param name="gleisknotenList"></param>
-        public void drawObject(double canvasSize, 
+        public async Task<bool> drawObject(double canvasSize,
             ObservableCollection<CustomPolyLine> gleiskantenList,
             ObservableCollection<Point> gleiskantenPointsList,
             ObservableCollection<CustomPolyLine> Entwurfselement_LA_list,
@@ -123,6 +137,7 @@ namespace APLan.ViewModels
             ObservableCollection<Point> Entwurfselement_UHPointsList,
             ObservableCollection<CustomNode> gleisknotenList)
         {
+            loadingObject.LoadingReport = "Drawing Eulynx Object...";
             //clear old data.
             gleiskantenList.Clear();
             gleiskantenPointsList.Clear();
@@ -142,170 +157,283 @@ namespace APLan.ViewModels
 
             PositioningSystemCoordinates = RsmEntities.usesTopography.usesPositioningSystemCoordinate;
             IntrensicCoordinates = RsmEntities.usesTopography.usesIntrinsicCoordinate;
-            List<Unit> units = RsmEntities.usesUnit;
-            //MessageBox.Show("DrawStarted");
+            units = RsmEntities.usesUnit;
 
-            DrawNetElement(PositioningNetElements, PositioningSystemCoordinates, canvasSize, gleiskantenList, units);
-            DrawVerticalAlignment(RsmEntities, PositioningSystemCoordinates, canvasSize, Entwurfselement_HO_list, units);
-            DrawHorizontalAlignment(RsmEntities, PositioningSystemCoordinates, canvasSize, Entwurfselement_LA_list, units);
-            DrawMielage(RsmEntities, PositioningSystemCoordinates, canvasSize, Entwurfselement_KM_list, units);
-            DrawCantlAlignment(RsmEntities, PositioningSystemCoordinates, canvasSize, Entwurfselement_UH_list, units);
-            DrawNodes(RsmEntities, PositioningSystemCoordinates, IntrensicCoordinates, canvasSize, gleisknotenList, units);
-            
-            calculatePointsScaling(); //this should be always called before the Nodes due to templating in the XAML
-            
-            
-            
-            //points extraction after scaling
-            ExtractPoints(gleiskantenList, gleiskantenPointsList);
-            ExtractPoints(Entwurfselement_LA_list, Entwurfselement_LAPointsList);
-            ExtractPoints(Entwurfselement_KM_list, Entwurfselement_KMPointsList);
-            ExtractPoints(Entwurfselement_HO_list, Entwurfselement_HOList);
-            ExtractPoints(Entwurfselement_UH_list, Entwurfselement_UHPointsList);
+            var kanten = await DrawNetElement(PositioningNetElements, PositioningSystemCoordinates, canvasSize, units);
+            fetchLinesForBinding(gleiskantenList, kanten);
+            var HO = await DrawVerticalAlignment(RsmEntities, PositioningSystemCoordinates, canvasSize, units);
+            fetchLinesForBinding(Entwurfselement_HO_list, HO);
+            var LA = await DrawHorizontalAlignment(RsmEntities, PositioningSystemCoordinates, canvasSize, units);
+            fetchLinesForBinding(Entwurfselement_LA_list, LA);
+            var KM = await DrawMielage(RsmEntities, PositioningSystemCoordinates, canvasSize, units);
+            fetchLinesForBinding(Entwurfselement_KM_list, KM);
+            var UH = await DrawCantlAlignment(RsmEntities, PositioningSystemCoordinates, canvasSize, units);
+            fetchLinesForBinding(Entwurfselement_UH_list, UH);
+            var nodes = await DrawNodes(RsmEntities, PositioningSystemCoordinates, IntrensicCoordinates, canvasSize, units);
+            fetchNodesForBinding(gleisknotenList, nodes);
+            //calculatePointsScaling(); //this should be always called before the Nodes due to templating in the XAML
 
-        
-            //Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(Views.Draw.drawingScrollViewer.ExtentWidth/2);
-            //Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(Views.Draw.drawingScrollViewer.ExtentHeight/2);
+            //Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(Views.Draw.drawingScrollViewer.ExtentWidth / 2);
+            //Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(Views.Draw.drawingScrollViewer.ExtentHeight / 2);
+            return true;
         }
-
-
-
         /// <summary>
-        /// draw the NetElements in the EulynxObject
+        /// extract the NetElements in the EulynxObject async
         /// </summary>
         /// <param name="positioningNetElements"></param>
         /// <param name="PSCoordinates"></param>
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public void DrawNetElement (List<PositioningNetElement> positioningNetElements, 
+        public async Task<List<CustomPolyLine>> DrawNetElement(List<PositioningNetElement> positioningNetElements,
             List<PositioningSystemCoordinate> PSCoordinates,
             double canvasSize,
-            ObservableCollection<CustomPolyLine> customPolylines,
             List<Unit> units)
         {
-
-            List<PositioningSystemCoordinate> positioningSystemCoordinates = new List<PositioningSystemCoordinate>();
-            PositioningSystemCoordinate positioningSystemCoordinate = new PositioningSystemCoordinate();
-            List<Polyline> p = new List<Polyline>();
-
-            foreach (PositioningNetElement positioningNetElement in positioningNetElements)
-            {     
-                CustomPolyLine polyline = new CustomPolyLine();
-                polyline.Name = positioningNetElement.name;
-                polyline.Data.Add(new KeyValue() { Key="Name", Value= positioningNetElement.name});
-                polyline.Data.Add(new KeyValue() { Key = "Length", Value =
-                    ((Length)((LinearElementWithLength)positioningNetElement).elementLength.quantiy[0]).value
-                    .ToString() + " " +
-                    units.Find(x => x.id.Equals(((LinearElementWithLength)positioningNetElement).elementLength.quantiy[0].unit.@ref)).name
-                });
-                
-                List<AssociatedPositioning> associatedPositionings = positioningNetElement.associatedPositioning;
-                foreach (AssociatedPositioning associatedPositioning in associatedPositionings)
+            List<CustomPolyLine> lines = new List<CustomPolyLine>();
+            await Task.Run(() =>
+            {
+                List<PositioningSystemCoordinate> positioningSystemCoordinates = new List<PositioningSystemCoordinate>();
+                PositioningSystemCoordinate positioningSystemCoordinate = new PositioningSystemCoordinate();
+                foreach (PositioningNetElement positioningNetElement in positioningNetElements)
                 {
-                    List<IntrinsicCoordinate> intrinsicCoordinates = associatedPositioning.intrinsicCoordinates;
-                    foreach (IntrinsicCoordinate intrinsicCoordinate in intrinsicCoordinates)
+
+                    CustomPolyLine polyline = new CustomPolyLine();
+                    polyline.Name = positioningNetElement.name;
+                    polyline.Data.Add(new KeyValue() { Key = "Name", Value = positioningNetElement.name });
+                    polyline.Data.Add(new KeyValue()
                     {
-                        List<tElementWithIDref> tElementWithIDrefs = intrinsicCoordinate.coordinates;
-                        foreach (tElementWithIDref tElementWithIDref in tElementWithIDrefs)
+                        Key = "Length",
+                        Value =
+                        ((Length)((LinearElementWithLength)positioningNetElement).elementLength.quantiy[0]).value
+                        .ToString() + " " +
+                        units.Find(x => x.id.Equals(((LinearElementWithLength)positioningNetElement).elementLength.quantiy[0].unit.@ref)).name
+                    });
+
+                    List<AssociatedPositioning> associatedPositionings = positioningNetElement.associatedPositioning;
+                    foreach (AssociatedPositioning associatedPositioning in associatedPositionings)
+                    {
+                        List<IntrinsicCoordinate> intrinsicCoordinates = associatedPositioning.intrinsicCoordinates;
+                        foreach (IntrinsicCoordinate intrinsicCoordinate in intrinsicCoordinates)
                         {
-                            positioningSystemCoordinate = PSCoordinates.Find(x => x.id.Equals(tElementWithIDref.@ref));
-                            
-                            if (positioningSystemCoordinate is CartesianCoordinate)
+                            List<tElementWithIDref> tElementWithIDrefs = intrinsicCoordinate.coordinates;
+                            foreach (tElementWithIDref tElementWithIDref in tElementWithIDrefs)
                             {
-                                
-                                CartesianCoordinate cartesianCoordinate = positioningSystemCoordinate as CartesianCoordinate;
-                                if (firspoint.X==0)
+                                positioningSystemCoordinate = PSCoordinates.Find(x => x.id.Equals(tElementWithIDref.@ref));
+
+                                if (positioningSystemCoordinate is CartesianCoordinate)
                                 {
-                                    
-                                    firspoint.X = (((double)cartesianCoordinate.x));
-                                    firspoint.Y = (((double)cartesianCoordinate.y));
-                                    ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
+
+                                    CartesianCoordinate cartesianCoordinate = positioningSystemCoordinate as CartesianCoordinate;
+                                    if (firspoint.X == 0)
+                                    {
+                                        firspoint.X = (((double)cartesianCoordinate.x));
+                                        firspoint.Y = (((double)cartesianCoordinate.y));
+                                        ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
+                                    }
+                                    polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
+                                    Point newPoint = new Point((((double)cartesianCoordinate.x)), (((double)cartesianCoordinate.y)));
+                                    extractBoundary(newPoint);
+                                    polyline.Points.Add(newPoint);
                                 }
-                                polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
-                                Point newPoint = new Point((((double)cartesianCoordinate.x)), (((double)cartesianCoordinate.y)));
-                                extractBoundary(newPoint);
-                                polyline.Points.Add(newPoint);
-                            }else if (positioningSystemCoordinate is LinearCoordinate)
-                            {
-                                extractStartEnd((LinearCoordinate)positioningSystemCoordinate,polyline,units, PSCoordinates);
+                                else if (positioningSystemCoordinate is LinearCoordinate)
+                                {
+                                    extractStartEnd((LinearCoordinate)positioningSystemCoordinate, polyline, units, PSCoordinates);
+                                }
                             }
                         }
                     }
+                    InfoExtractor.attachProperties(polyline, positioningNetElement.id);
+                    polyline.Color = new SolidColorBrush() { Color = Colors.Red };
+                    polyline.Color.Freeze();
+                    polyline.Points.Freeze();
+                    lines.Add(polyline);
                 }
-                polyline.Color = new SolidColorBrush() { Color = Colors.Red};
-                customPolylines.Add(polyline);
-            }
-
+            });
+            return lines;
         }
 
         /// <summary>
-        /// draw the VerticalAlignment in the EulynxObject
+        /// extract the VerticalAlignment in the EulynxObject async
         /// </summary>
         /// <param name="ownsRsmEntity"></param>
         /// <param name="PSCoordinates"></param>
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public void DrawVerticalAlignment(RsmEntities ownsRsmEntity,
+        public async Task<List<CustomPolyLine>> DrawVerticalAlignment(RsmEntities ownsRsmEntity,
             List<PositioningSystemCoordinate> PSCoordinates,
             double canvasSize,
-            ObservableCollection<CustomPolyLine> customPolylines,
             List<Unit> units)
         {
-            System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.VerticalAlignmentSegment>
+            List<CustomPolyLine> lines = new List<CustomPolyLine>();
+            await Task.Run(() =>
+            {
+                System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.VerticalAlignmentSegment>
                 usesVerticalAlignemntSegment = ownsRsmEntity.usesTopography.usesVerticalAlignmentSegment;
 
-            foreach (Models.TopoModels.EULYNX.rsmCommon.VerticalAlignmentSegment segment in usesVerticalAlignemntSegment )
-            {
-                CustomPolyLine polyline = new CustomPolyLine();
-                verticalElementExtractProperties(segment, polyline,ownsRsmEntity);
-                polyline.Name = null;
-                PolyLine poly = segment.hasLinearLocation.polyLines[1];
-                foreach (tElementWithIDref element in poly.coordinates)
+                foreach (Models.TopoModels.EULYNX.rsmCommon.VerticalAlignmentSegment segment in usesVerticalAlignemntSegment)
                 {
-                    CartesianCoordinate coordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(element.@ref)); 
-                    if (firspoint.X == 0)
+                    CustomPolyLine polyline = new CustomPolyLine();
+                    verticalElementExtractProperties(segment, polyline, ownsRsmEntity);
+                    polyline.Name = null;
+                    PolyLine poly = segment.hasLinearLocation.polyLines[1];
+                    foreach (tElementWithIDref element in poly.coordinates)
                     {
+                        CartesianCoordinate coordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(element.@ref));
+                        if (firspoint.X == 0)
+                        {
 
-                        firspoint.X = (((double)coordinate.x));
-                        firspoint.Y = (((double)coordinate.y));
-                        ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
+                            firspoint.X = (((double)coordinate.x));
+                            firspoint.Y = (((double)coordinate.y));
+                            ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
+                        }
+                        polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
+                        Point newPoint = new Point((((double)coordinate.x)), (((double)coordinate.y)));
+                        polyline.Points.Add(newPoint);
+                        extractBoundary(newPoint);
                     }
-                    polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
-                    Point newPoint = new Point((((double)coordinate.x) ), (((double)coordinate.y) ));
-                    polyline.Points.Add(newPoint);
-                    extractBoundary(newPoint);
+                    InfoExtractor.attachProperties(polyline, segment.id);
+                    polyline.Color = new SolidColorBrush() { Color = Colors.Red };
+                    polyline.Color.Freeze();
+                    polyline.Points.Freeze();
+                    lines.Add(polyline);
                 }
-                polyline.Color = new SolidColorBrush() { Color = Colors.Red };
-                customPolylines.Add(polyline);
-            }
-
+            });
+            return lines;
         }
 
         /// <summary>
-        /// draw the HorizontalAlignment in the EulynxObject
+        /// extract the HorizontalAlignment in the EulynxObject async
         /// </summary>
         /// <param name="ownsRsmEntity"></param>
         /// <param name="PSCoordinates"></param>
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public void DrawHorizontalAlignment(RsmEntities ownsRsmEntity,
+        public async Task<List<CustomPolyLine>> DrawHorizontalAlignment(RsmEntities ownsRsmEntity,
            List<PositioningSystemCoordinate> PSCoordinates,
            double canvasSize,
-           ObservableCollection<CustomPolyLine> customPolylines,
            List<Unit> units)
         {
-            System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment>
+            List<CustomPolyLine> lines = new List<CustomPolyLine>();
+            await Task.Run(() =>
+            {
+                System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment>
                 usesHorizontalAlignemntSegment = ownsRsmEntity.usesTopography.usesHorizontalAlignmentSegment;
 
-            foreach (Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment segment in usesHorizontalAlignemntSegment)
+                foreach (Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment segment in usesHorizontalAlignemntSegment)
+                {
+                    if (segment.initialAzimuth != null)
+                    {
+                        CustomPolyLine polyline = new CustomPolyLine();
+                        HorizontalElementExtractProperties(segment, polyline, ownsRsmEntity);
+                        polyline.Name = null;
+                        PolyLine poly = segment.hasLinearLocation.polyLines[1];
+                        foreach (tElementWithIDref element in poly.coordinates)
+                        {
+                            CartesianCoordinate coordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(element.@ref));
+                            //polyline.Points.Add(new Point((double)coordinate.x, (double)coordinate.y));
+                            if (firspoint.X == 0)
+                            {
+
+                                firspoint.X = (((double)coordinate.x));
+                                firspoint.Y = (((double)coordinate.y));
+                                ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
+                            }
+                            polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
+                            Point newPoint = new Point((((double)coordinate.x)), (((double)coordinate.y)));
+                            polyline.Points.Add(newPoint);
+                            extractBoundary(newPoint);
+                        }
+                        InfoExtractor.attachProperties(polyline, segment.id);
+                        polyline.Color = new SolidColorBrush() { Color = Colors.Red };
+                        polyline.Color.Freeze();
+                        polyline.Points.Freeze();
+                        lines.Add(polyline);
+                    }
+                }
+            });
+            return lines;
+        }
+
+        /// <summary>
+        /// extract the Mielage in the EulynxObject async
+        /// </summary>
+        /// <param name="ownsRsmEntity"></param>
+        /// <param name="PSCoordinates"></param>
+        /// <param name="canvasSize"></param>
+        /// <param name="customPolylines"></param>
+        /// <param name="units"></param>
+        public async Task<List<CustomPolyLine>> DrawMielage(RsmEntities ownsRsmEntity,
+            List<PositioningSystemCoordinate> PSCoordinates,
+            double canvasSize,
+            List<Unit> units)
+        {
+            List<CustomPolyLine> lines = new List<CustomPolyLine>();
+            await Task.Run(() =>
             {
-                if (segment.initialAzimuth!=null)
+                System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment>
+                usesHorizontalAlignemntSegment = ownsRsmEntity.usesTopography.usesHorizontalAlignmentSegment;
+
+                foreach (Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment segment in usesHorizontalAlignemntSegment)
+                {
+                    if (segment.initialAzimuth == null)
+                    {
+                        CustomPolyLine polyline = new CustomPolyLine();
+                        HorizontalElementExtractProperties(segment, polyline, ownsRsmEntity);
+                        polyline.Name = null;
+                        //PolyLine polyIntrensic = segment.hasLinearLocation.polyLines[0];
+                        PolyLine poly = segment.hasLinearLocation.polyLines[1];
+                        foreach (tElementWithIDref element in poly.coordinates)
+                        {
+                            CartesianCoordinate coordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(element.@ref));
+                            if (firspoint.X == 0)
+                            {
+
+                                firspoint.X = (((double)coordinate.x));
+                                firspoint.Y = (((double)coordinate.y));
+                                ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
+                            }
+                            polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
+                            Point newPoint = new Point((((double)coordinate.x)), (((double)coordinate.y)));
+                            polyline.Points.Add(newPoint);
+                            extractBoundary(newPoint);
+                        }
+                        InfoExtractor.attachProperties(polyline, segment.id);
+                        polyline.Color = new SolidColorBrush() { Color = Colors.Red };
+                        polyline.Color.Freeze();
+                        polyline.Points.Freeze();
+                        lines.Add(polyline);
+                    }
+
+                }
+            });
+            return lines;
+        }
+        /// <summary>
+        /// extract the CantAlignment in the EulynxObject async
+        /// </summary>
+        /// <param name="ownsRsmEntity"></param>
+        /// <param name="PSCoordinates"></param>
+        /// <param name="canvasSize"></param>
+        /// <param name="customPolylines"></param>
+        /// <param name="units"></param>
+        public async Task<List<CustomPolyLine>> DrawCantlAlignment(RsmEntities ownsRsmEntity,
+           List<PositioningSystemCoordinate> PSCoordinates,
+           double canvasSize,
+           List<Unit> units)
+        {
+            List<CustomPolyLine> lines = new List<CustomPolyLine>();
+            await Task.Run(() =>
+            {
+                System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.AlignmentCantSegment>
+                usesHorizontalAlignemntSegment = ownsRsmEntity.usesTopography.usesAlignmentCantSegment;
+
+                foreach (Models.TopoModels.EULYNX.rsmCommon.AlignmentCantSegment segment in usesHorizontalAlignemntSegment)
                 {
                     CustomPolyLine polyline = new CustomPolyLine();
-                    HorizontalElementExtractProperties(segment, polyline, ownsRsmEntity);
+                    CantElementExtractProperties(segment, polyline, ownsRsmEntity);
                     polyline.Name = null;
                     PolyLine poly = segment.hasLinearLocation.polyLines[1];
                     foreach (tElementWithIDref element in poly.coordinates)
@@ -320,113 +448,22 @@ namespace APLan.ViewModels
                             ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
                         }
                         polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
-                        Point newPoint = new Point((((double)coordinate.x) ), (((double)coordinate.y) ));
+                        Point newPoint = new Point((((double)coordinate.x)), (((double)coordinate.y)));
                         polyline.Points.Add(newPoint);
                         extractBoundary(newPoint);
                     }
+                    InfoExtractor.attachProperties(polyline, segment.id);
                     polyline.Color = new SolidColorBrush() { Color = Colors.Red };
-                    customPolylines.Add(polyline);
+                    polyline.Color.Freeze();
+                    polyline.Points.Freeze();
+                    lines.Add(polyline);
                 }
-               
-            }
-
+            });
+            return lines;
         }
 
         /// <summary>
-        /// draw the Mielage in the EulynxObject
-        /// </summary>
-        /// <param name="ownsRsmEntity"></param>
-        /// <param name="PSCoordinates"></param>
-        /// <param name="canvasSize"></param>
-        /// <param name="customPolylines"></param>
-        /// <param name="units"></param>
-        public void DrawMielage(RsmEntities ownsRsmEntity,
-            List<PositioningSystemCoordinate> PSCoordinates,
-            double canvasSize,
-            ObservableCollection<CustomPolyLine> customPolylines,
-            List<Unit> units)
-        {
-            System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment>
-                usesHorizontalAlignemntSegment = ownsRsmEntity.usesTopography.usesHorizontalAlignmentSegment;
-
-            foreach (Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment segment in usesHorizontalAlignemntSegment)
-            {
-                if (segment.initialAzimuth == null)
-                {
-                    CustomPolyLine polyline = new CustomPolyLine();
-                    HorizontalElementExtractProperties(segment, polyline, ownsRsmEntity);
-                    polyline.Name = null;
-                    //PolyLine polyIntrensic = segment.hasLinearLocation.polyLines[0];
-                    PolyLine poly = segment.hasLinearLocation.polyLines[1];
-                    foreach (tElementWithIDref element in poly.coordinates)
-                    {
-                        CartesianCoordinate coordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(element.@ref));
-                        if (firspoint.X == 0)
-                        {
-
-                            firspoint.X = (((double)coordinate.x));
-                            firspoint.Y = (((double)coordinate.y));
-                            ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
-                        }
-                        polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
-                        Point newPoint = new Point((((double)coordinate.x) ), (((double)coordinate.y) ));
-                        polyline.Points.Add(newPoint);
-                        extractBoundary(newPoint);
-                    }
-                    polyline.Color = new SolidColorBrush() { Color= Colors.Red};
-                    customPolylines.Add(polyline);
-                }
-
-            }
-
-        }
-        /// <summary>
-        /// draw the CantAlignment in the EulynxObject
-        /// </summary>
-        /// <param name="ownsRsmEntity"></param>
-        /// <param name="PSCoordinates"></param>
-        /// <param name="canvasSize"></param>
-        /// <param name="customPolylines"></param>
-        /// <param name="units"></param>
-        public void DrawCantlAlignment(RsmEntities ownsRsmEntity,
-           List<PositioningSystemCoordinate> PSCoordinates,
-           double canvasSize,
-           ObservableCollection<CustomPolyLine> customPolylines,
-           List<Unit> units)
-        {
-            System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmCommon.AlignmentCantSegment>
-                usesHorizontalAlignemntSegment = ownsRsmEntity.usesTopography.usesAlignmentCantSegment;
-
-            foreach (Models.TopoModels.EULYNX.rsmCommon.AlignmentCantSegment segment in usesHorizontalAlignemntSegment)
-            {
-                CustomPolyLine polyline = new CustomPolyLine();
-                CantElementExtractProperties(segment, polyline, ownsRsmEntity);
-                polyline.Name = null;
-                PolyLine poly = segment.hasLinearLocation.polyLines[1];
-                foreach (tElementWithIDref element in poly.coordinates)
-                {
-                    CartesianCoordinate coordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(element.@ref));
-                    //polyline.Points.Add(new Point((double)coordinate.x, (double)coordinate.y));
-                    if (firspoint.X == 0)
-                    {
-
-                        firspoint.X = (((double)coordinate.x));
-                        firspoint.Y = (((double)coordinate.y));
-                        ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
-                    }
-                    polyline.GlobalPoint = new Point(firspoint.X, firspoint.Y);
-                    Point newPoint = new Point((((double)coordinate.x)), (((double)coordinate.y)));
-                    polyline.Points.Add(newPoint);
-                    extractBoundary(newPoint);
-                }
-                polyline.Color = new SolidColorBrush() { Color = Colors.Red};
-                customPolylines.Add(polyline);
-            }
-
-        }
-
-        /// <summary>
-        /// draw the Nodes in the EulynxObject
+        /// extract the Nodes in the EulynxObject async
         /// </summary>
         /// <param name="ownsRsmEntity"></param>
         /// <param name="PSCoordinates"></param>
@@ -435,55 +472,58 @@ namespace APLan.ViewModels
         /// <param name="allNodes"></param>
         /// <param name="units"></param>
         /// <returns></returns>
-        public List<CartesianCoordinate> DrawNodes(RsmEntities ownsRsmEntity,
+        public async Task<List<CustomNode>> DrawNodes(RsmEntities ownsRsmEntity,
             List<PositioningSystemCoordinate> PSCoordinates,
             List<IntrinsicCoordinate> IntrensicCoordinates,
             double canvasSize,
-            ObservableCollection<CustomNode> allNodes,
             List<Unit> units)
         {
-            System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmTrack.Turnout>
-                Nodes = ownsRsmEntity.ownsPoint;
-            System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmTrack.VehicleStop>
-                VehicleNodes = ownsRsmEntity.ownsVehicleStop;
-            List<CartesianCoordinate> AllCoordinates = new List<CartesianCoordinate>();
-
-
-            //turn outs.
-            foreach (Models.TopoModels.EULYNX.rsmTrack.Turnout turn in Nodes)
+            List<CustomNode> nodes = new List<CustomNode>();
+            await Task.Run(() =>
             {
-                
-                Models.TopoModels.EULYNX.rsmCommon.tElementWithIDref loc = turn.locations[0];
-                SpotLocation spot = (SpotLocation)ownsRsmEntity.usesLocation.Find(x => x.id.Equals(loc.@ref));
-                List<AssociatedNetElement> AssElement = spot.associatedNetElements;
+                System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmTrack.Turnout>
+                Nodes = ownsRsmEntity.ownsPoint;
+                System.Collections.Generic.List<Models.TopoModels.EULYNX.rsmTrack.VehicleStop>
+                    VehicleNodes = ownsRsmEntity.ownsVehicleStop;
+                List<CartesianCoordinate> AllCoordinates = new List<CartesianCoordinate>();
 
-                APLan.HelperClasses.CustomNode node = new CustomNode();
-                TurnOutElementExtractProperties(turn, node, ownsRsmEntity);
-                node.Name = null;
-                foreach (AssociatedNetElement ele in AssElement)
+
+                //turn outs.
+                foreach (Models.TopoModels.EULYNX.rsmTrack.Turnout turn in Nodes)
                 {
-                    IntrinsicCoordinate intCoordinate = (IntrinsicCoordinate)IntrensicCoordinates.Find(x => x.id.Equals(ele.bounds[0].@ref));
-                    CartesianCoordinate cartCoordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(intCoordinate.coordinates[1].@ref));
-                    if (!AllCoordinates.Contains(cartCoordinate))
-                    {
-                        AllCoordinates.Add(cartCoordinate);
-                        if (firspoint.X == 0)
-                        {
-                            firspoint.X = (((double)cartCoordinate.x));
-                            firspoint.Y = (((double)cartCoordinate.y));
-                            ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
-                        }
-                        Point newPoint = new Point((((double)cartCoordinate.x) ), (((double)cartCoordinate.y) ));
-                        node.NodePoint = newPoint;
-                        node.Color = Brushes.Red;
-                        allNodes.Add(node);
-                        extractBoundary(newPoint);
-                    }
 
+                    Models.TopoModels.EULYNX.rsmCommon.tElementWithIDref loc = turn.locations[0];
+                    SpotLocation spot = (SpotLocation)ownsRsmEntity.usesLocation.Find(x => x.id.Equals(loc.@ref));
+                    List<AssociatedNetElement> AssElement = spot.associatedNetElements;
+
+                    APLan.HelperClasses.CustomNode node = new CustomNode();
+                    TurnOutElementExtractProperties(turn, node, ownsRsmEntity);
+                    node.Name = null;
+                    foreach (AssociatedNetElement ele in AssElement)
+                    {
+                        IntrinsicCoordinate intCoordinate = (IntrinsicCoordinate)IntrensicCoordinates.Find(x => x.id.Equals(ele.bounds[0].@ref));
+                        CartesianCoordinate cartCoordinate = (CartesianCoordinate)PSCoordinates.Find(x => x.id.Equals(intCoordinate.coordinates[1].@ref));
+                        if (!AllCoordinates.Contains(cartCoordinate))
+                        {
+                            AllCoordinates.Add(cartCoordinate);
+                            if (firspoint.X == 0)
+                            {
+                                firspoint.X = (((double)cartCoordinate.x));
+                                firspoint.Y = (((double)cartCoordinate.y));
+                                ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
+                            }
+                            Point newPoint = new Point((((double)cartCoordinate.x)), (((double)cartCoordinate.y)));
+                            node.NodePoint = newPoint;
+                            node.Color = Brushes.Red;
+                            node.Color.Freeze();
+                            nodes.Add(node);
+                            extractBoundary(newPoint);   
+                        }
+                    }
+                    InfoExtractor.attachProperties(node, turn.id);
                 }
-            }
-            //Vehicle Stops
-            foreach (Models.TopoModels.EULYNX.rsmTrack.VehicleStop Vstop in VehicleNodes)
+                //Vehicle Stops
+                foreach (Models.TopoModels.EULYNX.rsmTrack.VehicleStop Vstop in VehicleNodes)
                 {
 
                     Models.TopoModels.EULYNX.rsmCommon.tElementWithIDref locVstop = Vstop.locations[0];
@@ -506,18 +546,17 @@ namespace APLan.ViewModels
                                 firspoint.Y = (((double)cartCoordinate.y));
                                 ViewModels.DrawViewModel.GlobalDrawingPoint = firspoint;
                             }
-                            Point newPoint = new Point((((double)cartCoordinate.x) ), (((double)cartCoordinate.y) ));
+                            Point newPoint = new Point((((double)cartCoordinate.x)), (((double)cartCoordinate.y)));
                             node.NodePoint = newPoint;
-                            allNodes.Add(node);
+                            nodes.Add(node);
                             //extractBoundary(newPoint);
                         }
 
                     }
-                    //polyline.Points.Add(new Point((double)coordinate.x, (double)coordinate.y));
+                    InfoExtractor.attachProperties(node, Vstop.id);
                 }
-               
-           
-            return AllCoordinates;
+            });
+            return nodes;
         }
 
         /// <summary>
@@ -527,11 +566,11 @@ namespace APLan.ViewModels
         /// <param name="polyLine"></param>
         /// <param name="units"></param>
         /// <param name="PSCoordinates"></param>
-        public void extractStartEnd( LinearCoordinate coordinate , CustomPolyLine polyLine,List<Unit> units, List<PositioningSystemCoordinate> PSCoordinates)
+        public void extractStartEnd(LinearCoordinate coordinate, CustomPolyLine polyLine, List<Unit> units, List<PositioningSystemCoordinate> PSCoordinates)
         {
             if (start == false)
             {
-                polyLine.Data.Add(new KeyValue() { Key = "Start", Value = coordinate.measure.value?.ToString()+"  " + units.Find(x=> x.id.Equals( coordinate.measure.unit.@ref)).name});
+                polyLine.Data.Add(new KeyValue() { Key = "Start", Value = coordinate.measure.value?.ToString() + "  " + units.Find(x => x.id.Equals(coordinate.measure.unit.@ref)).name });
                 start = true;
             }
             else
@@ -548,9 +587,9 @@ namespace APLan.ViewModels
         {
             if (point.X < (double)boundPoints[0])
             {
-                
+
                 boundPoints[0] = point.X;
-            }else
+            } else
             if (point.X > (double)boundPoints[1])
             {
                 boundPoints[1] = point.X;
@@ -558,11 +597,11 @@ namespace APLan.ViewModels
             if (point.Y < (double)boundPoints[2])
             {
                 boundPoints[2] = point.Y;
-            }else
+            } else
             if (point.Y > (double)boundPoints[3])
             {
                 boundPoints[3] = point.Y;
-            } 
+            }
         }
         /// <summary>
         /// calculate how much the drawing should be scaled down or up to be proprotionally visible.
@@ -572,7 +611,7 @@ namespace APLan.ViewModels
             double scaleX = (double)boundPoints[1] - (double)boundPoints[0];
             double scaleY = (double)boundPoints[3] - (double)boundPoints[2];
 
-            if (scaleX>scaleY)
+            if (scaleX > scaleY)
             {
                 ViewModels.DrawViewModel.drawingScale = (ViewModels.DrawViewModel.sharedCanvasSize / scaleX) * 0.1;
             }
@@ -586,18 +625,6 @@ namespace APLan.ViewModels
         /// </summary>
         /// <param name="polylines"></param>
         /// <param name="pointsContainer"></param>
-        public void ExtractPoints(ObservableCollection<CustomPolyLine> polylines, ObservableCollection<Point> pointsContainer)
-        {
-            foreach (CustomPolyLine line in polylines)
-            {
-                for (int i =0; i<line.Points.Count; i++)
-                {
-                    pointsContainer.Add(line.Points[i]);
-                }
-            }
-        }
-        
-        //Extract properties of the polylines and nodes.
         public void verticalElementExtractProperties(VerticalAlignmentSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
         {
             //double? initialSegmentValue = element.initialSegment.value;
@@ -632,14 +659,14 @@ namespace APLan.ViewModels
             var endKMunit = ownsRsmEntity.usesUnit.Find(x => x.id.Equals(endKM.measure.unit.@ref)).name;
 
 
-            polyline.Data.Add(new KeyValue() {Key= "startKM", Value= startKMvalue.ToString()+" "+ startKMunit });
+            polyline.Data.Add(new KeyValue() { Key = "startKM", Value = startKMvalue.ToString() + " " + startKMunit });
             polyline.Data.Add(new KeyValue() { Key = "endSegmentValue", Value = endKMvalue.ToString() + " " + endKMunit });
             polyline.Data.Add(new KeyValue() { Key = "initialElevationValue", Value = initialElevationValue.ToString() + " " + initialElevationUnit });
             polyline.Data.Add(new KeyValue() { Key = "finalElevationValue", Value = finalElevationValue.ToString() + " " + finalElevationUnit });
             polyline.Data.Add(new KeyValue() { Key = "length", Value = length.ToString() + " " + lengthUnit });
             //polyline.Data.Add(new KeyValue() { Key = "startKMvalue", Value = startKMvalue.ToString() + " " + startKMunit });
             //polyline.Data.Add(new KeyValue() { Key = "endKMvalue", Value = endKMvalue.ToString() + " " + endKMunit });
-            polyline.Data.Add(new KeyValue() { Key = "type", Value = type});
+            polyline.Data.Add(new KeyValue() { Key = "type", Value = type });
 
         }
         public void HorizontalElementExtractProperties(Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
@@ -656,13 +683,13 @@ namespace APLan.ViewModels
             double? radius = null;
             string? radiusUnit = null;
 
-            double? initialRadius=null;
+            double? initialRadius = null;
             string? initialRadiusUnit = null;
 
             double? finalRadius = null;
             string? finalRadiusUnit = null;
 
-            string? type=null;
+            string? type = null;
 
 
             if (element is HorizontalSegmentArc)
@@ -703,15 +730,15 @@ namespace APLan.ViewModels
                 polyline.Data.Add(new KeyValue() { Key = "initialSegmentValue", Value = startKMvalue.ToString() + " " + startKMunit });
                 polyline.Data.Add(new KeyValue() { Key = "endSegmentValue", Value = endKMvalue.ToString() + " " + endKMunit });
             }
-            if (initialAzimuth!=null)
+            if (initialAzimuth != null)
             {
                 polyline.Data.Add(new KeyValue() { Key = "initialAzimuth", Value = initialAzimuth.ToString() + " " + initialAzimuthUnit });
             }
-            if (initialRadius!=null)
+            if (initialRadius != null)
             {
                 polyline.Data.Add(new KeyValue() { Key = "initialRadius", Value = initialRadius.ToString() + " " + initialRadiusUnit });
             }
-            if (finalRadius!=null)
+            if (finalRadius != null)
             {
                 polyline.Data.Add(new KeyValue() { Key = "finalRadius", Value = finalRadius.ToString() + " " + finalRadiusUnit });
             }
@@ -721,7 +748,7 @@ namespace APLan.ViewModels
             }
             if (type != null)
             {
-                polyline.Data.Add(new KeyValue() { Key = "type", Value = type});
+                polyline.Data.Add(new KeyValue() { Key = "type", Value = type });
             }
 
             polyline.Data.Add(new KeyValue() { Key = "length", Value = length.ToString() + " " + lengthUnit });
@@ -759,13 +786,13 @@ namespace APLan.ViewModels
                 polyline.Data.Add(new KeyValue() { Key = "initialSegmentValue", Value = startKMvalue.ToString() + " " + startKMunit });
                 polyline.Data.Add(new KeyValue() { Key = "endSegmentValue", Value = endKMvalue.ToString() + " " + endKMunit });
             }
-            if (transitionType!=null)
+            if (transitionType != null)
             {
-                polyline.Data.Add(new KeyValue() { Key = "transitionType", Value = transitionType});
+                polyline.Data.Add(new KeyValue() { Key = "transitionType", Value = transitionType });
             }
-           
 
-            
+
+
             //polyline.Data.Add(new KeyValue() { Key = "startKMvalue", Value = startKMvalue.ToString() + " " + startKMunit });
             //polyline.Data.Add(new KeyValue() { Key = "endKMvalue", Value = endKMvalue.ToString() + " " + endKMunit });
 
@@ -776,7 +803,7 @@ namespace APLan.ViewModels
             string? longname = element.longname;
             string? name = element.name;
 
-            node.Data.Add(new KeyValue() { Key = "longname", Value = longname.ToString()});
+            node.Data.Add(new KeyValue() { Key = "longname", Value = longname.ToString() });
             node.Data.Add(new KeyValue() { Key = "name", Value = name.ToString() });
         }
         public void VehicleStopElementExtractProperties(Models.TopoModels.EULYNX.rsmTrack.VehicleStop element, CustomNode node, RsmEntities ownsRsmEntity)
@@ -785,5 +812,31 @@ namespace APLan.ViewModels
             node.Data.Add(new KeyValue() { Key = "name", Value = name.ToString() });
         }
 
-    }
+
+        /// <summary>
+        /// fetch the lines to the UI on the Main thread
+        /// </summary>
+        /// <param name="bindedList"></param>
+        /// <param name="lines"></param>
+        private void fetchLinesForBinding(ObservableCollection<CustomPolyLine> bindedList, List<CustomPolyLine> lines)
+        {
+            foreach (CustomPolyLine line in lines)
+            {
+                bindedList.Add(line);
+            }
+        }
+
+        /// <summary>
+        /// fetch the nodes to the UI on the Main thread
+        /// </summary>
+        /// <param name="bindedList"></param>
+        /// <param name="nodes"></param>
+        private void fetchNodesForBinding(ObservableCollection<CustomNode> bindedList, List<CustomNode> nodes)
+        {
+            foreach (CustomNode node in nodes)
+            {
+                bindedList.Add(node);
+            }
+        }
+    }  
 }

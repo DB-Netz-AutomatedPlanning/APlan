@@ -319,6 +319,7 @@ C:\APLan_2\APLan\obj\Debug\net6.0-windows\APLan.pdb
 C:\APLan_2\APLan\obj\Debug\net6.0-windows\APLan.genruntimeconfig.cache
 C:\APLan_2\APLan\obj\Debug\net6.0-windows\ref\APLan.dll
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\APLan.csproj.AssemblyReference.cache
+C:\APLan_3\APLan\obj\Debug\net6.0-windows\Resources\Symbols\Symbols.baml
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\MainWindow.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\AboutWPF.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\AddDataWindow.g.cs
@@ -340,6 +341,7 @@ C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\SignalObjectInfo.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\SymbolsTab.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\Tabs.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\VisualizedData.g.cs
+C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\Welcome.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\App.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\APLan_MarkupCompile.cache
@@ -392,6 +394,7 @@ C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\SignalObjectInfo.baml
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\SymbolsTab.baml
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\Tabs.baml
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\VisualizedData.baml
+C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\Welcome.baml
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\APLan.g.resources
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\APLan.Properties.Resources.resources
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\APLan.csproj.GenerateResource.cache
@@ -405,5 +408,3 @@ C:\APLan_3\APLan\obj\Debug\net6.0-windows\refint\APLan.dll
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\APLan.pdb
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\APLan.genruntimeconfig.cache
 C:\APLan_3\APLan\obj\Debug\net6.0-windows\ref\APLan.dll
-C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\Welcome.g.cs
-C:\APLan_3\APLan\obj\Debug\net6.0-windows\Views\Welcome.baml

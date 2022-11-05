@@ -33,7 +33,6 @@ namespace APLan.Views
             drawing = mycanvas;
             drawingScrollViewer = DrawingViewer;
             signalresultsRow = this.SignalOutput;
-            myKantenLines = KantenLines;
             canvasGridColor = System.Windows.Application.Current.Resources["gridColor"] as SolidColorBrush;
         }
         private void drawingCanvas_DragOver(object sender, DragEventArgs e)
@@ -58,9 +57,7 @@ namespace APLan.Views
                     if (drawing.Children.Contains(element) == false)
                     {
                         DrawViewModel.toBeStored.Add(element);
-                        
-                        drawing.Children.Add(element);
-                        
+                        drawing.Children.Add(element);  
                     }
 
                 }

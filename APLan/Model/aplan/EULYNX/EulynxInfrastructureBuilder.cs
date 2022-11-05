@@ -11,6 +11,7 @@ using AssociatedNetElement = Models.TopoModels.EULYNX.rsmCommon.AssociatedNetEle
 
 using static aplan.core.Helper;
 using static aplan.core.JsonHandler;
+using APLan.HelperClasses;
 
 namespace aplan.eulynx
 {
@@ -107,6 +108,7 @@ namespace aplan.eulynx
                             new tElementWithIDref { @ref = spotLocation.id }
                         }
                         };
+                        InfoExtractor.ChangeID(item.id, rsmVehicleStop.id); //change ID to the object element ID (Khaled).
                         rsmEntities.ownsVehicleStop.Add(rsmVehicleStop);
 
                         // EULYNX vehicle stop mirrors the RSM vehicle stop
@@ -123,6 +125,7 @@ namespace aplan.eulynx
                             },
                             refersToRsmVehicleStop = new tElementWithIDref { @ref = rsmVehicleStop.id }
                         };
+                        
 
                         var trackEntitiy = new database.TrackEntity()
                         {
@@ -234,7 +237,7 @@ namespace aplan.eulynx
                             }
 
                         };
-
+                        InfoExtractor.ChangeID(item.id,turnout.id); //change ID to the object element ID (Khaled).
                         var trackEntity = new database.TrackEntity()
                         {
                             uuid = turnout.id,
