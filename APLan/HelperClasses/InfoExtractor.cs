@@ -19,9 +19,12 @@ namespace APLan.HelperClasses
         }
         public static void ChangeID(string id, string newId)
         {
-            Feature value = AllInfo[id];
-            AllInfo.Remove(id);
-            AllInfo[newId] = value;
+            if (AllInfo!=null&& id!=null && AllInfo.Keys.Contains(id))
+            {
+                Feature value = AllInfo[id];
+                AllInfo.Remove(id);
+                AllInfo[newId] = value;
+            }
         }
         public static void attachProperties(CustomItem item, string id)
         {

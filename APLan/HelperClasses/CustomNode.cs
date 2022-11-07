@@ -38,14 +38,6 @@ namespace APLan.HelperClasses
                 OnPropertyChanged();
             }
         }
-        /// <summary>
-        /// all the data needed to be visualized.
-        /// </summary>
-        public ObservableCollection<KeyValue> Data
-        {
-            get;
-            set;
-        }
         #endregion
         #region constructor
         public CustomNode()

@@ -22,7 +22,6 @@
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
                      ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=gleiskantenList}">
-                    
                 </ListView>
             </TreeViewItem>
             <!--Entwurfselement_HO_Lines-->

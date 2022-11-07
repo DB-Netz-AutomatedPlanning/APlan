@@ -14,20 +14,25 @@ namespace APLan.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var collection = ((ObservableCollection<KeyValue>)value);
-            if (collection.FirstOrDefault(x=>x.Key.Equals("KN_NAME"))!=null)
+            var ExtraInfo = ((ObservableCollection<KeyValue>)((CustomItem)value).ExtraInfo);
+            var Data = ((ObservableCollection<KeyValue>)((CustomItem)value).Data);
+
+            if (ExtraInfo.FirstOrDefault(x => x.Key.Equals("KN_NAME")) != null)
             {
-                return collection.FirstOrDefault(x => x.Key.Equals("KN_NAME")).Value;
+                return ExtraInfo.FirstOrDefault(x => x.Key.Equals("KN_NAME")).Value;
             }
-            else if(collection.FirstOrDefault(x => x.Key.Equals("KNOTENNAME")) != null)
+            else if (ExtraInfo.FirstOrDefault(x => x.Key.Equals("KNOTENNAME")) != null)
             {
-                return collection.FirstOrDefault(x => x.Key.Equals("KNOTENNAME")).Value;
+                return ExtraInfo.FirstOrDefault(x => x.Key.Equals("KNOTENNAME")).Value;
             }
-            else if (collection.FirstOrDefault(x => x.Key.Equals("ID")) != null)
+            else if (ExtraInfo.FirstOrDefault(x => x.Key.Equals("ID")) != null)
             {
-                return collection.FirstOrDefault(x => x.Key.Equals("ID")).Value;
+                return ExtraInfo.FirstOrDefault(x => x.Key.Equals("ID")).Value;
+            } else if (Data.FirstOrDefault(x => x.Key.Equals("Name"))!=null)
+            {
+                return Data.FirstOrDefault(x => x.Key.Equals("Name")).Value;
             }
-            return "Unkown Item";
+            return "Item";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

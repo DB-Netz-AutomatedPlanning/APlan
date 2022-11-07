@@ -21,6 +21,12 @@ namespace APLan.HelperClasses
             get;
             set;
         }
+        //contains all information from the Eulynx Object.
+        public ObservableCollection<KeyValue> Data
+        {
+            get;
+            set;
+        }
         public CustomItem()
         {
             ExtraInfo= new ObservableCollection<KeyValue>();

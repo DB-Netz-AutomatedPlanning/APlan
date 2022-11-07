@@ -12,12 +12,6 @@ namespace APLan.HelperClasses
     public class CustomPolyLine  : CustomItem
     {
         #region attributes
-        //contains all information from the Eulynx Object.
-        public ObservableCollection<KeyValue> Data
-        {
-            get;
-            set;
-        }
         // name as in the Eulynx Object.
         private string name;
         private SolidColorBrush color;
