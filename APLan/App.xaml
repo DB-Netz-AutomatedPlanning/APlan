@@ -87,14 +87,13 @@
                                   AlternatingRowBackground = "White"
                                   IsReadOnly="True"
                                   ItemsSource="{Binding DataContext.Data}">
-                            <DataGrid.Columns>
-                                
-                                <DataGridTextColumn Header = "Property" Binding="{Binding Path=Key}"/>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header = "Property" Binding="{Binding Path=Key}"/>
                                 <DataGridTextColumn Header = "Value" Binding="{Binding Path=Value}"/>
                             </DataGrid.Columns >
                         </DataGrid>
                     </TreeViewItem>
-                    <TreeViewItem Header="Provided attributes">
+                    <TreeViewItem Header="Source files attributes">
                         <DataGrid 
                                   AutoGenerateColumns="False"
                                   AlternatingRowBackground = "White"

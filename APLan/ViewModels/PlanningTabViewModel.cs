@@ -219,7 +219,7 @@ namespace APLan.ViewModels
                 aplan.database.NetElement dataBaseElement = null;
                 using (var liteDB = ModelViewModel.db.accessDB())
                 {
-                    dataBaseElement = (liteDB).GetCollection<aplan.database.NetElement>("NetElements").Find(x => x.id == element.@ref).FirstOrDefault();
+                    dataBaseElement = (liteDB).GetCollection<aplan.database.NetElement>("NetElements").Find(x => x.uuid== element.@ref).FirstOrDefault();
                 }
                 netElement = netElements.Find(x => x.id.Equals(dataBaseElement.uuid));
 

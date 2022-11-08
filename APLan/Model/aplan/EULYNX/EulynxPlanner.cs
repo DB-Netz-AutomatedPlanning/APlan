@@ -394,7 +394,7 @@ namespace aplan.eulynx
 
             var associatedNetElement = new database.AssociatedNetElement
             {
-                netElementId = aNetElement.id,
+                netElementId = aNetElement.uuid,  // I changed this from id to UUID (Khaled)
                 intrinsicValue = intrinsicValue,
                 lateralSide = lateralSide,
                 appliesInDirection = aNetElement.codeDirection
