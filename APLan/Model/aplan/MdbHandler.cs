@@ -318,6 +318,10 @@ namespace aplan.core
                             // extra method to handle geo coordinates in one segment
                             handleCartesianCoordinateLine(db, mileage);
 
+                            // to link between source file and objectElement (Khaled).
+                            mileage.SourceFileConnectingID = generateUUID();
+                            InfoExtractor.attachMDBextraInfo(reader, mileage.SourceFileConnectingID);
+
                             mileageCollection.Insert(mileage);
                         }
                     }
@@ -387,13 +391,15 @@ namespace aplan.core
                                 startKm = db.GetCollection<Node>("Nodes").FindOne(x => x.id == reader["AKNOTEN"].ToString().Trim()).km,
                                 endKm = db.GetCollection<Node>("Nodes").FindOne(x => x.id == reader["EKNOTEN"].ToString().Trim()).km,
                                 codeDirection = Convert.ToInt16(reader["STRRIKZ"])
-                            };
-
+                            };                            
                             // change code direction 0 to 1 to meet standard along with json format
-                            if(netElement.codeDirection == 0)
+                            if (netElement.codeDirection == 0)
                             {
                                 netElement.codeDirection = 1;
                             }
+                            // to link between source file and objectElement (Khaled).
+                            netElement.SourceFileConnectingID = generateUUID();
+                            InfoExtractor.attachMDBextraInfo(reader, netElement.SourceFileConnectingID);
 
                             netElementCollection.Insert(netElement);
                         }
@@ -632,6 +638,9 @@ namespace aplan.core
                             {
                                 node.destinationNodeID.Add(reader["KN" + i].ToString());
                             }
+                            // to link between source file and objectElement (Khaled).
+                            node.SourceFileConnectingID = generateUUID();  
+                            InfoExtractor.attachMDBextraInfo(reader,node.SourceFileConnectingID);
 
                             collection.Insert(node);
                         }
@@ -702,6 +711,10 @@ namespace aplan.core
 
                             // handle geo coordinates belong to alignment
                             handleCartesianCoordinateLine(db, horizontalAlignment);
+                            
+                            // to link between source file and objectElement (Khaled).
+                            horizontalAlignment.SourceFileConnectingID = generateUUID();  
+                            InfoExtractor.attachMDBextraInfo(reader, horizontalAlignment.SourceFileConnectingID);
 
                             collection.Insert(horizontalAlignment);
                         }
@@ -791,7 +804,11 @@ namespace aplan.core
 
                             // handle geo coordinates belong to alignment
                             handleCartesianCoordinateLine(db, verticalAlignment);
-
+                            
+                            // to link between source file and objectElement (Khaled).
+                            verticalAlignment.SourceFileConnectingID = generateUUID(); 
+                            InfoExtractor.attachMDBextraInfo(reader, verticalAlignment.SourceFileConnectingID);
+                            
                             collection.Insert(verticalAlignment);
                         }
                     }
@@ -876,7 +893,11 @@ namespace aplan.core
 
                             // handle geo coordinates belong to alignment
                             handleCartesianCoordinateLine(db, alignmentCant);
-
+                            
+                            // to link between source file and objectElement (Khaled).
+                            alignmentCant.SourceFileConnectingID = generateUUID();  
+                            InfoExtractor.attachMDBextraInfo(reader, alignmentCant.SourceFileConnectingID);
+                            
                             collection.Insert(alignmentCant);
                         }
                     }

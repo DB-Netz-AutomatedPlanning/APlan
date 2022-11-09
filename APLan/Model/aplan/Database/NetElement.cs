@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using APLan.Model.aplan.Database;
+using System.Collections.Generic;
 
 
 namespace aplan.database
@@ -8,7 +9,7 @@ namespace aplan.database
     /// This is modeled based on the needs of keeping imported information,
     /// which later will be used for calculation and mapping.
     /// </summary>
-    class NetElement
+    class NetElement : BaseElement
     {
         
         /// <value>

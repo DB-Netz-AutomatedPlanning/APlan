@@ -52,11 +52,12 @@ namespace APLan.ViewModels
         public ModelViewModel(string country, string format,
                 string mileageFilePath, string edgesFilePath, string nodesFilePath,
                 string horizontalAlignmentsFilePath, string verticalAlignmentsFilePath, string cantAlingnmentsFilePath,
-                string mdbFilePath)
+                string mdbFilePath,string projectPath)
         {
             Globals.routeNumber = 6624;
             eulynxService = EulynxService.getInstance();
             db = Database.getInstance();
+            Database.setDBPath(projectPath);
             loadingObject = System.Windows.Application.Current.FindResource("globalLoading") as Loading;
             assignInitialBoundary();
             generateAEuLynxObject(country, format,
@@ -91,7 +92,7 @@ namespace APLan.ViewModels
         /// <param name="verticalAlignmentsFilePath"></param>
         /// <param name="cantAlingnmentsFilePath"></param>
         /// <param name="mdbFilePath"></param>
-        public void generateAEuLynxObject(string country, string format,
+        private void generateAEuLynxObject(string country, string format,
                 string mileageFilePath, string edgesFilePath, string nodesFilePath,
                 string horizontalAlignmentsFilePath, string verticalAlignmentsFilePath, string cantAlingnmentsFilePath,
                 string mdbFilePath)
@@ -138,6 +139,9 @@ namespace APLan.ViewModels
             ObservableCollection<CustomNode> gleisknotenList)
         {
             loadingObject.LoadingReport = "Drawing Eulynx Object...";
+
+            firspoint = new Point(0,0); //reset the first point in each drawing call. very important.
+
             //clear old data.
             gleiskantenList.Clear();
             gleiskantenPointsList.Clear();
@@ -185,7 +189,7 @@ namespace APLan.ViewModels
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public async Task<List<CustomPolyLine>> DrawNetElement(List<PositioningNetElement> positioningNetElements,
+        private async Task<List<CustomPolyLine>> DrawNetElement(List<PositioningNetElement> positioningNetElements,
             List<PositioningSystemCoordinate> PSCoordinates,
             double canvasSize,
             List<Unit> units)
@@ -261,7 +265,7 @@ namespace APLan.ViewModels
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public async Task<List<CustomPolyLine>> DrawVerticalAlignment(RsmEntities ownsRsmEntity,
+        private async Task<List<CustomPolyLine>> DrawVerticalAlignment(RsmEntities ownsRsmEntity,
             List<PositioningSystemCoordinate> PSCoordinates,
             double canvasSize,
             List<Unit> units)
@@ -311,7 +315,7 @@ namespace APLan.ViewModels
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public async Task<List<CustomPolyLine>> DrawHorizontalAlignment(RsmEntities ownsRsmEntity,
+        private async Task<List<CustomPolyLine>> DrawHorizontalAlignment(RsmEntities ownsRsmEntity,
            List<PositioningSystemCoordinate> PSCoordinates,
            double canvasSize,
            List<Unit> units)
@@ -365,7 +369,7 @@ namespace APLan.ViewModels
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public async Task<List<CustomPolyLine>> DrawMielage(RsmEntities ownsRsmEntity,
+        private async Task<List<CustomPolyLine>> DrawMielage(RsmEntities ownsRsmEntity,
             List<PositioningSystemCoordinate> PSCoordinates,
             double canvasSize,
             List<Unit> units)
@@ -419,7 +423,7 @@ namespace APLan.ViewModels
         /// <param name="canvasSize"></param>
         /// <param name="customPolylines"></param>
         /// <param name="units"></param>
-        public async Task<List<CustomPolyLine>> DrawCantlAlignment(RsmEntities ownsRsmEntity,
+        private async Task<List<CustomPolyLine>> DrawCantlAlignment(RsmEntities ownsRsmEntity,
            List<PositioningSystemCoordinate> PSCoordinates,
            double canvasSize,
            List<Unit> units)
@@ -472,7 +476,7 @@ namespace APLan.ViewModels
         /// <param name="allNodes"></param>
         /// <param name="units"></param>
         /// <returns></returns>
-        public async Task<List<CustomNode>> DrawNodes(RsmEntities ownsRsmEntity,
+        private async Task<List<CustomNode>> DrawNodes(RsmEntities ownsRsmEntity,
             List<PositioningSystemCoordinate> PSCoordinates,
             List<IntrinsicCoordinate> IntrensicCoordinates,
             double canvasSize,
@@ -566,7 +570,7 @@ namespace APLan.ViewModels
         /// <param name="polyLine"></param>
         /// <param name="units"></param>
         /// <param name="PSCoordinates"></param>
-        public void extractStartEnd(LinearCoordinate coordinate, CustomPolyLine polyLine, List<Unit> units, List<PositioningSystemCoordinate> PSCoordinates)
+        private void extractStartEnd(LinearCoordinate coordinate, CustomPolyLine polyLine, List<Unit> units, List<PositioningSystemCoordinate> PSCoordinates)
         {
             if (start == false)
             {
@@ -583,7 +587,7 @@ namespace APLan.ViewModels
         /// extract the boundary of the whole drawing according to the polylines
         /// </summary>
         /// <param name="point"></param>
-        public void extractBoundary(Point point)
+        private void extractBoundary(Point point)
         {
             if (point.X < (double)boundPoints[0])
             {
@@ -606,7 +610,7 @@ namespace APLan.ViewModels
         /// <summary>
         /// calculate how much the drawing should be scaled down or up to be proprotionally visible.
         /// </summary>
-        public void calculatePointsScaling()
+        private void calculatePointsScaling()
         {
             double scaleX = (double)boundPoints[1] - (double)boundPoints[0];
             double scaleY = (double)boundPoints[3] - (double)boundPoints[2];
@@ -625,7 +629,7 @@ namespace APLan.ViewModels
         /// </summary>
         /// <param name="polylines"></param>
         /// <param name="pointsContainer"></param>
-        public void verticalElementExtractProperties(VerticalAlignmentSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
+        private void verticalElementExtractProperties(VerticalAlignmentSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
         {
             //double? initialSegmentValue = element.initialSegment.value;
             //string? initialSegmentValueUnit = ownsRsmEntity.usesUnit.Find(x => x.id.Equals(element.initialSegment.unit.@ref)).name;
@@ -669,7 +673,7 @@ namespace APLan.ViewModels
             polyline.Data.Add(new KeyValue() { Key = "type", Value = type });
 
         }
-        public void HorizontalElementExtractProperties(Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
+        private void HorizontalElementExtractProperties(Models.TopoModels.EULYNX.rsmCommon.HorizontalAlignmentSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
         {
             //double? initialSegmentValue = element.initialSegment.value;
             //string? initialSegmentValueUnit = ownsRsmEntity.usesUnit.Find(x => x.id.Equals(element.initialSegment.unit.@ref)).name;
@@ -757,7 +761,7 @@ namespace APLan.ViewModels
 
 
         }
-        public void CantElementExtractProperties(Models.TopoModels.EULYNX.rsmCommon.AlignmentCantSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
+        private void CantElementExtractProperties(Models.TopoModels.EULYNX.rsmCommon.AlignmentCantSegment element, CustomPolyLine polyline, RsmEntities ownsRsmEntity)
         {
             //double? initialSegmentValue = element.initialSegment.value;
             //string? initialSegmentValueUnit = ownsRsmEntity.usesUnit.Find(x => x.id.Equals(element.initialSegment.unit.@ref)).name;
@@ -798,7 +802,7 @@ namespace APLan.ViewModels
 
 
         }
-        public void TurnOutElementExtractProperties(Models.TopoModels.EULYNX.rsmTrack.Turnout element, CustomNode node, RsmEntities ownsRsmEntity)
+        private void TurnOutElementExtractProperties(Models.TopoModels.EULYNX.rsmTrack.Turnout element, CustomNode node, RsmEntities ownsRsmEntity)
         {
             string? longname = element.longname;
             string? name = element.name;
@@ -806,7 +810,7 @@ namespace APLan.ViewModels
             node.Data.Add(new KeyValue() { Key = "longname", Value = longname.ToString() });
             node.Data.Add(new KeyValue() { Key = "name", Value = name.ToString() });
         }
-        public void VehicleStopElementExtractProperties(Models.TopoModels.EULYNX.rsmTrack.VehicleStop element, CustomNode node, RsmEntities ownsRsmEntity)
+        private void VehicleStopElementExtractProperties(Models.TopoModels.EULYNX.rsmTrack.VehicleStop element, CustomNode node, RsmEntities ownsRsmEntity)
         {
             var name = element.name;
             node.Data.Add(new KeyValue() { Key = "name", Value = name.ToString() });

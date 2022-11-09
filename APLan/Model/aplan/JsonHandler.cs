@@ -14,7 +14,6 @@ namespace aplan.core
 {
     class JsonHandler : InputHandler
     {
-        
         private string mileageFilePath;
         private string edgesFilePath;
         private string nodesFilePath;
@@ -171,13 +170,12 @@ namespace aplan.core
             FeatureCollection collectionKM = jsonToFeatureCollection(path);
             if (collectionIsNull(collectionKM))
                 return;
-
+            
             // create collection for mileage
             var mileageCollection = db.GetCollection<Mileage>("Mileage");
 
             foreach (Feature feature in collectionKM.Features)
             {
-                
                 var mileage = new Mileage()
                 {
                     id = fetchIndividualValue("ID", feature).ToString(),
@@ -189,8 +187,9 @@ namespace aplan.core
                     startKM = hmToKm_mileage(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm_mileage(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
-
-                InfoExtractor.getAllInfo().Add(mileage.id, feature); //store all info related to this id (khaled).
+                //store all info related to this id (khaled).
+                mileage.SourceFileConnectingID = generateUUID();
+                InfoExtractor.getAllInfo().Add(mileage.SourceFileConnectingID, feature); 
                 
                 // instantiate coordinate objects
                 handleLinearCoordinateMileage(db, feature);
@@ -383,7 +382,10 @@ namespace aplan.core
                     endKm = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                     geometryType = feature.Geometry.Type.ToString()
                 };
-                InfoExtractor.getAllInfo().Add(netElement.id, feature); //store all info related to this id (khaled).
+                //store all info related to this id (khaled).
+                netElement.SourceFileConnectingID = generateUUID();
+                InfoExtractor.getAllInfo().Add(netElement.SourceFileConnectingID, feature); 
+
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 netElement.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -422,7 +424,9 @@ namespace aplan.core
                     nodeType = Convert.ToInt32(fetchIndividualValue("KN_TYP", feature)),
                     geometryType = feature.Geometry.Type.ToString()
                 };
-                InfoExtractor.getAllInfo().Add(node.id, feature); //store all info related to this id (khaled).
+                //store all info related to this id (khaled).
+                node.SourceFileConnectingID = generateUUID();
+                InfoExtractor.getAllInfo().Add(node.SourceFileConnectingID, feature); 
                 // handle destination nodes
                 node.destinationNodeID = new ArrayList();
                 for (int i = 0; i < 3; i++)
@@ -468,7 +472,10 @@ namespace aplan.core
                     startKM = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
-                InfoExtractor.getAllInfo().Add(horizontalAlignment.id, feature); //store all info related to this id (khaled).
+                //store all info related to this id (khaled).
+                horizontalAlignment.SourceFileConnectingID = generateUUID();
+                InfoExtractor.getAllInfo().Add(horizontalAlignment.SourceFileConnectingID, feature);
+                
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 horizontalAlignment.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -508,7 +515,10 @@ namespace aplan.core
                     startKM = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
-                InfoExtractor.getAllInfo().Add(verticalAlignment.id, feature); //store all info related to this id (khaled).
+                //store all info related to this id (khaled).
+                verticalAlignment.SourceFileConnectingID = generateUUID();
+                InfoExtractor.getAllInfo().Add(verticalAlignment.SourceFileConnectingID, feature);
+                
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 verticalAlignment.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -546,7 +556,10 @@ namespace aplan.core
                     startKm = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKm = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
-                InfoExtractor.getAllInfo().Add(alignmentCant.id, feature); //store all info related to this id (khaled).
+                //store all info related to this id (khaled).
+                alignmentCant.SourceFileConnectingID = generateUUID();
+                InfoExtractor.getAllInfo().Add(alignmentCant.SourceFileConnectingID, feature);
+
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 alignmentCant.lineCoordinates = handleCartesianCoordinateLine(db, feature);

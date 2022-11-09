@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\APLan_2\APLan\obj\Release\net6.0-windows\
+C:\APLan_3\APLan\obj\Release\net6.0-windows\
 APLan
 none
 false
 TRACE;RELEASE;NET;NET6_0;NETCOREAPP
-C:\APLan_2\APLan\App.xaml
-20-1522985982
+C:\APLan_3\APLan\App.xaml
+23996856447
 
-971280833008
-213-1829272810
-MainWindow.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\CanvasToolsTab.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\PlanningTab.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;
+109-276754558
+2121428658519
+MainWindow.xaml;Resources\Symbols\Symbols.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\PlanningTab.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
 
 False
 

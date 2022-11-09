@@ -32,6 +32,7 @@ namespace APLan.ViewModels
         public static ModelViewModel model;
 
         //canvas data
+        private double canvasRotation;
         private double xdiff;
         private double ydiff;
         private Point OldPoint = new Point(double.NegativeInfinity, double.NegativeInfinity);
@@ -71,12 +72,16 @@ namespace APLan.ViewModels
             get;
             set;
         }
-        public ObservableCollection<UIElement> selected
-        {
-            get;
-            set;
-        }
 
+        public double CanvasRotation
+        {
+            get => canvasRotation;
+            set {
+                canvasRotation = value;
+                OnPropertyChanged();
+            }
+            
+        }
         public double CanvasSize
         {
             get => canvasSize;
@@ -224,9 +229,11 @@ namespace APLan.ViewModels
         private ICommand _BasCanvasMouseMoveCommand;
         private ICommand _KeyDownForMainWindow;
         private ICommand _ObjectLodaded;
+        private ICommand _RotateCanvasSlider { get; set; }
         private ICommand _RotateItemSlider { get; set; }
         private ICommand _ScaleItemSlider { get; set; }
         public ICommand RotateSelectionButton { get; set; }
+        
         public ICommand KeyDownForMainWindow
         {
             get
@@ -312,6 +319,17 @@ namespace APLan.ViewModels
                    x =>
                    {
                        ExecuteLoadObjects((UIElement) x);
+                   });
+            }
+        }
+        public ICommand RotateCanvasSlider
+        {
+            get
+            {
+                return _RotateCanvasSlider ??= new RelayCommand(
+                   x =>
+                   {
+                       ExecuteRotateCanvasSliderChange((RoutedPropertyChangedEventArgs<double>)x);
                    });
             }
         }
@@ -535,6 +553,10 @@ namespace APLan.ViewModels
         /// rotate the selected items by a slider.
         /// </summary>
         /// <param name="e"></param>
+        private void ExecuteRotateCanvasSliderChange(RoutedPropertyChangedEventArgs<double> e)
+        {
+            CanvasRotation = e.NewValue;
+        }
         private void ExecuteRotateItemSliderChange(RoutedPropertyChangedEventArgs<double> e)
         {
             foreach (UIElement element in selected)

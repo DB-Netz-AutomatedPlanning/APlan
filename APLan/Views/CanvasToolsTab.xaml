@@ -54,10 +54,10 @@
     <WrapPanel Background="White" VerticalAlignment="Top">
         <Viewbox Style="{StaticResource viewbox1}">
             <Button x:Name="select"
-                ToolTip="Activate selection"
+                ToolTip="Activate Multi selection"
                 HorizontalAlignment="Center"
-                Background="{Binding SelectBrush, Mode=TwoWay}"
-                Command="{Binding SelectButton}" BorderBrush="White">
+                BorderBrush="{Binding SelectBrush, Mode=TwoWay}"
+                Command="{Binding SelectButton}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource multiBindingConverter}">
                         <Binding ElementName="select"/>
@@ -72,8 +72,8 @@
             <Button x:Name="move"
                 ToolTip="Move selected items"
                 HorizontalAlignment="Center"
-                Background="{Binding MoveBrush, Mode=TwoWay}"
-                Command="{Binding MoveButton}" BorderBrush="White">
+                BorderBrush="{Binding MoveBrush, Mode=TwoWay}"
+                Command="{Binding MoveButton}">
                 <Button.CommandParameter>
                     <MultiBinding Converter="{StaticResource multiBindingConverter}">
                         <Binding ElementName="move"/>
@@ -88,8 +88,8 @@
         <Button x:Name="drag"   
                 HorizontalAlignment="Center"
                 ToolTip="Drag items"
-                Background="{Binding DragBrush, Mode=TwoWay}"
-                Command="{Binding DragButton}" BorderBrush="White">
+                BorderBrush="{Binding DragBrush, Mode=TwoWay}"
+                Command="{Binding DragButton}">
             <Image Source="/Resources/Icons/drag.png" Stretch="Fill"/>
         </Button>
         </Viewbox>
@@ -169,7 +169,8 @@
                       Width="200"
                       ValueChanged="canvasRotateSlider_ValueChanged"
                       Minimum="0" Maximum="360" SmallChange="1"
-                      />
+                      Value="{Binding ElementName=CanvasRotateText, Path=Text, Converter={StaticResource stringToDoubleconverter}}"
+                      commands:SliderBehaviour.ItemScaleSliderCommand="{Binding Source={StaticResource drawViewModel}, Path=RotateCanvasSlider}"/>
                 <!--Value="{Binding ElementName=CanvasRotateText, Path=Text, Converter={StaticResource stringToDoubleconverter}}" Minimum="0" Maximum="360" SmallChange="1"
                             commands:SliderBehaviour.SliderCommand="{Binding RotateCanvasSlider}"/>-->
             </StackPanel>

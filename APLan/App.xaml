@@ -38,6 +38,8 @@
 
         <converters:LoadingAngleConverter x:Key="LoadingAngleConverter"></converters:LoadingAngleConverter>
         <converters:TitleConverter x:Key="TitleConverter"></converters:TitleConverter>
+
+   
         <!--export-->
         <viewModels:ExportWindowViewModel x:Key="exportWindowViewModel"/>
 

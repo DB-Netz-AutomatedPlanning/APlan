@@ -130,7 +130,7 @@ namespace aplan.eulynx
                             //toNodeID = item.endNodeId,
                             //direction = item.codeDirection
                         };
-                        InfoExtractor.ChangeID(item.id, linearElement.id); // change the Id to be as the object Element Id(Khaled).
+                        InfoExtractor.ChangeID(item.SourceFileConnectingID, linearElement.id); // change the Id to be as the object Element Id(Khaled).
                         //linear associated positioning 
                         linearElement.associatedPositioning.Add(addLinearAssociatedPositioning(item, rsmEntities));
 
@@ -157,7 +157,7 @@ namespace aplan.eulynx
                             //direction = item.codeDirection
                             //isMainTrack = true
                         };
-                        InfoExtractor.ChangeID(item.id, linearElement.id); // change the Id to be as the object Element Id(Khaled).
+                        InfoExtractor.ChangeID(item.SourceFileConnectingID, linearElement.id); // change the Id to be as the object Element Id(Khaled).
                         //linear associated positioning 
                         linearElement.associatedPositioning.Add(addLinearAssociatedPositioning(item, rsmEntities));
 

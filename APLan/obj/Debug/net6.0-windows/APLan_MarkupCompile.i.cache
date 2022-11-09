@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 C:\APLan_3\APLan\App.xaml
-23996856447
+24676863215
 
-1091580553747
+1121978897471
 2121428658519
-MainWindow.xaml;Resources\Symbols\Symbols.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\PlanningTab.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
+MainWindow.xaml;Resources\Symbols\Symbols.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\DrawingUpperLayer.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\PlanningTab.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
 
 False
 

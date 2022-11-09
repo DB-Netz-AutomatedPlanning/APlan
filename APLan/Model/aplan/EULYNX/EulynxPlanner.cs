@@ -399,7 +399,6 @@ namespace aplan.eulynx
                 lateralSide = lateralSide,
                 appliesInDirection = aNetElement.codeDirection
             };
-
             return associatedNetElement;
         }
 

@@ -74,14 +74,13 @@
                         Width="{Binding ActualWidth, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Converter={StaticResource DrawUserControlSize}}"
                         Height="{Binding ActualHeight, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}},Converter={StaticResource DrawUserControlSize}}">
                 <views:Draw.RenderTransform>
-                    <RotateTransform Angle="0" 
+                    <RotateTransform Angle="{Binding Source={StaticResource drawViewModel}, Path=CanvasRotation}" 
                                      CenterX="{Binding ActualWidth, Converter={StaticResource HalfLengthConverter}, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:Draw}}}" 
                                      CenterY="{Binding ActualHeight, Converter={StaticResource HalfLengthConverter}, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type views:Draw}}}"/>
                 </views:Draw.RenderTransform>
             </views:Draw>
-
         </Canvas>
-
+        <views:DrawingUpperLayer Grid.Column="1" Grid.Row="2" Panel.ZIndex="2"/>
         <GridSplitter Grid.Row="3" 
                       Grid.ColumnSpan="2"
                       Background="{StaticResource themeColor}" 

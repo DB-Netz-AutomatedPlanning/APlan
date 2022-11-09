@@ -11,7 +11,7 @@ namespace aplan.core
 
         // instance
         private static Database databaseInstance;
-
+        private static string projectPath; // current project Path.(Khaled)
         // singleton constructor
         private Database() { }
 
@@ -35,9 +35,13 @@ namespace aplan.core
         /// </summary>
         public LiteDatabase accessDB()
         {
-            return new LiteDatabase(@"..\..\..\resources\APlan.db");
+            return new LiteDatabase(projectPath + "/APlan.db");
         }
 
+        public static void setDBPath(string path)
+        {
+            projectPath = path;
+        }
 
         /// <summary>
         /// Method to clear all records in internal database.

@@ -64,7 +64,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentLine.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentLine.id); // change the Id to be as the object Element Id(Khaled).
 
                             //create two polyline
 
@@ -95,7 +95,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentArc.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentArc.id); // change the Id to be as the object Element Id(Khaled).
 
                             //create two polyline
 
@@ -128,7 +128,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentClothoid.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentClothoid.id); // change the Id to be as the object Element Id(Khaled).
                             //create two polyline
 
                             //linear line
@@ -160,7 +160,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentBlossCurve.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentBlossCurve.id); // change the Id to be as the object Element Id(Khaled).
                             //create two polyline
 
                             //linear line
@@ -381,7 +381,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, verticalSegmentLine.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, verticalSegmentLine.id); // change the Id to be as the object Element Id(Khaled).
                             //Elevation
                             addElevation(rsmEntities, item.initialSlope);
                             addElevation(rsmEntities, item.endSlope);
@@ -417,7 +417,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, verticalSegmentArc.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, verticalSegmentArc.id); // change the Id to be as the object Element Id(Khaled).
                             //Elevation
                             addElevation(rsmEntities, item.initialSlope);
                             addElevation(rsmEntities, item.endSlope);
@@ -653,7 +653,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKm, unit = km },
                                 endSegment = new Length { value = item.endKm, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, segmentCantLine.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, segmentCantLine.id); // change the Id to be as the object Element Id(Khaled).
                             // Cant
                             var cantLine = new Cant { id = generateUUID(), superelevation = new Length { value = item.initialSuperelevation } };
                             rsmEntities.usesTopography.usesCant.Add(cantLine);
@@ -687,7 +687,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKm, unit = km },
                                 endSegment = new Length { value = item.endKm, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, segmentCantTransitionLinear.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, segmentCantTransitionLinear.id); // change the Id to be as the object Element Id(Khaled).
                             // Cant
                             // start
                             var cantLinear = new Cant { id = generateUUID(), superelevation = new Length { value = item.initialSuperelevation } };
@@ -727,7 +727,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKm, unit = km },
                                 endSegment = new Length { value = item.endKm, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, segmentCantTransitionBlossRampe.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, segmentCantTransitionBlossRampe.id); // change the Id to be as the object Element Id(Khaled).
                             //  Cant
 
                             // start
@@ -955,7 +955,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentLine.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentLine.id); // change the Id to be as the object Element Id(Khaled).
                             
                             //create two polyline
 
@@ -985,7 +985,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentArc.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentArc.id); // change the Id to be as the object Element Id(Khaled).
                             //create two polyline
 
                             //linear line
@@ -1014,7 +1014,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentClothoid.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentClothoid.id); // change the Id to be as the object Element Id(Khaled).
                             //create two polyline
 
                             //linear line
@@ -1043,7 +1043,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentBlossCurve.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentBlossCurve.id); // change the Id to be as the object Element Id(Khaled).
                             //create two polyline
 
                             //linear line
@@ -1072,7 +1072,7 @@ namespace aplan.eulynx
                                 initialSegment = new Length { value = item.startKM, unit = km },
                                 endSegment = new Length { value = item.endKM, unit = km }
                             };
-                            InfoExtractor.ChangeID(item.id, horizontalSegmentDefault.id); // change the Id to be as the object Element Id(Khaled).
+                            InfoExtractor.ChangeID(item.SourceFileConnectingID, horizontalSegmentDefault.id); // change the Id to be as the object Element Id(Khaled).
                             //create two polyline
 
                             //linear line

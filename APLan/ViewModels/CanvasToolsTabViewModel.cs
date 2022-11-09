@@ -16,6 +16,7 @@ namespace APLan.ViewModels
         private Brush _selectBrush;
         private Brush _moveBrush;
         private Brush _dragBrush;
+        private Brush _selectedBrush;
         public Brush SelectBrush
         {
             get
@@ -52,6 +53,19 @@ namespace APLan.ViewModels
             set
             {
                 _dragBrush = value;
+                OnPropertyChanged("DragBrush");
+            }
+        }
+        public Brush SelectedBrush
+        {
+            get
+            {
+                return _selectedBrush;
+            }
+
+            set
+            {
+                _selectedBrush = value;
                 OnPropertyChanged("DragBrush");
             }
         }
@@ -95,6 +109,8 @@ namespace APLan.ViewModels
             SelectBrush = Brushes.White;
             MoveBrush = Brushes.White;
             DragBrush = Brushes.White;
+
+            SelectedBrush = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
         }
         #endregion
         
@@ -117,7 +133,7 @@ namespace APLan.ViewModels
             if (DrawViewModel.tool != DrawViewModel.SelectedTool.MultiSelect)
             {
                 DrawViewModel.tool = DrawViewModel.SelectedTool.MultiSelect;
-                SelectBrush = Brushes.Gray;
+                SelectBrush = SelectedBrush;
                 MoveBrush = Brushes.White;
                 DragBrush = Brushes.White;
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
@@ -141,7 +157,7 @@ namespace APLan.ViewModels
             {
                 DrawViewModel.tool = DrawViewModel.SelectedTool.Move;
                 SelectBrush = Brushes.White;
-                MoveBrush = Brushes.Gray;
+                MoveBrush = SelectedBrush;
                 DragBrush = Brushes.White;
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.SizeAll;
             }
@@ -164,7 +180,7 @@ namespace APLan.ViewModels
                 DrawViewModel.tool = DrawViewModel.SelectedTool.Drag;
                 SelectBrush = Brushes.White;
                 MoveBrush = Brushes.White;
-                DragBrush = Brushes.Gray;
+                DragBrush = SelectedBrush;
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Hand;
             }
             else if (DrawViewModel.tool == DrawViewModel.SelectedTool.Drag)

@@ -20,8 +20,7 @@
           "System.Drawing.Common": "6.0.0",
           "System.IO.FileSystem.AccessControl": "5.0.0",
           "System.IO.Pipes.AccessControl": "5.0.0",
-          "System.Security.AccessControl": "6.0.0",
-          "JVM": "8.1.7195.0"
+          "System.Security.AccessControl": "6.0.0"
         },
         "runtime": {
           "APLan.dll": {}
@@ -287,14 +286,6 @@
         "dependencies": {
           "System.Drawing.Common": "6.0.0"
         }
-      },
-      "JVM/8.1.7195.0": {
-        "runtime": {
-          "JVM.DLL": {
-            "assemblyVersion": "8.1.7195.0",
-            "fileVersion": "8.1.7195.0"
-          }
-        }
       }
     }
   },
@@ -534,11 +525,6 @@
       "sha512": "sha512-IXoJOXIqc39AIe+CIR7koBtRGMiCt/LPM3lI+PELtDIy9XdyeSrwXFdWV9dzJ2Awl0paLWUaknLxFQ5HpHZUog==",
       "path": "system.windows.extensions/6.0.0",
       "hashPath": "system.windows.extensions.6.0.0.nupkg.sha512"
-    },
-    "JVM/8.1.7195.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }

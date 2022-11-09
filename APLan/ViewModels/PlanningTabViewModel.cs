@@ -51,11 +51,6 @@ namespace APLan.ViewModels
             }
         }
         List<PositioningNetElement> VisitedElements;
-        public ObservableCollection<Signalinfo> Signals
-        {
-            get;
-            set;
-        }
         PositioningNetElement neededElement = null;
         #endregion
 
@@ -80,6 +75,8 @@ namespace APLan.ViewModels
             var EulynxObject= ModelViewModel.eulynx;
             var eulynxService = ModelViewModel.eulynxService;
             Database dataBase = ModelViewModel.db;
+            Signals.Clear();
+
             bool etcs = false;
             if (EulynxObject == null)
             {

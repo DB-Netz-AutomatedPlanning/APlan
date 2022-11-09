@@ -108,7 +108,7 @@ namespace aplan.eulynx
                             new tElementWithIDref { @ref = spotLocation.id }
                         }
                         };
-                        InfoExtractor.ChangeID(item.id, rsmVehicleStop.id); //change ID to the object element ID (Khaled).
+                        InfoExtractor.ChangeID(item.SourceFileConnectingID, rsmVehicleStop.id); //change ID to the object element ID (Khaled).
                         rsmEntities.ownsVehicleStop.Add(rsmVehicleStop);
 
                         // EULYNX vehicle stop mirrors the RSM vehicle stop
@@ -237,7 +237,7 @@ namespace aplan.eulynx
                             }
 
                         };
-                        InfoExtractor.ChangeID(item.id,turnout.id); //change ID to the object element ID (Khaled).
+                        InfoExtractor.ChangeID(item.SourceFileConnectingID,turnout.id); //change ID to the object element ID (Khaled).
                         var trackEntity = new database.TrackEntity()
                         {
                             uuid = turnout.id,

@@ -26,8 +26,9 @@ namespace APLan.Views
         }
         private void canvasRotateSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            RotateTransform transform = (RotateTransform)MainWindow.drawing.RenderTransform;
-            transform.Angle = e.NewValue;
+            //RotateTransform transform = (RotateTransform)MainWindow.drawing.RenderTransform;
+            //transform.Angle = e.NewValue;
+            //MainWindow.drawing.RenderTransform = transform;
         }
     }
 }

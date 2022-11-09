@@ -250,66 +250,7 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<CanvasObjectInformation> loadedObjects
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<CustomPolyLine> gleiskantenList
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<Point> gleiskantenPointsList
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<CustomPolyLine> Entwurfselement_LA_list
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<Point> Entwurfselement_LAPointsList
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<CustomPolyLine> Entwurfselement_KM_list
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<Point> Entwurfselement_KMPointsList
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<CustomPolyLine> Entwurfselement_HO_list
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<Point> Entwurfselement_HOPointsList
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<CustomPolyLine> Entwurfselement_UH_list
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<Point> Entwurfselement_UHPointsList
-        {
-            get;
-            set;
-        }
-        public ObservableCollection<CustomNode> gleisknotenList
-        {
-            get;
-            set;
-        }
+
 
         #endregion
 
@@ -363,26 +304,8 @@ namespace APLan.ViewModels
         #endregion
 
         #region logic
-        public async void createModel(string format)
-        {
-            loadingObject.LoadingReport = "Creating Eulynx Object...";
-            loadingObject.startLoading();
-            if (format.Equals(".json"))
-            {
-                await createJSONproject();
-            }
-            else if (format.Equals(".mdb"))
-            {
-                await createMDBproject();
-            }else if (format.Equals(".euxml"))
-            {
-                await loadEuxml(EUXML);
-            }
-            loadingObject.LoadingReport = "Finished";
-            loadingObject.stopLoading();
-            WelcomeVisibility = Visibility.Collapsed;   
-        }
-        public void ExecuteAddPath(object parameter)
+        
+        private void ExecuteAddPath(object parameter)
         {
             folderBrowserDialog1.ShowDialog();
             if (Directory.Exists(folderBrowserDialog1.SelectedPath))
@@ -394,7 +317,7 @@ namespace APLan.ViewModels
                 ProjectPath = "please select a project directory";
             }
         }
-        public void ExecuteBrowseJson(object parameter)
+        private void ExecuteBrowseJson(object parameter)
         {
             //clearOldSelectedFiles();
             openFileDialog1.Multiselect = true;
@@ -414,7 +337,7 @@ namespace APLan.ViewModels
                 }
             }
         }
-        public void ExecuteBrowseMDB(object parameter)
+        private void ExecuteBrowseMDB(object parameter)
         {
             clearOldSelectedFiles();
             openFileDialog1.Filter = "Types (*.MDB)|*.MDB";
@@ -429,7 +352,7 @@ namespace APLan.ViewModels
                 MDB = "please select single .mdb file";
             }
         }
-        public void ExecuteBrowseEuxml(object parameter)
+        private void ExecuteBrowseEuxml(object parameter)
         {
             clearOldSelectedFiles();
             openFileDialog1.Filter = "Types (*.euxml)|*.euxml";
@@ -444,7 +367,7 @@ namespace APLan.ViewModels
                 EUXML = "please select single .euxml file";
             }
         }
-        public void ExecuteBrowsePpxml(object parameter)
+        private void ExecuteBrowsePpxml(object parameter)
         {
             clearOldSelectedFiles();
             openFileDialog1.Filter = "Types (*.ppxml)|*.ppxml";
@@ -456,7 +379,7 @@ namespace APLan.ViewModels
             }
 
         }
-        public void ExecuteCreate(object parameter)
+        private void ExecuteCreate(object parameter)
         {
             var parameters = (object[])parameter;
             if (creatProjectFolder() == true)
@@ -467,11 +390,47 @@ namespace APLan.ViewModels
                 createModel(parameters[0].ToString());
             }   
         }
-        public void ExecuteCancel(object parameter)
+        private async void ExecuteOpen(object parameter)
+        {
+            loadingObject.startLoading();
+            folderBrowserDialog1.SelectedPath = null;
+            folderBrowserDialog1.ShowDialog();
+            OpenProjectPath = folderBrowserDialog1.SelectedPath;
+
+            if (Directory.Exists(OpenProjectPath))
+            {
+                Database.setDBPath(OpenProjectPath);
+                foreach (string f in Directory.GetFiles(OpenProjectPath))
+                {
+                    if (System.IO.Path.GetExtension(f) == ".APlan")
+                    {
+                        loadAPlanFile(f);
+                    }
+                    else if (System.IO.Path.GetExtension(f) == ".xml" && f.Contains("Additional"))
+                    {
+                        InfoExtractor.getAllInfo().Clear();
+                        InfoExtractor.loadExtraInfo(f);
+                    }
+                    else if (System.IO.Path.GetExtension(f) == ".euxml")
+                    {
+                        loadingObject.LoadingReport = "Loading Eulynx Object...";
+                        bool finished = await loadEuxml(f);
+                    }
+                }
+                CurrentProjectNameBind = OpenProjectPath.Split("\\")[^1];
+                activateButtons();
+                WelcomeVisibility = Visibility.Collapsed;
+            }
+            
+            loadingObject.LoadingReport = "Finished...";
+            loadingObject.stopLoading();
+        }
+        private void ExecuteCancel(object parameter)
         {
             (parameter as Window)?.Close();
         }
-        public void clearOldSelectedFiles()
+        
+        private void clearOldSelectedFiles()
         {
             Entwurfselement_KM = null;
             entwurfselement_LA = null;
@@ -483,24 +442,10 @@ namespace APLan.ViewModels
             //EUXML = null;
             //PPXML = null;
         }
-        public bool checkProjectNameAndPath()
+        private bool creatProjectFolder()
         {
             bool flag = true;
-            if (ProjectName==null)
-            {
-                flag = false;
-                System.Windows.MessageBox.Show("please enter a project name");
-            }else if (ProjectPath == null)
-            {
-                flag = false;
-                System.Windows.MessageBox.Show("please select a project path");
-            }
-            return flag;
-        }
-        public bool creatProjectFolder()
-        {
-            bool flag = true;
-            string targetFolderPath = projectPath + "/" + $"{projectName}"+"/"+"files";
+            string targetFolderPath = projectPath + "/" + $"{projectName}";
             if (!Directory.Exists(targetFolderPath))
             {
                 Directory.CreateDirectory(targetFolderPath);
@@ -519,6 +464,7 @@ namespace APLan.ViewModels
                 file.Delete();
             }
             transferFilesToPath(targetFolderPath);
+            CurrentProjectNameBind = projectName;
             return flag;
         }
         public void transferFilesToPath(string path)
@@ -560,50 +506,58 @@ namespace APLan.ViewModels
                 File.Copy(PPXML, path + "/" + Path.GetFileName(PPXML), true);
             }
         }
-        public void activateButtons()
+        private void activateButtons()
         {
             SaveButtonActive = true;
             SaveAsButtonActive = true;
             //ImportButtonActive = true;
             //PrintButtonActive = true;
         }
-        public async void ExecuteOpen(object parameter)
+        private void loadAPlanFile(string f)
         {
-            loadingObject.startLoading();
-            folderBrowserDialog1.SelectedPath = null;
-            folderBrowserDialog1.ShowDialog();
-            OpenProjectPath = folderBrowserDialog1.SelectedPath;
+            loadedObjects.Clear(); //clear the previously loaded items.
 
-            if (Directory.Exists(OpenProjectPath))
+            List<CanvasObjectInformation> importedObjects = new List<CanvasObjectInformation>();
+            BinaryFormatter bfDeserialize = new BinaryFormatter();
+            FileStream fsin = new FileStream(f, FileMode.Open, FileAccess.Read, FileShare.None);
+            fsin.Position = 0;
+            importedObjects = (List<CanvasObjectInformation>)bfDeserialize.Deserialize(fsin);
+            foreach (CanvasObjectInformation ObjectInfo in importedObjects)
             {
-                foreach (string f in Directory.GetFiles(OpenProjectPath))
-                {
-                    if (System.IO.Path.GetExtension(f) == ".APlan")
-                    {
-
-                        loadAPlanFile(f);
-                    }
-                    else if (System.IO.Path.GetExtension(f) == ".euxml")
-                    {
-                        loadingObject.LoadingReport = "Loading Eulynx Object...";
-                        bool finished = await loadEuxml(f);
-                    }
-                }
+                loadedObjects.Add(ObjectInfo);
             }
-            loadingObject.LoadingReport = "Finished...";
+            fsin.Close();
+        }
+        
+        private async void createModel(string format)
+        {
+            loadingObject.LoadingReport = "Creating Eulynx Object...";
+            loadingObject.startLoading();
+            if (format.Equals(".json"))
+            {
+                await createJSONproject();
+            }
+            else if (format.Equals(".mdb"))
+            {
+                await createMDBproject();
+            }
+            else if (format.Equals(".euxml"))
+            {
+                await loadEuxml(EUXML);
+            }
+            loadingObject.LoadingReport = "Finished";
             loadingObject.stopLoading();
             WelcomeVisibility = Visibility.Collapsed;
         }
-        public async Task<bool> createJSONproject()
+        private async Task<bool> createJSONproject()
         {
-            
             Task<bool> taskFinished1 = CreateJSONeulyxObject();
             bool report1 = await taskFinished1;
-            Task<bool> taskFinished2 =DrawJSONeulyxObject();
+            Task<bool> taskFinished2 = DrawJSONeulyxObject();
             bool report2 = await taskFinished2;
             return true;
         }
-        public async Task<bool> createMDBproject()
+        private async Task<bool> createMDBproject()
         {
             WelcomeInfo = "Creating Eulynx Object...";
             APLan.ViewModels.DrawViewModel.model = new ModelViewModel(
@@ -615,7 +569,8 @@ namespace APLan.ViewModels
             null,
             null,
             null,
-            mdb
+            mdb,
+            ProjectPath + "/" + projectName
             );
 
             WelcomeInfo = "Drawing...";
@@ -631,24 +586,24 @@ namespace APLan.ViewModels
            Entwurfselement_UH_list,
            Entwurfselement_UHPointsList,
            gleisknotenList);
-           return true;
+            return true;
         }
         /// <summary>
         /// load .euxml file representing the saved Eulynx model.
         /// </summary>
         /// <param name="f"></param>
-        public async Task<bool> loadEuxml(string f)
+        private async Task<bool> loadEuxml(string f)
         {
             loadingObject.LoadingReport = "Validating Euxml...";
             var EulynxValidatorViewModel = System.Windows.Application.Current.FindResource("EulynxValidatorViewModel") as EulynxValidatorViewModel;
-            Task<string> reportTask =  EulynxValidatorViewModel.validate(f);
+            Task<string> reportTask = EulynxValidatorViewModel.validate(f);
             string report = await reportTask;
             if (report.Contains("Validation is Successful"))
             {
                 await deserializeEuxml(f);
 
                 ModelViewModel model = new();
-                await  model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
+                await model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
                 gleiskantenList,
                 gleiskantenPointsList,
                 Entwurfselement_LA_list,
@@ -679,30 +634,14 @@ namespace APLan.ViewModels
                     // close the window 
                 }
             }
-            
+
             return true;
         }
         /// <summary>
         /// load an APlan binary file representing the saved items.
         /// </summary>
         /// <param name="f"></param>
-        public void loadAPlanFile(string f)
-        {
-            loadedObjects.Clear(); //clear the previously loaded items.
-
-            List<CanvasObjectInformation> importedObjects = new List<CanvasObjectInformation>();
-            BinaryFormatter bfDeserialize = new BinaryFormatter();
-            FileStream fsin = new FileStream(f, FileMode.Open, FileAccess.Read, FileShare.None);
-            fsin.Position = 0;
-            importedObjects = (List<CanvasObjectInformation>)bfDeserialize.Deserialize(fsin);
-            foreach (CanvasObjectInformation ObjectInfo in importedObjects)
-            {
-                loadedObjects.Add(ObjectInfo);
-            }
-            fsin.Close();
-        }
-
-        public async Task<bool> CreateJSONeulyxObject()
+        private async Task<bool> CreateJSONeulyxObject()
         {
             ((Loading)System.Windows.Application.Current.FindResource("globalLoading")).LoadingReport = "Creating Eulynx Object...";
             await Task.Run(() =>
@@ -716,13 +655,13 @@ namespace APLan.ViewModels
                             entwurfselement_LA,
                             entwurfselement_HO,
                             entwurfselement_UH,
-                            null
+                            null,
+                            ProjectPath + "/" + projectName
                             );
             });
             return true;
         }
-
-        public async Task<bool> DrawJSONeulyxObject()
+        private async Task<bool> DrawJSONeulyxObject()
         {
            await DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
                 gleiskantenList,
@@ -739,8 +678,7 @@ namespace APLan.ViewModels
 
             return true;
         }
-
-        public async Task<bool> deserializeEuxml(string file)
+        private async Task<bool> deserializeEuxml(string file)
         {
             await Task.Run(() =>
             {
@@ -749,7 +687,6 @@ namespace APLan.ViewModels
             });
             return true;
         }
-
         #endregion
     }
 }
