@@ -50,8 +50,8 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-        List<PositioningNetElement> VisitedElements;
-        PositioningNetElement neededElement = null;
+        private static List<PositioningNetElement> VisitedElements;
+        private static PositioningNetElement neededElement = null;
         #endregion
 
         #region commands
@@ -177,7 +177,7 @@ namespace APLan.ViewModels
             }
         }
 
-        public void extractOnTrackSignals(EulynxDataPrepInterface EulynxObject)
+        public static void extractOnTrackSignals(EulynxDataPrepInterface EulynxObject)
         {
             var dataPrepEntities = EulynxObject.hasDataContainer.First().ownsDataPrepEntities;
             List<Unit> units = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesUnit;
@@ -260,7 +260,7 @@ namespace APLan.ViewModels
             }
         }
 
-        public void extractMainSignals(EulynxDataPrepInterface EulynxObject)
+        public static void extractMainSignals(EulynxDataPrepInterface EulynxObject)
         {
             List<Unit> units = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesUnit;
             List<Models.TopoModels.EULYNX.sig.SignalFrame> signalFrames = EulynxObject.hasDataContainer.First().ownsDataPrepEntities.ownsSignalFrame;
@@ -325,7 +325,7 @@ namespace APLan.ViewModels
 
         }
 
-        public void getNeighbors(PositioningNetElement element, EulynxDataPrepInterface EulynxObject, LinearCoordinate SignalIntrensic)
+        private static void getNeighbors(PositioningNetElement element, EulynxDataPrepInterface EulynxObject, LinearCoordinate SignalIntrensic)
         {
             VisitedElements.Add(element);
             PositioningNetElement hostElement =null;
@@ -379,7 +379,7 @@ namespace APLan.ViewModels
                 }
             }
         }
-        public List<System.Windows.Point> getNetElementCartesianCoordinates(PositioningNetElement positioningNetElements,List<PositioningSystemCoordinate> PSCoordinates)
+        private static  List<System.Windows.Point> getNetElementCartesianCoordinates(PositioningNetElement positioningNetElements,List<PositioningSystemCoordinate> PSCoordinates)
         {
             List<System.Windows.Point> points = new List<System.Windows.Point>();
             AssociatedPositioning associatedPositionings = positioningNetElements.associatedPositioning[1];
@@ -396,7 +396,7 @@ namespace APLan.ViewModels
             }
             return points;
         }
-        public void calculateSignalLocation(Signalinfo signal, LinearCoordinate signalIntrensic, LinearCoordinate elementStart, LinearCoordinate elementEnd)
+        private static void calculateSignalLocation(Signalinfo signal, LinearCoordinate signalIntrensic, LinearCoordinate elementStart, LinearCoordinate elementEnd)
         {
 
             double? targetValue = (signalIntrensic.measure.value - elementStart.measure.value)*1000 / signal.AttachedToElementLength;
@@ -424,7 +424,7 @@ namespace APLan.ViewModels
                 signal.LocationCoordinate = new System.Windows.Point((double)(signal.Coordinates[signal.Coordinates.Count - 1].X) - DrawViewModel.GlobalDrawingPoint.X, (double)(signal.Coordinates[signal.Coordinates.Count - 1].Y) - DrawViewModel.GlobalDrawingPoint.Y);
             }
         }
-        public void applyRotation(Signalinfo signal, double xdiff, double ydiff)
+        private static void applyRotation(Signalinfo signal, double xdiff, double ydiff)
         {
             //negative sign for drawing
             if (ydiff>=0 && xdiff>=0)
@@ -444,7 +444,7 @@ namespace APLan.ViewModels
             }
 
         }
-        public void applyHorizontalOffset(Signalinfo signal, System.Windows.Point backward)
+        private static void applyHorizontalOffset(Signalinfo signal, System.Windows.Point backward)
         {
             var x = signal.LocationCoordinate.X;
             var y = signal.LocationCoordinate.Y;
@@ -507,14 +507,14 @@ namespace APLan.ViewModels
 
             signal.LocationCoordinate = new System.Windows.Point(x, y);
         }
-        public void applyDirection(Signalinfo signal)
+        private static void applyDirection(Signalinfo signal)
         {
             if (signal.Direction.Equals("2") || signal.Direction.Equals("reverse"))
             {
                 signal.Orientation = signal.Orientation-180;
             }
         }
-        public string [] extractSignalTypeAndFunction(Models.TopoModels.EULYNX.rsmSig.Signal signal , EulynxDataPrepInterface EulynxObject)
+        private static string [] extractSignalTypeAndFunction(Models.TopoModels.EULYNX.rsmSig.Signal signal , EulynxDataPrepInterface EulynxObject)
         {
             string type = "notFound" ;
             string function= "notFound";

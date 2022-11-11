@@ -529,6 +529,10 @@ namespace APLan.ViewModels
             fsin.Close();
         }
         
+        /// <summary>
+        /// choose which model creation according to selected file type.
+        /// </summary>
+        /// <param name="format"></param>
         private async void createModel(string format)
         {
             loadingObject.LoadingReport = "Creating Eulynx Object...";
@@ -553,39 +557,19 @@ namespace APLan.ViewModels
         {
             Task<bool> taskFinished1 = CreateJSONeulyxObject();
             bool report1 = await taskFinished1;
-            Task<bool> taskFinished2 = DrawJSONeulyxObject();
+            Task<bool> taskFinished2 = DrawEulyxObject();
             bool report2 = await taskFinished2;
             return true;
         }
         private async Task<bool> createMDBproject()
         {
             WelcomeInfo = "Creating Eulynx Object...";
-            APLan.ViewModels.DrawViewModel.model = new ModelViewModel(
-            country,
-            format,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            mdb,
-            ProjectPath + "/" + projectName
-            );
+            Task<bool> taskFinished1 = CreateMDBeulyxObject();
+            bool report1 = await taskFinished1;
 
             WelcomeInfo = "Drawing...";
-            await DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
-           gleiskantenList,
-           gleiskantenPointsList,
-           Entwurfselement_LA_list,
-           Entwurfselement_LAPointsList,
-           Entwurfselement_KM_list,
-           Entwurfselement_KMPointsList,
-           Entwurfselement_HO_list,
-           Entwurfselement_HOPointsList,
-           Entwurfselement_UH_list,
-           Entwurfselement_UHPointsList,
-           gleisknotenList);
+            Task<bool> taskFinished2 = DrawEulyxObject();
+            bool report2 = await taskFinished2;
             return true;
         }
         /// <summary>
@@ -617,7 +601,6 @@ namespace APLan.ViewModels
                 gleisknotenList);
 
                 var planningTabViewModel = System.Windows.Application.Current.FindResource("planTabViewModel") as PlanningTabViewModel;
-                planningTabViewModel.extractMainSignals(ModelViewModel.eulynx);
             }
             else
             {
@@ -638,9 +621,9 @@ namespace APLan.ViewModels
             return true;
         }
         /// <summary>
-        /// load an APlan binary file representing the saved items.
+        /// create a Eulynx object from JSON files async.
         /// </summary>
-        /// <param name="f"></param>
+        /// <returns></returns>
         private async Task<bool> CreateJSONeulyxObject()
         {
             ((Loading)System.Windows.Application.Current.FindResource("globalLoading")).LoadingReport = "Creating Eulynx Object...";
@@ -661,7 +644,35 @@ namespace APLan.ViewModels
             });
             return true;
         }
-        private async Task<bool> DrawJSONeulyxObject()
+        /// <summary>
+        /// create a Eulynx object from MDB file async.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> CreateMDBeulyxObject()
+        {
+            ((Loading)System.Windows.Application.Current.FindResource("globalLoading")).LoadingReport = "Creating Eulynx Object...";
+            await Task.Run(() =>
+            {
+                APLan.ViewModels.DrawViewModel.model = new ModelViewModel(
+                country,
+                format,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                mdb,
+                ProjectPath + "/" + projectName
+                );
+            });
+            return true;
+        }
+        /// <summary>
+        /// draw the created Eulynx object async.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<bool> DrawEulyxObject()
         {
            await DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
                 gleiskantenList,
@@ -678,6 +689,11 @@ namespace APLan.ViewModels
 
             return true;
         }
+        /// <summary>
+        /// create a Eulynx object from a .euxml file async.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
         private async Task<bool> deserializeEuxml(string file)
         {
             await Task.Run(() =>

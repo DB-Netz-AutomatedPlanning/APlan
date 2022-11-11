@@ -154,6 +154,8 @@ namespace APLan.ViewModels
             Entwurfselement_UH_list.Clear();
             Entwurfselement_UHPointsList.Clear();
             gleisknotenList.Clear();
+            Signals.Clear();
+
 
             DataContainer = eulynx.hasDataContainer;
             RsmEntities = DataContainer[0].ownsRsmEntities;
@@ -176,7 +178,8 @@ namespace APLan.ViewModels
             var nodes = await DrawNodes(RsmEntities, PositioningSystemCoordinates, IntrensicCoordinates, canvasSize, units);
             fetchNodesForBinding(gleisknotenList, nodes);
             //calculatePointsScaling(); //this should be always called before the Nodes due to templating in the XAML
-
+            PlanningTabViewModel.extractMainSignals(eulynx);
+            PlanningTabViewModel.extractOnTrackSignals(eulynx);
             //Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(Views.Draw.drawingScrollViewer.ExtentWidth / 2);
             //Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(Views.Draw.drawingScrollViewer.ExtentHeight / 2);
             return true;
@@ -521,7 +524,7 @@ namespace APLan.ViewModels
                             node.Color = Brushes.Red;
                             node.Color.Freeze();
                             nodes.Add(node);
-                            extractBoundary(newPoint);   
+                            //extractBoundary(newPoint);   
                         }
                     }
                     InfoExtractor.attachProperties(node, turn.id);
@@ -552,6 +555,8 @@ namespace APLan.ViewModels
                             }
                             Point newPoint = new Point((((double)cartCoordinate.x)), (((double)cartCoordinate.y)));
                             node.NodePoint = newPoint;
+                            node.Color = Brushes.Red;
+                            node.Color.Freeze();
                             nodes.Add(node);
                             //extractBoundary(newPoint);
                         }

@@ -101,7 +101,8 @@ namespace APLan.ViewModels
         public void ExecuteSave(object parameter)
         {
             SavePath = NewProjectViewModel.currentProjectPath+"/"+ NewProjectViewModel.currentProjectName;
-            saveAndSaveAs(SavePath);  
+            saveAndSaveAs(SavePath);
+            InfoExtractor.extractExtraInfo(SavePath, null);
         }
         public void ExecuteSaveAs(object parameter)
         {

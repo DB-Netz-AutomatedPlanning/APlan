@@ -299,3 +299,5 @@ C:\APLan_3\APLan\obj\Release\net6.0-windows\refint\APLan.dll
 C:\APLan_3\APLan\obj\Release\net6.0-windows\APLan.pdb
 C:\APLan_3\APLan\obj\Release\net6.0-windows\APLan.genruntimeconfig.cache
 C:\APLan_3\APLan\obj\Release\net6.0-windows\ref\APLan.dll
+C:\APLan_3\APLan\obj\Release\net6.0-windows\Views\DrawingUpperLayer.g.cs
+C:\APLan_3\APLan\obj\Release\net6.0-windows\Views\DrawingUpperLayer.baml
