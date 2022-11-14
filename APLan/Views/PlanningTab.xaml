@@ -46,6 +46,7 @@
                     <ComboBox SelectedItem="{Binding ExportType, Mode=TwoWay}">
                          <ComboBoxItem Content="Eulynx"/>
                         <ComboBoxItem Content="pdf"/>
+                        <ComboBoxItem Content="dxf"/>
                         <ComboBoxItem Content="Plan Pro" IsEnabled="False"/>
                     </ComboBox>
                     <Label Content="Export"></Label>

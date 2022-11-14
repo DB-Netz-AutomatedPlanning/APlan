@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jlTgeoPJ5xUnJ795CnE5axZAv2VHYvdGMQr06NPpIIuiQ8vXgDtfJfSjNbr0rcs5eSQyt7zHG6xs7gqiiAP6Uw==",
+  "dgSpecHash": "TRgym+g4oUKaN+16y9iuMTEr5qOcly2GT4v2Y6+BbFAu84uhjyDenhwF0EARhX6ZsIqMJ47chOkadBwAZ+Hm0A==",
   "success": true,
   "projectFilePath": "C:\\APLan_3\\APLan\\APLan.csproj",
   "expectedPackageFiles": [
@@ -12,8 +12,10 @@
     "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.win32.systemevents\\6.0.0\\microsoft.win32.systemevents.6.0.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.39\\microsoft.xaml.behaviors.wpf.1.1.39.nupkg.sha512",
+    "C:\\Users\\k7ada\\.nuget\\packages\\netdxf.standard\\2.1.1\\netdxf.standard.2.1.1.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\saxon-he\\10.8.0\\saxon-he.10.8.0.nupkg.sha512",
+    "C:\\Users\\k7ada\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.collections.nongeneric\\4.3.0\\system.collections.nongeneric.4.3.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.0\\system.configuration.configurationmanager.6.0.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.data.oledb\\6.0.0\\system.data.oledb.6.0.0.nupkg.sha512",

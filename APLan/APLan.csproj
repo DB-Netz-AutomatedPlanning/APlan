@@ -438,6 +438,7 @@
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
     <PackageReference Include="LiteDB" Version="5.0.11" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="netDXF.Standard" Version="2.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Saxon-HE" Version="10.8.0" />
     <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />

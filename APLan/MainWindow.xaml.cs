@@ -28,6 +28,8 @@ namespace APLan
         public MainWindow()
         {
             InitializeComponent();
+            Application.Current.MainWindow.WindowState = WindowState.Maximized;
+
             c0 = this.C0;
             c1 = this.C1;
             c2 = this.C2;

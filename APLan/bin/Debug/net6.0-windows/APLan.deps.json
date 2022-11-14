@@ -20,7 +20,8 @@
           "System.Drawing.Common": "6.0.0",
           "System.IO.FileSystem.AccessControl": "5.0.0",
           "System.IO.Pipes.AccessControl": "5.0.0",
-          "System.Security.AccessControl": "6.0.0"
+          "System.Security.AccessControl": "6.0.0",
+          "netDXF.Standard": "2.1.1"
         },
         "runtime": {
           "APLan.dll": {}
@@ -86,6 +87,18 @@
           }
         }
       },
+      "netDXF.Standard/2.1.1": {
+        "dependencies": {
+          "System.Collections": "4.3.0",
+          "System.Drawing.Common": "6.0.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/netDXF.Standard.dll": {
+            "assemblyVersion": "2.1.1.0",
+            "fileVersion": "2.1.1.0"
+          }
+        }
+      },
       "Newtonsoft.Json/13.0.1": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
@@ -132,6 +145,13 @@
             "assemblyVersion": "10.8.0.0",
             "fileVersion": "10.8.0.0"
           }
+        }
+      },
+      "System.Collections/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0"
         }
       },
       "System.Collections.NonGeneric/4.3.0": {
@@ -351,6 +371,13 @@
       "path": "microsoft.xaml.behaviors.wpf/1.1.39",
       "hashPath": "microsoft.xaml.behaviors.wpf.1.1.39.nupkg.sha512"
     },
+    "netDXF.Standard/2.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5RLcC6D7y5X+e784G9U8xj/60sMhXJDFvJQznmqS4z6zhdEOSkNNcmiApUZ3fWYWirBkCY8vuNX87Y15D0+XDw==",
+      "path": "netdxf.standard/2.1.1",
+      "hashPath": "netdxf.standard.2.1.1.nupkg.sha512"
+    },
     "Newtonsoft.Json/13.0.1": {
       "type": "package",
       "serviceable": true,
@@ -364,6 +391,13 @@
       "sha512": "sha512-2Nt8l2/yQadlpQmeUVKmJrrtTYP5ymZyVpwLxbLU9urWx6HpzDYJLv4+fjc/A6HbVMJJiE8dkoBjWx6GUwwy+Q==",
       "path": "saxon-he/10.8.0",
       "hashPath": "saxon-he.10.8.0.nupkg.sha512"
+    },
+    "System.Collections/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3Dcj85/TBdVpL5Zr+gEEBUuFe2icOnLalmEh9hfck1PTYbbyWuZgh4fmm2ysCLTrqLQw6t3TgTyJ+VLp+Qb+Lw==",
+      "path": "system.collections/4.3.0",
+      "hashPath": "system.collections.4.3.0.nupkg.sha512"
     },
     "System.Collections.NonGeneric/4.3.0": {
       "type": "package",

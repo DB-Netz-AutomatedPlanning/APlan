@@ -13,17 +13,18 @@ using System;
 using System.Windows;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.IO;
 using System.Windows.Documents;
 using System.Windows.Xps.Packaging;
-using System.IO.Packaging;
-using System.Windows.Xps.Serialization;
+using System.Windows.Controls;
+using System.Windows.Xps;
+using netDxf;
+using netDxf.Tables;
+using netDxf.Entities;
 
 namespace APLan.ViewModels
 {
@@ -32,6 +33,19 @@ namespace APLan.ViewModels
         #region attributes
         private string planType;
         private string exportType;
+        private Visibility pdfDetailViewerVisibility;
+        private Microsoft.Win32.SaveFileDialog safeFileDialog1;
+
+
+        public Visibility PdfDetailViewerVisibility
+        {
+            get => pdfDetailViewerVisibility;
+            set
+            {
+                pdfDetailViewerVisibility = value;
+                OnPropertyChanged();
+            }
+        }
         public string PlanType
         {
             get => planType;
@@ -66,11 +80,12 @@ namespace APLan.ViewModels
             ExportButton = new RelayCommand(ExecuteExportButton);
             Signals = new ObservableCollection<Signalinfo>();
             VisitedElements = new List<PositioningNetElement>();
+            safeFileDialog1 = new Microsoft.Win32.SaveFileDialog();
         }
         #endregion
 
         #region logic
-        public void ExecutePlanButton(object parameter)
+        private void ExecutePlanButton(object parameter)
         {
             var EulynxObject= ModelViewModel.eulynx;
             var eulynxService = ModelViewModel.eulynxService;
@@ -95,7 +110,7 @@ namespace APLan.ViewModels
             }       
         }
 
-        public void ExecuteExportButton(object parameter)
+        private void ExecuteExportButton(object parameter)
         {
             if (exportType == "Eulynx")
             {
@@ -104,79 +119,212 @@ namespace APLan.ViewModels
             }
             else if (exportType == "pdf")
             {
+
                 string fileName = System.IO.Path.GetRandomFileName();
+
                 try
-                {   //getting static resource to remove the tile in canvas
-                    object res = Draw.drawing.TryFindResource("canvasGrid");
-                    DrawingBrush yellowBrush = (DrawingBrush)res;
-                    yellowBrush.TileMode = TileMode.None;
-                    yellowBrush.Viewport = new Rect(0, 0, 0, 0);
+                {
+                    //PdfDetailCanvasVisibility = Visibility.Visible;
+                    PdfDetailViewerVisibility = Visibility.Visible;
+                    //getting static resource to remove the tile in canvas                  
+                    object resourceCanvasGrid = Draw.drawing.TryFindResource("canvasGrid");
+                    DrawingBrush gridBrush = (DrawingBrush)resourceCanvasGrid;
+                    gridBrush.TileMode = TileMode.None;
+                    gridBrush.Viewport = new Rect(0, 0, 0, 0);
+
 
 
                     // write the XPS document
-                    FrameworkElement fe = (MainWindow.basCanvas as FrameworkElement);
-                    fe.Measure(new Size(Int32.MaxValue, Int32.MaxValue));
-                    Size visualSize = fe.DesiredSize;
-                    fe.Arrange(new Rect(new System.Windows.Point(0, 0), visualSize));
-                    MemoryStream stream = new MemoryStream();
-                    string pack = "pack://temp.xps";
-                    Uri uri = new Uri(pack);
-                    DocumentPaginator paginator;
-                    XpsDocument xpsDoc;
-
-                    using (Package container = Package.Open(fileName, FileMode.Create))
+                    using (XpsDocument doc = new XpsDocument(fileName, FileAccess.ReadWrite))
                     {
-                        PackageStore.AddPackage(uri, container);
-                        using (xpsDoc = new XpsDocument(container, CompressionOption.Fast, pack))
-                        {
-                            XpsSerializationManager rsm =
-                              new XpsSerializationManager(new XpsPackagingPolicy(xpsDoc), false);
-                            rsm.SaveAsXaml(MainWindow.basCanvas);
-                            paginator = ((IDocumentPaginatorSource)
-                              xpsDoc.GetFixedDocumentSequence()).DocumentPaginator;
-                            paginator.PageSize = visualSize;
-                        }
-                        PackageStore.RemovePackage(uri);
+                        XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
+                        writer.Write(MainWindow.basCanvas);
                     }
 
-                    using (Package container = Package.Open(fileName, FileMode.Create))
+                    // Read the XPS document into a dynamically generated
+                    // preview Window 
+                    using (XpsDocument doc = new XpsDocument(fileName, FileAccess.Read))
                     {
-                        using (xpsDoc = new XpsDocument(container, CompressionOption.Fast, pack))
-                        {
-                            paginator = new VisualDocumentPaginator(paginator,
-                                            new Size(500, 500),
-                                                     new Size(48, 48));
-                            XpsSerializationManager rsm = new XpsSerializationManager(
-                                                     new XpsPackagingPolicy(xpsDoc), false);
-                            rsm.SaveAsXaml(paginator);
-                        }
-                        PackageStore.RemovePackage(uri);
+                        FixedDocumentSequence fds = doc.GetFixedDocumentSequence();
+
+                        var window = new Window();
+
+                        window.Content = new DocumentViewer { Document = fds };
+
+                        window.ShowDialog();
+
                     }
-                    System.Windows.Controls.PrintDialog m_PrintDialog = new System.Windows.Controls.PrintDialog();
-                    m_PrintDialog.PrintDocument(paginator, "Printing");
+
+
+
                     //adding the tile in canvas again
-                    yellowBrush.TileMode = TileMode.Tile;
-                    yellowBrush.Viewport = new Rect(0, 0, 100, 100);
+
+                    gridBrush.TileMode = TileMode.Tile;
+                    gridBrush.Viewport = new Rect(0, 0, 100, 100);
 
                 }
                 finally
                 {
-                    if (System.IO.File.Exists(fileName))
+                    if (File.Exists(fileName))
                     {
                         try
                         {
-                            System.IO.File.Delete(fileName);
+                            File.Delete(fileName);
                         }
                         catch (Exception exep)
                         {
-                            System.Console.WriteLine(exep.Message);
+                            Console.WriteLine(exep.Message);
                         }
                     }
+                    PdfDetailViewerVisibility = Visibility.Collapsed;
+                    //PdfDetailCanvasVisibility = Visibility.Collapsed;
+                } 
+            }
+            else if (exportType == "dxf")
+            {
+                DxfDocument dxf = new DxfDocument();
+                Layer layer1_LA = new Layer("Entwurfselement_LA");
+                Layer layer2_KM = new Layer("Entwurfselement_KM");
+                Layer layer3_HO = new Layer("Entwurfselement_HO");
+                Layer layer4_UH = new Layer("Entwurfselement_UH");
+                Layer layer5_gleiskanten = new Layer("gleiskanten");
+                Layer layer6_gleisknoten = new Layer("gleisknoten");
+                Layer layer7_symbolImage = new Layer("symbolImage");
+                netDxf.Entities.Polyline p1 = new netDxf.Entities.Polyline();
+                PolylineVertex polylineVertex = new PolylineVertex();
+                List<netDxf.Vector3> polylineVertexList = new List<netDxf.Vector3>();
+
+                
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_LA_list = Entwurfselement_LA_list;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_KM_list = Entwurfselement_KM_list;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_HO_list = Entwurfselement_HO_list;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_UH_list = Entwurfselement_UH_list;
+                System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_gleiskantenList = gleiskantenList;
+                System.Collections.ObjectModel.ObservableCollection<CustomNode> obsCustomPolyline_gleisknotenList = gleisknotenList;
+                System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Polyline> obsDxfpolyLine = new System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Polyline>();
+                System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Point> obsDxfpoints = new System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Point>();
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_LA_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+                    dxfPolyline.Layer = layer1_LA;
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_KM_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+                    dxfPolyline.Layer = layer2_KM;
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_HO_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+                    dxfPolyline.Layer = layer3_HO;
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_UH_list)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+                    dxfPolyline.Layer = layer4_UH;
+
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
+
+                foreach (CustomNode customNode in obsCustomPolyline_gleisknotenList)
+                {
+                    netDxf.Vector3 vec = new netDxf.Vector3((double)customNode.NodePoint.X, (double)customNode.NodePoint.Y, 0.0);
+                    netDxf.Entities.Point point = new netDxf.Entities.Point(vec);
+
+                    point.Layer = layer6_gleisknoten;
+
+                    obsDxfpoints.Add(point);
+                }
+
+                //foreach(var d in DrawViewModel.toBeStored)
+                //{
+                //    if(d is CustomCanvasSignal element && element.GetType() == typeof(CustomCanvasSignal))
+                //    { 
+
+                //        System.Windows.Media.ImageSource img = element.Source;                        
+                //        System.Drawing.Image dimg = ImageWpfToGDI(img);                        
+                //        dimg.Save(@"D:\\somepath.png");
+                //        //using (FileStream file = File.Create(@"D:\\somepath.png"))
+                //        //{
+                //        //    tempImage = System.Drawing.Image.FromStream(file);
+
+                //        //}                        
+                //        string imgFile = @"D:\\somepath.png";
+                //        //System.Drawing.Image img = System.Drawing.Image.FromFile(imgFile);
+                //        netDxf.Objects.ImageDefinition imageDefinition = new netDxf.Objects.ImageDefinition("MyImage", imgFile, 100, 10, 100, 10, ImageResolutionUnits.Inches);
+                //        netDxf.Entities.Image image = new netDxf.Entities.Image(imageDefinition, netDxf.Vector3.Zero, 10, 10);
+                //        image.Layer = layer7_symbolImage;
+                //        dxf.AddEntity(image);
+                //        //netDxf.Entities.Image img = new netDxf.Entities.Image(element,);
+
+                //    }
+
+                //}
+                foreach (netDxf.Entities.Polyline polylne in obsDxfpolyLine)
+                {
+                    dxf.AddEntity(polylne);
+                }
+
+                foreach (netDxf.Entities.Point point in obsDxfpoints)
+                {
+                    dxf.AddEntity(point);
+                }
+                safeFileDialog1.Filter = "Data Files (*.dxf)|*.dxf";
+                safeFileDialog1.DefaultExt = "dxf";
+                safeFileDialog1.AddExtension = true;
+
+                if (safeFileDialog1.ShowDialog() == true)
+                {
+                    //File.WriteAllText(safeFileDialog1.FileName, txtEditor.Text);
+                    dxf.Save(safeFileDialog1.FileName);
                 }
 
             }
         }
 
+        /// <summary>
+        /// Extract the onTrack signals from the Eulynx object.
+        /// </summary>
+        /// <param name="EulynxObject"></param>
         public static void extractOnTrackSignals(EulynxDataPrepInterface EulynxObject)
         {
             var dataPrepEntities = EulynxObject.hasDataContainer.First().ownsDataPrepEntities;
@@ -260,6 +408,10 @@ namespace APLan.ViewModels
             }
         }
 
+        /// <summary>
+        /// Extract the main signals from the Eulynx object.
+        /// </summary>
+        /// <param name="EulynxObject"></param>
         public static void extractMainSignals(EulynxDataPrepInterface EulynxObject)
         {
             List<Unit> units = EulynxObject.hasDataContainer.First().ownsRsmEntities.usesUnit;
@@ -325,6 +477,12 @@ namespace APLan.ViewModels
 
         }
 
+        /// <summary>
+        /// get neighboring elements according to relations between the elements.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <param name="EulynxObject"></param>
+        /// <param name="SignalIntrensic"></param>
         private static void getNeighbors(PositioningNetElement element, EulynxDataPrepInterface EulynxObject, LinearCoordinate SignalIntrensic)
         {
             VisitedElements.Add(element);
@@ -345,8 +503,6 @@ namespace APLan.ViewModels
                 {
                     relatedElements.Add(elementB);
                 }
-              // VisitedElements.Add(elementA);
-              
             }
             for ( int i=0; i< relatedElements.Count; i++)
             {
@@ -360,7 +516,6 @@ namespace APLan.ViewModels
                         neededElement = relatedElements[i];
                         hostElement= relatedElements[i];
                         break;
-                        //return hostElement;
                     }
                 }
                 else
@@ -424,6 +579,12 @@ namespace APLan.ViewModels
                 signal.LocationCoordinate = new System.Windows.Point((double)(signal.Coordinates[signal.Coordinates.Count - 1].X) - DrawViewModel.GlobalDrawingPoint.X, (double)(signal.Coordinates[signal.Coordinates.Count - 1].Y) - DrawViewModel.GlobalDrawingPoint.Y);
             }
         }
+        /// <summary>
+        /// apply rotation on signal
+        /// </summary>
+        /// <param name="signal"></param>
+        /// <param name="xdiff"></param>
+        /// <param name="ydiff"></param>
         private static void applyRotation(Signalinfo signal, double xdiff, double ydiff)
         {
             //negative sign for drawing
@@ -444,6 +605,11 @@ namespace APLan.ViewModels
             }
 
         }
+        /// <summary>
+        /// apply the horizontal offset required for a signal.
+        /// </summary>
+        /// <param name="signal"></param>
+        /// <param name="backward"></param>
         private static void applyHorizontalOffset(Signalinfo signal, System.Windows.Point backward)
         {
             var x = signal.LocationCoordinate.X;
@@ -507,6 +673,10 @@ namespace APLan.ViewModels
 
             signal.LocationCoordinate = new System.Windows.Point(x, y);
         }
+        /// <summary>
+        /// apply the direction to the signal
+        /// </summary>
+        /// <param name="signal"></param>
         private static void applyDirection(Signalinfo signal)
         {
             if (signal.Direction.Equals("2") || signal.Direction.Equals("reverse"))

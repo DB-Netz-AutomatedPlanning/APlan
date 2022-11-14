@@ -2,8 +2,6 @@
 using APLan.HelperClasses;
 using System;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -41,7 +39,27 @@ namespace APLan.ViewModels
         #endregion
 
         #region logic
-        public void loadSymbols()
+        private void ExecuteMouseDown(MouseEventArgs e)
+        {
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                CustomCanvasSignal customSignal = new CustomCanvasSignal
+                {
+                    Source = (BitmapFrame)((Image)e.Source).Source,
+                    Width = 10,
+                    Height = 10
+                };
+                CustomProperites.SetScale(customSignal, 1);
+                CustomProperites.SetRotation(customSignal, 0);
+                DragDrop.DoDragDrop(customSignal, new DataObject(DataFormats.Serializable, customSignal), DragDropEffects.Move);
+            }
+        }
+
+        /// <summary>
+        /// load the signal symbols according to a list of names in the resources.
+        /// </summary>
+        private void loadSymbols()
         {
             ObservableCollection<SymbolObject> newItems = new ObservableCollection<SymbolObject>();
             string s = APLan.Properties.Resources.SymbolsList;
@@ -58,28 +76,7 @@ namespace APLan.ViewModels
             items = newItems;
         }
 
-        private void ExecuteMouseDown(MouseEventArgs e)
-        {
- 
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                CustomCanvasSignal customSignal = new CustomCanvasSignal
-                {
-                    Source = (BitmapFrame)((Image)e.Source).Source,
-                    Width = 10,
-                    Height = 10
-                };
-                customSignal.MouseWheel += I_MouseWheel;
-                CustomProperites.SetScale(customSignal,1);
-                CustomProperites.SetRotation(customSignal, 0);
-                DragDrop.DoDragDrop(customSignal, new DataObject(DataFormats.Serializable, customSignal), DragDropEffects.Move);
-            }
-        }
-
-        private void I_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-           
-        }
+        
         #endregion
     }
 

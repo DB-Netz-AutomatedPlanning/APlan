@@ -1,19 +1,15 @@
 ﻿using aplan.eulynx.validator;
 using APLan.Commands;
-//using java.nio.file.attribute;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
-using System.Timers;
 
 namespace APLan.ViewModels
 {
@@ -23,43 +19,43 @@ namespace APLan.ViewModels
         private FolderBrowserDialog folderBrowserDialog1;
         private OpenFileDialog openFileDialog1;
 
-        private string xml;
-        private string path;
-        private string report;
-        private string report_rules;
+        private string _xml;
+        private string _path;
+        private string _report;
+        private string _report_rules;
         public string XML
         {
-            get { return xml; }
+            get { return _xml; }
             set
             {
-                xml = value;
+                _xml = value;
                 OnPropertyChanged();
             }
         }
         public string Path
         {
-            get { return path; }
+            get { return _path; }
             set
             {
-                path = value;
+                _path = value;
                 OnPropertyChanged();
             }
         }
         public string Report
         {
-            get { return report; }
+            get { return _report; }
             set
             {
-                report = value;
+                _report = value;
                 OnPropertyChanged();
             }
         }
         public string Report_rules
         {
-            get { return report_rules; }
+            get { return _report_rules; }
             set
             {
-                report_rules = value;
+                _report_rules = value;
                 OnPropertyChanged();
             }
         }
@@ -90,18 +86,18 @@ namespace APLan.ViewModels
         #endregion
 
         #region logic
-        public void ExecuteFilePath(object parameter)
+        private void ExecuteFilePath(object parameter)
         { 
             openFileDialog1.Filter = "Types (*.xml;*.euxml)|*.xml;*.euxml";
             openFileDialog1.ShowDialog();
             XML = openFileDialog1.FileName;
         }
-        public void ExecuteOutputPath(object parameter)
+        private void ExecuteOutputPath(object parameter)
         {
             folderBrowserDialog1.ShowDialog();
             Path = folderBrowserDialog1.SelectedPath;
         }
-        public async void ExecuteValidate(object parameter)
+        private async void ExecuteValidate(object parameter)
         {
             startLoading();
             //define XSD validation version based on the imported xml.
@@ -110,7 +106,7 @@ namespace APLan.ViewModels
             await RulesValidate(XML);
             stopLoading();
         }
-        public void ExecuteCancel(object parameter)
+        private void ExecuteCancel(object parameter)
         {
             ((Window)parameter).Close();
         }
@@ -167,7 +163,7 @@ namespace APLan.ViewModels
         /// </summary>
         /// <param name="euxmlPath"></param>
         /// <returns></returns>
-        public async Task<bool> RulesValidate(string euxmlPath)
+        private async Task<bool> RulesValidate(string euxmlPath)
         {
             LoadingReport = "Validating against Rules";
             await Task.Run(() =>
@@ -185,7 +181,7 @@ namespace APLan.ViewModels
         /// </summary>
         /// <param name="report"></param>
         /// <param name="filePath"></param>
-        public void createReportFile(string report, string filePath)
+        private void createReportFile(string report, string filePath)
         {
             if (File.Exists(filePath))
             {
@@ -199,10 +195,6 @@ namespace APLan.ViewModels
             }
 
         }
-        /// <summary>
-        /// stop the loading sign.
-        /// </summary>
-        /// <param name="stop"></param>
         #endregion
     }
 }

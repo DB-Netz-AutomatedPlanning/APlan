@@ -1,9 +1,7 @@
 ﻿using APLan.Commands;
 using APLan.Views;
-using System.ComponentModel;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -56,55 +54,55 @@ namespace APLan.ViewModels
             folderBrowserDialog1 = new();
         }
         #endregion
-        
+
         #region logic
-        public void ExecuteNewProjectWindow (object parameter)
+        private void ExecuteNewProjectWindow (object parameter)
         {
             
             NewProjectWindow newProject = new();
             newProject.ShowDialog();
         }
-        public void ExecuteAddDataWindow(object parameter)
+        private void ExecuteAddDataWindow(object parameter)
         {
             AddDataWindow addData = new();
             addData.ShowDialog();
         }
-        public void ExecutePreviewData(object parameter)
+        private void ExecutePreviewData(object parameter)
         {
             PreviewDataWindow previewData = new ();
             previewData.ShowDialog();
         }
-        public void ExecuteRemoveData(object parameter)
+        private void ExecuteRemoveData(object parameter)
         {
             RemoveDataWindow removeData = new ();
             removeData.ShowDialog();
         }
-        public void ExecutePrint(object parameter)
+        private void ExecutePrint(object parameter)
         {
             System.Windows.Controls.PrintDialog printDlg = new ();
             printDlg.ShowDialog();
         }
-        public void ExecuteEulynxValidator(object parameter)
+        private void ExecuteEulynxValidator(object parameter)
         {
             EulynxValidator validator = new ();
             validator.ShowDialog();
         }
-        public void ExecuteAboutWPF(object parameter)
+        private void ExecuteAboutWPF(object parameter)
         {
             AboutWPF wpfinfo = new ();
             wpfinfo.ShowDialog();
         }
-        public void ExecuteExitProgram(object parameter)
+        private void ExecuteExitProgram(object parameter)
         {
             ((MainWindow)parameter).Close();
         }
-        public void ExecuteSave(object parameter)
+        private void ExecuteSave(object parameter)
         {
             SavePath = NewProjectViewModel.currentProjectPath+"/"+ NewProjectViewModel.currentProjectName;
             saveAndSaveAs(SavePath);
             InfoExtractor.extractExtraInfo(SavePath, null);
         }
-        public void ExecuteSaveAs(object parameter)
+        private void ExecuteSaveAs(object parameter)
         {
             folderBrowserDialog1.ShowDialog();
             SavePath = folderBrowserDialog1.SelectedPath;

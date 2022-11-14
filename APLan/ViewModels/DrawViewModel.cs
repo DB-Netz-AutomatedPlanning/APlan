@@ -219,8 +219,6 @@ namespace APLan.ViewModels
 
         #region commands
 
-        public ICommand GridColorActivation { get; set; }
-
         private ICommand _MouseleftButtonDownCommand;
         private ICommand _MouserightButtonDownCommand;
         private ICommand _MouseMiddleDownCommand;
@@ -229,6 +227,8 @@ namespace APLan.ViewModels
         private ICommand _BasCanvasMouseMoveCommand;
         private ICommand _KeyDownForMainWindow;
         private ICommand _ObjectLodaded;
+
+        public ICommand GridColorActivation { get; set; }
         private ICommand _RotateCanvasSlider { get; set; }
         private ICommand _RotateItemSlider { get; set; }
         private ICommand _ScaleItemSlider { get; set; }
@@ -367,8 +367,7 @@ namespace APLan.ViewModels
             if (tool==SelectedTool.MultiSelect)
             {
                 multiselectAlgo(e); // apply multiselection while the mouse if moving if selection is allowed.
-            }
-            
+            } 
         }
         /// <summary>
         /// logic applied to the drawing canvas.
@@ -377,7 +376,16 @@ namespace APLan.ViewModels
         private void ExecuteMouseMoveDrawingCanvas(MouseEventArgs e)
         {
             //get necessary elements for interaction
-            var element = Views.Draw.drawing;
+            Canvas element;
+            if (e.Source is not Canvas)
+            {
+               element = VisualTreeHelpers.FindAncestor<Canvas>((UIElement)e.Source);
+            }
+            else
+            {
+                element = e.Source as Canvas;
+            }
+            
             var scroll  = VisualTreeHelpers.FindAncestor<ScrollViewer>(element);
 
             //update the mouse coordinates.
@@ -451,14 +459,19 @@ namespace APLan.ViewModels
         /// <param name="e"></param>
         private void ExecuteMouseWheelDrawingCanvas(MouseWheelEventArgs e)
         {
-            
-           
-            var element = Views.Draw.drawing;
+            Canvas element;
+            if (e.Source is not Canvas)
+            {
+                element = VisualTreeHelpers.FindAncestor<Canvas>((UIElement)e.Source);
+            }
+            else
+            {
+                element = e.Source as Canvas;
+            }
             var scroll = VisualTreeHelpers.FindAncestor<ScrollViewer>(element);
 
             var position = e.GetPosition(element);
 
-            //var transform2 = (Transform)element.LayoutTransform;
             TransformGroup transformGroup = (TransformGroup)element.LayoutTransform;
             var Scaletransform=(ScaleTransform)transformGroup.Children[0];
             var scale = e.Delta >= 0 ? 1.1 : (1.0 / 1.1);
@@ -469,14 +482,17 @@ namespace APLan.ViewModels
             {
                 Scaletransform.ScaleX *= scale;
                 Scaletransform.ScaleY *= scale;
-                //element.LayoutTransform = transform2;
+                
                 scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
                 scroll.ScrollToHorizontalOffset(position.X * Scaletransform.ScaleX - e.GetPosition(scroll).X);
                 scroll.ScrollToVerticalOffset(position.Y * Scaletransform.ScaleY - e.GetPosition(scroll).Y);
             }
-            if (Scaletransform.ScaleX < 0.1)
+            if (Scaletransform.ScaleX <= 0.1)
             {
-                scroll.VerticalScrollBarVisibility = ScrollBarVisibility.Disabled;
+                //to compensate the scrolling down.
+                scroll.LineUp();
+                scroll.LineUp();
+                scroll.LineUp();
             }
         }
         /// <summary>
@@ -627,11 +643,13 @@ namespace APLan.ViewModels
         /// <param name="e"></param>
         private void multiselectAlgo( MouseEventArgs e)
         {
-            var element = Draw.drawing;
+            var element = VisualTreeHelpers.FindAncestor<Canvas>((UIElement)e.Source,"baseCanvas");
+            
             element.Children.Remove(selectionRectangle);
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 selectionRectangle = new Rectangle() { Fill = Brushes.LightSkyBlue, Opacity=0.5, IsHitTestVisible=false};
+                Panel.SetZIndex(selectionRectangle,2);
                 element.Children.Add(selectionRectangle);
 
                 var mouseX = Mouse.GetPosition(element).X;
@@ -644,8 +662,8 @@ namespace APLan.ViewModels
                 }
                 else
                 {
-                    var userControl = VisualTreeHelpers.FindAncestor<UserControl>(element);
-                    var userControlAngle = ((RotateTransform)userControl.RenderTransform).Angle;
+                    //var userControl = VisualTreeHelpers.FindAncestor<UserControl>(element);
+                    //var userControlAngle = ((RotateTransform)userControl.RenderTransform).Angle;
 
                     selectionRectangle.LayoutTransform = new RotateTransform() { Angle = 0, CenterX = 0, CenterY = 0 };
 
@@ -681,7 +699,7 @@ namespace APLan.ViewModels
                         selectionRectangle.RenderTransform = s;
                         expandedHitTestArea = new RectangleGeometry(new Rect(Canvas.GetLeft(selectionRectangle) - selectionRectangle.Width, Canvas.GetTop(selectionRectangle), selectionRectangle.Width, selectionRectangle.Height));
                     }
-                    multiSelectHitTest(expandedHitTestArea);
+                    multiSelectHitTest(expandedHitTestArea, element);
                 }
             }
             if (e.LeftButton == MouseButtonState.Released && firsPoint.X!=0)
@@ -702,23 +720,20 @@ namespace APLan.ViewModels
         /// hit testing by a rectanlge for multiselection.
         /// </summary>
         /// <param name="expandedHitTestArea"></param>
-        private void multiSelectHitTest(RectangleGeometry expandedHitTestArea)
+        private void multiSelectHitTest(RectangleGeometry expandedHitTestArea, Canvas canvas)
         {
             //here the selection is UIElement we need to adabt for other objects
             foreach (UIElement e in tempSelected)
             {
-                
-
                 Multiselected.Remove(e);
                 if (selected.Contains(e) == false)
                 {
-                    
                     e.Opacity = 1;
                 }
             }
             tempSelected.Clear();
             // Set up a callback to receive the hit test result enumeration.
-            VisualTreeHelper.HitTest(Draw.drawing,
+            VisualTreeHelper.HitTest(canvas,
                 new HitTestFilterCallback(MyHitTestFilter),
                 new HitTestResultCallback(MultiSelectionHitTestResult),
                 new GeometryHitTestParameters(expandedHitTestArea));

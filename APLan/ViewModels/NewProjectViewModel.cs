@@ -1,7 +1,5 @@
-﻿using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Forms;
-using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using APLan.Commands;
 using System.Collections.ObjectModel;
@@ -10,17 +8,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using aplan.eulynx;
-using System;
 using System.Windows.Media;
 using aplan.core;
 using APLan.Views;
 using System.Threading.Tasks;
-using System.Windows.Data;
-
-using static net.sf.saxon.trans.SymbolicName;
-using System.Threading;
-using System.Windows.Threading;
-using System.Timers;
+using netDxf;
 
 namespace APLan.ViewModels
 {
@@ -33,8 +25,6 @@ namespace APLan.ViewModels
         private Loading loadingObject;
         private bool saveButtonActive;
         private bool saveAsButtonActive;
-        private bool printButtonActive;
-        private bool importButtonActive;
         private string welcomeInfo;
         private string country;
         private string format;
@@ -49,10 +39,12 @@ namespace APLan.ViewModels
         private string euxml = null;
         private string ppxml = null;
         private string projectPath = null;
+        private string projectName = null;
+        private string dxf = null;
+        
         public static string currentProjectPath = null; //this would be used to know our project path.
         public static string currentProjectName = null; //this would be used to know our project path.
-        private string projectName = null;
-        
+
 
         private string OpenProjectPath { get; set; }
         public string ProjectName
@@ -183,6 +175,15 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string DXF
+        {
+            get { return dxf; }
+            set
+            {
+                dxf = value;
+                OnPropertyChanged();
+            }
+        }
         public bool SaveButtonActive
         {
             get { return saveButtonActive; }
@@ -201,24 +202,6 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-        public bool PrintButtonActive
-        {
-            get { return printButtonActive; }
-            set
-            {
-                printButtonActive = value;
-                OnPropertyChanged();
-            }
-        }
-        public bool ImportButtonActive
-        {
-            get { return importButtonActive; }
-            set
-            {
-                importButtonActive = value;
-                OnPropertyChanged();
-            }
-        }
         public string WelcomeInfo
         {
             get { return welcomeInfo; }
@@ -229,29 +212,16 @@ namespace APLan.ViewModels
             }
         }
         
-        private Visibility welcomeVisibility;
-        private Visibility _gleisKantenPointsVisibility;
-        public Visibility GleisKantenPointsVisibility
-        {
-            get => _gleisKantenPointsVisibility;
-            set
-            {
-                _gleisKantenPointsVisibility = value;
-                OnPropertyChanged();
-            }
-
-        }
+        private Visibility _welcomeVisibility;
         public Visibility WelcomeVisibility
         {
-            get { return welcomeVisibility; }
+            get { return _welcomeVisibility; }
             set
             {
-                welcomeVisibility = value;
+                _welcomeVisibility = value;
                 OnPropertyChanged();
             }
         }
-
-
         #endregion
 
         #region commands
@@ -264,8 +234,9 @@ namespace APLan.ViewModels
         public ICommand Create { get; set; }
         public ICommand Cancel { get; set; }
         public ICommand Open { get; set; }
+        public ICommand BrowseDxf { get; set; }
         #endregion
-        
+
         #region constructor
         public NewProjectViewModel()
         {
@@ -278,11 +249,12 @@ namespace APLan.ViewModels
             Create = new RelayCommand(ExecuteCreate);
             Cancel = new RelayCommand(ExecuteCancel);
             Open = new RelayCommand(ExecuteOpen);
+            BrowseDxf = new RelayCommand(ExecuteBrowseDxf);
             folderBrowserDialog1 = new FolderBrowserDialog();
             folderBrowserDialog1.ShowNewFolderButton=true;
             openFileDialog1 = new OpenFileDialog();
 
-            loadedObjects = new ObservableCollection<CanvasObjectInformation>(); //binded to view
+            loadedObjects = new ObservableCollection<CanvasObjectInformation>();
 
             gleiskantenList = new ObservableCollection<CustomPolyLine>();
             Entwurfselement_LA_list = new ObservableCollection<CustomPolyLine>();
@@ -297,6 +269,7 @@ namespace APLan.ViewModels
             Entwurfselement_KMPointsList = new ObservableCollection<Point>();
             Entwurfselement_HOPointsList = new ObservableCollection<Point>();
             Entwurfselement_UHPointsList = new ObservableCollection<Point>();
+            
             WelcomeVisibility = Visibility.Visible;
             loadingObject.LoadingReport = "Welcome";
             
@@ -304,7 +277,17 @@ namespace APLan.ViewModels
         #endregion
 
         #region logic
-        
+        public void ExecuteBrowseDxf(object parameter)
+        {
+            clearOldSelectedFiles();
+            openFileDialog1.Filter = "Types (*.dxf)|*.dxf";
+            openFileDialog1.ShowDialog();
+            dxf = openFileDialog1.FileName;
+            if (dxf != null)
+            {
+                ((System.Windows.Controls.Button)parameter).IsEnabled = true;
+            }
+        }
         private void ExecuteAddPath(object parameter)
         {
             folderBrowserDialog1.ShowDialog();
@@ -467,7 +450,11 @@ namespace APLan.ViewModels
             CurrentProjectNameBind = projectName;
             return flag;
         }
-        public void transferFilesToPath(string path)
+        /// <summary>
+        /// transfer the selected file for project creation to the project path.
+        /// </summary>
+        /// <param name="path"></param>
+        private void transferFilesToPath(string path)
         {
             if(Entwurfselement_KM != null)
             {
@@ -506,13 +493,18 @@ namespace APLan.ViewModels
                 File.Copy(PPXML, path + "/" + Path.GetFileName(PPXML), true);
             }
         }
+        /// <summary>
+        /// activate the buttons like save, save as ... that are not allowed to be activated in the beginning.
+        /// </summary>
         private void activateButtons()
         {
             SaveButtonActive = true;
             SaveAsButtonActive = true;
-            //ImportButtonActive = true;
-            //PrintButtonActive = true;
         }
+        /// <summary>
+        /// load .APlan file which represent the saved information.
+        /// </summary>
+        /// <param name="f"></param>
         private void loadAPlanFile(string f)
         {
             loadedObjects.Clear(); //clear the previously loaded items.
@@ -528,7 +520,152 @@ namespace APLan.ViewModels
             }
             fsin.Close();
         }
-        
+        public void createDxfProject()
+        {
+            DxfDocument dxfReader = DxfDocument.Load(dxf);
+            foreach (netDxf.Entities.Polyline plyLine in dxfReader.Polylines)
+            {
+                if (plyLine.Layer.Name == "Entwurfselement_HO")
+                {
+                    netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
+                    PointCollection pointCollection_HO = new PointCollection();
+                    int i = 0;
+                    foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
+                    {
+                        System.Windows.Point vertexPoint_HO = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
+
+                        pointCollection_HO.Add(vertexPoint_HO);
+                        if (i == 0)
+                        {
+                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_HO;
+                            i++;
+                        }
+
+                    }
+                    CustomPolyLine newPolyline_HO = new CustomPolyLine();
+
+                    newPolyline_HO.Points = pointCollection_HO;
+                    newPolyline_HO.Color = new SolidColorBrush() { Color = Colors.DarkBlue };
+                    Entwurfselement_HO_list.Add(newPolyline_HO);
+                }
+
+                if (plyLine.Layer.Name == "Entwurfselement_LA")
+                {
+                    netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
+                    PointCollection pointCollection_LA = new PointCollection();
+                    int i = 0;
+                    foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
+                    {
+                        System.Windows.Point vertexPoint_LA = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
+
+                        pointCollection_LA.Add(vertexPoint_LA);
+                        if (i == 0)
+                        {
+                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_LA;
+                            i++;
+                        }
+
+                    }
+                    CustomPolyLine newPolyline_LA = new CustomPolyLine();
+
+                    newPolyline_LA.Points = pointCollection_LA;
+                    newPolyline_LA.Color = new SolidColorBrush() { Color = Colors.DarkRed };
+                    Entwurfselement_LA_list.Add(newPolyline_LA);
+                }
+
+                if (plyLine.Layer.Name == "Entwurfselement_KM")
+                {
+                    netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
+                    PointCollection pointCollection_KM = new PointCollection();
+                    int i = 0;
+                    foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
+                    {
+                        System.Windows.Point vertexPoint_KM = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
+
+                        pointCollection_KM.Add(vertexPoint_KM);
+                        if (i == 0)
+                        {
+                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_KM;
+                            i++;
+                        }
+
+                    }
+                    CustomPolyLine newPolyline_KM = new CustomPolyLine();
+
+                    newPolyline_KM.Points = pointCollection_KM;
+                    newPolyline_KM.Color = new SolidColorBrush() { Color = Colors.DarkViolet };
+                    Entwurfselement_KM_list.Add(newPolyline_KM);
+                }
+
+                if (plyLine.Layer.Name == "Entwurfselement_UH")
+                {
+                    netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
+                    PointCollection pointCollection_UH = new PointCollection();
+                    int i = 0;
+                    foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
+                    {
+                        System.Windows.Point vertexPoint_UH = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
+
+                        pointCollection_UH.Add(vertexPoint_UH);
+                        if (i == 0)
+                        {
+                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_UH;
+                            i++;
+                        }
+
+                    }
+                    CustomPolyLine newPolyline_UH = new CustomPolyLine();
+
+                    newPolyline_UH.Points = pointCollection_UH;
+                    newPolyline_UH.Color = new SolidColorBrush() { Color = Colors.Green };
+                    Entwurfselement_UH_list.Add(newPolyline_UH);
+                }
+
+                if (plyLine.Layer.Name == "gleiskanten")
+                {
+                    netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
+                    PointCollection pointCollection_gleiskanten = new PointCollection();
+                    int i = 0;
+                    foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
+                    {
+                        System.Windows.Point vertexPoint_gleiskanten = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
+
+                        pointCollection_gleiskanten.Add(vertexPoint_gleiskanten);
+                        if (i == 0)
+                        {
+                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_gleiskanten;
+                            i++;
+                        }
+
+                    }
+                    CustomPolyLine newPolyline_gleiskanten = new CustomPolyLine();
+
+                    newPolyline_gleiskanten.Points = pointCollection_gleiskanten;
+                    newPolyline_gleiskanten.Color = new SolidColorBrush() { Color = Colors.DarkOrange };
+                    gleiskantenList.Add(newPolyline_gleiskanten);
+                }
+
+
+            }
+            foreach (netDxf.Entities.Point pnts in dxfReader.Points)
+            {
+                if (pnts.Layer.Name == "gleisknoten")
+                {
+                    CustomNode node = new CustomNode();
+                    Point newPoint = new Point((((double)pnts.Position.X)), (((double)pnts.Position.Y)));
+
+
+                    node.NodePoint = newPoint;
+                    gleisknotenList.Add(node);
+
+                }
+            }
+
+
+            APLan.ViewModels.DrawViewModel.model = new ModelViewModel();
+            DrawViewModel.model.drawObjectDxf(ViewModels.DrawViewModel.sharedCanvasSize, Entwurfselement_HO_list, Entwurfselement_LA_list, Entwurfselement_KM_list, Entwurfselement_UH_list, gleiskantenList, gleisknotenList);
+        }
+
         /// <summary>
         /// choose which model creation according to selected file type.
         /// </summary>
@@ -548,6 +685,10 @@ namespace APLan.ViewModels
             else if (format.Equals(".euxml"))
             {
                 await loadEuxml(EUXML);
+            }
+            else if (format.Equals(".dxf"))
+            {
+                createDxfProject();
             }
             loadingObject.LoadingReport = "Finished";
             loadingObject.stopLoading();
@@ -587,18 +728,7 @@ namespace APLan.ViewModels
                 await deserializeEuxml(f);
 
                 ModelViewModel model = new();
-                await model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
-                gleiskantenList,
-                gleiskantenPointsList,
-                Entwurfselement_LA_list,
-                Entwurfselement_LAPointsList,
-                Entwurfselement_KM_list,
-                Entwurfselement_KMPointsList,
-                Entwurfselement_HO_list,
-                Entwurfselement_HOPointsList,
-                Entwurfselement_UH_list,
-                Entwurfselement_UHPointsList,
-                gleisknotenList);
+                await model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize);
 
                 var planningTabViewModel = System.Windows.Application.Current.FindResource("planTabViewModel") as PlanningTabViewModel;
             }
@@ -674,18 +804,7 @@ namespace APLan.ViewModels
         /// <returns></returns>
         private async Task<bool> DrawEulyxObject()
         {
-           await DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize,
-                gleiskantenList,
-                gleiskantenPointsList,
-                Entwurfselement_LA_list,
-                Entwurfselement_LAPointsList,
-                Entwurfselement_KM_list,
-                Entwurfselement_KMPointsList,
-                Entwurfselement_HO_list,
-                Entwurfselement_HOPointsList,
-                Entwurfselement_UH_list,
-                Entwurfselement_UHPointsList,
-                gleisknotenList);
+           await DrawViewModel.model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize);
 
             return true;
         }

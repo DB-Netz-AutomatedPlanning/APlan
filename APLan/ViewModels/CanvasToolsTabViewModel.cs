@@ -1,18 +1,12 @@
 ﻿using APLan.Commands;
-using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using APLan.Views;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using APLan.HelperClasses;
 
 namespace APLan.ViewModels
 {
     public class CanvasToolsTabViewModel : BaseViewModel
     {
         #region attributes
-        //private double previousAngle; // store the current rotation of the canvas.
         private Brush _selectBrush;
         private Brush _moveBrush;
         private Brush _dragBrush;
@@ -75,29 +69,6 @@ namespace APLan.ViewModels
         public ICommand SelectButton { get; set; }
         public ICommand MoveButton { get; set; }
         public ICommand DragButton { get; set; }
-        private ICommand rotateCanvasSlider { get; set; }
-        public ICommand RotateCanvasSlider
-        {
-            get
-            {
-                return rotateCanvasSlider ??= new RelayCommand(
-                   x =>
-                   {
-                       ExecuteCanvasSliderChange((RoutedPropertyChangedEventArgs<double>)x);
-                   });
-            }
-        }
-        private RelayCommand _mouseDownCommand;
-        public RelayCommand MouseDownCommand
-        {
-            get
-            {
-                if (_mouseDownCommand == null) return _mouseDownCommand = new RelayCommand(param => ExecuteMouseDown((MouseEventArgs)param));
-                return _mouseDownCommand;
-            }
-            set { _mouseDownCommand = value; }
-        }
-
         #endregion
 
         #region constructor
@@ -116,19 +87,10 @@ namespace APLan.ViewModels
         
         #region logic 
         /// <summary>
-        /// rotate the canvas.
-        /// </summary>
-        /// <param name="e"></param>
-        private void ExecuteCanvasSliderChange(RoutedPropertyChangedEventArgs<double> e)
-        {
-            var drawing = Draw.drawing;
-            var scroll = Draw.drawingScrollViewer;
-        }
-        /// <summary>
         /// allow selection
         /// </summary>
         /// <param name="parameter"></param>
-        public void ExecuteSelectButton(object parameter)
+        private void ExecuteSelectButton(object parameter)
         {
             if (DrawViewModel.tool != DrawViewModel.SelectedTool.MultiSelect)
             {
@@ -151,7 +113,7 @@ namespace APLan.ViewModels
         /// allow moving
         /// </summary>
         /// <param name="parameter"></param>
-        public void ExecuteMoveButton(object parameter)
+        private void ExecuteMoveButton(object parameter)
         {
             if (DrawViewModel.tool != DrawViewModel.SelectedTool.Move)
             {
@@ -173,7 +135,7 @@ namespace APLan.ViewModels
         /// allow dragging
         /// </summary>
         /// <param name="parameter"></param>
-        public void ExecuteDragButton(object parameter)
+        private void ExecuteDragButton(object parameter)
         {
             if (DrawViewModel.tool != DrawViewModel.SelectedTool.Drag)
             {
@@ -194,15 +156,6 @@ namespace APLan.ViewModels
         /// allow draging for a text
         /// </summary>
         /// <param name="e"></param>
-        private void ExecuteMouseDown(MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                CustomCanvasText textBox = new();
-                DragDrop.DoDragDrop(textBox, new DataObject(DataFormats.Serializable, textBox), DragDropEffects.Move);
-            }
-        }
-
         #endregion
     }
 }

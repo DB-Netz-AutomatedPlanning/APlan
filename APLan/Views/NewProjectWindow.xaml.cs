@@ -4,6 +4,7 @@ using System.Windows.Media;
 using APLan.ViewModels;
 using System.IO;
 using APLan.HelperClasses;
+using System.Printing;
 
 namespace APLan.Views
 {
@@ -23,6 +24,7 @@ namespace APLan.Views
         private string EuxmlFileHint { get; set; }
         private string MdbFileHint { get; set; }
         private string PpxmlFileHint { get; set; }
+        private string DxfFileHint { get; set; }
         #endregion
 
         #region constructor
@@ -36,9 +38,11 @@ namespace APLan.Views
             EuxmlFileHint = "please select .Euxml file";
             MdbFileHint = "please select single .Mdb file";
             PpxmlFileHint = "please select single .PPXML file";
+            DxfFileHint = "please select single .dxf file";
 
             newprojectClass = System.Windows.Application.Current.FindResource("newProjectViewModel") as NewProjectViewModel;
             themeColor = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
+            
             InitializeComponent();
             fileType.SelectedIndex = 0;
         }
@@ -51,37 +55,23 @@ namespace APLan.Views
                 createProject.IsEnabled = false;
             if (((System.Windows.Controls.ComboBox)sender).SelectedItem.ToString().Equals(".json"))
             {
-                container.RowDefinitions[5].Height = new GridLength(0);
-                container.RowDefinitions[6].Height = new GridLength(0);
-                container.RowDefinitions[7].Height = new GridLength(0);
-                for (int i = 4; i < container.RowDefinitions.Count - 4; i++)
-                {
-                    container.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
-                }
+                collapseOtherChoices(4);
             }
             else if (((System.Windows.Controls.ComboBox)sender).SelectedItem.ToString().Equals(".mdb"))
             {
-                for (int i = 4; i < container.RowDefinitions.Count - 1; i++)
-                {
-                    container.RowDefinitions[i].Height = new GridLength(0);
-                }
-                container.RowDefinitions[5].Height = new GridLength(1, GridUnitType.Star);
+                collapseOtherChoices(5);
             }
             else if (((System.Windows.Controls.ComboBox)sender).SelectedItem.ToString().Equals(".euxml"))
             {
-                for (int i = 4; i < container.RowDefinitions.Count - 1; i++)
-                {
-                    container.RowDefinitions[i].Height = new GridLength(0);
-                }
-                container.RowDefinitions[6].Height = new GridLength(1, GridUnitType.Star);
+                collapseOtherChoices(6);
             }
             else if (((System.Windows.Controls.ComboBox)sender).SelectedItem.ToString().Equals(".ppxml"))
             {
-                for (int i = 4; i < container.RowDefinitions.Count - 1; i++)
-                {
-                    container.RowDefinitions[i].Height = new GridLength(0);
-                }
-                container.RowDefinitions[7].Height = new GridLength(1, GridUnitType.Star);
+                collapseOtherChoices(7);
+            }
+            else if (((System.Windows.Controls.ComboBox)sender).SelectedItem.ToString().Equals(".dxf"))
+            {
+                collapseOtherChoices(8);
             }
             activateCreation();
         }
@@ -144,6 +134,26 @@ namespace APLan.Views
             {
                 euxmlFileBox.Foreground = Brushes.Black;
                 euxmlFileBox.Background = Brushes.White;   
+            }
+            activateCreation();
+        }
+
+        private void dxftext_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (File.Exists(@$"{dxfFileBox.Text}") && Path.GetExtension(@$"{dxfFileBox.Text}").EqualsIgnoreCase(".dxf"))
+            {
+                euxmlFileBox.Foreground = Brushes.Black;
+                euxmlFileBox.Background = themeColor;
+            }
+            else if (dxfFileBox.Text.Equals(DxfFileHint))
+            {
+                euxmlFileBox.Foreground = Brushes.Gray;
+                euxmlFileBox.Background = Brushes.White;
+            }
+            else
+            {
+                euxmlFileBox.Foreground = Brushes.Black;
+                euxmlFileBox.Background = Brushes.White;
             }
             activateCreation();
         }
@@ -330,9 +340,17 @@ namespace APLan.Views
                     case nameof(ppxmlFileBox):
                         ppxmlFileBox.Text = PpxmlFileHint;
                         break;
+                    case nameof(dxfFileBox):
+                        dxfFileBox.Text = DxfFileHint;
+                        break;
                 }
             }
         }
+        /// <summary>
+        /// reset the window hints and colors.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void newProjectWindow_Loaded(object sender, System.EventArgs e)
         {
             //reset Hints
@@ -342,6 +360,7 @@ namespace APLan.Views
             newprojectClass.EUXML = EuxmlFileHint;
             newprojectClass.MDB = MdbFileHint;
             newprojectClass.PPXML = PpxmlFileHint;
+            newprojectClass.DXF = DxfFileHint;
 
             //reset jsonFiles
             newprojectClass.Gleiskanten = null;
@@ -359,6 +378,23 @@ namespace APLan.Views
             mdbFileBox.Background = Brushes.White;
             euxmlFileBox.Background = Brushes.White;
             ppxmlFileBox.Background = Brushes.White;
+            dxfFileBox.Background = Brushes.White;
+        }
+        
+        /// <summary>
+        /// collapse all rows except a specific one.
+        /// </summary>
+        /// <param name="itemRow"></param>
+        private void collapseOtherChoices(int itemRow)
+        {
+            container.RowDefinitions[itemRow].Height = new GridLength(1, GridUnitType.Star);
+            for (int i = 4; i < container.RowDefinitions.Count - 1; i++)
+            {
+                if (i != itemRow)
+                {
+                    container.RowDefinitions[i].Height = new GridLength(0, GridUnitType.Star);
+                }  
+            }
         }
         #endregion
     }

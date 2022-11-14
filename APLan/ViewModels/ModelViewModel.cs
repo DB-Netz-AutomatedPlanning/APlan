@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Shapes;
 using aplan.core;
 using aplan.eulynx;
 using Models.TopoModels.EULYNX.generic;
@@ -10,34 +9,27 @@ using APLan.HelperClasses;
 using System.Collections;
 using System.Windows.Media;
 using System.Threading.Tasks;
-using System;
-using System.Threading;
-using java.lang;
-using System.ComponentModel;
-using javax.xml.transform;
-using net.sf.saxon.expr.instruct;
-using org.w3c.dom.css;
 
 namespace APLan.ViewModels
 {
     public class ModelViewModel : BaseViewModel
     {
         #region attributes
-        private bool start = false;
         public static int routeNumber;
         public static ArrayList boundPoints;
         public static Point firspoint = new Point(0, 0);
-        private Loading loadingObject;
-        public static Database db { get; set; }
-        private RsmEntities RsmEntities { get; set; }
-        private List<DataContainer> DataContainer { get; set; }
         public static EulynxService eulynxService { get; set; }
         public static EulynxDataPrepInterface eulynx { get; set; }
+        public static Database db { get; set; }
+
+        private bool start = false;
+        private Loading loadingObject;
+        private RsmEntities RsmEntities { get; set; }
+        private List<DataContainer> DataContainer { get; set; }
         private List<IntrinsicCoordinate> IntrensicCoordinates { get; set; }
         private List<PositioningNetElement> PositioningNetElements { get; set; }
         private List<PositioningSystemCoordinate> PositioningSystemCoordinates { get; set; }
-        List<Unit> units { get; set; }
-        public ObservableCollection<Polyline> lines = new ObservableCollection<Polyline>();
+        private List<Unit> units { get; set; }
         #endregion
 
         #region constructors
@@ -97,8 +89,6 @@ namespace APLan.ViewModels
                 string horizontalAlignmentsFilePath, string verticalAlignmentsFilePath, string cantAlingnmentsFilePath,
                 string mdbFilePath)
         {
-            //routeNumber = 6624; // this is just example, in the end this should be generic
-
 
             eulynxService.inputHandling(
             format, db,
@@ -125,18 +115,7 @@ namespace APLan.ViewModels
         /// <param name="Entwurfselement_UH_list"></param>
         /// <param name="Entwurfselement_UHPointsList"></param>
         /// <param name="gleisknotenList"></param>
-        public async Task<bool> drawObject(double canvasSize,
-            ObservableCollection<CustomPolyLine> gleiskantenList,
-            ObservableCollection<Point> gleiskantenPointsList,
-            ObservableCollection<CustomPolyLine> Entwurfselement_LA_list,
-            ObservableCollection<Point> Entwurfselement_LAPointsList,
-            ObservableCollection<CustomPolyLine> Entwurfselement_KM_list,
-            ObservableCollection<Point> Entwurfselement_KMPointsList,
-            ObservableCollection<CustomPolyLine> Entwurfselement_HO_list,
-            ObservableCollection<Point> Entwurfselement_HOList,
-            ObservableCollection<CustomPolyLine> Entwurfselement_UH_list,
-            ObservableCollection<Point> Entwurfselement_UHPointsList,
-            ObservableCollection<CustomNode> gleisknotenList)
+        public async Task<bool> drawObject(double canvasSize)
         {
             loadingObject.LoadingReport = "Drawing Eulynx Object...";
 
@@ -150,7 +129,7 @@ namespace APLan.ViewModels
             Entwurfselement_KM_list.Clear();
             Entwurfselement_KMPointsList.Clear();
             Entwurfselement_HO_list.Clear();
-            Entwurfselement_HOList.Clear();
+            Entwurfselement_HOPointsList.Clear();
             Entwurfselement_UH_list.Clear();
             Entwurfselement_UHPointsList.Clear();
             gleisknotenList.Clear();
@@ -177,11 +156,12 @@ namespace APLan.ViewModels
             fetchLinesForBinding(Entwurfselement_UH_list, UH);
             var nodes = await DrawNodes(RsmEntities, PositioningSystemCoordinates, IntrensicCoordinates, canvasSize, units);
             fetchNodesForBinding(gleisknotenList, nodes);
+
             //calculatePointsScaling(); //this should be always called before the Nodes due to templating in the XAML
+            
             PlanningTabViewModel.extractMainSignals(eulynx);
             PlanningTabViewModel.extractOnTrackSignals(eulynx);
-            //Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(Views.Draw.drawingScrollViewer.ExtentWidth / 2);
-            //Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(Views.Draw.drawingScrollViewer.ExtentHeight / 2);
+            
             return true;
         }
         /// <summary>
@@ -821,7 +801,6 @@ namespace APLan.ViewModels
             node.Data.Add(new KeyValue() { Key = "name", Value = name.ToString() });
         }
 
-
         /// <summary>
         /// fetch the lines to the UI on the Main thread
         /// </summary>
@@ -846,6 +825,22 @@ namespace APLan.ViewModels
             {
                 bindedList.Add(node);
             }
+        }
+
+        public void drawObjectDxf(double canvasSize,
+                    ObservableCollection<CustomPolyLine> Entwurfselement_KM_list,
+                    ObservableCollection<CustomPolyLine> Entwurfselement_LA_list,
+                    ObservableCollection<CustomPolyLine> Entwurfselement_HO_list,
+                    ObservableCollection<CustomPolyLine> Entwurfselement_UH_list,
+                    ObservableCollection<CustomPolyLine> gleiskantenList,
+                    ObservableCollection<CustomNode> gleisknotenList
+                    )
+        {
+
+            calculatePointsScaling(); //this should be always called before the Nodes due to templating in the XAML
+
+            //Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(50000);
+            //Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(50000);
         }
     }  
 }

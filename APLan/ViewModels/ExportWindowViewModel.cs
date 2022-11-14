@@ -1,17 +1,11 @@
 ﻿using APLan.Commands;
 using APLan.HelperClasses;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media.TextFormatting;
-using System.Xml;
 
 namespace APLan.ViewModels
 {
@@ -19,45 +13,45 @@ namespace APLan.ViewModels
     {
         #region attributes
         private FolderBrowserDialog folderBrowserDialog1;
-        private string outputFolder;
-        private string successfull;
-        private string euxmlResult;
-        private string projectName;
-        private string loadingMessage;
+        private string _outputFolder;
+        private string _successfull;
+        private string _euxmlResult;
+        private string _projectName;
+        private string _loadingMessage;
 
         public string LoadingMessage
         {
-            get => loadingMessage;
+            get => _loadingMessage;
             set
             {
-                loadingMessage = value;
+                _loadingMessage = value;
                 OnPropertyChanged();
             }
         }
         public string OutputFolder
         {
-            get => outputFolder;
+            get => _outputFolder;
             set
             {
-                outputFolder = value;
+                _outputFolder = value;
                 OnPropertyChanged();
             }
         }
         public string Successfull
         {
-            get { return successfull; }
+            get { return _successfull; }
             set
             {
-                successfull = value;
+                _successfull = value;
                 OnPropertyChanged();
             }
         }
         public string EuxmlResult
         {
-            get { return euxmlResult; }
+            get { return _euxmlResult; }
             set
             {
-                euxmlResult = value;
+                _euxmlResult = value;
                 OnPropertyChanged();
             }
         }
@@ -80,18 +74,18 @@ namespace APLan.ViewModels
             Ok = new RelayCommand(ExecuteCancel);
             ValidateXML = new RelayCommand(ExecuteValidateXML);
             folderBrowserDialog1 = new FolderBrowserDialog();
+            
             LoadingVisibility = Visibility.Collapsed;
-
             LoadingMessage = "Loading The Euxml...";
         }
         #endregion
 
         #region logic
-        public void ExecuteCancelButton(object parameter)
+        private void ExecuteCancelButton(object parameter)
         {
             ((Window)parameter).Close();
         }
-        public async void ExecuteExportButton(object parameter)
+        private async void ExecuteExportButton(object parameter)
         {
             startLoading();
             LoadingReport = "exporting to Euxml";
@@ -99,7 +93,7 @@ namespace APLan.ViewModels
             var exportType = ((TextBlock)objects[0]).Text;
             var exportPath = ((System.Windows.Controls.TextBox)objects[1]).Text;
             var projectName = ((System.Windows.Controls.TextBlock)objects[2]).Text;
-            this.projectName = projectName;
+            this._projectName = projectName;
             var window = ((System.Windows.Window)objects[3]);
             if (exportType!=null && projectName!=null && Directory.Exists(exportPath))
             {
@@ -120,23 +114,24 @@ namespace APLan.ViewModels
             stopLoading();
             window.Close();
         }
-        public void ExecuteSelectFolderButton(object parameter)
+        private void ExecuteSelectFolderButton(object parameter)
         {
             folderBrowserDialog1.ShowDialog();
             OutputFolder= folderBrowserDialog1.SelectedPath;
         }
-        public void ExecuteCancel(object parameter)
+        private void ExecuteCancel(object parameter)
         {
             closeWindow(parameter);
         }
-        public void ExecuteValidateXML(object parameter)
+        private void ExecuteValidateXML(object parameter)
         {
             closeWindow(parameter);
             Views.EulynxValidator validator = new Views.EulynxValidator();
             validator.ShowDialog();
             LoadingReport = "loading Euxml";
         }
-        public async Task<bool> exportToEuxml(string projectName, string exportPath)
+        
+        private async Task<bool> exportToEuxml(string projectName, string exportPath)
         {
             await Task.Run(() =>
             {   
@@ -149,18 +144,26 @@ namespace APLan.ViewModels
             
             return true;
         }
-        public void closeWindow(object parameter)
+        /// <summary>
+        /// close the window
+        /// </summary>
+        /// <param name="parameter"></param>
+        private void closeWindow(object parameter)
         {
             var objects = (object[])parameter;
             var window = (System.Windows.Window)objects[0];
             window.Close();
         }
-        public async Task<string> readingEuxmlAsText()
+        /// <summary>
+        /// read Euxml as text based on outputFolder and projectName.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> readingEuxmlAsText()
         {
             string text=null;
             await Task.Run(() =>
             {
-                text = File.ReadAllText(OutputFolder + "/eulynx" + projectName+ ".euxml");
+                text = File.ReadAllText(OutputFolder + "/eulynx" + _projectName + ".euxml");
             });
             
             return text;

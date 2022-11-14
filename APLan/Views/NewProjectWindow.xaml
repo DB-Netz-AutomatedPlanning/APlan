@@ -57,6 +57,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -72,6 +73,7 @@
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5" Grid.Column="0" Text="mdb file" x:Name="mdbfile"/>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" Text="euxml file" x:Name="euxmlfile"/>
         <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="7" Grid.Column="0" Text="ppxml file" x:Name="ppxmlfile"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="8" Grid.Column="0" Text="dxf file" x:Name="dxfFile"/>
         <!--content Right-->
         <TextBox 
                 Template="{StaticResource TextBoxBaseControlTemplate}"
@@ -113,6 +115,7 @@
             <ComboBoxItem Content = ".json" />
             <ComboBoxItem Content = ".mdb" />
             <ComboBoxItem Content = ".euxml"/>
+            <ComboBoxItem Content = ".dxf"/>
             <ComboBoxItem Content = ".ppxml" IsEnabled="False" />
         </ComboBox>
 
@@ -127,7 +130,6 @@
                        VerticalAlignment="Stretch"
                        TextChanged="Json_TextChanged"
                        Background="White"
-                       Foreground="{Binding HelperHintJsonFiles}"
                        Text="{Binding JsonFiles}"/>
             <Button   x:Name="ButtonEntwurfselement_KM" 
                       Grid.Column="1" 
@@ -148,7 +150,6 @@
                         VerticalAlignment="Stretch"
                         TextChanged="Tmdbtext_TextChanged"
                         Background="White"
-                        Foreground="{Binding HelperHintMdb}"
                         Text="{Binding MDB}"/>
             <Button     x:Name="Buttonmdb" 
                         Grid.Column="1" 
@@ -169,7 +170,6 @@
                         VerticalAlignment="Stretch"
                         TextChanged="euxmltext_TextChanged"
                         Background="White"
-                        Foreground="{Binding HelperHintEuxml}"
                         Text="{Binding EUXML}"/>
             <Button     x:Name="Buttoneuxml" 
                         Grid.Column="1" 
@@ -197,7 +197,27 @@
                         Command="{Binding BrowsePpxml}"
                         CommandParameter="{Binding ElementName=createProject}"></Button>
         </Grid>
-        <Grid  Height="30" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2">
+        <Grid x:Name="n5"  Height="30" Grid.Row="8" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBox  x:Name="dxfFileBox"  
+                        Grid.Column="0" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch"
+                        TextChanged="dxftext_TextChanged"
+                        Text="{Binding DXF}"/>
+            <Button     x:Name="dxf" 
+                        Grid.Column="1" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" 
+                        Content="Browse" 
+                        Command="{Binding BrowseDxf}"
+                        CommandParameter="{Binding ElementName=createProject}"></Button>
+
+        </Grid>
+        <Grid  Height="30" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>

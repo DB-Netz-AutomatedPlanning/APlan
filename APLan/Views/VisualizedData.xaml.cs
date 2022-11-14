@@ -24,14 +24,5 @@ namespace APLan.Views
         {
             InitializeComponent();
         }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            //if (APLan.Views.Draw.myKantenLines.ItemsSource == null)
-            //{
-            //    //Draw.myKantenLines.ItemsSource = APLan.App.Current.FindResource("newProjectViewModel");
-            //}
-            //;
-        }
     }
 }

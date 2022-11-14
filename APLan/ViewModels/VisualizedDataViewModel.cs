@@ -207,7 +207,7 @@ namespace APLan.ViewModels
         #endregion
 
         #region logic
-        public void ExecuteKanten(object parameter)
+        private void ExecuteKanten(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (gleisKantenVisibility == Visibility.Visible)
@@ -224,7 +224,7 @@ namespace APLan.ViewModels
                 
             }
         }
-        public void ExecuteKnoten(object parameter)
+        private void ExecuteKnoten(object parameter)
         {
 
             CheckBox box = ((CheckBox)parameter);
@@ -239,7 +239,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteHorizontal(object parameter)
+        private void ExecuteHorizontal(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_LA_Visibility == Visibility.Visible)
@@ -253,7 +253,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteVertical(object parameter)
+        private void ExecuteVertical(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_HO_Visibility == Visibility.Visible)
@@ -267,7 +267,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteMeilage(object parameter)
+        private void ExecuteMeilage(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_KM_Visibility == Visibility.Visible)
@@ -281,7 +281,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteCant(object parameter)
+        private void ExecuteCant(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_UH_Visibility == Visibility.Visible)
@@ -296,7 +296,7 @@ namespace APLan.ViewModels
             }
         }
 
-        public void ExecuteKantenPoints(object parameter)
+        private void ExecuteKantenPoints(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (GleisKantenPointsVisibility == Visibility.Visible)
@@ -310,7 +310,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteHorizontalPoints(object parameter)
+        private void ExecuteHorizontalPoints(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_LA_PointsVisibility == Visibility.Visible)
@@ -324,7 +324,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteVerticalPoints(object parameter)
+        private void ExecuteVerticalPoints(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_HO_PointsVisibility == Visibility.Visible)
@@ -338,7 +338,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteMeilagePoints(object parameter)
+        private void ExecuteMeilagePoints(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_KM_PointsVisibility == Visibility.Visible)
@@ -352,7 +352,7 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-        public void ExecuteCantPoints(object parameter)
+        private void ExecuteCantPoints(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
             if (Entwurfselement_UH_PointsVisibility == Visibility.Visible)
