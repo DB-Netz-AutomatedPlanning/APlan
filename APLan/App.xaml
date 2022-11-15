@@ -38,8 +38,8 @@
 
         <converters:LoadingAngleConverter x:Key="LoadingAngleConverter"></converters:LoadingAngleConverter>
         <converters:TitleConverter x:Key="TitleConverter"></converters:TitleConverter>
+        <converters:PdfDetailSizeConverter x:Key="PdfDetailSizeConverter"></converters:PdfDetailSizeConverter>
 
-   
         <!--export-->
         <viewModels:ExportWindowViewModel x:Key="exportWindowViewModel"/>
 

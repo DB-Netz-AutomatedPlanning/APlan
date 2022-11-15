@@ -99,6 +99,7 @@
     <None Remove="Resources\hauptTunneln.png" />
     <None Remove="Resources\Heisslauferortungsanlage.png" />
     <None Remove="Resources\Hektometerangabe.png" />
+    <None Remove="Resources\Icons\dblogo.png" />
     <None Remove="Resources\Icons\delete.png" />
     <None Remove="Resources\Icons\drag.png" />
     <None Remove="Resources\Icons\eulynx-logo.png" />
@@ -457,6 +458,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\EulynxSchema\DB.xsd" />
+    <Resource Include="Resources\Icons\dblogo.png" />
     <Resource Include="Resources\Icons\delete.png" />
     <Resource Include="Resources\Icons\drag.png" />
     <Resource Include="Resources\Icons\eulynx-logo.png" />

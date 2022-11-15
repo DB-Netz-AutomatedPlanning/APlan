@@ -12,7 +12,8 @@
         WindowState="Maximized"
         Icon="/Resources/Icons/eulynx-logo.png"
         ResizeMode="CanResize"
-        Title="MainWindow">
+        Title="MainWindow"
+         >
 
     <Window.DataContext>
         <StaticResource ResourceKey="drawViewModel"/>
@@ -67,11 +68,12 @@
                     Grid.Row="2" 
                     Grid.Column="0"
                     Grid.RowSpan="2" 
-                    Grid.ColumnSpan="2">
+                    Grid.ColumnSpan="2"
+                    >
             <views:pdfDetail x:Name="pdfDetailsView"
                          Background="White"
-                         Width="{Binding ElementName=baseCanvas, Path=ActualWidth, Converter={StaticResource HalfLengthConverter}}"
-                         Height="{Binding ElementName=baseCanvas, Path=ActualHeight, Converter={StaticResource HalfLengthConverter}}"
+                         Width="{Binding ElementName=baseCanvas, Path=ActualWidth, Converter={StaticResource PdfDetailSizeConverter}}"
+                         Height="{Binding ElementName=baseCanvas, Path=ActualHeight, Converter={StaticResource PdfDetailSizeConverter}}"
                          Visibility="{Binding Source={StaticResource planTabViewModel}, Path=PdfDetailViewerVisibility}"
                          Panel.ZIndex="2" Canvas.Right="0" Canvas.Bottom="0"/>
             <views:Draw x:Name="drawingTab"

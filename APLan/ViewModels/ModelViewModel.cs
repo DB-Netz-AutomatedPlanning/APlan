@@ -826,21 +826,5 @@ namespace APLan.ViewModels
                 bindedList.Add(node);
             }
         }
-
-        public void drawObjectDxf(double canvasSize,
-                    ObservableCollection<CustomPolyLine> Entwurfselement_KM_list,
-                    ObservableCollection<CustomPolyLine> Entwurfselement_LA_list,
-                    ObservableCollection<CustomPolyLine> Entwurfselement_HO_list,
-                    ObservableCollection<CustomPolyLine> Entwurfselement_UH_list,
-                    ObservableCollection<CustomPolyLine> gleiskantenList,
-                    ObservableCollection<CustomNode> gleisknotenList
-                    )
-        {
-
-            calculatePointsScaling(); //this should be always called before the Nodes due to templating in the XAML
-
-            //Views.Draw.drawingScrollViewer.ScrollToHorizontalOffset(50000);
-            //Views.Draw.drawingScrollViewer.ScrollToVerticalOffset(50000);
-        }
     }  
 }

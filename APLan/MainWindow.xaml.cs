@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace APLan
 {
@@ -54,5 +55,23 @@ namespace APLan
         {
 
         }
+
+        //private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //   pdfDetailsView.container.Width = e.NewSize.Width;
+        //   pdfDetailsView.container.Height = e.NewSize.Height;
+
+        //   double xChange = 1, yChange = 1;
+
+        //   if (e.PreviousSize.Width != 0)
+        //       xChange = (e.NewSize.Width / e.PreviousSize.Width);
+
+        //   if (e.PreviousSize.Height != 0)
+        //       yChange = (e.NewSize.Height / e.PreviousSize.Height);
+
+        //   ScaleTransform scale = new ScaleTransform(pdfDetailsView.container.LayoutTransform.Value.M11 * xChange, pdfDetailsView.container.LayoutTransform.Value.M22 * yChange);
+        //   pdfDetailsView.container.LayoutTransform = scale;
+        //   pdfDetailsView.container.UpdateLayout();
+        //}
     }
 }

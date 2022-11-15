@@ -26,14 +26,6 @@ namespace APLan.Views
         public pdfDetail()
         {
             InitializeComponent();
-            //pdfdetailCan = this.pdfdetailCanva;
-            //pdfDetailsControl = this.pdfdetails;
-            //ScaleTransform scale = new ScaleTransform(0.5, 0.5);
-            //pdfdetailCan.LayoutTransform = scale;
-            //pdfdetailCan.UpdateLayout();
-            //pdfdetailCan.Visibility = Visibility.Collapsed;
-            //pdfdetailCan.Visibility = Visibility.Collapsed;
-
         }
     }
 }

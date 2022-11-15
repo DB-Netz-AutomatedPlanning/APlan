@@ -522,25 +522,31 @@ namespace APLan.ViewModels
         }
         public void createDxfProject()
         {
+
             DxfDocument dxfReader = DxfDocument.Load(dxf);
+
+            foreach (netDxf.Entities.Point pnts in dxfReader.Points)
+            {
+                if (pnts.Layer.Name == "GlobalDrawingPoint")
+                {
+                    System.Windows.Point globalPoint = new System.Windows.Point((pnts.Position.X), (pnts.Position.Y));
+
+                    ViewModels.DrawViewModel.GlobalDrawingPoint = globalPoint;
+                }
+            }
+
             foreach (netDxf.Entities.Polyline plyLine in dxfReader.Polylines)
             {
+                               
                 if (plyLine.Layer.Name == "Entwurfselement_HO")
                 {
                     netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
                     PointCollection pointCollection_HO = new PointCollection();
-                    int i = 0;
                     foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
                     {
                         System.Windows.Point vertexPoint_HO = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
 
                         pointCollection_HO.Add(vertexPoint_HO);
-                        if (i == 0)
-                        {
-                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_HO;
-                            i++;
-                        }
-
                     }
                     CustomPolyLine newPolyline_HO = new CustomPolyLine();
 
@@ -553,18 +559,11 @@ namespace APLan.ViewModels
                 {
                     netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
                     PointCollection pointCollection_LA = new PointCollection();
-                    int i = 0;
                     foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
                     {
                         System.Windows.Point vertexPoint_LA = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
 
                         pointCollection_LA.Add(vertexPoint_LA);
-                        if (i == 0)
-                        {
-                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_LA;
-                            i++;
-                        }
-
                     }
                     CustomPolyLine newPolyline_LA = new CustomPolyLine();
 
@@ -577,18 +576,11 @@ namespace APLan.ViewModels
                 {
                     netDxf.Collections.ObservableCollection<netDxf.Entities.PolylineVertex> vertexCollection = plyLine.Vertexes;
                     PointCollection pointCollection_KM = new PointCollection();
-                    int i = 0;
+                    //int i = 0;
                     foreach (netDxf.Entities.PolylineVertex singleVertex in vertexCollection)
                     {
                         System.Windows.Point vertexPoint_KM = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
-
                         pointCollection_KM.Add(vertexPoint_KM);
-                        if (i == 0)
-                        {
-                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_KM;
-                            i++;
-                        }
-
                     }
                     CustomPolyLine newPolyline_KM = new CustomPolyLine();
 
@@ -607,12 +599,6 @@ namespace APLan.ViewModels
                         System.Windows.Point vertexPoint_UH = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
 
                         pointCollection_UH.Add(vertexPoint_UH);
-                        if (i == 0)
-                        {
-                            ViewModels.DrawViewModel.GlobalDrawingPoint = vertexPoint_UH;
-                            i++;
-                        }
-
                     }
                     CustomPolyLine newPolyline_UH = new CustomPolyLine();
 
@@ -659,11 +645,7 @@ namespace APLan.ViewModels
                     gleisknotenList.Add(node);
 
                 }
-            }
-
-
-            APLan.ViewModels.DrawViewModel.model = new ModelViewModel();
-            DrawViewModel.model.drawObjectDxf(ViewModels.DrawViewModel.sharedCanvasSize, Entwurfselement_HO_list, Entwurfselement_LA_list, Entwurfselement_KM_list, Entwurfselement_UH_list, gleiskantenList, gleisknotenList);
+            }        
         }
 
         /// <summary>

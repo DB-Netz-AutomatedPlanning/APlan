@@ -81,6 +81,8 @@ namespace APLan.ViewModels
             Signals = new ObservableCollection<Signalinfo>();
             VisitedElements = new List<PositioningNetElement>();
             safeFileDialog1 = new Microsoft.Win32.SaveFileDialog();
+
+            pdfDetailViewerVisibility = Visibility.Collapsed;
         }
         #endregion
 
@@ -124,7 +126,8 @@ namespace APLan.ViewModels
 
                 try
                 {
-                    //PdfDetailCanvasVisibility = Visibility.Visible;
+                    Application.Current.MainWindow.WindowState = WindowState.Maximized;
+
                     PdfDetailViewerVisibility = Visibility.Visible;
                     //getting static resource to remove the tile in canvas                  
                     object resourceCanvasGrid = Draw.drawing.TryFindResource("canvasGrid");
@@ -176,8 +179,8 @@ namespace APLan.ViewModels
                             Console.WriteLine(exep.Message);
                         }
                     }
+                    Application.Current.MainWindow.WindowState = WindowState.Normal;
                     PdfDetailViewerVisibility = Visibility.Collapsed;
-                    //PdfDetailCanvasVisibility = Visibility.Collapsed;
                 } 
             }
             else if (exportType == "dxf")
@@ -190,9 +193,11 @@ namespace APLan.ViewModels
                 Layer layer5_gleiskanten = new Layer("gleiskanten");
                 Layer layer6_gleisknoten = new Layer("gleisknoten");
                 Layer layer7_symbolImage = new Layer("symbolImage");
+                Layer layer8_GlobalPoint = new Layer("GlobalDrawingPoint");
                 netDxf.Entities.Polyline p1 = new netDxf.Entities.Polyline();
                 PolylineVertex polylineVertex = new PolylineVertex();
                 List<netDxf.Vector3> polylineVertexList = new List<netDxf.Vector3>();
+
 
                 
                 System.Collections.ObjectModel.ObservableCollection<CustomPolyLine> obsCustomPolyline_Entwurfselement_LA_list = Entwurfselement_LA_list;
@@ -203,6 +208,11 @@ namespace APLan.ViewModels
                 System.Collections.ObjectModel.ObservableCollection<CustomNode> obsCustomPolyline_gleisknotenList = gleisknotenList;
                 System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Polyline> obsDxfpolyLine = new System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Polyline>();
                 System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Point> obsDxfpoints = new System.Collections.ObjectModel.ObservableCollection<netDxf.Entities.Point>();
+
+                netDxf.Entities.Point globalPoint = new netDxf.Entities.Point(DrawViewModel.GlobalDrawingPoint.X, DrawViewModel.GlobalDrawingPoint.Y, 0.0);
+                globalPoint.Layer = layer8_GlobalPoint;
+
+
                 foreach (CustomPolyLine polyLne in obsCustomPolyline_Entwurfselement_LA_list)
                 {
                     PointCollection points = polyLne.Points;
@@ -264,7 +274,21 @@ namespace APLan.ViewModels
                     obsDxfpolyLine.Add(dxfPolyline);
                     polylineVertexList.Clear();
                 }
+                foreach (CustomPolyLine polyLne in obsCustomPolyline_gleiskantenList)
+                {
+                    PointCollection points = polyLne.Points;
+                    foreach (System.Windows.Point vertexPoint in points)
+                    {
+                        netDxf.Vector3 vec = new netDxf.Vector3((double)vertexPoint.X, (double)vertexPoint.Y, 0.0);
+                        //polylineVertex.Position = vec;
+                        polylineVertexList.Add(vec);
+                    }
+                    netDxf.Entities.Polyline dxfPolyline = new netDxf.Entities.Polyline(polylineVertexList);
+                    dxfPolyline.Layer = layer5_gleiskanten;
 
+                    obsDxfpolyLine.Add(dxfPolyline);
+                    polylineVertexList.Clear();
+                }
                 foreach (CustomNode customNode in obsCustomPolyline_gleisknotenList)
                 {
                     netDxf.Vector3 vec = new netDxf.Vector3((double)customNode.NodePoint.X, (double)customNode.NodePoint.Y, 0.0);
@@ -308,10 +332,12 @@ namespace APLan.ViewModels
                 {
                     dxf.AddEntity(point);
                 }
+                dxf.AddEntity(globalPoint);
+
                 safeFileDialog1.Filter = "Data Files (*.dxf)|*.dxf";
                 safeFileDialog1.DefaultExt = "dxf";
                 safeFileDialog1.AddExtension = true;
-
+                
                 if (safeFileDialog1.ShowDialog() == true)
                 {
                     //File.WriteAllText(safeFileDialog1.FileName, txtEditor.Text);
