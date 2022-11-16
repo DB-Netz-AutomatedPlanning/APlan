@@ -97,15 +97,21 @@ namespace APLan.ViewModels
             var window = ((System.Windows.Window)objects[3]);
             if (exportType!=null && projectName!=null && Directory.Exists(exportPath))
             {
-                await exportToEuxml(projectName,exportPath);
-                Views.ExportConfirmationAndValidation exportConfirmValidate = new();
-                exportConfirmValidate.Show();
-                startLoading();
-                LoadingReport = "Loading the Euxml file.";
-                Task<string> task = readingEuxmlAsText();
-                EuxmlResult = await task;
-                stopLoading();
-                LoadingReport = "";
+                if (ModelViewModel.eulynx == null)
+                {
+                    System.Windows.MessageBox.Show("No Eulynx Object to export");
+                }
+                else {
+                    await exportToEuxml(projectName,exportPath);
+                    Views.ExportConfirmationAndValidation exportConfirmValidate = new();
+                    exportConfirmValidate.Show();
+                    startLoading();
+                    LoadingReport = "Loading the Euxml file.";
+                    Task<string> task = readingEuxmlAsText();
+                    EuxmlResult = await task;
+                    stopLoading();
+                    LoadingReport = "";
+                }
             }
             else
             {
@@ -133,15 +139,13 @@ namespace APLan.ViewModels
         
         private async Task<bool> exportToEuxml(string projectName, string exportPath)
         {
-            await Task.Run(() =>
-            {   
-                ModelViewModel.eulynxService.serialization(ModelViewModel.eulynx, projectName, exportPath);
-                InfoExtractor.extractExtraInfo(exportPath, projectName);
-                Successfull = "Exporting to XML was Successfull";
-                //XmlReader xmlReader = XmlReader.Create(OutputFolder + "/eulynx" + projectName + ".euxml");
-            });
-            
-            
+                await Task.Run(() =>
+                {
+                    ModelViewModel.eulynxService.serialization(ModelViewModel.eulynx, projectName, exportPath);
+                    InfoExtractor.extractExtraInfo(exportPath, projectName);
+                    Successfull = "Exporting to XML was Successfull";
+                    //XmlReader xmlReader = XmlReader.Create(OutputFolder + "/eulynx" + projectName + ".euxml");
+                });
             return true;
         }
         /// <summary>
@@ -163,9 +167,9 @@ namespace APLan.ViewModels
             string text=null;
             await Task.Run(() =>
             {
-                text = File.ReadAllText(OutputFolder + "/eulynx" + _projectName + ".euxml");
+                  text = File.ReadAllText(OutputFolder + "/eulynx" + _projectName + ".euxml");
+
             });
-            
             return text;
         }
         #endregion

@@ -48,8 +48,7 @@ namespace APLan.ViewModels
         {
             Globals.routeNumber = 6624;
             eulynxService = EulynxService.getInstance();
-            db = Database.getInstance();
-            Database.setDBPath(projectPath);
+
             loadingObject = System.Windows.Application.Current.FindResource("globalLoading") as Loading;
             assignInitialBoundary();
             generateAEuLynxObject(country, format,
@@ -122,18 +121,7 @@ namespace APLan.ViewModels
             firspoint = new Point(0,0); //reset the first point in each drawing call. very important.
 
             //clear old data.
-            gleiskantenList.Clear();
-            gleiskantenPointsList.Clear();
-            Entwurfselement_LA_list.Clear();
-            Entwurfselement_LAPointsList.Clear();
-            Entwurfselement_KM_list.Clear();
-            Entwurfselement_KMPointsList.Clear();
-            Entwurfselement_HO_list.Clear();
-            Entwurfselement_HOPointsList.Clear();
-            Entwurfselement_UH_list.Clear();
-            Entwurfselement_UHPointsList.Clear();
-            gleisknotenList.Clear();
-            Signals.Clear();
+            clearAllVisualizedData();
 
 
             DataContainer = eulynx.hasDataContainer;
@@ -158,10 +146,14 @@ namespace APLan.ViewModels
             fetchNodesForBinding(gleisknotenList, nodes);
 
             //calculatePointsScaling(); //this should be always called before the Nodes due to templating in the XAML
+            if (Database.checkDB() == true)
+            {
+                extractOnTrackSignals(eulynx);
+                extractMainSignals(eulynx);
+            }
             
-            PlanningTabViewModel.extractMainSignals(eulynx);
-            PlanningTabViewModel.extractOnTrackSignals(eulynx);
-            
+
+
             return true;
         }
         /// <summary>
@@ -826,5 +818,6 @@ namespace APLan.ViewModels
                 bindedList.Add(node);
             }
         }
+
     }  
 }

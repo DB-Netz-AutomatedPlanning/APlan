@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using System.IO;
 
 namespace aplan.core
 {
@@ -35,12 +36,24 @@ namespace aplan.core
         /// </summary>
         public LiteDatabase accessDB()
         {
-            return new LiteDatabase(projectPath + "/APlan.db");
+            return new LiteDatabase(projectPath + "/APlan.db");      
         }
 
         public static void setDBPath(string path)
         {
             projectPath = path;
+        }
+
+        public static bool checkDB()
+        {
+            if (File.Exists(projectPath + "/APlan.db"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>

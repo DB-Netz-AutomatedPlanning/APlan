@@ -220,15 +220,6 @@ C:\APLan_3\APLan\bin\Release\net6.0-windows\GeoJSON.Net.dll
 C:\APLan_3\APLan\bin\Release\net6.0-windows\LiteDB.dll
 C:\APLan_3\APLan\bin\Release\net6.0-windows\Microsoft.Xaml.Behaviors.dll
 C:\APLan_3\APLan\bin\Release\net6.0-windows\Newtonsoft.Json.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\IKVM.OpenJDK.Charsets.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\IKVM.OpenJDK.Core.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\IKVM.OpenJDK.Localedata.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\IKVM.OpenJDK.Text.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\IKVM.OpenJDK.Util.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\IKVM.OpenJDK.XML.API.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\IKVM.Runtime.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\saxon-he-10.8.dll
-C:\APLan_3\APLan\bin\Release\net6.0-windows\saxon-he-api-10.8.dll
 C:\APLan_3\APLan\bin\Release\net6.0-windows\System.Data.OleDb.dll
 C:\APLan_3\APLan\bin\Release\net6.0-windows\de\EulynxDpLibrary.resources.dll
 C:\APLan_3\APLan\bin\Release\net6.0-windows\fr\EulynxDpLibrary.resources.dll

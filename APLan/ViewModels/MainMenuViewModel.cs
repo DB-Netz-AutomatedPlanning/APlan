@@ -10,6 +10,7 @@ using APLan.HelperClasses;
 using System.Windows.Media;
 using System.Windows.Forms;
 using aplan.eulynx;
+using System.Windows.Shapes;
 
 namespace APLan.ViewModels
 {
@@ -109,6 +110,7 @@ namespace APLan.ViewModels
             if (!SavePath.Equals(""))
             {
                 saveAndSaveAs(SavePath);
+                InfoExtractor.extractExtraInfo(SavePath, null);
             } 
         }
         /// <summary>
@@ -172,13 +174,13 @@ namespace APLan.ViewModels
                     bf.Serialize(fsout, allInfo);
                 }
                 fsout.Close();
+                //File.Copy(NewProjectViewModel.currentProjectPath + "/" + NewProjectViewModel.currentProjectName + "/Aplan.db", SavePath + "/" + "/Aplan.db", true);
             }
             else
             {
                 System.Windows.MessageBox.Show("Saving directory don't Exist. Please create a project.");
             }
         }
-
         #endregion
     }
 }

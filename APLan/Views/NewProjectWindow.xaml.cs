@@ -51,8 +51,8 @@ namespace APLan.Views
         #region logic
         private void fileType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (createProject != null)
-                createProject.IsEnabled = false;
+            //if (createProject != null)
+            //    createProject.IsEnabled = false;
             if (((System.Windows.Controls.ComboBox)sender).SelectedItem.ToString().Equals(".json"))
             {
                 collapseOtherChoices(4);
@@ -81,7 +81,7 @@ namespace APLan.Views
             if (Directory.Exists(@$"{directortPathBox.Text}"))
             {
                 directortPathBox.Foreground = Brushes.Black;
-                directortPathBox.Background = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;   
+                directortPathBox.Background = themeColor;
             }
             else if (directortPathBox.Text.Equals(DirPathHint))
             {
@@ -142,18 +142,18 @@ namespace APLan.Views
         {
             if (File.Exists(@$"{dxfFileBox.Text}") && Path.GetExtension(@$"{dxfFileBox.Text}").EqualsIgnoreCase(".dxf"))
             {
-                euxmlFileBox.Foreground = Brushes.Black;
-                euxmlFileBox.Background = themeColor;
+                dxfFileBox.Foreground = Brushes.Black;
+                dxfFileBox.Background = themeColor;
             }
             else if (dxfFileBox.Text.Equals(DxfFileHint))
             {
-                euxmlFileBox.Foreground = Brushes.Gray;
-                euxmlFileBox.Background = Brushes.White;
+                dxfFileBox.Foreground = Brushes.Gray;
+                dxfFileBox.Background = Brushes.White;
             }
             else
             {
-                euxmlFileBox.Foreground = Brushes.Black;
-                euxmlFileBox.Background = Brushes.White;
+                dxfFileBox.Foreground = Brushes.Black;
+                dxfFileBox.Background = Brushes.White;
             }
             activateCreation();
         }
@@ -243,7 +243,7 @@ namespace APLan.Views
         public bool checkAllJson()
         {
             bool check = true;
-            if (newprojectClass.Entwurfselement_HO==null)
+            if (newprojectClass.Entwurfselement_HO == null)
             {
                 check = false;
             }
@@ -276,26 +276,47 @@ namespace APLan.Views
         public void activateCreation()
         {
             
-            if (fileType!=null && jsonFilesBox != null && mdbFileBox != null && euxmlFileBox!=null && createProject!=null)
+            if (fileType!=null && jsonFilesBox != null && mdbFileBox != null && euxmlFileBox!=null && createProject!=null && dxfFileBox != null)
             {
                 bool check = true;
                 if (projectNameBox.Background != themeColor || directortPathBox.Background != themeColor)
                 {
                     check = false;
                 }
-                if (fileType.SelectedIndex== 0  && jsonFilesBox.Background!=themeColor)
+
+                if (fileType.SelectedIndex == 0)
                 {
-                    check = false;
+                    if (jsonFilesBox.Background != themeColor)
+                    {
+                        check = false;
+                    }               
                 }
-                else if(fileType.SelectedIndex == 1  && mdbFileBox.Background != themeColor)
+
+                if (fileType.SelectedIndex == 1)
                 {
-                    check = false;
+                    if (mdbFileBox.Background != themeColor)
+                    {
+                        check = false;
+                    }
                 }
-                else if (fileType.SelectedIndex == 2  && euxmlFileBox.Background != themeColor)
+
+                if (fileType.SelectedIndex == 2)
                 {
-                    check = false;
+                    if (euxmlFileBox.Background != themeColor)
+                    {
+                        check = false;
+                    }
                 }
-                if (check==true)
+
+                if (fileType.SelectedIndex == 3)
+                {
+                    if (dxfFileBox.Background != themeColor)
+                    {
+                        check = false;
+                    }
+                }
+
+                if (check == true)
                 {
                     createProject.IsEnabled = true;
                 }

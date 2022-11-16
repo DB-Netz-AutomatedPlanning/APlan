@@ -104,6 +104,9 @@ namespace APLan.ViewModels
             await validate(XML);
             //validate according to the rules in German book.
             await RulesValidate(XML);
+
+            createReportFile(Report, Path + "/" + "XSDvalidation" + ".txt");
+            createReportFile(Report_rules, Path + "/" + "RulesReport" + ".txt");
             stopLoading();
         }
         private void ExecuteCancel(object parameter)
@@ -151,9 +154,7 @@ namespace APLan.ViewModels
                     {
                         validationReport += "File don't contain the required name spaces";
                     }
-
-                }
-                createReportFile(validationReport, Path+"/"+nameof(validationReport)+".txt");
+                }    
             });
             Report = validationReport;
             return validationReport;
@@ -171,7 +172,6 @@ namespace APLan.ViewModels
                 string RulesReport = null;
                 HelperClasses.RulesValidator validator = new HelperClasses.RulesValidator(euxmlPath);
                 RulesReport = validator.runRulesTesting();
-                createReportFile(RulesReport, Path + "/" + nameof(RulesReport) + ".txt");
                 Report_rules = RulesReport;
             });
             return true;
@@ -186,6 +186,9 @@ namespace APLan.ViewModels
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
+            }
+            else
+            {
                 using (FileStream fs = File.Create(filePath))
                 {
                     // Add some text to file    
@@ -193,7 +196,6 @@ namespace APLan.ViewModels
                     fs.Write(title, 0, title.Length);
                 }
             }
-
         }
         #endregion
     }

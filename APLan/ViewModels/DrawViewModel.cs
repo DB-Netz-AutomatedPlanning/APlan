@@ -1073,7 +1073,7 @@ namespace APLan.ViewModels
             MoveOffest = new Point(-1, -1);
             DraOffset = new Point(-1, -1);
         }
-        public void childRemover(UIElement element)
+        public static void childRemover(UIElement element)
         {
             if (element!=null)
             {
@@ -1082,6 +1082,18 @@ namespace APLan.ViewModels
                 {
                     canvas.Children.Remove(element);
                 }
+            }
+        }
+
+        /// <summary>
+        /// remove all children from its canvas parent.
+        /// </summary>
+        /// <param name="toBeStored"></param>
+        public static void childrenRemover(List<UIElement> children)
+        {
+            foreach (var child in children)
+            {
+                childRemover(child);
             }
         }
         #endregion

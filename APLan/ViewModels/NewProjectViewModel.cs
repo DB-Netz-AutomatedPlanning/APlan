@@ -41,7 +41,6 @@ namespace APLan.ViewModels
         private string projectPath = null;
         private string projectName = null;
         private string dxf = null;
-        
         public static string currentProjectPath = null; //this would be used to know our project path.
         public static string currentProjectName = null; //this would be used to know our project path.
 
@@ -282,11 +281,7 @@ namespace APLan.ViewModels
             clearOldSelectedFiles();
             openFileDialog1.Filter = "Types (*.dxf)|*.dxf";
             openFileDialog1.ShowDialog();
-            dxf = openFileDialog1.FileName;
-            if (dxf != null)
-            {
-                ((System.Windows.Controls.Button)parameter).IsEnabled = true;
-            }
+            DXF = openFileDialog1.FileName;
         }
         private void ExecuteAddPath(object parameter)
         {
@@ -294,10 +289,6 @@ namespace APLan.ViewModels
             if (Directory.Exists(folderBrowserDialog1.SelectedPath))
             {
                 ProjectPath = folderBrowserDialog1.SelectedPath;
-            }
-            else
-            {
-                ProjectPath = "please select a project directory";
             }
         }
         private void ExecuteBrowseJson(object parameter)
@@ -326,14 +317,6 @@ namespace APLan.ViewModels
             openFileDialog1.Filter = "Types (*.MDB)|*.MDB";
             openFileDialog1.ShowDialog();
             MDB = openFileDialog1.FileName;
-            if (MDB!=null && File.Exists(MDB) && MDB != "")
-            {
-                ((System.Windows.Controls.Button)parameter).IsEnabled = true;
-            }
-            else
-            {
-                MDB = "please select single .mdb file";
-            }
         }
         private void ExecuteBrowseEuxml(object parameter)
         {
@@ -341,14 +324,6 @@ namespace APLan.ViewModels
             openFileDialog1.Filter = "Types (*.euxml)|*.euxml";
             openFileDialog1.ShowDialog();
             EUXML = openFileDialog1.FileName;
-            if (EUXML != null && File.Exists(EUXML) && EUXML!="")
-            {
-                ((System.Windows.Controls.Button)parameter).IsEnabled = true;
-            }
-            else
-            {
-                EUXML = "please select single .euxml file";
-            }
         }
         private void ExecuteBrowsePpxml(object parameter)
         {
@@ -356,11 +331,6 @@ namespace APLan.ViewModels
             openFileDialog1.Filter = "Types (*.ppxml)|*.ppxml";
             openFileDialog1.ShowDialog();
             PPXML = openFileDialog1.FileName;
-            if (PPXML != null)
-            {
-                ((System.Windows.Controls.Button)parameter).IsEnabled = true;
-            }
-
         }
         private void ExecuteCreate(object parameter)
         {
@@ -369,8 +339,10 @@ namespace APLan.ViewModels
             {
                 ((Window)parameters[1]).Close();
                 //WelcomeVisibility = Visibility.Collapsed;
-                activateButtons();
+               
                 createModel(parameters[0].ToString());
+                activateButtons();
+                
             }   
         }
         private async void ExecuteOpen(object parameter)
@@ -401,6 +373,7 @@ namespace APLan.ViewModels
                     }
                 }
                 CurrentProjectNameBind = OpenProjectPath.Split("\\")[^1];
+                
                 activateButtons();
                 WelcomeVisibility = Visibility.Collapsed;
             }
@@ -411,8 +384,7 @@ namespace APLan.ViewModels
         private void ExecuteCancel(object parameter)
         {
             (parameter as Window)?.Close();
-        }
-        
+        }       
         private void clearOldSelectedFiles()
         {
             Entwurfselement_KM = null;
@@ -448,6 +420,9 @@ namespace APLan.ViewModels
             }
             transferFilesToPath(targetFolderPath);
             CurrentProjectNameBind = projectName;
+
+            ModelViewModel.db = Database.getInstance();
+            Database.setDBPath(ProjectPath+"\\"+ProjectName);
             return flag;
         }
         /// <summary>
@@ -492,6 +467,10 @@ namespace APLan.ViewModels
             {
                 File.Copy(PPXML, path + "/" + Path.GetFileName(PPXML), true);
             }
+            if (DXF != null && File.Exists(DXF))
+            {
+                File.Copy(DXF, path + "/" + Path.GetFileName(DXF), true);
+            }
         }
         /// <summary>
         /// activate the buttons like save, save as ... that are not allowed to be activated in the beginning.
@@ -499,7 +478,7 @@ namespace APLan.ViewModels
         private void activateButtons()
         {
             SaveButtonActive = true;
-            SaveAsButtonActive = true;
+            //SaveAsButtonActive = true;
         }
         /// <summary>
         /// load .APlan file which represent the saved information.
@@ -522,7 +501,7 @@ namespace APLan.ViewModels
         }
         public void createDxfProject()
         {
-
+            
             DxfDocument dxfReader = DxfDocument.Load(dxf);
 
             foreach (netDxf.Entities.Point pnts in dxfReader.Points)
@@ -642,6 +621,7 @@ namespace APLan.ViewModels
 
 
                     node.NodePoint = newPoint;
+                    node.Color = System.Windows.Media.Brushes.Red;
                     gleisknotenList.Add(node);
 
                 }
@@ -656,9 +636,22 @@ namespace APLan.ViewModels
         {
             loadingObject.LoadingReport = "Creating Eulynx Object...";
             loadingObject.startLoading();
+            resetProjectSettings();
+            
             if (format.Equals(".json"))
             {
-                await createJSONproject();
+                JSONfileChecker checker = new JSONfileChecker(Entwurfselement_KM, Entwurfselement_LA, Entwurfselement_HO, Entwurfselement_UH, Gleiskanten, Gleisknoten);
+                var checkResult = checker.checkAllFiles();
+
+                if (!checkResult.Equals(""))
+                {
+                    System.Windows.MessageBox.Show(checkResult);
+                }
+                else
+                {
+                    await createJSONproject();
+                }
+                
             }
             else if (format.Equals(".mdb"))
             {
@@ -672,6 +665,8 @@ namespace APLan.ViewModels
             {
                 createDxfProject();
             }
+            
+            
             loadingObject.LoadingReport = "Finished";
             loadingObject.stopLoading();
             WelcomeVisibility = Visibility.Collapsed;
@@ -711,8 +706,6 @@ namespace APLan.ViewModels
 
                 ModelViewModel model = new();
                 await model.drawObject(ViewModels.DrawViewModel.sharedCanvasSize);
-
-                var planningTabViewModel = System.Windows.Application.Current.FindResource("planTabViewModel") as PlanningTabViewModel;
             }
             else
             {
@@ -803,6 +796,16 @@ namespace APLan.ViewModels
                 ModelViewModel.eulynx = eulynxService.deserialization(file);
             });
             return true;
+        }
+
+        /// <summary>
+        /// reset necessary information for new project.
+        /// </summary>
+        private void resetProjectSettings()
+        {
+            clearAllVisualizedData();
+            DrawViewModel.childrenRemover(DrawViewModel.toBeStored);
+            ModelViewModel.eulynx = null;
         }
         #endregion
     }

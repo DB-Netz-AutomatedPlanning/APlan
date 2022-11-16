@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "TRgym+g4oUKaN+16y9iuMTEr5qOcly2GT4v2Y6+BbFAu84uhjyDenhwF0EARhX6ZsIqMJ47chOkadBwAZ+Hm0A==",
+  "dgSpecHash": "STmfThsybsU5DDpF1MHI1rosKuAWWWQbpTwDNoU+xFGyJh3xGupeXmOzcTxCpBawLzOfYxfXLv4kR1m3pLRzVg==",
   "success": true,
   "projectFilePath": "C:\\APLan_3\\APLan\\APLan.csproj",
   "expectedPackageFiles": [
@@ -14,7 +14,6 @@
     "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.39\\microsoft.xaml.behaviors.wpf.1.1.39.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\netdxf.standard\\2.1.1\\netdxf.standard.2.1.1.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
-    "C:\\Users\\k7ada\\.nuget\\packages\\saxon-he\\10.8.0\\saxon-he.10.8.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.collections.nongeneric\\4.3.0\\system.collections.nongeneric.4.3.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.configuration.configurationmanager\\6.0.0\\system.configuration.configurationmanager.6.0.0.nupkg.sha512",
@@ -40,16 +39,5 @@
     "C:\\Users\\k7ada\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Saxon-HE 10.8.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
-      "libraryId": "Saxon-HE",
-      "targetGraphs": [
-        "net6.0-windows7.0"
-      ]
-    }
-  ]
+  "logs": []
 }

@@ -29,8 +29,9 @@
             <!--<Button Grid.Column="0" Content="Modify Data" VerticalAlignment="Stretch"/>-->
             <StackPanel>
                 <Button Width="40" Height="40"
-                    Grid.Column="1" ToolTip="Plan"
-                        Command="{Binding PlanButton}">
+                        Grid.Column="1" ToolTip="Plan"
+                        Command="{Binding PlanButton}"
+                        IsEnabled="{Binding Source={StaticResource baseViewModel}, Path=ActivatePlanning}">
                     <Image Source="/Resources/Icons/plan.png" Stretch="Fill"/>
                 </Button>
                 <ComboBox SelectedItem="{Binding PlanType, Mode=TwoWay}" >

@@ -9,7 +9,7 @@ namespace aplan.eulynx.validator
         //instance
         private static EulynxXmlValidator eulynxXmlValidator;
         private ValidatorSchema validatorSchema;
-        private ValidatorSchematron validatorSchematron;
+        //private ValidatorSchematron validatorSchematron;
         public string inputUri { get; set; }
 
         //singleton constructor
@@ -40,10 +40,10 @@ namespace aplan.eulynx.validator
             return report;
         }
 
-        public void reportConsole()
-        {
-            Console.WriteLine(validatorSchema.Status | validatorSchematron.Status);
-        }
+        //public void reportConsole()
+        //{
+        //    Console.WriteLine(validatorSchema.Status | validatorSchematron.Status);
+        //}
 
         public ArrayList XSDvalidationVersionCheck(ArrayList nameSapces)
         {

@@ -5,11 +5,13 @@
              xmlns:converters="clr-namespace:APLan.Converters"
              xmlns:helperClasses="clr-namespace:APLan.HelperClasses"
              xmlns:viewModels="clr-namespace:APLan.ViewModels"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <Cursor x:Key="arrow">Arrow</Cursor>
         <SolidColorBrush x:Key="backGround">white</SolidColorBrush>
         <SolidColorBrush x:Key="themeColor">#cd7ef0</SolidColorBrush>
+        <s:Boolean x:Key="planningActivate">True</s:Boolean>
 
         <helperClasses:Loading x:Key="globalLoading"></helperClasses:Loading>
 
@@ -39,6 +41,9 @@
         <converters:LoadingAngleConverter x:Key="LoadingAngleConverter"></converters:LoadingAngleConverter>
         <converters:TitleConverter x:Key="TitleConverter"></converters:TitleConverter>
         <converters:PdfDetailSizeConverter x:Key="PdfDetailSizeConverter"></converters:PdfDetailSizeConverter>
+
+        <!--baseViewModel-->
+        <viewModels:BaseViewModel x:Key="baseViewModel"/>
 
         <!--export-->
         <viewModels:ExportWindowViewModel x:Key="exportWindowViewModel"/>

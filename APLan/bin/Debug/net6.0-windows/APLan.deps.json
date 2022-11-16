@@ -14,7 +14,6 @@
           "LiteDB": "5.0.11",
           "Microsoft.Xaml.Behaviors.Wpf": "1.1.39",
           "Newtonsoft.Json": "13.0.1",
-          "Saxon-HE": "10.8.0",
           "System.Collections.NonGeneric": "4.3.0",
           "System.Data.OleDb": "6.0.0",
           "System.Drawing.Common": "6.0.0",
@@ -104,46 +103,6 @@
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "13.0.0.0",
             "fileVersion": "13.0.1.25517"
-          }
-        }
-      },
-      "Saxon-HE/10.8.0": {
-        "runtime": {
-          "lib/net40/IKVM.OpenJDK.Charsets.dll": {
-            "assemblyVersion": "8.1.5717.0",
-            "fileVersion": "8.1.5717.0"
-          },
-          "lib/net40/IKVM.OpenJDK.Core.dll": {
-            "assemblyVersion": "8.1.5717.0",
-            "fileVersion": "8.1.5717.0"
-          },
-          "lib/net40/IKVM.OpenJDK.Localedata.dll": {
-            "assemblyVersion": "8.1.5717.0",
-            "fileVersion": "8.1.5717.0"
-          },
-          "lib/net40/IKVM.OpenJDK.Text.dll": {
-            "assemblyVersion": "8.1.5717.0",
-            "fileVersion": "8.1.5717.0"
-          },
-          "lib/net40/IKVM.OpenJDK.Util.dll": {
-            "assemblyVersion": "8.1.5717.0",
-            "fileVersion": "8.1.5717.0"
-          },
-          "lib/net40/IKVM.OpenJDK.XML.API.dll": {
-            "assemblyVersion": "8.1.5717.0",
-            "fileVersion": "8.1.5717.0"
-          },
-          "lib/net40/IKVM.Runtime.dll": {
-            "assemblyVersion": "8.1.5717.0",
-            "fileVersion": "8.1.5717.0"
-          },
-          "lib/net40/saxon-he-10.8.dll": {
-            "assemblyVersion": "10.8.0.0",
-            "fileVersion": "10.8.0.0"
-          },
-          "lib/net40/saxon-he-api-10.8.dll": {
-            "assemblyVersion": "10.8.0.0",
-            "fileVersion": "10.8.0.0"
           }
         }
       },
@@ -384,13 +343,6 @@
       "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "path": "newtonsoft.json/13.0.1",
       "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
-    },
-    "Saxon-HE/10.8.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-2Nt8l2/yQadlpQmeUVKmJrrtTYP5ymZyVpwLxbLU9urWx6HpzDYJLv4+fjc/A6HbVMJJiE8dkoBjWx6GUwwy+Q==",
-      "path": "saxon-he/10.8.0",
-      "hashPath": "saxon-he.10.8.0.nupkg.sha512"
     },
     "System.Collections/4.3.0": {
       "type": "package",
