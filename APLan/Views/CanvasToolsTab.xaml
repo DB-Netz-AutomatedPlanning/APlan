@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:APLan.Views"
              xmlns:commands="clr-namespace:APLan.Commands"
              xmlns:converters="clr-namespace:APLan.Converters" 
-             mc:Ignorable="d"  
+             mc:Ignorable="d"
              DataContext="{StaticResource canvasToolsTabViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -102,10 +102,6 @@
                 commands:MouseBehaviour.MouseDownCommand="{Binding Source={StaticResource canvasToolsTabViewModel}, Path=MouseDownCommand}">
             </Image>
         </Viewbox>
-        <!--<Button ToolTip="Delete selected items (press delete)"
-                HorizontalAlignment="Center">
-            <Image Source="/Resources/Icons/delete.png" Stretch="Fill"></Image>
-        </Button>-->
         <Viewbox Style="{StaticResource viewbox2}">
             <StackPanel>
                 <WrapPanel HorizontalAlignment="Center">
@@ -131,24 +127,6 @@
                             commands:SliderBehaviour.ItemRotateSliderCommand="{Binding RotateItemSlider}"/>
             </StackPanel>
         </Viewbox>
-
-        <!--<StackPanel DataContext="{StaticResource drawViewModel}">
-                <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBox x:Name="scaleInput"
-                          Width="100" 
-                         Text="{Binding ScaleTextBox}"/>
-                <Button x:Name="scale" 
-                         Margin="5" 
-                         ToolTip="Scale Selection" 
-                         HorizontalAlignment="Center">
-                        <Image Source="/Resources/Icons/scale.png" Stretch="Fill"></Image>
-                    </Button>
-                </WrapPanel>
-                <Slider   x:Name="ItemScaleSlider"  
-                            Width="200"
-                            Value="{Binding ElementName=scaleInput, Path=Text, Converter={StaticResource stringToDoubleconverter}}" Minimum="0.1" Maximum="10" SmallChange="0.1"
-                            commands:SliderBehaviour.ItemScaleSliderCommand="{Binding ScaleItemSlider}"/>
-            </StackPanel>-->
         <Viewbox Style="{StaticResource viewbox2}">
             <StackPanel>
                 <WrapPanel HorizontalAlignment="Center">
@@ -175,6 +153,5 @@
                             commands:SliderBehaviour.SliderCommand="{Binding RotateCanvasSlider}"/>-->
             </StackPanel>
         </Viewbox>
-
     </WrapPanel>
 </UserControl>

@@ -1,4 +1,6 @@
 ﻿using APLan.Commands;
+using APLan.HelperClasses;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -69,6 +71,17 @@ namespace APLan.ViewModels
         public ICommand SelectButton { get; set; }
         public ICommand MoveButton { get; set; }
         public ICommand DragButton { get; set; }
+
+        private RelayCommand _mouseDownCommand;
+        public RelayCommand MouseDownCommand
+        {
+            get
+            {
+                if (_mouseDownCommand == null) return _mouseDownCommand = new RelayCommand(param => ExecuteMouseDown((MouseEventArgs)param));
+                return _mouseDownCommand;
+            }
+            set { _mouseDownCommand = value; }
+        }
         #endregion
 
         #region constructor
@@ -156,6 +169,14 @@ namespace APLan.ViewModels
         /// allow draging for a text
         /// </summary>
         /// <param name="e"></param>
+        private void ExecuteMouseDown(MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                CustomCanvasText textBox = new();
+                DragDrop.DoDragDrop(textBox, new DataObject(DataFormats.Serializable, textBox), DragDropEffects.Move);
+            }
+        }
         #endregion
     }
 }
