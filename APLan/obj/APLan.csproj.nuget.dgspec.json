@@ -1,28 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\APLan_3\\APLan\\APLan.csproj": {}
+    "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\APLan.csproj": {}
   },
   "projects": {
-    "C:\\APLan_3\\APLan\\APLan.csproj": {
+    "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\APLan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\APLan_3\\APLan\\APLan.csproj",
+        "projectUniqueName": "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\APLan.csproj",
         "projectName": "APLan",
-        "projectPath": "C:\\APLan_3\\APLan\\APLan.csproj",
-        "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
-        "outputPath": "C:\\APLan_3\\APLan\\obj\\",
+        "projectPath": "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\APLan.csproj",
+        "packagesPath": "C:\\Users\\OlatunjiFelixAjala\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "D:\\Users\\BKU\\OlatunjiFelixAjala\\AppData(Roaming)\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0-windows"
         ],
         "sources": {
-          "F:\\APlan_Libraries\\1.0.0_With_DifferentSize": {},
-          "F:\\SCI_XX\\ApplicationLayer\\RastaApplication\\Libraries": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "D:\\Users\\BKU\\OlatunjiFelixAjala\\Documents\\Nuget Local": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
