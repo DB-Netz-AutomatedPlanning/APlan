@@ -151,9 +151,6 @@ namespace APLan.ViewModels
                 extractOnTrackSignals(eulynx);
                 extractMainSignals(eulynx);
             }
-            
-
-
             return true;
         }
         /// <summary>
@@ -541,7 +538,7 @@ namespace APLan.ViewModels
         }
 
         /// <summary>
-        /// extract the stard and end kilometer value of a polyline.
+        /// extract the start and end kilometer value of a polyline.
         /// </summary>
         /// <param name="coordinate"></param>
         /// <param name="polyLine"></param>

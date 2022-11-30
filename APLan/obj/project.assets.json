@@ -2099,11 +2099,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\OlatunjiFelixAjala\\Source\\Repos\\APlan\\APLan\\APLan.csproj",
+      "projectUniqueName": "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\APLan.csproj",
       "projectName": "APLan",
-      "projectPath": "C:\\Users\\OlatunjiFelixAjala\\Source\\Repos\\APlan\\APLan\\APLan.csproj",
+      "projectPath": "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\APLan.csproj",
       "packagesPath": "C:\\Users\\OlatunjiFelixAjala\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\OlatunjiFelixAjala\\Source\\Repos\\APlan\\APLan\\obj\\",
+      "outputPath": "C:\\Users\\OlatunjiFelixAjala\\source\\repos\\APlan\\APLan\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "D:\\Users\\BKU\\OlatunjiFelixAjala\\AppData(Roaming)\\NuGet\\NuGet.Config",

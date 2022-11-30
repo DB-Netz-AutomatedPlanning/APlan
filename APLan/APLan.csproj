@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>APLan.App</StartupObject>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <Platforms>AnyCPU;x86</Platforms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
