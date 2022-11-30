@@ -116,6 +116,7 @@ namespace APLan.ViewModels
                         eulynxService.plan(EulynxObject, dataBase, etcs);
                         extractMainSignals(EulynxObject);
                         extractOnTrackSignals(EulynxObject);
+                        MessageBox.Show("Done!");
                     }
                     else
                     {
@@ -172,7 +173,6 @@ namespace APLan.ViewModels
                         window.Content = new DocumentViewer { Document = fds };
 
                         window.ShowDialog();
-
                     }
 
 
