@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "STmfThsybsU5DDpF1MHI1rosKuAWWWQbpTwDNoU+xFGyJh3xGupeXmOzcTxCpBawLzOfYxfXLv4kR1m3pLRzVg==",
+  "dgSpecHash": "E9QnzFoQnqwp6VVMOPt5I6yQf2ZHcyFN9Ni6l+Byq5socigVsqTCDUsfkrgxS1Xotz417KcfA8Mrek7SekbBnw==",
   "success": true,
   "projectFilePath": "C:\\APLan_3\\APLan\\APLan.csproj",
   "expectedPackageFiles": [
@@ -37,7 +37,11 @@
     "C:\\Users\\k7ada\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.threading\\4.3.0\\system.threading.4.3.0.nupkg.sha512",
     "C:\\Users\\k7ada\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
-    "C:\\Users\\k7ada\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512"
+    "C:\\Users\\k7ada\\.nuget\\packages\\system.windows.extensions\\6.0.0\\system.windows.extensions.6.0.0.nupkg.sha512",
+    "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.11\\microsoft.aspnetcore.app.ref.6.0.11.nupkg.sha512",
+    "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.11\\microsoft.windowsdesktop.app.ref.6.0.11.nupkg.sha512",
+    "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.11\\microsoft.netcore.app.ref.6.0.11.nupkg.sha512",
+    "C:\\Users\\k7ada\\.nuget\\packages\\microsoft.netcore.app.host.win-x86\\6.0.11\\microsoft.netcore.app.host.win-x86.6.0.11.nupkg.sha512"
   ],
   "logs": []
 }
