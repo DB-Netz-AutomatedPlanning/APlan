@@ -18,7 +18,7 @@ using System.IO;
 
 namespace aplan.core
 {
-    class Helper
+    public class Helper
     {
 
 
