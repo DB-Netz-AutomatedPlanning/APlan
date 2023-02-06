@@ -1,0 +1,103 @@
+{
+    "type": "object",
+    "properties": {
+        "$type": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string"
+        },
+        "appliesToTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "refersToSignal": {
+            "anyOf": [
+                {}
+            ]
+        },
+        "stoppingPointReachDistance": {
+            "type": "string",
+            "enum": [
+                "10cm",
+                "20cm",
+                "30cm",
+                "40cm",
+                "50cm",
+                "1m",
+                "1.5m",
+                "2m",
+                "2.5m",
+                "3m",
+                "5m",
+                "7.5m",
+                "10m",
+                "15m",
+                "20m",
+                "25m",
+                "30m",
+                "50m",
+                "75m",
+                "100m"
+            ]
+        },
+        "stopLocationTolerance": {
+            "type": "string",
+            "enum": [
+                "10cm",
+                "20cm",
+                "30cm",
+                "40cm",
+                "50cm",
+                "1m",
+                "1.5m",
+                "2m",
+                "2.5m",
+                "3m",
+                "5m",
+                "7.5m",
+                "10m",
+                "15m",
+                "20m",
+                "25m",
+                "30m",
+                "50m",
+                "75m",
+                "100m"
+            ]
+        },
+        "doorOpeningSide": {
+            "type": "string",
+            "enum": [
+                "None",
+                "Right",
+                "Left",
+                "Both"
+            ]
+        },
+        "timingPointIdentifier": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackEdgePoint",
+        "refersToSignal",
+        "stoppingPointReachDistance",
+        "stopLocationTolerance",
+        "doorOpeningSide",
+        "timingPointIdentifier"
+    ],
+    "additionalProperties": false
+}

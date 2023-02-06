@@ -1,0 +1,52 @@
+{
+    "type": "object",
+    "properties": {
+        "$type": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "geometricConstruct": {
+            "anyOf": [
+                {}
+            ]
+        },
+        "appliesToTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "Catenary Post",
+                "Signal Post",
+                "Radio Post",
+                "Mileage Stone",
+                "Camera Post",
+                "Communication",
+                "Post",
+                "End of Track",
+                "Other Post"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "geometricConstruct",
+        "appliesToTrackEdgePoint",
+        "type"
+    ],
+    "additionalProperties": false
+}
