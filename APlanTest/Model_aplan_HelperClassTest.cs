@@ -16,7 +16,6 @@ namespace APlanTest
             Assert.Equal(67.79, actual);
         }
 
-
         [Fact]
         public void hmToKm_Test()
         {
@@ -26,5 +25,6 @@ namespace APlanTest
             double? actual = Helper.hmToKm(hectometerPlusMeter);
             Assert.Equal(expected, actual);
         }
+
     }
 }
