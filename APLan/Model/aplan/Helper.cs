@@ -97,7 +97,7 @@ namespace aplan.core
             try
             {
                 reference.@ref = rsmEntities.usesUnit.Find(item => item.name.Equals(unitName)).id;
-                return reference;
+                //return reference;
             }
             catch (NullReferenceException)
             {
@@ -120,7 +120,7 @@ namespace aplan.core
             try
             {
                 reference.@ref = rsmEntities.usesTopography.usesElevationAndInclination.Find(item => item.inclination.value == value).id;
-                return reference;
+                //return reference;
             }
             catch (NullReferenceException)
             {
@@ -143,7 +143,7 @@ namespace aplan.core
             try
             {
                 reference.@ref = rsmEntities.usesTopography.usesCant.Find(item => item.id.Equals(id)).id;
-                return reference;
+                //return reference;
             }
             catch (NullReferenceException)
             {
@@ -165,7 +165,7 @@ namespace aplan.core
             try
             {
                 reference.@ref = rsmEntities.usesTopography.usesPositioningSystemCoordinate.Find(item => item.name.Equals(coordinateName)).id;
-                return reference;
+                //return reference;
             }
             catch (NullReferenceException)
             {
@@ -188,7 +188,7 @@ namespace aplan.core
             try
             {
                 reference.@ref = rsmEntities.usesTopography.usesPositioningSystem.Find(item => item.name.Equals(positioningSystemName)).id;
-                return reference;
+                //return reference;
             }
             catch (NullReferenceException)
             {
