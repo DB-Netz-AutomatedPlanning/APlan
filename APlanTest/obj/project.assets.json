@@ -1,0 +1,147 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0-windows7.0": {}
+  },
+  "libraries": {},
+  "projectFileDependencyGroups": {
+    "net6.0-windows7.0": [
+      "Microsoft.NET.Test.Sdk >= 17.3.2",
+      "coverlet.collector >= 3.1.2",
+      "xunit >= 2.4.2",
+      "xunit.runner.visualstudio >= 2.4.5"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\k7ada\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "F:\\ERDM\\GitHub-Aplan\\APlan\\APlanTest\\APlanTest.csproj",
+      "projectName": "APlanTest",
+      "projectPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APlanTest\\APlanTest.csproj",
+      "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
+      "outputPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APlanTest\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0-windows"
+      ],
+      "sources": {
+        "F:\\APlan_Libraries\\1.0.0_With_DifferentSize": {},
+        "F:\\RCA\\RCA_Nuget": {},
+        "F:\\SCI_XX\\ApplicationLayer\\RastaApplication\\Libraries": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net6.0-windows7.0": {
+          "targetAlias": "net6.0-windows",
+          "projectReferences": {
+            "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {
+              "projectPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0-windows7.0": {
+        "targetAlias": "net6.0-windows",
+        "dependencies": {
+          "Microsoft.NET.Test.Sdk": {
+            "target": "Package",
+            "version": "[17.3.2, )"
+          },
+          "coverlet.collector": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[3.1.2, )"
+          },
+          "xunit": {
+            "target": "Package",
+            "version": "[2.4.2, )"
+          },
+          "xunit.runner.visualstudio": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[2.4.5, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[6.0.11, 6.0.11]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[6.0.11, 6.0.11]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[6.0.11, 6.0.11]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'F:\\APlan_Libraries\\1.0.0_With_DifferentSize' doesn't exist.",
+      "libraryId": "Newtonsoft.Json"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'F:\\APlan_Libraries\\1.0.0_With_DifferentSize' doesn't exist.",
+      "libraryId": "System.IO.Pipes.AccessControl"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'F:\\APlan_Libraries\\1.0.0_With_DifferentSize' doesn't exist.",
+      "libraryId": "GeoJSON.Net"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'F:\\APlan_Libraries\\1.0.0_With_DifferentSize' doesn't exist.",
+      "libraryId": "System.IO.FileSystem.AccessControl"
+    },
+    {
+      "code": "NU1301",
+      "level": "Error",
+      "message": "The local source 'F:\\APlan_Libraries\\1.0.0_With_DifferentSize' doesn't exist.",
+      "libraryId": "System.Security.AccessControl"
+    }
+  ]
+}
