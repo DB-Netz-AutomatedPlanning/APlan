@@ -1,0 +1,52 @@
+{
+    "type": "object",
+    "properties": {
+        "$type": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "markerType": {
+            "type": "string",
+            "enum": [
+                "ETCS Marker",
+                "stopping Location",
+                "balise",
+                "Other"
+            ]
+        },
+        "riskBufferConfiguration": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            }
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackEdgePoint",
+        "markerType",
+        "riskBufferConfiguration"
+    ],
+    "additionalProperties": false
+}

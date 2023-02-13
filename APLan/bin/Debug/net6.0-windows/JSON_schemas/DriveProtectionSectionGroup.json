@@ -1,0 +1,35 @@
+{
+    "type": "object",
+    "properties": {
+        "$type": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "consistsOfDriveProtectionSection": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "consistsOfDriveProtectionSection"
+    ],
+    "additionalProperties": false
+}

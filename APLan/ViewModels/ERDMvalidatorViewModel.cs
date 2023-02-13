@@ -138,7 +138,7 @@ namespace APLan.ViewModels
                 {
                     var jsonContent = File.ReadAllText(JSON);
                     var attributeTypes = File.ReadAllText(Directory.GetCurrentDirectory() + "\\JSON_schemas\\AttributeTypes.json");
-                    var MapDataSchemaPath = Directory.GetCurrentDirectory() + "\\JSON_schemas\\MapData.json";
+                    var MapDataSchemaPath = Directory.GetCurrentDirectory() + "\\JSON_schemas\\ERDM.json";
                     StreamReader MapDatasr = new StreamReader(MapDataSchemaPath);
                     JSchema MapDataSchema = JSchema.Parse(MapDatasr.ReadToEnd(), new JSchemaReaderSettings() { Resolver = new JSchemaUrlResolver(), BaseUri = new Uri(MapDataSchemaPath) });
                     JObject MapDataObject = JObject.Parse(jsonContent);

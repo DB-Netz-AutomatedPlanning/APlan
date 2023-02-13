@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ using RCA_Model.Tier_0;
 using RCA_Model.Tier_1;
 using RCA_Model.Tier_2;
 using RCA_Model.Tier_3;
+using SD1_DataModel;
 using Point = System.Windows.Point;
 
 namespace APLan.ViewModels
@@ -186,29 +188,38 @@ namespace APLan.ViewModels
             gleisknotenList.Clear();
             Signals.Clear();
             ViewModels.DrawViewModel.GlobalDrawingPoint = new(0,0);
-
-
         }
 
         /// <summary>
         /// draw the ERDM informations.
         /// </summary>
         /// <param name="mapData"></param>
-        private void drawERDM(MapData mapData)
+        private void drawERDM(ERDM erdmModel)
         {
-            drawSegments(mapData); //Segments
-            drawNodes(mapData); //Nodes
+            var allMapData=erdmModel.Tier0.FindAll(t => t is MapData).ToList(); // get all MapData.
+            allMapData.ForEach(mapData => drawMapData((MapData)mapData, erdmModel)); // draw each one.
         }
-        //add the segments to the LA list and the corresponding points.
-        private void drawSegments(MapData mapData)
+        /// <summary>
+        /// draw a MapData informations.
+        /// </summary>
+        private void drawMapData(MapData mapData,ERDM erdmModel)
         {
-            var segments = mapData.consistsOfTier3Objects.FindAll(x => (x is CurveSegmentArc || x is CurveSegmentLine || x is CurveSegmentTransition));
+            drawSegments(mapData,erdmModel); //Segments
+            drawNodes(mapData,erdmModel); //Nodes
+        }
+        /// <summary>
+        /// add the segments to the LA list and the corresponding points.
+        /// </summary>
+        /// <param name="erdmModel"></param>
+        private void drawSegments(MapData mapData,ERDM erdmModel)
+        {
+            var segments = getAllSegmentsOfMapData(mapData,erdmModel);
             foreach (CurveSegment segment in segments)
             {
                 CustomPolyLine polyLine = new();
-                TrackEdgeSection Section = mapData.consistsOfTier2Objects.Find(x => (x is TrackEdgeSection) && segment.appliesToTrackEdgeSection.Contains(x.id)) as TrackEdgeSection;
-                var trackEdgePoints = mapData.consistsOfTier2Objects.FindAll(x => (x is TrackEdgePoint) && Section.hasStartTrackEdgePoint.Equals(x.id) || Section.hasEndTrackEdgePoint.Equals(x.id));
-                var geoCoordinates = mapData.consistsOfTier0Objects.FindAll(x => (x is GeoCoordinates) && (x.id.Equals((trackEdgePoints[0] as TrackEdgePoint).isLocatedAtGeoCoordinates) || x.id.Equals((trackEdgePoints[1] as TrackEdgePoint).isLocatedAtGeoCoordinates)));
+                TrackEdgeSection Section = erdmModel.Tier2.Find(x => (x is TrackEdgeSection) && segment.appliesToTrackEdgeSection.Contains(x.id)) as TrackEdgeSection;
+                var trackEdgePoints = erdmModel.Tier2.FindAll(x => (x is TrackEdgePoint) && Section.hasStartTrackEdgePoint.Equals(x.id) || Section.hasEndTrackEdgePoint.Equals(x.id));
+                var geoCoordinates = erdmModel.Tier0.FindAll(x => (x is GeoCoordinates) && (x.id.Equals((trackEdgePoints[0] as TrackEdgePoint).isLocatedAtGeoCoordinates) || x.id.Equals((trackEdgePoints[1] as TrackEdgePoint).isLocatedAtGeoCoordinates)));
 
                 var point1 = new Point((double)((GeoCoordinates)geoCoordinates[0]).xCoordinate,(double)((GeoCoordinates)geoCoordinates[0]).yCoordinate);
                 var point2 = new Point((double)((GeoCoordinates)geoCoordinates[1]).xCoordinate, (double)((GeoCoordinates)geoCoordinates[1]).yCoordinate);
@@ -227,12 +238,15 @@ namespace APLan.ViewModels
                 Entwurfselement_LA_list.Add(polyLine);
             }
         }
-        //draw nodes of the ERDM model.
-        private void drawNodes(MapData mapData)
+        /// <summary>
+        /// draw nodes of the ERDM model.
+        /// </summary>
+        /// <param name="erdmModel"></param>
+        private void drawNodes(MapData mapData,ERDM erdmModel)
         {
-            var nodes = mapData.consistsOfTier1Objects.FindAll(x=>(x is TrackNode));
+            var nodes = getAllNodesOfMapData(mapData,erdmModel);
             var geoID= nodes.Select(x=>((TrackNode)x).isLocatedAtGeoCoordinates);
-            var geoCoordinates = mapData.consistsOfTier0Objects.FindAll(x => geoID.Contains(x.id));
+            var geoCoordinates = erdmModel.Tier0.FindAll(x => geoID.Contains(x.id));
             geoCoordinates.ForEach(x => {
                 gleisknotenList.Add(
                     new(){
@@ -240,6 +254,30 @@ namespace APLan.ViewModels
                         Color = System.Windows.Media.Brushes.Red
                      });
             });
+        }
+        /// <summary>
+        /// get all Segments of this specific MapData by the help of the ERDM object.
+        /// </summary>
+        /// <param name="mapData"></param>
+        /// <param name="erdmModel"></param>
+        /// <returns></returns>
+        private List<Tier3> getAllSegmentsOfMapData(MapData mapData, ERDM erdmModel)
+        {
+            var segments = erdmModel.Tier3.FindAll(x => (x is CurveSegmentArc || x is CurveSegmentLine || x is CurveSegmentTransition));
+            var mapDataSegments = segments.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ToList();
+            return mapDataSegments;
+        }
+        /// <summary>
+        /// get all Nodes of this specific MapData by the help of the ERDM object.
+        /// </summary>
+        /// <param name="mapData"></param>
+        /// <param name="erdmModel"></param>
+        /// <returns></returns>
+        private List<Tier1> getAllNodesOfMapData(MapData mapData, ERDM erdmModel)
+        {
+            var nodes = erdmModel.Tier1.FindAll(x => (x is TrackNode));
+            var mapDataNodes = nodes.FindAll(x => mapData.consistsOfTier1Objects.Contains(x.id)).ToList();
+            return mapDataNodes;
         }
         #endregion
     }
