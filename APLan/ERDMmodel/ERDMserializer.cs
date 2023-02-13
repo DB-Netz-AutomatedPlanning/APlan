@@ -7,15 +7,16 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SD1_DataModel;
 
 namespace APLan.ERDMmodel
 {
     public class ERDMserializer
     {
-        private MapData mapData;
-        public ERDMserializer(MapData mapData)
+        private ERDM erdmModel;
+        public ERDMserializer(ERDM erdmModel)
         {
-            this.mapData = mapData;
+            this.erdmModel = erdmModel;
         }
         /// <summary>
         /// serialize the ERDM model to JSON string.
@@ -23,9 +24,9 @@ namespace APLan.ERDMmodel
         /// <returns></returns>
         public string serializeERDM()
         {
-            if (this.mapData!=null)
+            if (this.erdmModel!=null)
             {
-                string MapDataObjectJson = System.Text.Json.JsonSerializer.Serialize<MapData>(mapData, new JsonSerializerOptions() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } });
+                string MapDataObjectJson = System.Text.Json.JsonSerializer.Serialize<ERDM>(erdmModel, new JsonSerializerOptions() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } });
                 return MapDataObjectJson;
             }
             return null;

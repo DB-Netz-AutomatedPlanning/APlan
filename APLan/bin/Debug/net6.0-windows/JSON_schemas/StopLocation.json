@@ -1,0 +1,54 @@
+{
+    "type": "object",
+    "properties": {
+        "$type": {
+            "type": "string"
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackEdgePoint": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        },
+        "function": {
+            "type": "string",
+            "enum": [
+                "Generic stop location (valid for all type of trains)",
+                "Stop location based on train length (200m, 300m, ...)",
+                "Stop location based on the number of wagons (1 2 3 ...)",
+                "Stop location based on number of axles",
+                "Stop location based on the configuration of train units (short train, half train, full train)"
+            ]
+        },
+        "value": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "pattern": "^[a-zA-Z_0-9]*$"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackEdgePoint",
+        "function",
+        "value"
+    ],
+    "additionalProperties": false
+}
