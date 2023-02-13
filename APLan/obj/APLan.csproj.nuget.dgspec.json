@@ -21,9 +21,8 @@
           "net6.0-windows"
         ],
         "sources": {
-          "F:\\APlan_Libraries\\1.0.0_With_DifferentSize": {},
+          "F:\\ERDM\\Libraries": {},
           "F:\\RCA\\RCA_Nuget": {},
-          "F:\\SCI_XX\\ApplicationLayer\\RastaApplication\\Libraries": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -45,6 +44,10 @@
             "CommunityToolkit.Mvvm": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "ERDM": {
+              "target": "Package",
+              "version": "[0.2.0, )"
             },
             "EulynxDpLibrary": {
               "target": "Package",
@@ -72,15 +75,11 @@
             },
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[13.0.1, )"
+              "version": "[13.0.2, )"
             },
             "Newtonsoft.Json.Schema": {
               "target": "Package",
               "version": "[3.0.15-beta2, )"
-            },
-            "SD1_DataModel": {
-              "target": "Package",
-              "version": "[0.3.0, )"
             },
             "Saxon-HE": {
               "target": "Package",

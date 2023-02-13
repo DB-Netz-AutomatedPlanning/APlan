@@ -13,8 +13,8 @@ F:\ERDM\GitHub-Aplan\APlan\APLan\App.xaml
 30945039160
 
 1371547300310
-233-758174904
+233-1602511873
 MainWindow.xaml;Resources\Symbols\Symbols.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\APlanCadToolView.xaml;Views\AplanCADViewer.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\ChooseProject.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\DrawingUpperLayer.xaml;Views\ERDMproject.xaml;Views\ERDMvalidator.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\pdfDetail.xaml;Views\PlanningTab.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
 
-True
+False
 

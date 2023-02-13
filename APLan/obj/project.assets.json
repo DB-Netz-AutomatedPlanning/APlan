@@ -47,6 +47,19 @@
           }
         }
       },
+      "ERDM/0.2.0": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.2",
+          "System.Text.Json": "7.0.1"
+        },
+        "compile": {
+          "lib/net6.0/ERDM.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/ERDM.dll": {}
+        }
+      },
       "EulynxDpLibrary/1.0.0": {
         "type": "package",
         "compile": {
@@ -252,15 +265,15 @@
           }
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
             "related": ".xml"
           }
         }
@@ -364,19 +377,6 @@
           "lib/net40/saxon-he-api-10.8.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "SD1_DataModel/0.3.0": {
-        "type": "package",
-        "dependencies": {
-          "Newtonsoft.Json": "13.0.1",
-          "System.Text.Json": "7.0.0"
-        },
-        "compile": {
-          "lib/net6.0/SD1_DataModel.dll": {}
-        },
-        "runtime": {
-          "lib/net6.0/SD1_DataModel.dll": {}
         }
       },
       "SharpZipLib/1.3.3": {
@@ -923,7 +923,7 @@
           }
         }
       },
-      "System.Text.Json/7.0.0": {
+      "System.Text.Json/7.0.1": {
         "type": "package",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
@@ -1080,6 +1080,17 @@
         "lib/netstandard2.1/Enums.NET.dll",
         "lib/netstandard2.1/Enums.NET.pdb",
         "lib/netstandard2.1/Enums.NET.xml"
+      ]
+    },
+    "ERDM/0.2.0": {
+      "sha512": "7OTEG/HY9oWei1CyJUeXWDbIacz7hgsgjA2kkDb4M06hB+bhZ/bhTgMD3GF6JeqX2ytNuxQqZePS7kHBUs/HmA==",
+      "type": "package",
+      "path": "erdm/0.2.0",
+      "files": [
+        ".nupkg.metadata",
+        "erdm.0.2.0.nupkg.sha512",
+        "erdm.nuspec",
+        "lib/net6.0/ERDM.dll"
       ]
     },
     "EulynxDpLibrary/1.0.0": {
@@ -1339,14 +1350,15 @@
         "netdxf.netstandard.nuspec"
       ]
     },
-    "Newtonsoft.Json/13.0.1": {
-      "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
+    "Newtonsoft.Json/13.0.2": {
+      "sha512": "R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
       "type": "package",
-      "path": "newtonsoft.json/13.0.1",
+      "path": "newtonsoft.json/13.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.md",
+        "README.md",
         "lib/net20/Newtonsoft.Json.dll",
         "lib/net20/Newtonsoft.Json.xml",
         "lib/net35/Newtonsoft.Json.dll",
@@ -1355,13 +1367,15 @@
         "lib/net40/Newtonsoft.Json.xml",
         "lib/net45/Newtonsoft.Json.dll",
         "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
         "lib/netstandard1.0/Newtonsoft.Json.dll",
         "lib/netstandard1.0/Newtonsoft.Json.xml",
         "lib/netstandard1.3/Newtonsoft.Json.dll",
         "lib/netstandard1.3/Newtonsoft.Json.xml",
         "lib/netstandard2.0/Newtonsoft.Json.dll",
         "lib/netstandard2.0/Newtonsoft.Json.xml",
-        "newtonsoft.json.13.0.1.nupkg.sha512",
+        "newtonsoft.json.13.0.2.nupkg.sha512",
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
@@ -1502,17 +1516,6 @@
         "tools/Query.exe.config",
         "tools/Transform.exe",
         "tools/Transform.exe.config"
-      ]
-    },
-    "SD1_DataModel/0.3.0": {
-      "sha512": "clHOBWb1PZIyWRhLtmPs4hcWWPDE+5r81gCohcgfYTw+En8I8+WtUciKm9+L750tGtaVoXcu6HshF1qZj4Fw2Q==",
-      "type": "package",
-      "path": "sd1_datamodel/0.3.0",
-      "files": [
-        ".nupkg.metadata",
-        "lib/net6.0/SD1_DataModel.dll",
-        "sd1_datamodel.0.3.0.nupkg.sha512",
-        "sd1_datamodel.nuspec"
       ]
     },
     "SharpZipLib/1.3.3": {
@@ -2797,10 +2800,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Text.Json/7.0.0": {
-      "sha512": "DaGSsVqKsn/ia6RG8frjwmJonfos0srquhw09TlT8KRw5I43E+4gs+/bZj4K0vShJ5H9imCuXupb4RmS+dBy3w==",
+    "System.Text.Json/7.0.1": {
+      "sha512": "OtDEmCCiNl8JAduFKZ/r0Sw6XZNHwIicUYy/mXgMDGeOsZLshH37qi3oPRzFYiryVktiMoQLByMGPtRCEMYbeQ==",
       "type": "package",
-      "path": "system.text.json/7.0.0",
+      "path": "system.text.json/7.0.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2863,7 +2866,7 @@
         "lib/net7.0/System.Text.Json.xml",
         "lib/netstandard2.0/System.Text.Json.dll",
         "lib/netstandard2.0/System.Text.Json.xml",
-        "system.text.json.7.0.0.nupkg.sha512",
+        "system.text.json.7.0.1.nupkg.sha512",
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -3047,15 +3050,15 @@
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
       "CommunityToolkit.Mvvm >= 8.0.0",
+      "ERDM >= 0.2.0",
       "EulynxDpLibrary >= 1.0.0",
       "Extended.Wpf.Toolkit >= 4.5.0",
       "GeoJSON.Net >= 1.2.19",
       "LiteDB >= 5.0.11",
       "Microsoft.Xaml.Behaviors.Wpf >= 1.1.39",
       "NPOI >= 2.6.0",
-      "Newtonsoft.Json >= 13.0.1",
+      "Newtonsoft.Json >= 13.0.2",
       "Newtonsoft.Json.Schema >= 3.0.15-beta2",
-      "SD1_DataModel >= 0.3.0",
       "Saxon-HE >= 10.8.0",
       "System.Collections.NonGeneric >= 4.3.0",
       "System.Data.OleDb >= 6.0.0",
@@ -3087,9 +3090,8 @@
         "net6.0-windows"
       ],
       "sources": {
-        "F:\\APlan_Libraries\\1.0.0_With_DifferentSize": {},
+        "F:\\ERDM\\Libraries": {},
         "F:\\RCA\\RCA_Nuget": {},
-        "F:\\SCI_XX\\ApplicationLayer\\RastaApplication\\Libraries": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3111,6 +3113,10 @@
           "CommunityToolkit.Mvvm": {
             "target": "Package",
             "version": "[8.0.0, )"
+          },
+          "ERDM": {
+            "target": "Package",
+            "version": "[0.2.0, )"
           },
           "EulynxDpLibrary": {
             "target": "Package",
@@ -3138,15 +3144,11 @@
           },
           "Newtonsoft.Json": {
             "target": "Package",
-            "version": "[13.0.1, )"
+            "version": "[13.0.2, )"
           },
           "Newtonsoft.Json.Schema": {
             "target": "Package",
             "version": "[3.0.15-beta2, )"
-          },
-          "SD1_DataModel": {
-            "target": "Package",
-            "version": "[0.3.0, )"
           },
           "Saxon-HE": {
             "target": "Package",

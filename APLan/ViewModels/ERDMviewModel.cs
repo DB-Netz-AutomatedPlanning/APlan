@@ -10,12 +10,13 @@ using APLan.Commands;
 using APLan.HelperClasses;
 using ERDM_Implementation;
 using java.lang.reflect;
-using RCA_Model.Tier_0;
-using RCA_Model.Tier_1;
-using RCA_Model.Tier_2;
-using RCA_Model.Tier_3;
-using SD1_DataModel;
+using ERDM.Tier_0;
+using ERDM.Tier_1;
+using ERDM.Tier_2;
+using ERDM.Tier_3;
+
 using Point = System.Windows.Point;
+using ERDMmodel;
 
 namespace APLan.ViewModels
 {
@@ -155,10 +156,10 @@ namespace APLan.ViewModels
 
             ERDMobjectsCreator ERDMcreator = new();
 
-            BaseViewModel.ERDMmodel = ERDMcreator.createModel(SegmentsFilePath,GradientsFilePath,NodesFilePath,EdgesFilePath);
+            BaseViewModel.erdmModel = ERDMcreator.createModel(SegmentsFilePath,GradientsFilePath,NodesFilePath,EdgesFilePath);
 
 
-            drawERDM(ERDMmodel);
+            drawERDM(erdmModel);
 
             var baseViewModel = System.Windows.Application.Current.FindResource("baseViewModel") as BaseViewModel;
             baseViewModel.WelcomeVisibility = Visibility.Collapsed;
@@ -194,7 +195,7 @@ namespace APLan.ViewModels
         /// draw the ERDM informations.
         /// </summary>
         /// <param name="mapData"></param>
-        private void drawERDM(ERDM erdmModel)
+        private void drawERDM(ERDMmodel.ERDM erdmModel)
         {
             var allMapData=erdmModel.Tier0.FindAll(t => t is MapData).ToList(); // get all MapData.
             allMapData.ForEach(mapData => drawMapData((MapData)mapData, erdmModel)); // draw each one.
@@ -202,7 +203,7 @@ namespace APLan.ViewModels
         /// <summary>
         /// draw a MapData informations.
         /// </summary>
-        private void drawMapData(MapData mapData,ERDM erdmModel)
+        private void drawMapData(MapData mapData, ERDMmodel.ERDM erdmModel)
         {
             drawSegments(mapData,erdmModel); //Segments
             drawNodes(mapData,erdmModel); //Nodes
@@ -211,7 +212,7 @@ namespace APLan.ViewModels
         /// add the segments to the LA list and the corresponding points.
         /// </summary>
         /// <param name="erdmModel"></param>
-        private void drawSegments(MapData mapData,ERDM erdmModel)
+        private void drawSegments(MapData mapData,ERDMmodel.ERDM erdmModel)
         {
             var segments = getAllSegmentsOfMapData(mapData,erdmModel);
             foreach (CurveSegment segment in segments)
@@ -242,7 +243,7 @@ namespace APLan.ViewModels
         /// draw nodes of the ERDM model.
         /// </summary>
         /// <param name="erdmModel"></param>
-        private void drawNodes(MapData mapData,ERDM erdmModel)
+        private void drawNodes(MapData mapData,ERDMmodel.ERDM erdmModel)
         {
             var nodes = getAllNodesOfMapData(mapData,erdmModel);
             var geoID= nodes.Select(x=>((TrackNode)x).isLocatedAtGeoCoordinates);
@@ -261,7 +262,7 @@ namespace APLan.ViewModels
         /// <param name="mapData"></param>
         /// <param name="erdmModel"></param>
         /// <returns></returns>
-        private List<Tier3> getAllSegmentsOfMapData(MapData mapData, ERDM erdmModel)
+        private List<Tier3> getAllSegmentsOfMapData(MapData mapData, ERDMmodel.ERDM erdmModel)
         {
             var segments = erdmModel.Tier3.FindAll(x => (x is CurveSegmentArc || x is CurveSegmentLine || x is CurveSegmentTransition));
             var mapDataSegments = segments.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ToList();
@@ -273,7 +274,7 @@ namespace APLan.ViewModels
         /// <param name="mapData"></param>
         /// <param name="erdmModel"></param>
         /// <returns></returns>
-        private List<Tier1> getAllNodesOfMapData(MapData mapData, ERDM erdmModel)
+        private List<Tier1> getAllNodesOfMapData(MapData mapData, ERDMmodel.ERDM erdmModel)
         {
             var nodes = erdmModel.Tier1.FindAll(x => (x is TrackNode));
             var mapDataNodes = nodes.FindAll(x => mapData.consistsOfTier1Objects.Contains(x.id)).ToList();
