@@ -13,7 +13,7 @@ namespace APLan.ViewModels
     {
         private static string currentProjectNameBind = null;
         private static string currentProjectPathBind = null;
-        public static ERDMmodel.ERDM erdmModel;
+        public static ERDM.ERDMmodel erdmModel;
 
 
         private Visibility _welcomeVisibility = Visibility.Visible;

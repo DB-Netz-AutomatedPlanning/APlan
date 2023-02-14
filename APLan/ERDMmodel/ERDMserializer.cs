@@ -13,8 +13,8 @@ namespace ERDM_Implementation
 {
     public class ERDMserializer
     {
-        private ERDMmodel.ERDM erdmModel;
-        public ERDMserializer(ERDMmodel.ERDM erdmModel)
+        private ERDM.ERDMmodel erdmModel;
+        public ERDMserializer(ERDM.ERDMmodel erdmModel)
         {
             this.erdmModel = erdmModel;
         }
@@ -26,7 +26,7 @@ namespace ERDM_Implementation
         {
             if (this.erdmModel!=null)
             {
-                string MapDataObjectJson = System.Text.Json.JsonSerializer.Serialize<ERDMmodel.ERDM>(erdmModel, new JsonSerializerOptions() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } });
+                string MapDataObjectJson = System.Text.Json.JsonSerializer.Serialize<ERDM.ERDMmodel>(erdmModel, new JsonSerializerOptions() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } });
                 return MapDataObjectJson;
             }
             return null;

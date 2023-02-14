@@ -15,7 +15,7 @@ namespace ERDM_Implementation
 {
     public class ERDMobjectsCreator
     {
-        public ERDMmodel.ERDM createModel(string SegmentsPath, string GradientsPath, string NodesPath, string EdgesPath)
+        public ERDM.ERDMmodel createModel(string SegmentsPath, string GradientsPath, string NodesPath, string EdgesPath)
         {
 
             XLSreader reader = new XLSreader();
@@ -55,11 +55,15 @@ namespace ERDM_Implementation
             mapData.consistsOfTier2Objects.Add(areaOfControl.id);
 
 
-            ERDMmodel.ERDM erdmModel = new();
-            erdmModel.Tier0 = new() { version, mapData };
+            ERDM.ERDMmodel erdmModel = new();
+            erdmModel.Tier0 = new();
             erdmModel.Tier1 = new();
-            erdmModel.Tier2 = new() { areaOfControl };
+            erdmModel.Tier2 = new();
             erdmModel.Tier3 = new();
+
+            erdmModel.Tier0.Version.Add(version);
+            erdmModel.Tier0.MapData.Add(mapData);
+            erdmModel.Tier2.AreaOfControl.Add(areaOfControl);
 
             ERDMobjectsCreator creator = new ERDMobjectsCreator();
 
@@ -75,7 +79,7 @@ namespace ERDM_Implementation
         /// </summary>
         /// <param name="xlsItems"></param>
         /// <param name="mapdata"></param>
-        public void TrackNodesCreator(ArrayList xlsItems, MapData mapdata, ERDM.Tier_0.Version version, ERDMmodel.ERDM erdmModel)
+        public void TrackNodesCreator(ArrayList xlsItems, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             foreach (Dictionary<string, string> dict in xlsItems)
             {
@@ -102,7 +106,7 @@ namespace ERDM_Implementation
         /// <param name="xlsItems"></param>
         /// <param name="mapdata"></param>
         /// <param name="version"></param>
-        public void TrackEdgesCreator(ArrayList xlsItems, ArrayList segmentsXlsItems, MapData mapdata, ERDM.Tier_0.Version version, ERDMmodel.ERDM erdmModel)
+        public void TrackEdgesCreator(ArrayList xlsItems, ArrayList segmentsXlsItems, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
 
            foreach (Dictionary<string, string> dict in xlsItems)
@@ -114,8 +118,8 @@ namespace ERDM_Implementation
                 startNode = ERDMhelperFunctions.ReplaceNonAlphaNumericalChar(startNode);
                 endNode = ERDMhelperFunctions.ReplaceNonAlphaNumericalChar(endNode);
 
-                var start = erdmModel.Tier1?.Find(x => x.name.Equals(startNode) && x is TrackNode);
-                var end = erdmModel.Tier1?.Find(x => x.name.Equals(endNode) && x is TrackNode);
+                var start = erdmModel.Tier1?.TrackNode.Find(x => x.name.Equals(startNode) && x is TrackNode);
+                var end = erdmModel.Tier1?.TrackNode.Find(x => x.name.Equals(endNode) && x is TrackNode);
                 var length = ERDMhelperFunctions.ExtractEdgeLengthFromSegmentsFile(edgeID, segmentsXlsItems);
                 ERDMhelperFunctions.CreateNewTrackEdge(edgeID, length, start as TrackNode, end as TrackNode, mapdata, version, erdmModel);
            }
@@ -126,7 +130,7 @@ namespace ERDM_Implementation
         /// </summary>
         /// <param name="xlsItems">List of dictionaries of attributes and values</param>
         /// <returns></returns>
-        public void HorizontalSegmentsCreator(ArrayList xlsItems, MapData mapdata, ERDM.Tier_0.Version version, AreaOfControl areaOfControl,ERDMmodel.ERDM erdmModel)
+        public void HorizontalSegmentsCreator(ArrayList xlsItems, MapData mapdata, ERDM.Tier_0.Version version, AreaOfControl areaOfControl,ERDM.ERDMmodel erdmModel)
         {
             foreach (Dictionary<string, string> dict in xlsItems)
             {
@@ -184,7 +188,7 @@ namespace ERDM_Implementation
         /// create gradient information based on data extracted from xls file of Gradients.
         /// the data from the xls file should be sorted topologically from start to end.
         /// </summary>
-        public void GradientSegmentsCreator(ArrayList xlsItems, MapData mapdata, ERDM.Tier_0.Version version, ERDMmodel.ERDM erdmModel)
+        public void GradientSegmentsCreator(ArrayList xlsItems, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             foreach (Dictionary<string, string> dict in xlsItems)
             {
@@ -222,7 +226,7 @@ namespace ERDM_Implementation
                 }
 
                 mapdata?.consistsOfTier3Objects?.Add(GSL.id);
-                erdmModel?.Tier3?.Add(GSL);
+                erdmModel?.Tier3?.GradientSegmentLine.Add(GSL);
             }
 
         }
@@ -231,7 +235,7 @@ namespace ERDM_Implementation
         /// </summary>
         /// <param name="dict"></param>
         /// <param name="mapdata"></param>
-        private void CreateSegmentLine(string? segmentID,TrackEdgeSection? trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDMmodel.ERDM erdmModel)
+        private void CreateSegmentLine(string? segmentID,TrackEdgeSection? trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             CurveSegmentLine curveSegment = new();
             curveSegment.id = Guid.NewGuid().ToString();
@@ -243,14 +247,14 @@ namespace ERDM_Implementation
             curveSegment.name = segmentID;
 
             mapdata.consistsOfTier3Objects?.Add(curveSegment.id);
-            erdmModel.Tier3?.Add(curveSegment);
+            erdmModel.Tier3?.CurveSegmentLine.Add(curveSegment);
         }
         /// <summary>
         /// Create a CurveSegmentArc which correspond to Radius type in the xls file
         /// </summary>
         /// <param name="dict"></param>
         /// <param name="mapdata"></param>
-        private void CreateCurveSegmentArc(double radiusBegin,string? segmentID,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version,ERDMmodel.ERDM erdmModel)
+        private void CreateCurveSegmentArc(double radiusBegin,string? segmentID,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version,ERDM.ERDMmodel erdmModel)
         {
             CurveSegmentArc curveSegment = new();
             curveSegment.id = Guid.NewGuid().ToString();
@@ -263,7 +267,7 @@ namespace ERDM_Implementation
             //curveSegment.hasCenterAtGeoCoordinates = Guid.NewGuid().ToString(); //to be adjusted.
 
             mapdata.consistsOfTier3Objects?.Add(curveSegment.id);
-            erdmModel.Tier3?.Add(curveSegment);
+            erdmModel.Tier3?.CurveSegmentArc.Add(curveSegment);
         }
     
         /// <summary>
@@ -271,7 +275,7 @@ namespace ERDM_Implementation
         /// </summary>
         /// <param name="dict"></param>
         /// <param name="mapdata"></param>
-        private void CreateCurveSegmentTransition(string? segmentID,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDMmodel.ERDM erdmModel)
+        private void CreateCurveSegmentTransition(string? segmentID,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
   
 
@@ -288,7 +292,7 @@ namespace ERDM_Implementation
            // curveSegment.hasCenterAtGeoCoordinates = Guid.NewGuid().ToString();// to be adjusted.
 
             mapdata.consistsOfTier3Objects?.Add(curveSegment.id);
-            erdmModel.Tier3?.Add(curveSegment);
+            erdmModel.Tier3?.CurveSegmentTransition.Add(curveSegment);
         }
 
     }
