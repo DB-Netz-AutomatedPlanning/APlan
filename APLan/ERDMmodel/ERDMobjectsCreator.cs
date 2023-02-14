@@ -58,7 +58,7 @@ namespace ERDM_Implementation
             ERDMmodel.ERDM erdmModel = new();
             erdmModel.Tier0 = new() { version, mapData };
             erdmModel.Tier1 = new();
-            erdmModel.Tier2 = new() { areaOfControl};
+            erdmModel.Tier2 = new() { areaOfControl };
             erdmModel.Tier3 = new();
 
             ERDMobjectsCreator creator = new ERDMobjectsCreator();
