@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"belongsToAreaOfControl": {},"consistsOfBase0Objects": {},"consistsOfBase1Objects": {},"consistsOfBase2Objects": {},"consistsOfBase3Objects": {},"containsReleaseInformation": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"belongsToAreaOfControl"
+            ,"consistsOfBase0Objects"
+            ,"consistsOfBase1Objects"
+            ,"consistsOfBase2Objects"
+            ,"consistsOfBase3Objects"
+            ,"containsReleaseInformation"
+            ],
+    "additionalProperties": false
+    }

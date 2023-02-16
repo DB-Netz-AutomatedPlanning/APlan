@@ -1,0 +1,17 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"isPositionedOnTrackEdge": {},"offset": {},"isLocatedAtGeoCoordinates": {},"lateralOffset": {},"verticalOffset": {},"hasOperationalPoint": {},"lineReference": {},"direction": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"isPositionedOnTrackEdge"
+            ,"offset"
+            ,"isLocatedAtGeoCoordinates"
+            ,"lateralOffset"
+            ,"verticalOffset"
+            ,"hasOperationalPoint"
+            ,"lineReference"
+            ,"direction"
+            ],
+    "additionalProperties": false
+    }

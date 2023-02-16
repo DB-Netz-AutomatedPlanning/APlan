@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgePoint": {},"markerType": {},"riskBufferConfiguration": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgePoint"
+            ,"markerType"
+            ,"riskBufferConfiguration"
+            ],
+    "additionalProperties": false
+    }
