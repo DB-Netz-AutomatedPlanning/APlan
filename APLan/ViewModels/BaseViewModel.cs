@@ -1,5 +1,6 @@
 ﻿using APLan.HelperClasses;
-using RCA_Model.Tier_0;
+using ERDM.Tier_0;
+
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,7 +13,7 @@ namespace APLan.ViewModels
     {
         private static string currentProjectNameBind = null;
         private static string currentProjectPathBind = null;
-        public static MapData ERDMmodel;
+        public static ERDM.ERDMmodel erdmModel;
 
 
         private Visibility _welcomeVisibility = Visibility.Visible;

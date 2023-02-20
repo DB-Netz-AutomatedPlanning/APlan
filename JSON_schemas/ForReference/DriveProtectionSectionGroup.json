@@ -1,0 +1,10 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"consistsOfDriveProtectionSection": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"consistsOfDriveProtectionSection"
+            ],
+    "additionalProperties": false
+    }

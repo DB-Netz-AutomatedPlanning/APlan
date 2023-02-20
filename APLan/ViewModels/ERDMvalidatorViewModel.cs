@@ -1,28 +1,16 @@
-﻿using aplan.eulynx.validator;
-using APLan.Commands;
-using javax.xml.validation;
-using jdk.@internal.util.xml.impl;
-using net.sf.saxon.expr.parser;
-using net.sf.saxon.lib;
-using Newtonsoft.Json;
+﻿using APLan.Commands;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using RCA_Model.Tier_0;
-using sun.misc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Xml;
 
 namespace APLan.ViewModels
 {
@@ -138,7 +126,7 @@ namespace APLan.ViewModels
                 {
                     var jsonContent = File.ReadAllText(JSON);
                     var attributeTypes = File.ReadAllText(Directory.GetCurrentDirectory() + "\\JSON_schemas\\AttributeTypes.json");
-                    var MapDataSchemaPath = Directory.GetCurrentDirectory() + "\\JSON_schemas\\MapData.json";
+                    var MapDataSchemaPath = Directory.GetCurrentDirectory() + "\\JSON_schemas\\ERDM.json";
                     StreamReader MapDatasr = new StreamReader(MapDataSchemaPath);
                     JSchema MapDataSchema = JSchema.Parse(MapDatasr.ReadToEnd(), new JSchemaReaderSettings() { Resolver = new JSchemaUrlResolver(), BaseUri = new Uri(MapDataSchemaPath) });
                     JObject MapDataObject = JObject.Parse(jsonContent);
@@ -185,33 +173,34 @@ namespace APLan.ViewModels
         {
             foreach (JToken item in jsonToken.Children())
             {
-                //if we are at object
+                //if we are at property with object value
+                if (item.Type == JTokenType.Property && !regex.IsMatch(((JProperty)item).Value.ToString()))
+                {
+                    ValidateJSONreference(item, MapDataObject, attributeTypesObject, typesReport);
+                }
+
                 if (item.Type == JTokenType.Object)
                 {
                     ValidateJSONreference(item, MapDataObject, attributeTypesObject, typesReport);
                 }
-                // if we are at a property have array as value , go deeper.
-                if (item.Type == JTokenType.Property && ((JProperty)item).Value.Type == JTokenType.Array)
-                {
-                    ValidateJSONreference(item, MapDataObject, attributeTypesObject, typesReport);
-                }
-                // if we are at array , go deeper
+
                 if (item.Type == JTokenType.Array)
                 {
                     ValidateJSONreference(item, MapDataObject, attributeTypesObject, typesReport);
                 }
-                // if we are inside an array of references.
-                if (jsonToken.Type== JTokenType.Array && item.Type == JTokenType.String && regex.IsMatch(((JValue)item).Value.ToString()))
+                // if we found an attribute with a uuid as value and the name is not id
+                if (item.Type == JTokenType.Property && !((JProperty)item).Name.Equals("id") && regex.IsMatch(((JProperty)item).Value.ToString()))
                 {
-                    checkTrueType(item.Parent.Parent, item.ToString(), ((JProperty)item.Parent.Parent).Name, MapDataObject, attributeTypesObject, typesReport);
+                    checkTrueType(item, attributeTypesObject, typesReport);
                 }
-                // if we are at direct reference.
-                if (item.Type == JTokenType.Property && !((JProperty)item).Name.Equals("id") && ((JProperty)item).Value.Type == JTokenType.String && regex.IsMatch(((JProperty)item).Value.ToString()))
+
+                // if the uuid is enclosed in a list of UUIDs
+                if (item.Type == JTokenType.String && regex.IsMatch(item.ToString()))
                 {
-                    checkTrueType(item,((JProperty)item).Value.ToString(), ((JProperty)item).Name, MapDataObject, attributeTypesObject, typesReport);
+                    checkTrueType(item ,attributeTypesObject, typesReport);
                 }
             }
-            
+
         }
         /// <summary>
         /// check if the type of the referenced object is valid accordin the model.
@@ -223,46 +212,46 @@ namespace APLan.ViewModels
         /// <param name="attributeTypesObject"></param>
         /// <param name="typesReport"></param>
         /// <returns></returns>
-        private bool checkTrueType(JToken currentItem, string id,string propertyName, JObject mapData, JObject attributeTypesObject,ArrayList typesReport)
+        private bool checkTrueType(JToken item, JObject attributeTypesObject, ArrayList typesReport)
         {
-            //find an object with that id in the whoel file.
-            JToken item = mapData.SelectToken($"$..[?(@id=='{id}')]");
+            var uuid = "";
+            if (item.Type== JTokenType.Property)
+            {
+                uuid = ((JProperty)item).Value.ToString();
+            }else if (item.Type == JTokenType.String)
+            {
+                uuid = item.ToString();
+            }
+
+            var attributeName = getAttributeName(item);
+
+            var targetClassName = getEnclosingObjectType(item);
+
+            //find an object with that id in the whole file.
+            JObject itemWithId = (JObject)item.Root.SelectToken($"$..[?(@id=='{uuid}')]");
 
             //if no object with that ID is found.
-            if (item == null) {
-                typesReport.Add($"The reference {id} is not related to any object");
+            if (item == null)
+            {
+                typesReport.Add($"The reference {uuid} is not related to any object");
                 return false;
             }
-            
-            // the current object type.
-            var current_type = ((JValue)currentItem.Parent.SelectToken(".$type"))?.Value.ToString();
 
-            // the target type to be validated.
-            string type = ((JValue)item?.SelectToken(".$type"))?.Value.ToString();
+            //attributesTypes json file property name.
+           JToken validTypes = attributeTypesObject.SelectToken($"$.{targetClassName}_{attributeName}");
 
-            // attributesTypes json file property name.
-            JToken validTypes = attributeTypesObject.SelectToken($"$.{current_type}_{propertyName}");
+            //if no object with that ID is found.
+            if (validTypes == null)
+            {
+                typesReport.Add($"{targetClassName}_{attributeName} has no registered type");
+                return false;
+            }
 
-            // if it supports any type => ex: Release_insertsMapDataObjects
-            if (validTypes.Equals("MapDataObject"))
+            if(!validateReference(validTypes, itemWithId))
             {
-                return true;
-            }
-            // if the target validation types is single type.
-            if (validTypes is JValue && type.Equals(((JValue)validTypes).Value))
-            {
-                return true;
-            }
-            // if we have multiple types to validate against (Inheritance).
-            else if (validTypes is JArray)
-            {
-                foreach (JValue value in validTypes as JArray)
-                {
-                    if (type.Equals(value.Value)) return true; 
-                }
-            }
-            //wrong type is catched.
-            typesReport.Add($"{((JProperty)currentItem).Name} at object with id {id} is not the correct type");
+                typesReport.Add($"{item.Path} is not refering to the correct object class");
+                return false;
+            };
             return false;
         }
         /// <summary>
@@ -286,6 +275,65 @@ namespace APLan.ViewModels
             return report;
         }
 
+        /// <summary>
+        /// get object name if the object is inside a list of objects as value of a property with the same name of the Type
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private string getEnclosingObjectType(JToken item)
+        {
+            var targetClass = item;
+            while (targetClass.Type != JTokenType.Object)
+            {
+                targetClass = targetClass.Parent;
+            }
+            return ((JProperty)targetClass.Parent.Parent).Name; //according to the JSON file structure
+        }
+        /// <summary>
+        /// get attribute name if the attribute value is not array
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        private string getAttributeName(JToken item)
+        {
+            var targetProperty = item;
+            while (targetProperty.Type != JTokenType.Property)
+            {
+                targetProperty = targetProperty.Parent;
+            }
+            return ((JProperty)targetProperty).Name; // according to the JSON structure
+        }
+        /// <summary>
+        /// validate references according to the attribute name and file containing maping between attributes and the valid reference types.
+        /// </summary>
+        /// <param name="validTypes"></param>
+        /// <param name="itemWithId"></param>
+        /// <returns></returns>
+        private bool validateReference(JToken validTypes, JObject itemWithId)
+        {
+            bool validation = false;
+
+            var itemObjectName = getEnclosingObjectType(itemWithId);
+
+            // if the valid types are single
+            if (validTypes.Type== JTokenType.String && itemObjectName!=null && itemObjectName.Equals(validTypes.ToString()))
+            {
+                return true;
+            }
+
+            //if we have array of valid types
+            if (validTypes.Type == JTokenType.Array && itemObjectName != null)
+            {
+                foreach(var child in validTypes.Children())
+                {
+                    validation = child.ToString().Equals(itemObjectName)? true:false;
+
+                    if (validation)
+                        return validation;
+                }
+            }
+            return validation;
+        }
         #endregion
     }
 }

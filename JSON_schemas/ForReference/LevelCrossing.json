@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackArea": {},"appliesToDpsGroup": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackArea"
+            ,"appliesToDpsGroup"
+            ],
+    "additionalProperties": false
+    }

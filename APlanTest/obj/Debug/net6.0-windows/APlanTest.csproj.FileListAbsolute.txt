@@ -1,0 +1,6 @@
+F:\ERDM\GitHub-Aplan\APlan\APlanTest\bin\Debug\net6.0-windows\CoverletSourceRootsMapping
+F:\ERDM\GitHub-Aplan\APlan\APlanTest\obj\Debug\net6.0-windows\APlanTest.csproj.AssemblyReference.cache
+F:\ERDM\GitHub-Aplan\APlan\APlanTest\obj\Debug\net6.0-windows\APlanTest.GeneratedMSBuildEditorConfig.editorconfig
+F:\ERDM\GitHub-Aplan\APlan\APlanTest\obj\Debug\net6.0-windows\APlanTest.AssemblyInfoInputs.cache
+F:\ERDM\GitHub-Aplan\APlan\APlanTest\obj\Debug\net6.0-windows\APlanTest.AssemblyInfo.cs
+F:\ERDM\GitHub-Aplan\APlan\APlanTest\obj\Debug\net6.0-windows\APlanTest.csproj.CoreCompileInputs.cache

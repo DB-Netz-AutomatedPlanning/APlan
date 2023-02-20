@@ -31,231 +31,36 @@
             ]
         },
         "consistsOfTier0Objects": {
+            "type": "array",
             "items": {
-                "anyOf": [
-                    {
-                        "$ref": "Version.json"
-                    },
-                    {
-                        "$ref": "Release.json"
-                    },
-                    {
-                        "$ref": "GeoCoordinates.json"
-                    },
-                    {
-                        "$ref": "LineReference.json"
-                    },
-                    {
-                        "$ref": "OperationalPoint.json"
-                    }
-                ]
-            }
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
         },
         "consistsOfTier1Objects": {
-            "type": [
-                "array"
-            ],
+            "type": "array",
             "items": {
-                "anyOf": [
-                    {
-                        "type": "object",
-                        "properties": {
-                            "$ref": {
-                                "type": "string"
-                            }
-                        },
-                        "required": [
-                            "$ref"
-                        ]
-                    },
-                    {
-                        "$ref": "TrackNode.json"
-                    },
-                    {
-                        "$ref": "TrackEdge.json"
-                    },
-                    {
-                        "$ref": "TrackNavigability.json"
-                    }
-                ]
-            }
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
         },
         "consistsOfTier2Objects": {
-            "type": [
-                "array"
-            ],
+            "type": "array",
             "items": {
-                "anyOf": [
-                    {
-                        "$ref": "AreaOfControl.json"
-                    },
-                    {
-                        "$ref": "TrackEdgePoint.json"
-                    },
-                    {
-                        "$ref": "DirectedTrackEdgePoint.json"
-                    },
-                    {
-                        "$ref": "TrackEdgeSection.json"
-                    },
-                    {
-                        "$ref": "DirectedTrackEdgeSection.json"
-                    },
-                    {
-                        "$ref": "TrackArea.json"
-                    },
-                    {
-                        "$ref": "ContiguousTrackArea.json"
-                    },
-                    {
-                        "$ref": "LinearContiguousTrackArea.json"
-                    }
-                ]
-            }
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
         },
         "consistsOfTier3Objects": {
-            "type": [
-                "array"
-            ],
+            "type": "array",
             "items": {
-                "anyOf": [
-                    {
-                        "$ref": "AdjacentAreaOfControl.json"
-                    },
-                    {
-                        "$ref": "StaticSpeedProfile.json"
-                    },
-                    {
-                        "$ref": "SpecificStaticSpeedProfile.json"
-                    },
-                    {
-                        "$ref": "AxleLoadSpeedProfile.json"
-                    },
-                    {
-                        "$ref": "GradientSegmentLine.json"
-                    },
-                    {
-                        "$ref": "GradientSegmentArc.json"
-                    },
-                    {
-                        "$ref": "CurveSegmentLine.json"
-                    },
-                    {
-                        "$ref": "CurveSegmentArc.json"
-                    },
-                    {
-                        "$ref": "CurveSegmentTransition.json"
-                    },
-                    {
-                        "$ref": "CantSegmentLine.json"
-                    },
-                    {
-                        "$ref": "AllocationSection.json"
-                    },
-                    {
-                        "$ref": "DriveProtectionSection.json"
-                    },
-                    {
-                        "$ref": "DriveProtectionSectionGroup.json"
-                    },
-                    {
-                        "$ref": "Balise.json"
-                    },
-                    {
-                        "$ref": "BaliseGroup.json"
-                    },
-                    {
-                        "$ref": "SegmentProfile.json"
-                    },
-                    {
-                        "$ref": "Landmark.json"
-                    },
-                    {
-                        "$ref": "LightSignal.json"
-                    },
-                    {
-                        "$ref": "ETCSMarker.json"
-                    },
-                    {
-                        "$ref": "StopLocation.json"
-                    },
-                    {
-                        "$ref": "PlatformEdge.json"
-                    },
-                    {
-                        "$ref": "TunnelPortal.json"
-                    },
-                    {
-                        "$ref": "TunnelTube.json"
-                    },
-                    {
-                        "$ref": "Tunnel.json"
-                    },
-                    {
-                        "$ref": "SimplePoint.json"
-                    },
-                    {
-                        "$ref": "SlipCrossing.json"
-                    },
-                    {
-                        "$ref": "Derailer.json"
-                    },
-                    {
-                        "$ref": "DiamondCrossing.json"
-                    },
-                    {
-                        "$ref": "LevelCrossing.json"
-                    },
-                    {
-                        "$ref": "TrackCondition.json"
-                    },
-                    {
-                        "$ref": "TractionSystem.json"
-                    },
-                    {
-                        "$ref": "CurrentLimitation.json"
-                    },
-                    {
-                        "$ref": "PermittedBrakingDistance.json"
-                    },
-                    {
-                        "$ref": "TrackProperties.json"
-                    },
-                    {
-                        "$ref": "TracksideTrainDetectionArea.json"
-                    },
-                    {
-                        "$ref": "MpTargetMarker.json"
-                    },
-                    {
-                        "$ref": "RiskBufferConfiguration.json"
-                    },
-                    {
-                        "$ref": "Zone.json"
-                    },
-                    {
-                        "$ref": "TrackZone.json"
-                    },
-                    {
-                        "$ref": "NearTrackZone.json"
-                    },
-                    {
-                        "$ref": "ProtectionZone.json"
-                    },
-                    {
-                        "$ref": "OverheadLineEquipmentZone.json"
-                    },
-                    {
-                        "$ref": "GenericSpatialObject.json"
-                    },
-                    {
-                        "$ref": "GenericLinearObject.json"
-                    },
-                    {
-                        "$ref": "GenericSpotObject.json"
-                    }
-                ]
-            }
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
         }
     },
     "required": [

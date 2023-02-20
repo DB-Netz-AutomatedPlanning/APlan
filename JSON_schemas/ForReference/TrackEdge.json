@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"length": {},"gauge": {},"hasStartTrackNode": {},"hasEndTrackNode": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"length"
+            ,"gauge"
+            ,"hasStartTrackNode"
+            ,"hasEndTrackNode"
+            ],
+    "additionalProperties": false
+    }

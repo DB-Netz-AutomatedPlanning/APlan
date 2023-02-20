@@ -1,4 +1,8 @@
 {
+    "MapData_consistsOfTier0Objects":["Version","MapData","Release","GeoCoordinates","LineReference","OperationalPoint"],
+    "MapData_consistsOfTier1Objects":["TrackNode","TrackEdge","TrackNavigability"],
+    "MapData_consistsOfTier2Objects":["AreaOfControl","TrackEdgePoint","DirectedTrackEdgePoint","TrackEdgeSection","TrackArea","ContiguousTrackArea","LinearContiguousTrackArea"],
+    "MapData_consistsOfTier3Objects":["AdjacentAreaOfControl","StaticSpeedProfile","SpecificStaticSpeedProfile","AxleLoadSpeedProfile","GradientSegmentLine","GradientSegmentArc","CurveSegmentLine","CurveSegmentArc","CurveSegmentTransition","CantSegmentLine","AllocationSection","DriveProtectionSection","DriveProtectionSectionGroup","Balise","BaliseGroup","SegmentProfile","LightSignal","ETCSMarker","StopLocation","PlatformEdge","TunnelPortal","TunnelTube","Tunnel","SimplePoint","SlipCrossing","Derailer","DiamondCrossing","LevelCrossing","TrackCondition","TractionSystem","CurrentLimitation","PermittedBrakingDistance","TrackProperties","TracksideTrainDetectionArea","MpTargetMarker","RiskBufferConfiguration","Zone","TrackZone","NearTrackZone","ProtectionZone","OverheadLineEquipmentZone","GenericSpatialObject","GenericLinearObject","GenericSpotObject"],
     "MapData_belongsToAreaOfControl": "AreaOfControl",
     "MapData_version": "Version",
     "MapData_containsReleaseInformation": "Release",

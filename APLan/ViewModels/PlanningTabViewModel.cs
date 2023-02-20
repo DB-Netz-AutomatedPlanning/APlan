@@ -121,7 +121,6 @@ namespace APLan.ViewModels
                 eulynxService.plan(EulynxObject, dataBase, etcs);
                 extractMainSignals(EulynxObject);
                 extractOnTrackSignals(EulynxObject);
-                MessageBox.Show("Completed!");
             }
             else
             {

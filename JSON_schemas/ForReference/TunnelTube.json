@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackArea": {},"hasStartTunnelPortal": {},"hasEndTunnelPortal": {},"length": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackArea"
+            ,"hasStartTunnelPortal"
+            ,"hasEndTunnelPortal"
+            ,"length"
+            ],
+    "additionalProperties": false
+    }

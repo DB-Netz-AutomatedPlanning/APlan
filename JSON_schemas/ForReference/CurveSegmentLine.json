@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgeSection": {},"azimuthAngle": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgeSection"
+            ,"azimuthAngle"
+            ],
+    "additionalProperties": false
+    }

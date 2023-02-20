@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgePoint": {},"positionInGroup": {},"baliseTelegram": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgePoint"
+            ,"positionInGroup"
+            ,"baliseTelegram"
+            ],
+    "additionalProperties": false
+    }
