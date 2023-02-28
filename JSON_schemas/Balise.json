@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "id": {
             "type": "string",
             "format": "uuid"
@@ -30,7 +27,7 @@
                 "string",
                 "null"
             ],
-            "maxLength": 1024
+            "pattern": "^[01]{1023}$"
         }
     },
     "required": [

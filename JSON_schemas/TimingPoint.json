@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "id": {
             "type": "string",
             "format": "uuid"
@@ -20,9 +17,8 @@
             "format": "uuid"
         },
         "refersToSignal": {
-            "anyOf": [
-                {}
-            ]
+            "type": "string",
+            "format": "uuid"
         },
         "stoppingPointReachDistance": {
             "type": "string",

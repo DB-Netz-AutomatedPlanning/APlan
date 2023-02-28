@@ -1083,7 +1083,7 @@
       ]
     },
     "ERDM/0.2.0": {
-      "sha512": "mgxCF3HAJHaMQvS3Njk0D7yh5Fa/AjtP+Vwjq6+b4w+J/F60tw3VCqOfCeqdjEf89eDLh7siWjVzKehRKaCiQA==",
+      "sha512": "TuP4KZleQWbb8+v8YePzbppKrQicVRHTjecl9LfGev7S8PZucuSQrHyfOUdT4SBMSgHAIqphW4Bn60hvwNxchA==",
       "type": "package",
       "path": "erdm/0.2.0",
       "files": [
@@ -3090,9 +3090,10 @@
         "net6.0-windows"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "F:\\ERDM\\ERDM_C#_Library_XML_JSON\\ERDM_Library\\ERDM\\bin\\Debug": {},
         "F:\\ERDM\\Libraries": {},
-        "F:\\RCA\\RCA_Nuget": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "F:\\RCA\\RCA_Nuget": {}
       },
       "frameworks": {
         "net6.0-windows7.0": {

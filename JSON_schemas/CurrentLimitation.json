@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "id": {
             "type": "string",
             "format": "uuid"
@@ -22,7 +19,7 @@
             "maximum": 15000
         },
         "appliesToTrackEdgeSection": {
-           "type": "array",
+            "type": "array",
             "items": {
                 "type": "string",
                 "format": "uuid"

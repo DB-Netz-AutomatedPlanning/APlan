@@ -1,17 +1,40 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "version": {
             "type": "string",
             "format": "uuid"
         },
         "appliesToTrackNode": {
-            "type": "array",
-            "minItems": 1,
-            "maxItems": 4
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 1,
+                    "maxItems": 1
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                }
+            ]
         },
         "appliesToTrackArea": {
             "type": "string",

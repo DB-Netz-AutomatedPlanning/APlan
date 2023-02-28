@@ -159,12 +159,12 @@ namespace APLan.ViewModels
 
             BaseViewModel.erdmModel = ERDMcreator.createModel(SegmentsFilePath,GradientsFilePath,NodesFilePath,EdgesFilePath);
 
-
-            drawERDM(erdmModel);
-
-            var baseViewModel = System.Windows.Application.Current.FindResource("baseViewModel") as BaseViewModel;
-            baseViewModel.WelcomeVisibility = Visibility.Collapsed;
-            ((Window)parameter).Close();
+            if (erdmModel != null) { 
+                drawERDM(erdmModel);
+                var baseViewModel = System.Windows.Application.Current.FindResource("baseViewModel") as BaseViewModel;
+                baseViewModel.WelcomeVisibility = Visibility.Collapsed;
+                ((Window)parameter).Close();
+            }
         }
         private void ExecuteCancel(object parameter)
         {
@@ -206,8 +206,8 @@ namespace APLan.ViewModels
         /// </summary>
         private void drawMapData(MapData mapData, ERDM.ERDMmodel erdmModel)
         {
-           //drawSegments(mapData,erdmModel); //Segments
-           //drawNodes(mapData,erdmModel); //Nodes
+           drawSegments(mapData,erdmModel); //Segments
+           drawNodes(mapData,erdmModel); //Nodes
         }
         /// <summary>
         /// add the segments to the LA list and the corresponding points.
@@ -215,7 +215,7 @@ namespace APLan.ViewModels
         /// <param name="erdmModel"></param>
         private void drawSegments(MapData mapData,ERDM.ERDMmodel erdmModel)
         {
-            var segments = getAllSegmentsOfMapData(mapData,erdmModel);
+            var segments = getAllSegmentsOfMapData(mapData, erdmModel);
             foreach (CurveSegment segment in segments)
             {
                 CustomPolyLine polyLine = new();
@@ -263,15 +263,16 @@ namespace APLan.ViewModels
         /// <param name="mapData"></param>
         /// <param name="erdmModel"></param>
         /// <returns></returns>
-        private ArrayList getAllSegmentsOfMapData(MapData mapData, ERDM.ERDMmodel erdmModel)
+        private List<CurveSegment> getAllSegmentsOfMapData(MapData mapData, ERDM.ERDMmodel erdmModel)
         {
+            List<CurveSegment> curveSegments = new();
 
-            var mapDataSegmentsArc = erdmModel.Tier3.CurveSegmentArc.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ToList();
-            var mapDataSegmentsLine = erdmModel.Tier3.CurveSegmentLine.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ToList();
-            var mapDataSegmentsTransition = erdmModel.Tier3.CurveSegmentTransition.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ToList();
+            erdmModel.Tier3.CurveSegmentArc.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ForEach(x=>curveSegments.Add(x));
+            erdmModel.Tier3.CurveSegmentLine.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ForEach(x => curveSegments.Add(x));
+            erdmModel.Tier3.CurveSegmentTransition.FindAll(x => mapData.consistsOfTier3Objects.Contains(x.id)).ForEach(x => curveSegments.Add(x));
 
-            ArrayList mapDataSegments = new() { mapDataSegmentsArc, mapDataSegmentsLine, mapDataSegmentsTransition };
-            return mapDataSegments;
+
+            return curveSegments;
         }
         /// <summary>
         /// get all Nodes of this specific MapData by the help of the ERDM object.

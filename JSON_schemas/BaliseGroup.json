@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "id": {
             "type": "string",
             "format": "uuid"
@@ -27,7 +24,7 @@
             "maximum": 16382
         },
         "consistsOfBalise": {
-           "type": "array",
+            "type": "array",
             "items": {
                 "type": "string",
                 "format": "uuid"

@@ -118,11 +118,18 @@ namespace APLan.Views
                 && NodesFileBox.Background == themeColor
                 && EdgesFileBox.Background == themeColor)
             {
-                createProject.IsEnabled = true;
+                if (createProject != null)
+                {
+                    createProject.IsEnabled = true;
+                }
             }
             else
             {
-                createProject.IsEnabled = false;
+                if (createProject!=null)
+                {
+                    createProject.IsEnabled = false;
+                }
+                
             }
         }
     }

@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "id": {
             "type": "string",
             "format": "uuid"
@@ -17,7 +14,7 @@
             "format": "uuid"
         },
         "appliesToTrackNode": {
-            "oneOf": [
+            "anyOf": [
                 {
                     "type": "array",
                     "items": {

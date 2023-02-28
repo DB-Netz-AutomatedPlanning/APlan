@@ -25,6 +25,12 @@ namespace ERDM_Implementation
             var nodes = reader.ReadXLSContent(NodesPath, 0); // simulated information till we get the correct one.
             var edges = reader.ReadXLSContent(EdgesPath, 0); // simulated information till we get the correct one.
 
+            //return null if sth is wrong
+            if (horizotanSegments==null || gradients == null || nodes == null || edges == null)
+            {
+                return null;
+            }
+
             ERDM.Tier_0.Version version = new ERDM.Tier_0.Version();
             AreaOfControl areaOfControl = new AreaOfControl();
 
