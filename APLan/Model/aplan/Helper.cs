@@ -342,13 +342,13 @@ namespace aplan.core
         /// <param name="db">lite database</param>
         public static string convertLocatedEntityTypeToString(LocatedNetEntity locatedNetEntity, LiteDatabase db)
         {
-            if(locatedNetEntity is Signal)
+            if (locatedNetEntity is Signal)
             {
                 var id = locatedNetEntity.id;
                 var aSignal = db.GetCollection<database.Signal>("Signals").Find(x => x.uuid == id).FirstOrDefault();
                 return aSignal.signalType;
             }
-            else if(locatedNetEntity is Turnout)
+            else if (locatedNetEntity is Turnout)
             {
                 var id = locatedNetEntity.id;
                 var aTurnout = db.GetCollection<TrackEntity>("TrackEntities").Find(x => x.uuid == id).FirstOrDefault();
@@ -356,7 +356,7 @@ namespace aplan.core
             }
             return "";
 
-           
+
         }
 
 
@@ -373,10 +373,17 @@ namespace aplan.core
             var hm_m = hektometerPlusMeter.Split('+');
             if (hm_m.Count() != 2) return null;
 
-            if (double.TryParse(hm_m[0], out var hm) && double.TryParse(hm_m[1], out var m))
-                return hm + m / 1000;
-            else
-                return null;
+            hm_m[0] = hm_m[0].Replace(",", ".");
+            hm_m[1] = hm_m[1].Replace(",", ".");
+
+            var hm = double.Parse(hm_m[0], System.Globalization.CultureInfo.InvariantCulture);
+            var m = double.Parse(hm_m[1], System.Globalization.CultureInfo.InvariantCulture);
+
+            return hm + m / 1000;
+            //if (double.TryParse(hm_m[0], out var hm) && double.TryParse(hm_m[1], out var m))
+            //    return hm + m / 1000;
+            //else
+            //    return null;
         }
 
 
@@ -391,12 +398,19 @@ namespace aplan.core
                 return 0;
 
             var hm_m = hektometerPlusMeter.Split('+');
+
+            hm_m[0] = hm_m[0].Replace(",", ".");
+            hm_m[1] = hm_m[1].Replace(",", ".");
+
             if (hm_m.Count() != 2) return null;
 
-            if (double.TryParse(hm_m[0], out var hm) && double.TryParse(hm_m[1], out var m))
-                return hm / 10 + m / 1000;
-            else
-                return null;
+            var hm = double.Parse(hm_m[0], System.Globalization.CultureInfo.InvariantCulture);
+            var m = double.Parse(hm_m[1], System.Globalization.CultureInfo.InvariantCulture);
+
+            //if (double.TryParse(hm_m[0], out var hm) && double.TryParse(hm_m[1], out var m))
+            return hm + m / 1000;
+            //else
+            //    return null;
         }
 
 
@@ -417,7 +431,7 @@ namespace aplan.core
             sortedChainages = min_max
                 .SelectMany(v => v)
                 .OrderBy(v => v);
-            
+
 
             return (min: sortedChainages.FirstOrDefault(), max: sortedChainages.LastOrDefault());
         }
