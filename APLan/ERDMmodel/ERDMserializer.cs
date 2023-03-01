@@ -1,4 +1,4 @@
-﻿using RCA_Model.Tier_0;
+﻿using ERDM.Tier_0;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,14 +8,15 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace APLan.ERDMmodel
+
+namespace ERDM_Implementation
 {
     public class ERDMserializer
     {
-        private MapData mapData;
-        public ERDMserializer(MapData mapData)
+        private ERDM.ERDMmodel erdmModel;
+        public ERDMserializer(ERDM.ERDMmodel erdmModel)
         {
-            this.mapData = mapData;
+            this.erdmModel = erdmModel;
         }
         /// <summary>
         /// serialize the ERDM model to JSON string.
@@ -23,9 +24,9 @@ namespace APLan.ERDMmodel
         /// <returns></returns>
         public string serializeERDM()
         {
-            if (this.mapData!=null)
+            if (this.erdmModel!=null)
             {
-                string MapDataObjectJson = System.Text.Json.JsonSerializer.Serialize<MapData>(mapData, new JsonSerializerOptions() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } });
+                string MapDataObjectJson = System.Text.Json.JsonSerializer.Serialize<ERDM.ERDMmodel>(erdmModel, new JsonSerializerOptions() { WriteIndented = true, Converters = { new JsonStringEnumConverter() } });
                 return MapDataObjectJson;
             }
             return null;

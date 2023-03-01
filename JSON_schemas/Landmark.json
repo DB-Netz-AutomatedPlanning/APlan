@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "id": {
             "type": "string",
             "format": "uuid"
@@ -34,7 +31,10 @@
             ]
         },
         "label": {
-            "type": "array",
+            "type": [
+                "array",
+                "null"
+            ],
             "items": {
                 "type": "string",
                 "pattern": "^[a-zA-Z_0-9]*$"

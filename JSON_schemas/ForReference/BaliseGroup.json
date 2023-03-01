@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"countryIdentifier": {},"baliseGroupIdentifier": {},"consistsOfBalise": {},"locationAccuracy": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"countryIdentifier"
+            ,"baliseGroupIdentifier"
+            ,"consistsOfBalise"
+            ,"locationAccuracy"
+            ],
+    "additionalProperties": false
+    }

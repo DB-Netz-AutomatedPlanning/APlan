@@ -1,9 +1,7 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
+
         "id": {
             "type": "string",
             "format": "uuid"
@@ -17,9 +15,8 @@
             "format": "uuid"
         },
         "geometricConstruct": {
-            "anyOf": [
-                {}
-            ]
+            "type": "string",
+            "format": "uuid"
         },
         "appliesToTrackArea": {
             "type": "string",

@@ -7,9 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
-
-    public class XLSreader
+public class XLSreader
     {
         /// <summary>
         /// read an .xls (1997-2003) file without opening the file using NOPI library.
@@ -20,7 +20,7 @@ using System.Threading.Tasks;
         {
             ArrayList data = new ArrayList();
             ArrayList columnNames = new ArrayList();
-
+            try { 
             using (var stream = new FileStream(filePath, FileMode.Open))
             {
                 var workbook = new HSSFWorkbook(stream);
@@ -53,6 +53,12 @@ using System.Threading.Tasks;
                     }
                 }
             }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return null;  //return null if sth is wrong
+        } 
             return data;
         }
         /// <summary>
