@@ -1,15 +1,14 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
+
         "id": {
             "type": "string",
             "format": "uuid"
         },
         "refersToMapDataVersion": {
-            "type": "string"
+            "type": "string",
+            "format": "uuid"
         },
         "insertsMapDataObjects": {
             "type": [

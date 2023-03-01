@@ -1,9 +1,6 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
         "id": {
             "type": "string",
             "format": "uuid"
@@ -13,21 +10,18 @@
             "pattern": "^[a-zA-Z_0-9]*$"
         },
         "version": {
-            "type": "string"
-            ,
+            "type": "string",
             "format": "uuid"
         },
         "appliesToTrackArea": {
-            "type": "string"
-            ,
+            "type": "string",
             "format": "uuid"
         },
         "isDependentOnAllocationSection": {
             "type": "array",
             "items": {
-                "type": "string"
-                ,
-            "format": "uuid"
+                "type": "string",
+                "format": "uuid"
             },
             "minItems": 1
         }

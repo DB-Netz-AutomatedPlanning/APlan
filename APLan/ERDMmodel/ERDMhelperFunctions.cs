@@ -1,7 +1,7 @@
-﻿using RCA_Model.Tier_0;
-using RCA_Model.Tier_1;
-using RCA_Model.Tier_2;
-using RCA_Model.Tier_3;
+﻿using ERDM.Tier_0;
+using ERDM.Tier_1;
+using ERDM.Tier_2;
+using ERDM.Tier_3;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,13 +16,13 @@ namespace ERDM_Implementation
 {
     public class ERDMhelperFunctions
     {
-        public static TrackEdgeSection CreateOrFindTrackEdgeSection(double x1, double y1, double z1, double offset1, double x2, double y2, double z2, double offset2,string? segmentID,string? trackEdgeID,double length,MapData? mapData, RCA_Model.Tier_0.Version verison)
+        public static TrackEdgeSection CreateOrFindTrackEdgeSection(double x1, double y1, double z1, double offset1, double x2, double y2, double z2, double offset2,string? segmentID,string? trackEdgeID,double length,MapData? mapData, ERDM.Tier_0.Version verison, ERDM.ERDMmodel erdmModel)
         {
         
-            TrackEdge trackEdge = mapData?.consistsOfTier1Objects?.Find(x => x is TrackEdge && x.name.Equals(trackEdgeID)) as TrackEdge;
+            TrackEdge trackEdge = erdmModel?.Tier1?.TrackEdge.Find(x => x is TrackEdge && x.name.Equals(trackEdgeID)) as TrackEdge;
 
-            var startTrackEdge = CreatOrFindTrackEdgePoint(x1, y1, z1,offset1,trackEdge ,mapData, verison);
-            var endTrackEdge = CreatOrFindTrackEdgePoint(x2, y2, z2, offset1,trackEdge, mapData, verison);
+            var startTrackEdge = CreatOrFindTrackEdgePoint(x1, y1, z1,offset1,trackEdge ,mapData, verison,erdmModel);
+            var endTrackEdge = CreatOrFindTrackEdgePoint(x2, y2, z2, offset1,trackEdge, mapData, verison, erdmModel);
 
             // necessary composition for creation of a segment.
             TrackEdgeSection TES = new();
@@ -37,7 +37,8 @@ namespace ERDM_Implementation
             TES.version = verison.id;
             TES.isPartOfTrackEdge = trackEdge?.id;
 
-            mapData?.consistsOfTier2Objects?.Add(TES);
+            mapData?.consistsOfTier2Objects?.Add(TES.id);
+            erdmModel?.Tier2?.TrackEdgeSection.Add(TES);
 
             return TES;
         }
@@ -49,12 +50,12 @@ namespace ERDM_Implementation
         /// <param name="z"></param>
         /// <param name="mapData"></param>
         /// <returns></returns>
-        public static GeoCoordinates CreatOrFindGeoCoordinates(double x, double y, double z, MapData mapData)
+        public static GeoCoordinates CreatOrFindGeoCoordinates(double x, double y, double z, MapData mapData, ERDM.ERDMmodel erdmModel)
         {
             //search for existing geoCoordinate
-            if (mapData.consistsOfTier0Objects!=null)
+            if (erdmModel.Tier0!=null)
             {
-                foreach (var item in mapData.consistsOfTier0Objects)
+                foreach (var item in erdmModel.Tier0.GeoCoordinates)
                 {
                     if (item is GeoCoordinates)
                     {
@@ -68,7 +69,7 @@ namespace ERDM_Implementation
             }
 
             //create a new one.
-            var newGeoCoordinate = CreateNewGeoCoordinates(x, y, z, mapData);
+            var newGeoCoordinate = CreateNewGeoCoordinates(x, y, z, mapData, erdmModel);
             return newGeoCoordinate;
         }
         /// <summary>
@@ -79,19 +80,19 @@ namespace ERDM_Implementation
         /// <param name="z"></param>
         /// <param name="mapData"></param>
         /// <returns></returns>
-        public static TrackEdgePoint CreatOrFindTrackEdgePoint(double x, double y, double z,double offset,TrackEdge trackEdge, MapData mapData, RCA_Model.Tier_0.Version version)
+        public static TrackEdgePoint CreatOrFindTrackEdgePoint(double x, double y, double z,double offset,TrackEdge trackEdge, MapData mapData, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             //search for existing geoCoordinate
-            var geoCoordiante = CreatOrFindGeoCoordinates(x,y,z,mapData);
+            var geoCoordiante = CreatOrFindGeoCoordinates(x,y,z,mapData,erdmModel);
 
-            var trackEdgePoint = mapData?.consistsOfTier2Objects?.Find(x => x is TrackEdgePoint && (x as TrackEdgePoint).isLocatedAtGeoCoordinates.Equals(geoCoordiante.id)) as TrackEdgePoint;
+            var trackEdgePoint = erdmModel?.Tier2?.TrackEdgePoint.Find(x => x is TrackEdgePoint && (x as TrackEdgePoint).isLocatedAtGeoCoordinates.Equals(geoCoordiante.id)) as TrackEdgePoint;
 
             //if found
             if (trackEdgePoint != null)
                 return trackEdgePoint;
 
             //create a new one.
-            return CreateNewTrackEdgePoint(x, y, z, offset, trackEdge, mapData,version);
+            return CreateNewTrackEdgePoint(x, y, z, offset, trackEdge, mapData,version,erdmModel);
         }
         /// <summary>
         /// create trackEdge using start and end nodes
@@ -101,7 +102,7 @@ namespace ERDM_Implementation
         /// <param name="endNode"></param>
         /// <param name="mapData"></param>
         /// <param name="version"></param>
-        public static void CreateNewTrackEdge(string? name,double length, TrackNode? startNode, TrackNode? endNode, MapData mapData, RCA_Model.Tier_0.Version version)
+        public static void CreateNewTrackEdge(string? name,double length, TrackNode? startNode, TrackNode? endNode, MapData mapData, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             //Create new one if not found.
             var trackEdge = new TrackEdge()
@@ -115,7 +116,8 @@ namespace ERDM_Implementation
                 hasEndTrackNode = endNode?.id
             };
             // add to Tier0
-            mapData.consistsOfTier1Objects?.Add(trackEdge);
+            mapData.consistsOfTier1Objects?.Add(trackEdge.id);
+            erdmModel.Tier1?.TrackEdge.Add(trackEdge);
         }
 
         /// <summary>
@@ -126,7 +128,7 @@ namespace ERDM_Implementation
         /// <param name="z"></param>
         /// <param name="mapData"></param>
         /// <returns></returns>
-        private static GeoCoordinates CreateNewGeoCoordinates(double x, double y, double z, MapData mapData)
+        private static GeoCoordinates CreateNewGeoCoordinates(double x, double y, double z, MapData mapData, ERDM.ERDMmodel erdmModel)
         {
             var newGeoCoordinate = new GeoCoordinates()
             {
@@ -138,7 +140,8 @@ namespace ERDM_Implementation
                 zCoordinate = z,
             };
             // add to Tier0
-            mapData.consistsOfTier0Objects?.Add(newGeoCoordinate);
+            mapData.consistsOfTier0Objects?.Add(newGeoCoordinate.id);
+            erdmModel.Tier0?.GeoCoordinates.Add(newGeoCoordinate);
             return newGeoCoordinate;
         }
 
@@ -150,10 +153,10 @@ namespace ERDM_Implementation
         /// <param name="mapdata"></param>
         /// <param name="version"></param>
         /// <returns></returns>
-        private static TrackEdgePoint CreateNewTrackEdgePoint(double x, double y, double z, double offset,TrackEdge trackEdge, MapData mapData,RCA_Model.Tier_0.Version version)
+        private static TrackEdgePoint CreateNewTrackEdgePoint(double x, double y, double z, double offset,TrackEdge trackEdge, MapData mapData, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             //find geoCoordinate with the same x,y and z or create one.
-            var geoCoordiante = CreatOrFindGeoCoordinates(x, y, z, mapData);
+            var geoCoordiante = CreatOrFindGeoCoordinates(x, y, z, mapData, erdmModel);
 
             TrackEdgePoint trackEdgePoint = new TrackEdgePoint()
             {
@@ -164,7 +167,8 @@ namespace ERDM_Implementation
                 version = version.id,
                 isPositionedOnTrackEdge = trackEdge.id
             };
-            mapData.consistsOfTier2Objects?.Add(trackEdgePoint);
+            mapData.consistsOfTier2Objects?.Add(trackEdgePoint.id);
+            erdmModel.Tier2?.TrackEdgePoint.Add(trackEdgePoint);
             return trackEdgePoint;
         }
 
@@ -176,7 +180,7 @@ namespace ERDM_Implementation
         /// <param name="mapData"></param>
         /// <param name="version"></param>
         /// <returns></returns>
-        public static TrackNode CreateNewTrackNode(GeoCoordinates geoCoordiante, string? name, MapData mapData, RCA_Model.Tier_0.Version version)
+        public static TrackNode CreateNewTrackNode(GeoCoordinates geoCoordiante, string? name, MapData mapData, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             TrackNode node = new TrackNode()
             {
@@ -186,16 +190,17 @@ namespace ERDM_Implementation
                 version = version.id,
                 nodeType = TrackNodeType.EndOfTrack
             };
-            mapData?.consistsOfTier1Objects?.Add(node);
+            mapData?.consistsOfTier1Objects?.Add(node.id);
+            erdmModel?.Tier1?.TrackNode.Add(node);
             return node;
         }
 
-        public static List<string> ExtractTrackEdgeSectionsForGradients(double startKM, double endKM,MapData mapData)
+        public static List<string> ExtractTrackEdgeSectionsForGradients(double startKM, double endKM,MapData mapData,ERDM.ERDMmodel erdmModel)
         {
             var trackEdgeSections = new List<string>();
-            var result = mapData.consistsOfTier2Objects.FindAll(x => x is TrackEdgePoint && (((TrackEdgePoint)x).offset >= startKM && ((TrackEdgePoint)x).offset <= endKM));
+            var result = erdmModel.Tier2.TrackEdgePoint.FindAll(x => x is TrackEdgePoint && (((TrackEdgePoint)x).offset >= startKM && ((TrackEdgePoint)x).offset <= endKM));
 
-            foreach (var item in mapData.consistsOfTier2Objects)
+            foreach (var item in erdmModel.Tier2.TrackEdgeSection)
             {
                 if (item is TrackEdgeSection)
                 {

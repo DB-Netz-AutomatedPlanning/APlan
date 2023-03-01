@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgeSection": {},"hasCenterAtGeoCoordinates": {},"clothoidParameter": {},"initialArcLength": {},"azimuthAngle": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgeSection"
+            ,"hasCenterAtGeoCoordinates"
+            ,"clothoidParameter"
+            ,"initialArcLength"
+            ,"azimuthAngle"
+            ],
+    "additionalProperties": false
+    }

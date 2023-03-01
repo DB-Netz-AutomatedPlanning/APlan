@@ -21,7 +21,6 @@ namespace APLan.Views
     /// </summary>
     public partial class ERDMproject : Window
     {
-
         private ERDMviewModel eRDMnewProjectViewModel;
         private SolidColorBrush themeColor;
         //hints getters and setters
@@ -118,11 +117,18 @@ namespace APLan.Views
                 && NodesFileBox.Background == themeColor
                 && EdgesFileBox.Background == themeColor)
             {
-                createProject.IsEnabled = true;
+                if (createProject != null)
+                {
+                    createProject.IsEnabled = true;
+                }
             }
             else
             {
-                createProject.IsEnabled = false;
+                if (createProject!=null)
+                {
+                    createProject.IsEnabled = false;
+                }
+                
             }
         }
     }

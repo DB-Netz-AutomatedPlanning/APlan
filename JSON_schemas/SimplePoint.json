@@ -1,9 +1,7 @@
 {
     "type": "object",
     "properties": {
-        "$type": {
-            "type": "string"
-        },
+
         "id": {
             "type": "string",
             "format": "uuid"
@@ -17,9 +15,9 @@
             "format": "uuid"
         },
         "appliesToTrackNode": {
-            "oneOf": [
+            "anyOf": [
                 {
-                     "type": "array",
+                    "type": "array",
                     "items": {
                         "type": "string",
                         "format": "uuid"
@@ -28,7 +26,7 @@
                     "maxItems": 1
                 },
                 {
-                     "type": "array",
+                    "type": "array",
                     "items": {
                         "type": "string",
                         "format": "uuid"
@@ -37,7 +35,7 @@
                     "maxItems": 2
                 },
                 {
-                     "type": "array",
+                    "type": "array",
                     "items": {
                         "type": "string",
                         "format": "uuid"

@@ -1,6 +1,6 @@
 ﻿using APLan.Commands;
-using APLan.ERDMmodel;
 using APLan.HelperClasses;
+using ERDM_Implementation;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -97,9 +97,9 @@ namespace APLan.ViewModels
             this._projectName = projectName;
             var window = ((System.Windows.Window)objects[3]);
 
-            if (exportType.Equals("JSON(ERDM)") && BaseViewModel.ERDMmodel != null)
+            if (exportType.Equals("JSON(ERDM)") && BaseViewModel.erdmModel != null)
             {
-                ERDMserializer eRDMserializer = new(BaseViewModel.ERDMmodel);
+                ERDMserializer eRDMserializer = new(BaseViewModel.erdmModel);
 
                 System.IO.File.WriteAllText(exportPath + "\\" + projectName + ".json", eRDMserializer.serializeERDM());
             }
