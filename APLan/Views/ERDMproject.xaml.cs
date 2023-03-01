@@ -21,7 +21,6 @@ namespace APLan.Views
     /// </summary>
     public partial class ERDMproject : Window
     {
-
         private ERDMviewModel eRDMnewProjectViewModel;
         private SolidColorBrush themeColor;
         //hints getters and setters

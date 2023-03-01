@@ -36,7 +36,7 @@ namespace aplan.core
             return collection;
         }
 
-        
+
         /// <summary>
         /// Method to fetch information as individual value from a feature.
         /// </summary>
@@ -170,7 +170,7 @@ namespace aplan.core
             FeatureCollection collectionKM = jsonToFeatureCollection(path);
             if (collectionIsNull(collectionKM))
                 return;
-            
+
             // create collection for mileage
             var mileageCollection = db.GetCollection<Mileage>("Mileage");
 
@@ -181,16 +181,16 @@ namespace aplan.core
                     id = fetchIndividualValue("ID", feature).ToString(),
                     alignmentTypeCode = germanAlignmentTypeToInt(fetchIndividualValue("ELTYP", feature).ToString()),
                     alignmentTypeText = (horizontalAlignmentType)germanAlignmentTypeToInt(fetchIndividualValue("ELTYP", feature).ToString()),
-                    length = Convert.ToDouble(fetchIndividualValue("PARAM1", feature)),
-                    initialRadius = Convert.ToDouble(fetchIndividualValue("PARAM2", feature)),
-                    endRadius = Convert.ToDouble(fetchIndividualValue("PARAM3", feature)),
+                    length = double.Parse(fetchIndividualValue("PARAM1", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    initialRadius = double.Parse(fetchIndividualValue("PARAM2", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    endRadius = double.Parse(fetchIndividualValue("PARAM3", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
                     startKM = hmToKm_mileage(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm_mileage(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
                 //store all info related to this id (khaled).
                 mileage.SourceFileConnectingID = generateUUID();
-                InfoExtractor.getAllInfo().Add(mileage.SourceFileConnectingID, feature); 
-                
+                InfoExtractor.getAllInfo().Add(mileage.SourceFileConnectingID, feature);
+
                 // instantiate coordinate objects
                 handleLinearCoordinateMileage(db, feature);
                 mileage.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -369,14 +369,14 @@ namespace aplan.core
             {
                 if (!feature.Geometry.Type.Equals(GeoJSON.Net.GeoJSONObjectType.LineString))
                     continue;
-                
+
                 var netElement = new NetElement()
                 {
                     id = fetchIndividualValue("ID", feature).ToString(),
                     status = fetchIndividualValue("STATUS", feature).ToString(),
                     startNodeId = fetchIndividualValue("KN_ID_V", feature).ToString(),
                     endNodeId = fetchIndividualValue("KN_ID_B", feature).ToString(),
-                    length = Convert.ToDouble(fetchIndividualValue("LAENGE_ENT", feature))/1000, //convert to m
+                    length = double.Parse(fetchIndividualValue("LAENGE_ENT", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture) / 1000, //convert to m
                     codeDirection = Convert.ToInt32(fetchIndividualValue("RIKZ", feature)),
                     startKm = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKm = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
@@ -384,7 +384,7 @@ namespace aplan.core
                 };
                 //store all info related to this id (khaled).
                 netElement.SourceFileConnectingID = generateUUID();
-                InfoExtractor.getAllInfo().Add(netElement.SourceFileConnectingID, feature); 
+                InfoExtractor.getAllInfo().Add(netElement.SourceFileConnectingID, feature);
 
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
@@ -409,7 +409,7 @@ namespace aplan.core
 
             // create collection for Gleiskanten
             var collection = db.GetCollection<Node>("Nodes");
-            
+
             foreach (Feature feature in collectionNO.Features)
             {
                 if (!feature.Geometry.Type.Equals(GeoJSON.Net.GeoJSONObjectType.Point))
@@ -426,7 +426,7 @@ namespace aplan.core
                 };
                 //store all info related to this id (khaled).
                 node.SourceFileConnectingID = generateUUID();
-                InfoExtractor.getAllInfo().Add(node.SourceFileConnectingID, feature); 
+                InfoExtractor.getAllInfo().Add(node.SourceFileConnectingID, feature);
                 // handle destination nodes
                 node.destinationNodeID = new ArrayList();
                 for (int i = 0; i < 3; i++)
@@ -437,7 +437,7 @@ namespace aplan.core
                 // instantiate coordinate objects
                 handleLinearCoordinatePoint(db, feature);
                 node.coordinate = handleCartesianCoordinatePoint(db, feature);
-                
+
                 collection.Insert(node);
             }
         }
@@ -465,17 +465,17 @@ namespace aplan.core
                     codeDirection = Convert.ToInt32(fetchIndividualValue("RIKZ", feature)),
                     alignmentTypeCode = Convert.ToInt32(fetchIndividualValue("ELTYP", feature)),
                     alignmentTypeText = (horizontalAlignmentType)Convert.ToInt32(fetchIndividualValue("ELTYP", feature)),
-                    length = Convert.ToDouble(fetchIndividualValue("PARAM1", feature)),
-                    initialRadius = Convert.ToDouble(fetchIndividualValue("PARAM2", feature)),
-                    endRadius = Convert.ToDouble(fetchIndividualValue("PARAM3", feature)),
-                    initialAzimuth = Convert.ToDouble(fetchIndividualValue("WINKEL_AN", feature)),
+                    length = double.Parse(fetchIndividualValue("PARAM1", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    initialRadius = double.Parse(fetchIndividualValue("PARAM2", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    endRadius = double.Parse(fetchIndividualValue("PARAM3", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    initialAzimuth = double.Parse(fetchIndividualValue("WINKEL_AN", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
                     startKM = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
                 //store all info related to this id (khaled).
                 horizontalAlignment.SourceFileConnectingID = generateUUID();
                 InfoExtractor.getAllInfo().Add(horizontalAlignment.SourceFileConnectingID, feature);
-                
+
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 horizontalAlignment.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -507,18 +507,18 @@ namespace aplan.core
                     codeDirection = Convert.ToInt32(fetchIndividualValue("RIKZ", feature)),
                     alignmentTypeCode = Convert.ToInt32(fetchIndividualValue("ELTYP", feature)),
                     alignmentTypeText = (verticalAlignmentType)Convert.ToInt32(fetchIndividualValue("ELTYP", feature)),
-                    length = Convert.ToDouble(fetchIndividualValue("PARAM1", feature)),
-                    initialSlope = Convert.ToDouble(fetchIndividualValue("PARAM2", feature)),
-                    endSlope = Convert.ToDouble(fetchIndividualValue("PARAM3", feature)),
-                    initialHeight = Convert.ToDouble(fetchIndividualValue("HOEHE_A_R", feature)),
-                    endHeight = Convert.ToDouble(fetchIndividualValue("HOEHE_E_R", feature)),
+                    length = double.Parse(fetchIndividualValue("PARAM1", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    initialSlope = double.Parse(fetchIndividualValue("PARAM2", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    endSlope = double.Parse(fetchIndividualValue("PARAM3", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    initialHeight = double.Parse(fetchIndividualValue("HOEHE_A_R", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    endHeight = double.Parse(fetchIndividualValue("HOEHE_E_R", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
                     startKM = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKM = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
                 //store all info related to this id (khaled).
                 verticalAlignment.SourceFileConnectingID = generateUUID();
                 InfoExtractor.getAllInfo().Add(verticalAlignment.SourceFileConnectingID, feature);
-                
+
                 // instantiate coordinate objects
                 handleLinearCoordinateLine(db, feature);
                 verticalAlignment.lineCoordinates = handleCartesianCoordinateLine(db, feature);
@@ -550,9 +550,9 @@ namespace aplan.core
                     codeDirection = Convert.ToInt32(fetchIndividualValue("RIKZ", feature)),
                     alignmentTypeCode = Convert.ToInt32(fetchIndividualValue("ELTYP", feature)),
                     alignmentTypeText = (alignmentCantType)Convert.ToInt32(fetchIndividualValue("ELTYP", feature)),
-                    length = Convert.ToDouble(fetchIndividualValue("PARAM1", feature)),
-                    initialSuperelevation = Convert.ToDouble(fetchIndividualValue("PARAM2", feature)),
-                    endSuperelevation = Convert.ToDouble(fetchIndividualValue("PARAM3", feature)),
+                    length = double.Parse(fetchIndividualValue("PARAM1", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    initialSuperelevation = double.Parse(fetchIndividualValue("PARAM2", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
+                    endSuperelevation = double.Parse(fetchIndividualValue("PARAM3", feature).ToString(), System.Globalization.CultureInfo.InvariantCulture),
                     startKm = hmToKm(fetchIndividualValue("KM_A_TEXT", feature).ToString()),
                     endKm = hmToKm(fetchIndividualValue("KM_E_TEXT", feature).ToString()),
                 };
