@@ -41,7 +41,7 @@ public class XLSreader
                         while (cells !=null && cells.MoveNext())
                         {
                             ICell? cell = cells.Current;
-                            string? value = cell?.ToString();
+                            string? value = (cell!=null && cell.CellType==CellType.Numeric)?cell.NumericCellValue.ToString():cell.StringCellValue;
                             if (cell!=null & value != null && !value.Equals("") && cells.Current?.ColumnIndex < columnNames.Count)
                             {
                                 dictionary.Add(columnNames[cells.Current.ColumnIndex].ToString(), value.ToString());
@@ -58,7 +58,7 @@ public class XLSreader
             {
                 MessageBox.Show(e.Message);
                 return null;  //return null if sth is wrong
-        } 
+            } 
             return data;
         }
         /// <summary>

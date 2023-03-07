@@ -169,6 +169,10 @@ namespace APLan.ViewModels
             {
                 ExportWindow export = new ExportWindow();
                 export.ShowDialog();
+            }else if (exportType == "Eulynx" || exportType == "XML(ERDM)")
+            {
+                ExportWindow export = new ExportWindow();
+                export.ShowDialog();
             }
             else if (exportType == "pdf")
             {

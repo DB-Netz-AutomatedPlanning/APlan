@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Xml.Schema;
+using System.Xml;
 
 namespace APLan.ViewModels
 {
@@ -89,7 +91,7 @@ namespace APLan.ViewModels
         #region logic
         private void ExecuteFilePath(object parameter)
         {
-            openFileDialog1.Filter = "Types (*.json)|*.json";
+            openFileDialog1.Filter = "json file (*.json)|*.json|xml file (*.xml)|*.xml";
             openFileDialog1.ShowDialog();
             JSON = openFileDialog1.FileName;
         }
@@ -117,12 +119,13 @@ namespace APLan.ViewModels
         /// <param name="report"></param>
         /// <param name="json"></param>
         /// <returns></returns>
-        public async Task<string> validate(string json)
+        public async Task<string> validate(string erdmFile)
         {
-            LoadingReport = "Validating against JSON-Schema";
+            FileInfo info = new(erdmFile);
+            LoadingReport = "Validating";
             await Task.Run(() =>
             {
-                if (File.Exists(json)) // if the file exists only.
+                if (File.Exists(erdmFile) && info.Extension.Equals(".json")) // if the file exists only.
                 {
                     var jsonContent = File.ReadAllText(JSON);
                     var attributeTypes = File.ReadAllText(Directory.GetCurrentDirectory() + "\\JSON_schemas\\AttributeTypes.json");
@@ -138,6 +141,9 @@ namespace APLan.ViewModels
 
                     Report = ListReportToString(MapDataErrorMessages, typesReport);
                     File.WriteAllText($"{Path}/ERDMvalidation.txt", Report);
+                }else if (File.Exists(erdmFile) && info.Extension.Equals(".xml"))
+                {
+                    validateXML(erdmFile);
                 }
                 createReportFile(Report, Path + "/" + nameof(Report) + ".txt");
             });
@@ -334,6 +340,47 @@ namespace APLan.ViewModels
             }
             return validation;
         }
+        /// <summary>
+        /// validate ERDM xml file against xsd schema.
+        /// </summary>
+        private void validateXML(string xmlFile)
+        {
+            Report = "";
+            XmlReaderSettings settings = new XmlReaderSettings();
+
+            settings.Schemas.Add("", $"{Directory.GetCurrentDirectory()}\\ERDMxsd\\ERDM.xsd");
+
+            settings.ValidationType = ValidationType.Schema;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
+            settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+
+            settings.ValidationEventHandler += xmlValidationEventHandler;
+
+            XmlReader books = XmlReader.Create(xmlFile, settings);
+
+            while (books.Read()) { }
+        }
+
+        /// <summary>
+        /// event handler for xml validation process.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void xmlValidationEventHandler(object sender, System.Xml.Schema.ValidationEventArgs e)
+        {
+        
+            if (e.Severity == XmlSeverityType.Warning)
+            {
+                Report +="WARNING: ";
+                Report += e.Message +"\n";
+            }
+            else if (e.Severity == XmlSeverityType.Error)
+            {
+                Report += "ERROR: ";
+                Report += e.Message + "\n";
+            }
+        }
+
         #endregion
     }
 }

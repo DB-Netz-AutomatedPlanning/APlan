@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {}
+    "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj": {}
   },
   "projects": {
-    "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {
+    "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+        "projectUniqueName": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj",
         "projectName": "APLan",
-        "projectPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+        "projectPath": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj",
         "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
-        "outputPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\obj\\",
+        "outputPath": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -22,7 +22,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "F:\\ERDM\\ERDM_C#_Library_XML_JSON\\ERDM_Library\\ERDM\\bin\\Debug": {},
           "F:\\ERDM\\Libraries": {},
           "F:\\RCA\\RCA_Nuget": {}
         },
@@ -46,9 +45,9 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
-            "ERDM": {
+            "ERDMlibrary": {
               "target": "Package",
-              "version": "[0.2.0, )"
+              "version": "[1.0.0, )"
             },
             "EulynxDpLibrary": {
               "target": "Package",

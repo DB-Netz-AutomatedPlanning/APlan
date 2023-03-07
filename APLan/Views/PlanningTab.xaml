@@ -49,7 +49,7 @@
                         <ComboBoxItem Content="dxf"/>
                         <ComboBoxItem Content="Plan Pro" IsEnabled="False"/>
                         <ComboBoxItem Content="JSON(ERDM)"/>
-
+                        <ComboBoxItem Content="XML(ERDM)"/>
                 </ComboBox>
                     <Label Content="Export"></Label>
             </StackPanel>

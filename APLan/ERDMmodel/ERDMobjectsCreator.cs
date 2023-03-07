@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NPOI.SS.Formula.Functions;
 
 namespace ERDM_Implementation
 {
@@ -26,7 +27,7 @@ namespace ERDM_Implementation
             var edges = reader.ReadXLSContent(EdgesPath, 0); // simulated information till we get the correct one.
 
             //return null if sth is wrong
-            if (horizotanSegments==null || gradients == null || nodes == null || edges == null)
+            if (horizotanSegments == null || gradients == null || nodes == null || edges == null)
             {
                 return null;
             }
@@ -36,7 +37,9 @@ namespace ERDM_Implementation
 
             version.id = Guid.NewGuid().ToString();
             version.version = 1;
-            version.created = DateTimeOffset.UtcNow;
+            DateTime dateTime = DateTime.UtcNow;
+            TimeSpan offset = TimeSpan.Zero;
+            version.created = new ERDM.CustomDateTime(new DateTimeOffset(dateTime, offset));
             version.status = LevelOfMaturity.validated;
             version.hashValue = ERDMhelperFunctions.CreateSHA512("helllo");
 
@@ -71,6 +74,13 @@ namespace ERDM_Implementation
             erdmModel.Tier0.MapData.Add(mapData);
             erdmModel.Tier2.AreaOfControl.Add(areaOfControl);
 
+            //trials of some attributes
+            //erdmModel.Tier3.Balise.Add(new() { baliseTelegram = new ERDM.CustomBitArray(new bool[] { true, false, true }) });
+            //erdmModel.Tier3.SegmentProfile.Add(new SegmentProfile() { utcTimeOffset = new ERDM.CustomTime() { value=TimeSpan.FromHours(-0.5) } });
+            //LightSignal signal = new() { id = Guid.NewGuid().ToString() };
+            //erdmModel.Tier3.LightSignal.Add(signal);
+            //erdmModel.Tier3.TimingPoint.Add(new() {refersToSignal= signal.id });
+            
             ERDMobjectsCreator creator = new ERDMobjectsCreator();
 
             creator.TrackNodesCreator(nodes, mapData, version, erdmModel); //simulated data.

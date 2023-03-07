@@ -2,6 +2,7 @@
 using ERDM.Tier_1;
 using ERDM.Tier_2;
 using ERDM.Tier_3;
+using MathNet.Numerics;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace ERDM_Implementation
                     if (item is GeoCoordinates)
                     {
                         var geoCoordinate = item as GeoCoordinates;
-                        if (geoCoordinate?.xCoordinate == x && geoCoordinate?.yCoordinate == y && geoCoordinate?.zCoordinate == z)
+                        if (geoCoordinate?.xCoordinate == ((double)Math.Truncate((decimal)x * 1000000m) / 1000000.0) && geoCoordinate?.yCoordinate == ((double)Math.Truncate((decimal)y * 1000000m) / 1000000.0) && geoCoordinate?.zCoordinate == ((double)Math.Truncate((decimal)z * 1000000m) / 1000000.0))
                         {
                             return geoCoordinate;
                         }

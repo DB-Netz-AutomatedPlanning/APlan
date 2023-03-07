@@ -30,7 +30,7 @@ namespace APLan.Views
         #endregion
         public ERDMvalidator()
         {
-            FilePathHint = "please enter the path for the .json file";
+            FilePathHint = "please enter the path for the .json or .xml file";
             OutputPathHint = "please select the output path for the validation report";
             InitializeComponent();
             validatorViewModel = System.Windows.Application.Current.FindResource("EulynxValidatorViewModel") as EulynxValidatorViewModel;
@@ -44,7 +44,7 @@ namespace APLan.Views
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textbox = ((TextBox)sender);
-            if (File.Exists(textbox.Text) && System.IO.Path.GetExtension(textbox.Text).EqualsIgnoreCase(".json"))
+            if (File.Exists(textbox.Text) && System.IO.Path.GetExtension(textbox.Text).EqualsIgnoreCase(".json") ||  System.IO.Path.GetExtension(textbox.Text).EqualsIgnoreCase(".xml"))
             {
                 textbox.Background = themeColor;
                 textbox.Foreground = Brushes.Black;

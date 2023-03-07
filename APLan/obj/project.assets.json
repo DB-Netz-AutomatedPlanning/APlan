@@ -47,17 +47,17 @@
           }
         }
       },
-      "ERDM/0.2.0": {
+      "ERDMlibrary/1.0.0": {
         "type": "package",
         "dependencies": {
-          "Newtonsoft.Json": "13.0.2",
-          "System.Text.Json": "7.0.1"
+          "Newtonsoft.Json": "9.0.1",
+          "System.Text.Json": "7.0.2"
         },
         "compile": {
-          "lib/net6.0/ERDM.dll": {}
+          "lib/net6.0/ERDMlibrary.dll": {}
         },
         "runtime": {
-          "lib/net6.0/ERDM.dll": {}
+          "lib/net6.0/ERDMlibrary.dll": {}
         }
       },
       "EulynxDpLibrary/1.0.0": {
@@ -923,7 +923,7 @@
           }
         }
       },
-      "System.Text.Json/7.0.1": {
+      "System.Text.Json/7.0.2": {
         "type": "package",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0",
@@ -1082,15 +1082,15 @@
         "lib/netstandard2.1/Enums.NET.xml"
       ]
     },
-    "ERDM/0.2.0": {
-      "sha512": "TuP4KZleQWbb8+v8YePzbppKrQicVRHTjecl9LfGev7S8PZucuSQrHyfOUdT4SBMSgHAIqphW4Bn60hvwNxchA==",
+    "ERDMlibrary/1.0.0": {
+      "sha512": "BzKVHKCE4HPBhPwc0O1fYGOxUK2qhL//Ous1u+RfViUndXflcBf1ON4unZbp4/2+1id5eHQwo4zoL0TbiW+eGA==",
       "type": "package",
-      "path": "erdm/0.2.0",
+      "path": "erdmlibrary/1.0.0",
       "files": [
         ".nupkg.metadata",
-        "erdm.0.2.0.nupkg.sha512",
-        "erdm.nuspec",
-        "lib/net6.0/ERDM.dll"
+        "erdmlibrary.1.0.0.nupkg.sha512",
+        "erdmlibrary.nuspec",
+        "lib/net6.0/ERDMlibrary.dll"
       ]
     },
     "EulynxDpLibrary/1.0.0": {
@@ -2800,10 +2800,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Text.Json/7.0.1": {
-      "sha512": "OtDEmCCiNl8JAduFKZ/r0Sw6XZNHwIicUYy/mXgMDGeOsZLshH37qi3oPRzFYiryVktiMoQLByMGPtRCEMYbeQ==",
+    "System.Text.Json/7.0.2": {
+      "sha512": "/LZf/JrGyilojqwpaywb+sSz8Tew7ij4K/Sk+UW8AKfAK7KRhR6mKpKtTm06cYA7bCpGTWfYksIW+mVsdxPegQ==",
       "type": "package",
-      "path": "system.text.json/7.0.1",
+      "path": "system.text.json/7.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2866,7 +2866,7 @@
         "lib/net7.0/System.Text.Json.xml",
         "lib/netstandard2.0/System.Text.Json.dll",
         "lib/netstandard2.0/System.Text.Json.xml",
-        "system.text.json.7.0.1.nupkg.sha512",
+        "system.text.json.7.0.2.nupkg.sha512",
         "system.text.json.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -3050,7 +3050,7 @@
   "projectFileDependencyGroups": {
     "net6.0-windows7.0": [
       "CommunityToolkit.Mvvm >= 8.0.0",
-      "ERDM >= 0.2.0",
+      "ERDMlibrary >= 1.0.0",
       "EulynxDpLibrary >= 1.0.0",
       "Extended.Wpf.Toolkit >= 4.5.0",
       "GeoJSON.Net >= 1.2.19",
@@ -3076,11 +3076,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+      "projectUniqueName": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj",
       "projectName": "APLan",
-      "projectPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+      "projectPath": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj",
       "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
-      "outputPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\obj\\",
+      "outputPath": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -3091,7 +3091,6 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "F:\\ERDM\\ERDM_C#_Library_XML_JSON\\ERDM_Library\\ERDM\\bin\\Debug": {},
         "F:\\ERDM\\Libraries": {},
         "F:\\RCA\\RCA_Nuget": {}
       },
@@ -3115,9 +3114,9 @@
             "target": "Package",
             "version": "[8.0.0, )"
           },
-          "ERDM": {
+          "ERDMlibrary": {
             "target": "Package",
-            "version": "[0.2.0, )"
+            "version": "[1.0.0, )"
           },
           "EulynxDpLibrary": {
             "target": "Package",

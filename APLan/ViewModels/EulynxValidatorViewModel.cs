@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace APLan.ViewModels
 {
@@ -99,6 +100,8 @@ namespace APLan.ViewModels
         }
         private async void ExecuteValidate(object parameter)
         {
+            XmlSerializer XMLserializer = new XmlSerializer(typeof(ERDM.ERDMmodel));
+
             startLoading();
             //define XSD validation version based on the imported xml.
             await validate(XML);

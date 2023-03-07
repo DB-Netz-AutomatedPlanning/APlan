@@ -103,6 +103,12 @@ namespace APLan.ViewModels
 
                 System.IO.File.WriteAllText(exportPath + "\\" + projectName + ".json", eRDMserializer.serializeERDM());
             }
+            else if (exportType.Equals("XML(ERDM)") && BaseViewModel.erdmModel != null)
+            {
+                ERDMserializer eRDMserializer = new(BaseViewModel.erdmModel);
+
+                eRDMserializer.serializeERDMtoXML(exportPath + "\\" + projectName + ".xml");
+            }
             else
             if (exportType.Equals("Eulynx") && exportType != null && projectName != null && Directory.Exists(exportPath))
             {
