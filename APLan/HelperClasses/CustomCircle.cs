@@ -63,6 +63,7 @@ namespace APLan.HelperClasses
             Thickness = new();
             Radius = new();
             Data = new ObservableCollection<KeyValue>();
+            ShapeAttributeInfo = new ObservableCollection<KeyValue>();
         }
     }
 }

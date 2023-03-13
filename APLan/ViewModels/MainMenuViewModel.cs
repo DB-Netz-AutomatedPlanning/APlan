@@ -12,6 +12,16 @@ using System.Windows.Forms;
 using aplan.eulynx;
 using org.apache.xml.resolver.helpers;
 using Dsafa.WpfColorPicker;
+using aplan.database;
+using System.Windows.Media.Imaging;
+using java.util;
+using System;
+using java.nio.file;
+using Spire.Pdf;
+
+using net.sf.saxon.functions;
+using Patagames.Pdf.Net;
+using PdfDocument = Spire.Pdf.PdfDocument;
 
 namespace APLan.ViewModels
 {
@@ -19,16 +29,28 @@ namespace APLan.ViewModels
     {
         #region attributes
         private FolderBrowserDialog folderBrowserDialog1;
+        private Microsoft.Win32.SaveFileDialog safeFileDialog1;
+        private OpenFileDialog openFileDialog1;
+        private List<String> pdfFiles = null;
         public string SavePath
         {
             get;
             set;
         }
+        public List<String> PDFFiles
+        {
+            get { return pdfFiles; }
+            set
+            {
+                pdfFiles = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region commands      
 
-         
+
         public ICommand NewProject { get; set; }
         public ICommand AddData { get; set; }
         public ICommand PreviewData { get; set;}
@@ -53,6 +75,12 @@ namespace APLan.ViewModels
 
         public ICommand ERDM { get; set; }
 
+        public ICommand Snapshot { get; set; }
+
+        public ICommand MergePdfFiles { get; set; }
+
+        public ICommand PdfViewer { get; set; }
+
 
 
 
@@ -73,6 +101,7 @@ namespace APLan.ViewModels
             AboutWPF = new RelayCommand(ExecuteAboutWPF);
             ExitProgram = new RelayCommand(ExecuteExitProgram);
             folderBrowserDialog1 = new();
+            safeFileDialog1 = new Microsoft.Win32.SaveFileDialog();
 
             Undo = new RelayCommand(ExecuteUndoProgram);
             Redo = new RelayCommand(ExecuteRedoProgram);
@@ -80,7 +109,11 @@ namespace APLan.ViewModels
             ColorPicker = new RelayCommand(ExecuteColorPickingView);
             ChooseProjectType = new RelayCommand(ChooseProject);
             ERDM = new RelayCommand(ERDMmodel);
-
+            Snapshot = new RelayCommand(ExecuteSnapshot);
+            MergePdfFiles = new RelayCommand(ExecuteMergePdfFiles);
+            openFileDialog1 = new OpenFileDialog();
+            PDFFiles = new List<String>();
+            PdfViewer = new RelayCommand(ExecutePDFViewer);
 
 
         }
@@ -88,6 +121,94 @@ namespace APLan.ViewModels
 
         #region logic
 
+
+        private void ExecutePDFViewer(object parameter)
+        {
+            openFileDialog1.Multiselect = false;
+            openFileDialog1.Filter = "Types (*.pdf;*.pdf)|*.pdf;*.pdf";
+            openFileDialog1.ShowDialog();
+            PdfCommon.Initialize();
+
+            //Open and load a PDF document from a file.
+            PdfViewer pdf = new();
+            pdf.pdfview.LoadDocument(openFileDialog1.FileName);
+            pdf.ShowDialog();
+        }
+        private void ExecuteMergePdfFiles(object parameter)
+        {
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.Filter = "Types (*.pdf;*.pdf)|*.pdf;*.pdf";
+            openFileDialog1.ShowDialog();
+            if (openFileDialog1.FileNames.Length > 1)
+            {
+                
+                foreach (string file in openFileDialog1.FileNames)
+                {
+                    PDFFiles.Add(file);                   
+                    
+                }
+            }
+
+            //open pdf documents            
+            PdfDocument[] docs = new PdfDocument[PDFFiles.Count];
+            for (int i = 0; i < PDFFiles.Count; i++)
+            {
+                docs[i] = new PdfDocument(PDFFiles[i]);
+                 
+            }
+
+            for(int i=1;i<PDFFiles.Count;i++)
+            {
+                docs[0].AppendPage(docs[i]);
+            }
+            
+            safeFileDialog1.Filter = "Data Files (*.pdf)|*.pdf";
+            safeFileDialog1.DefaultExt = "pdf";
+            safeFileDialog1.AddExtension = true;
+            
+            if (safeFileDialog1.ShowDialog() == true)
+            {
+
+                docs[0].SaveToFile(safeFileDialog1.FileName);
+
+                //Initialize the SDK library
+                //You have to call this function before you can call any PDF processing functions.
+              
+
+            }
+            //PdfCommon.Initialize();
+
+            ////Open and load a PDF document from a file.
+            //PdfViewer pdf = new();
+            //pdf.pdfview.LoadDocument(safeFileDialog1.FileName);
+            //pdf.ShowDialog();
+            
+            foreach (PdfDocument doc in docs)
+            {
+                doc.Close();
+            }
+            //PDFDocumentViewer("MergeDocuments.pdf");
+        }
+        private void ExecuteSnapshot(object parameter)
+        {
+            int width = Convert.ToInt32(MainWindow.basCanvas.ActualWidth);
+            int height = Convert.ToInt32(MainWindow.basCanvas.ActualHeight);
+            RenderTargetBitmap renderTargetBitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+            renderTargetBitmap.Render(MainWindow.basCanvas);
+            PngBitmapEncoder pngImage = new PngBitmapEncoder();
+            pngImage.Frames.Add(BitmapFrame.Create(renderTargetBitmap));            
+            safeFileDialog1.Filter = "Data Files (*.png)|*.png";
+            safeFileDialog1.DefaultExt = "png";
+            safeFileDialog1.AddExtension = true;
+
+            if (safeFileDialog1.ShowDialog() == true)
+            {
+                using (Stream filestream = File.Create(safeFileDialog1.FileName))
+                {
+                    pngImage.Save(filestream);
+                }
+            }
+        }
 
         private void ChooseProject(object parameter)
         {

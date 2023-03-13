@@ -10,19 +10,20 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace APLan.Views
 {
     /// <summary>
-    /// Interaction logic for AplanCADViewer.xaml
+    /// Interaction logic for PdfViewer.xaml
     /// </summary>
-    public partial class AplanCADViewer : UserControl
+    public partial class PdfViewer : Window
     {
-        public AplanCADViewer()
+        public Patagames.Pdf.Net.Controls.Wpf.PdfViewer pdfview;
+        public PdfViewer()
         {
             InitializeComponent();
+            pdfview = this.pdfViewer1;
         }
     }
 }

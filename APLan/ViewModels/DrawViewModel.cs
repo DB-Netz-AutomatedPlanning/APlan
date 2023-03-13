@@ -955,10 +955,70 @@ namespace APLan.ViewModels
                 }
             }
         }
-        
+
         #endregion
-        
+
         #region additional logic
+        //private RectangleGeometry GetRecTangularGeometryForMyCanvas(MouseEventArgs e)
+        //{
+        //    var element2 = VisualTreeHelpers.FindAncestor<Canvas>((UIElement)e.Source, "mycanvas");
+
+        //    if (e.LeftButton == MouseButtonState.Pressed)
+        //    {
+        //        Rectangle newSelectionRectangle = new Rectangle() { Fill = Brushes.LightSkyBlue, Opacity = 0.5, IsHitTestVisible = false };
+
+
+
+        //        var mouseX = Mouse.GetPosition(element2).X;
+        //        var mouseY = Mouse.GetPosition(element2).Y;
+
+        //        if (centerPoint.X == -1)
+        //        {
+        //            centerPoint = Mouse.GetPosition(element2);
+
+        //        }
+        //        else
+        //        {
+        //            //var userControl = VisualTreeHelpers.FindAncestor<UserControl>(element);
+        //            //var userControlAngle = ((RotateTransform)userControl.RenderTransform).Angle;
+
+        //            newSelectionRectangle.LayoutTransform = new RotateTransform() { Angle = 0, CenterX = 0, CenterY = 0 };
+
+        //            newSelectionRectangle.Width = Math.Abs(mouseX - centerPoint.X);
+        //            newSelectionRectangle.Height = Math.Abs(mouseY - centerPoint.Y);
+
+        //            ScaleTransform s = new ScaleTransform();
+        //            RectangleGeometry expandedHitTestArea = new RectangleGeometry(new Rect(Canvas.GetLeft(newSelectionRectangle), Canvas.GetTop(newSelectionRectangle), newSelectionRectangle.Width, newSelectionRectangle.Height));
+        //            if (mouseX - centerPoint.X >= 0 && mouseY - centerPoint.Y < 0)
+        //            {
+        //                s.ScaleX = 1;
+        //                s.ScaleY = -1;
+        //                newSelectionRectangle.RenderTransform = s;
+        //                expandedHitTestArea = new RectangleGeometry(new Rect(Canvas.GetLeft(newSelectionRectangle), Canvas.GetTop(newSelectionRectangle) - newSelectionRectangle.Height, newSelectionRectangle.Width, newSelectionRectangle.Height));
+
+        //            }
+        //            else if (mouseX - centerPoint.X <= 0 && mouseY - centerPoint.Y < 0)
+        //            {
+        //                s.ScaleX = -1;
+        //                s.ScaleY = -1;
+        //                newSelectionRectangle.RenderTransform = s;
+        //                expandedHitTestArea = new RectangleGeometry(new Rect(Canvas.GetLeft(newSelectionRectangle) - newSelectionRectangle.Width, Canvas.GetTop(newSelectionRectangle) - newSelectionRectangle.Height, newSelectionRectangle.Width, newSelectionRectangle.Height));
+
+        //            }
+        //            else if (mouseX - centerPoint.X <= 0 && mouseY - centerPoint.Y > 0)
+        //            {
+        //                s.ScaleX = -1;
+        //                s.ScaleY = 1;
+        //                newSelectionRectangle.RenderTransform = s;
+        //                expandedHitTestArea = new RectangleGeometry(new Rect(Canvas.GetLeft(selectionRectangle) - newSelectionRectangle.Width, Canvas.GetTop(newSelectionRectangle), newSelectionRectangle.Width, newSelectionRectangle.Height));
+        //            }
+        //            return expandedHitTestArea;
+        //        }
+        //    }
+        //    return new RectangleGeometry();
+            
+        //}
+
         /// <summary>
         /// algorithm to select multiple items at once.
         /// </summary>
@@ -966,8 +1026,8 @@ namespace APLan.ViewModels
         private void multiselectAlgo( MouseEventArgs e)
         {
             var element = VisualTreeHelpers.FindAncestor<Canvas>((UIElement)e.Source,"baseCanvas");
-           
-            
+            //var element2 = VisualTreeHelpers.FindChild<Canvas>((UIElement)e.Source, "mycanvas");
+
             element.Children.Remove(selectionRectangle);
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -1024,7 +1084,9 @@ namespace APLan.ViewModels
                         selectionRectangle.RenderTransform = s;
                         expandedHitTestArea = new RectangleGeometry(new Rect(Canvas.GetLeft(selectionRectangle) - selectionRectangle.Width, Canvas.GetTop(selectionRectangle), selectionRectangle.Width, selectionRectangle.Height));
                     }
+                    //var element2 = VisualTreeHelpers.FindChild<Rectangle>((UIElement)selectionRectangle, "mycanvas");
                     RecGeometry = expandedHitTestArea;
+                    //RecGeometry = GetRecTangularGeometryForMyCanvas(e);
                     multiSelectHitTest(expandedHitTestArea, element);
                 }
             }
@@ -1557,6 +1619,7 @@ namespace APLan.ViewModels
                 newEllipse.RadiusY = Radius;
                 newEllipse.EllipseVertexCenter = new Point(centerPoint.X + xCoordinatesAdjust, -centerPoint.Y + yCoordinatesAdjust);
                 newEllipse.Color = new SolidColorBrush() { Color = SelectedColorForACAD };
+                newEllipse.Thickness = 2;
 
                 newEllipse.ShapeAttributeInfo.Add(new KeyValue()
                 {

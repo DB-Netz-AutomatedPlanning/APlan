@@ -1,0 +1,26 @@
+﻿<Window x:Class="APLan.Views.PdfViewer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Wpf="clr-namespace:Patagames.Pdf.Net.Controls.Wpf;assembly=Patagames.Pdf.Wpf"
+             xmlns:Toolbars="clr-namespace:Patagames.Pdf.Net.Controls.Wpf.ToolBars;assembly=Patagames.Pdf.Wpf"
+             xmlns:local="clr-namespace:APLan.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" Name="pdfViewerView">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <ToolBarTray Grid.Row="0">
+            <Toolbars:PdfToolBarMain Window="{Binding ElementName= pdfViewerView}" PdfViewer="{Binding ElementName=pdfViewer1}" Name="toolbarMain1"></Toolbars:PdfToolBarMain>
+            <Toolbars:PdfToolBarClipboard PdfViewer="{Binding ElementName=pdfViewer1}" Name="toolbarClipboard1"></Toolbars:PdfToolBarClipboard>
+        </ToolBarTray>
+
+        <ScrollViewer Grid.Row="1" CanContentScroll="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Wpf:PdfViewer Name="pdfViewer1" />
+        </ScrollViewer>
+    </Grid>
+</Window>

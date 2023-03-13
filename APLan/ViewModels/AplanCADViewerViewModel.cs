@@ -79,7 +79,7 @@ namespace APLan.ViewModels
         public ICommand ArcDrawingTwoPointCenter { get; set; } 
         public ICommand threePointCurve { get; set; }
         
-        
+
         #endregion
 
         #region constructor
@@ -92,20 +92,21 @@ namespace APLan.ViewModels
             HorizontalLineDrawing = new RelayCommand(ExecuteHorizontalLineDrawing);
             VerticalLineDrawing = new RelayCommand(ExecuteVerticalLineDrawing);
             ParallelLineDrawing = new RelayCommand(ExecuteParallelLineDrawing);
+
             CircleDrawing = new RelayCommand(ExecuteCircleDrawing);
-            EllipseDrawing = new RelayCommand(ExecuteEllipseDrawing);
+        
             PolylineDrawing = new RelayCommand(ExecutePolylineDrawing);
             ArcDrawingTwoPointCenter = new RelayCommand(ExecuteArcDrawing2Points);
             threePointCurve = new RelayCommand(ExecutethreePointCurve);
             AngularDrawing = new RelayCommand(ExecuteAngularDrawing);
             drawViewModel = System.Windows.Application.Current.FindResource("drawViewModel") as DrawViewModel;
-
+            
 
         }
         #endregion
 
         #region logic        
-
+         
         private void ExecuteAngularDrawing(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.AngularLine)

@@ -1,28 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {}
+    "C:\\Users\\user\\Desktop\\latest\\APLan\\APLan.csproj": {}
   },
   "projects": {
-    "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {
+    "C:\\Users\\user\\Desktop\\latest\\APLan\\APLan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\latest\\APLan\\APLan.csproj",
         "projectName": "APLan",
-        "projectPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
-        "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
-        "outputPath": "F:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\obj\\",
+        "projectPath": "C:\\Users\\user\\Desktop\\latest\\APLan\\APLan.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\latest\\APLan\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net6.0-windows"
         ],
         "sources": {
-          "F:\\ERDM\\Libraries": {},
-          "F:\\RCA\\RCA_Nuget": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Users\\user\\Downloads": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -57,6 +57,10 @@
               "target": "Package",
               "version": "[4.5.0, )"
             },
+            "FreeSpire.PDF": {
+              "target": "Package",
+              "version": "[8.6.0, )"
+            },
             "GeoJSON.Net": {
               "target": "Package",
               "version": "[1.2.19, )"
@@ -80,6 +84,10 @@
             "Newtonsoft.Json.Schema": {
               "target": "Package",
               "version": "[3.0.15-beta2, )"
+            },
+            "Pdfium.Net.SDK": {
+              "target": "Package",
+              "version": "[4.78.2704, )"
             },
             "Saxon-HE": {
               "target": "Package",
@@ -129,24 +137,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x86",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -155,7 +145,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

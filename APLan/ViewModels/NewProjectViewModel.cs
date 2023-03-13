@@ -22,6 +22,7 @@ using System.Linq;
 using System.Net;
 
 
+
 namespace APLan.ViewModels
 {
     public class NewProjectViewModel : BaseViewModel
@@ -557,17 +558,21 @@ namespace APLan.ViewModels
             DxfDocument dxfReader = DxfDocument.Load(DXF);       
             List<netDxf.Entities.EntityObject> boundary2 = new List<netDxf.Entities.EntityObject>();
             #region POINTSDXF
-            foreach (netDxf.Entities.Point pnts in dxfReader.Points)
+            if(dxfReader.Points.Count() > 0)
             {
-                if (pnts.Layer.Name == "GlobalDrawingPoint")
+                foreach (netDxf.Entities.Point pnts in dxfReader.Points)
                 {
-                    System.Windows.Point globalPoint = new System.Windows.Point((pnts.Position.X), (pnts.Position.Y));
+                    if (pnts.Layer.Name == "GlobalDrawingPoint")
+                    {
+                        System.Windows.Point globalPoint = new System.Windows.Point((pnts.Position.X), (pnts.Position.Y));
 
-                    ViewModels.DrawViewModel.GlobalDrawingPoint = globalPoint;
-                    ModelViewModel.firspoint.X = globalPoint.X;
-                    ModelViewModel.firspoint.Y = globalPoint.Y;
+                        ViewModels.DrawViewModel.GlobalDrawingPoint = globalPoint;
+                        ModelViewModel.firspoint.X = globalPoint.X;
+                        ModelViewModel.firspoint.Y = globalPoint.Y;
+                    }
                 }
             }
+           
             #endregion
 
             // cheking for the Inserts entity and the entities made for it
@@ -597,13 +602,32 @@ namespace APLan.ViewModels
                             newEllipse.Radius = radius;
                             newEllipse.Thickness = thickness;
                             newEllipse.EllipseVertexCenter = centerVertex;
+                            newEllipse.Color = new SolidColorBrush() { Color = Colors.DarkViolet };
+                            newEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Radius",
+                                Value = "" + radius + ""
+
+                            });
+                            newEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Center",
+                                Value = "" + centerVertex + ""
+
+                            });
+                            newEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Thickness",
+                                Value = "" + thickness + ""
+
+                            });
                             Circle_List.Add(newEllipse);
 
                         }
                         //if the entiites is text type
                         if (e is netDxf.Entities.Text txt)
                         {
-                            if (e.Layer.Name != "0" && e.IsVisible == true && txt.Value.Length > 0 && txt.Value.Length < 9)
+                            if (e.Layer.Name != "0" && txt.IsVisible == true && txt.Value.Length > 0 && txt.Value.Length < 9)
                             {
                                 CustomTextBlock textBlock = new CustomTextBlock();
                                 Point newPoint = new Point((((double)txt.Position.X)), (((double)txt.Position.Y)));
@@ -696,6 +720,7 @@ namespace APLan.ViewModels
                         // if the entities is of arc type
                         if (e is netDxf.Entities.Arc arc)
                         {
+                            
                             System.Windows.Point endPoint = new System.Windows.Point((arc.Center.X + Math.Cos(arc.EndAngle * Math.PI / 180) * arc.Radius), (arc.Center.Y + Math.Sin(arc.EndAngle * Math.PI / 180) * arc.Radius));
                             System.Windows.Point startPoint = new System.Windows.Point((arc.Center.X + Math.Cos(arc.StartAngle * Math.PI / 180) * arc.Radius), (arc.Center.Y + Math.Sin(arc.StartAngle * Math.PI / 180) * arc.Radius));
                             double sweep = 0.0;
@@ -721,6 +746,54 @@ namespace APLan.ViewModels
                                 ModelViewModel.firspoint.Y = startPoint.Y;
                                 DrawViewModel.GlobalDrawingPoint = ModelViewModel.firspoint;
                             }
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "StartPoint",
+                                Value = "" + startPoint + ""
+
+                            });
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "EndPoint",
+                                Value = "" + endPoint + ""
+
+                            });
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Radius",
+                                Value = "" + newArc.Radius + ""
+
+                            });
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Center",
+                                Value = "" + newArc.Center + ""
+
+                            });
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "IsLargeArc",
+                                Value = "" + newArc.IsLargeArc + ""
+
+                            });
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Thickness",
+                                Value = "" + newArc.Thickness + ""
+
+                            });
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "SweepDirection",
+                                Value = "" + sweepDirection + ""
+
+                            });
+                            newArc.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Normal",
+                                Value = "" + newArc.Normal + ""
+
+                            });
                             Arc_List.Add(newArc);
 
 
@@ -760,6 +833,18 @@ namespace APLan.ViewModels
                                             DrawViewModel.GlobalDrawingPoint = ModelViewModel.firspoint;
                                         }
                                         newpolylinewpf.Color = new SolidColorBrush() { Color = Colors.DarkViolet };
+                                        newpolylinewpf.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "EndPoint",
+                                            Value = "" + endpoint + ""
+
+                                        });
+                                        newpolylinewpf.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "StartPoint",
+                                            Value = "" + startpoint + ""
+
+                                        });
                                         Polyline_List.Add(newpolylinewpf);
                                     }
                                     else if (lwpoylineEntity is netDxf.Entities.Arc arcLwPolyline)
@@ -789,6 +874,54 @@ namespace APLan.ViewModels
                                             ModelViewModel.firspoint.Y = startPoint.Y;
                                             DrawViewModel.GlobalDrawingPoint = ModelViewModel.firspoint;
                                         }
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "StartPoint",
+                                            Value = "" + startPoint + ""
+
+                                        });
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "EndPoint",
+                                            Value = "" + endPoint + ""
+
+                                        });
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "Radius",
+                                            Value = "" + newArc.Radius + ""
+
+                                        });
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "Center",
+                                            Value = "" + newArc.Center + ""
+
+                                        });
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "IsLargeArc",
+                                            Value = "" + newArc.IsLargeArc + ""
+
+                                        });
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "Thickness",
+                                            Value = "" + newArc.Thickness + ""
+
+                                        });
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "SweepDirection",
+                                            Value = "" + sweepDirection + ""
+
+                                        });
+                                        newArc.ShapeAttributeInfo.Add(new KeyValue()
+                                        {
+                                            Key = "Normal",
+                                            Value = "" + newArc.Normal + ""
+
+                                        });
                                         Arc_List.Add(newArc);
 
 
@@ -800,10 +933,11 @@ namespace APLan.ViewModels
                                 List<netDxf.Entities.LwPolylineVertex> vertexCollection = lwpline1.Vertexes;
                                 PointCollection pointCollection_HO = new PointCollection();
 
-
+                                CustomPolyLine newPolyline_lw = new CustomPolyLine();
                                 foreach (netDxf.Entities.LwPolylineVertex singleVertex in vertexCollection)
                                 {
                                     System.Windows.Point vertexPoint_HO = new System.Windows.Point(singleVertex.Position.X, singleVertex.Position.Y);
+
                                     if (ModelViewModel.firspoint.X == 0)
                                     {
                                         ModelViewModel.firspoint.X = vertexPoint_HO.X;
@@ -812,10 +946,16 @@ namespace APLan.ViewModels
                                     }
 
                                     pointCollection_HO.Add(vertexPoint_HO);
+                                    newPolyline_lw.ShapeAttributeInfo.Add(new KeyValue()
+                                    {
+                                        Key = "Points",
+                                        Value = "" + vertexPoint_HO + ""
+
+                                    });
 
 
                                 }
-                                CustomPolyLine newPolyline_lw = new CustomPolyLine();
+                                
                                 newPolyline_lw.Points = pointCollection_HO;
                                
                                 newPolyline_lw.Color = new SolidColorBrush() { Color = Colors.DarkBlue };
@@ -848,7 +988,62 @@ namespace APLan.ViewModels
                             }
 
                             newpolylinewpf.Color = new SolidColorBrush() { Color = Colors.DarkViolet };
+                            newpolylinewpf.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Startpoint",
+                                Value = "" + startpoint + ""
+
+                            });
+                            newpolylinewpf.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "EndPoint",
+                                Value = "" + endpoint + ""
+
+                            });
                             Polyline_List.Add(newpolylinewpf);
+                        }
+
+                        if (e is netDxf.Entities.Ellipse l)
+                        {
+                            CustomEllipse newCustomEllipse = new CustomEllipse();
+                            System.Windows.Point centerVertex = new System.Windows.Point(l.Center.X, l.Center.Y);
+
+                            newCustomEllipse.RadiusX = (l.MajorAxis / 2);
+                            newCustomEllipse.RadiusY = (l.MinorAxis / 2);
+                            newCustomEllipse.Thickness = l.Thickness;
+                            newCustomEllipse.EllipseVertexCenter = centerVertex;
+                            if (ModelViewModel.firspoint.X == 0)
+                            {
+                                ModelViewModel.firspoint.X = centerVertex.X;
+                                ModelViewModel.firspoint.Y = centerVertex.Y;
+                                DrawViewModel.GlobalDrawingPoint = ModelViewModel.firspoint;
+                            }
+                            newCustomEllipse.Color = new SolidColorBrush() { Color = Colors.DarkViolet };
+                            newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "RadiusX",
+                                Value = "" + newCustomEllipse.RadiusX + ""
+
+                            });
+                            newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "RadiusY",
+                                Value = "" + newCustomEllipse.RadiusY + ""
+
+                            });
+                            newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Center",
+                                Value = "" + centerVertex + ""
+
+                            });
+                            newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                            {
+                                Key = "Thickness",
+                                Value = "" + l.Thickness + ""
+
+                            });
+                            Ellipse_List.Add(newCustomEllipse);
                         }
 
                     }
@@ -1013,6 +1208,8 @@ namespace APLan.ViewModels
             }
             #endregion
 
+             
+
             // entities of type Solid need to be implemented nicely
             //foreach (netDxf.Entities.Solid circ in dxfReader.Solids)
             //{
@@ -1115,6 +1312,7 @@ namespace APLan.ViewModels
             #region ARCDXF
             foreach(netDxf.Entities.Arc newArc in dxfReader.Arcs)
             {
+               
                 System.Windows.Point endPoint = new System.Windows.Point((newArc.Center.X + Math.Cos(newArc.EndAngle * Math.PI / 180) * newArc.Radius), (newArc.Center.Y + (Math.Sin(newArc.EndAngle * (Math.PI / 180)) * newArc.Radius)));
                 System.Windows.Point startPoint = new System.Windows.Point((newArc.Center.X + Math.Cos(newArc.StartAngle * Math.PI / 180) * newArc.Radius), (newArc.Center.Y + Math.Sin(newArc.StartAngle * Math.PI / 180) * newArc.Radius));
                 double sweep = 0.0;
@@ -1124,7 +1322,7 @@ namespace APLan.ViewModels
                 bool IsLargeArc = sweep >= 180;
 
                 Size size = new System.Windows.Size(newArc.Radius, newArc.Radius);
-                SweepDirection sweepDirection = newArc.Normal.Z > 0 ? SweepDirection.Clockwise : SweepDirection.Clockwise;
+                SweepDirection sweepDirection = newArc.Normal.Z > 0 ? SweepDirection.Counterclockwise : SweepDirection.Clockwise; 
 
                 CustomArc newArc2 = new CustomArc();
                 newArc2.StartPoint = startPoint;
@@ -1142,6 +1340,54 @@ namespace APLan.ViewModels
                     ModelViewModel.firspoint.Y = startPoint.Y;
                     DrawViewModel.GlobalDrawingPoint = ModelViewModel.firspoint;
                 }
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "StartPoint",
+                    Value = "" + startPoint + ""
+
+                });
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "EndPoint",
+                    Value = "" + endPoint + ""
+
+                });
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Radius",
+                    Value = "" + newArc.Radius + ""
+
+                });
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Center",
+                    Value = "" + newArc.Center + ""
+
+                });
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "IsLargeArc",
+                    Value = "" + newArc2.IsLargeArc + ""
+
+                });
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Thickness",
+                    Value = "" + newArc2.Thickness + ""
+
+                });
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "SweepDirection",
+                    Value = "" + sweepDirection + ""
+
+                });
+                newArc2.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Normal",
+                    Value = "" + newArc2.Normal + ""
+
+                });
 
                 Arc_List.Add(newArc2);
             }
@@ -1206,11 +1452,76 @@ namespace APLan.ViewModels
                     ModelViewModel.firspoint.Y = centerVertex.Y;
                     DrawViewModel.GlobalDrawingPoint = ModelViewModel.firspoint;
                 }
+                newCustomEllipse.Color = new SolidColorBrush() { Color = Colors.DarkViolet };
+                newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "RadiusX",
+                    Value = "" + newCustomEllipse.RadiusX + ""
+
+                });
+                newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "RadiusY",
+                    Value = "" + newCustomEllipse.RadiusY + ""
+
+                });
+                newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Center",
+                    Value = "" + centerVertex + ""
+
+                });
+                newCustomEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Thickness",
+                    Value = "" + l.Thickness + ""
+
+                });
                 Ellipse_List.Add(newCustomEllipse);
             }
             #endregion
 
-             
+            #region CIRCLEACADDXF
+            foreach (netDxf.Entities.Circle circle in dxfReader.Circles)
+            {
+                CustomCircle newEllipse = new CustomCircle();
+                double radius = circle.Radius;
+                double thickness = circle.Thickness;
+                System.Windows.Point centerVertex = new System.Windows.Point(circle.Center.X, circle.Center.Y);
+                if (ModelViewModel.firspoint.X == 0)
+                {
+                    ModelViewModel.firspoint.X = centerVertex.X;
+                    ModelViewModel.firspoint.Y = centerVertex.Y;
+                    DrawViewModel.GlobalDrawingPoint = ModelViewModel.firspoint;
+                }
+
+                newEllipse.Radius = radius;
+                newEllipse.Thickness = thickness;
+                newEllipse.EllipseVertexCenter = centerVertex;
+                newEllipse.Color = new SolidColorBrush() { Color = Colors.DarkViolet };
+                newEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Radius",
+                    Value = "" + radius + ""
+
+                });
+                newEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Center",
+                    Value = "" + centerVertex + ""
+
+                });
+                newEllipse.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Thickness",
+                    Value = "" + thickness + ""
+
+                });
+                Circle_List.Add(newEllipse);
+            }
+            #endregion
+
+
 
 
             #region JSONorMDBorACADDXFPolylines
@@ -1500,6 +1811,6 @@ namespace APLan.ViewModels
             });
             return true;
         }
-        #endregion
+        #endregion 
     }
 }

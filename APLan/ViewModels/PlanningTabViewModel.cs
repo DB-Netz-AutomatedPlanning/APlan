@@ -27,6 +27,13 @@ using netDxf.Tables;
 using netDxf.Entities;
 using Image = System.Windows.Controls.Image;
 
+using Spire.Pdf;
+using Spire.Pdf.Graphics;
+using Spire.Pdf.Graphics.Fonts;
+using Spire.Pdf.Tables;
+using System.Drawing;
+using System.Data;
+
 namespace APLan.ViewModels
 {
     public class PlanningTabViewModel : BaseViewModel
@@ -149,6 +156,7 @@ namespace APLan.ViewModels
                     //img.Source = bitmap;
                     CustomImage customImage = new CustomImage();
                     customImage.Name = bitmap;
+                    
                     customImage.Height = drawViewModel.RecGeometry.Rect.Height;
                     customImage.Width = drawViewModel.RecGeometry.Rect.Width;
                     //img.Stretch = Stretch.Fill;
@@ -156,13 +164,18 @@ namespace APLan.ViewModels
                     //double yCoordinatesAdjust = (DrawViewModel.sharedCanvasSize) / 2 + DrawViewModel.GlobalDrawingPoint.Y;
                     //System.Windows.Controls.Canvas.SetLeft(img,drawViewModel.RecGeometry.Rect.X+xCoordinatesAdjust);
                     //System.Windows.Controls.Canvas.SetTop(img, -drawViewModel.RecGeometry.Rect.Y+yCoordinatesAdjust);
+                    //customImage.SetLeft = (drawViewModel.RecGeometry.Rect.X + xCoordinatesAdjust);
+                    //customImage.SetTop = (-drawViewModel.RecGeometry.Rect.Y + yCoordinatesAdjust);
                     customImage.SetLeft = drawViewModel.RecGeometry.Rect.Left;
                     customImage.SetTop = drawViewModel.RecGeometry.Rect.Top;
                     NewProjectViewModel.Image_List.Add(customImage);
                 }
             }
         }
-
+        private static void Table_BeginRowLayout(object sender, BeginRowLayoutEventArgs args)
+        {
+            args.MinimalHeight = 25f;
+        }
         private void ExecuteExportButton(object parameter)
         {
             if (exportType == "Eulynx" || exportType == "JSON(ERDM)")
@@ -193,7 +206,10 @@ namespace APLan.ViewModels
                     {
                         XpsDocumentWriter writer = XpsDocument.CreateXpsDocumentWriter(doc);
                         writer.Write(MainWindow.basCanvas);
+                        
                     }
+                   
+
 
                     // Read the XPS document into a dynamically generated
                     // preview Window 
@@ -233,6 +249,172 @@ namespace APLan.ViewModels
                     Application.Current.MainWindow.WindowState = WindowState.Normal;
                     PdfDetailViewerVisibility = Visibility.Collapsed;
                 } 
+            }
+            else if(exportType == "pdfwithtables")
+            {
+                PdfDocument doc = new PdfDocument();
+                PdfPageBase page = doc.Pages.Add(PdfPageSize.A2);
+                PdfTable table = new PdfTable();
+
+                DataTable dataTable = new DataTable();
+                dataTable.Columns.Add("   ");
+                dataTable.Columns.Add("Bezeichnung Haupt- u. Vorsignale");
+                dataTable.Columns.Add("[22]");
+                dataTable.Columns.Add("[24]");
+                dataTable.Columns.Add("[26]");
+                dataTable.Columns.Add(" ");
+                dataTable.Columns.Add("Vf");
+                dataTable.Columns.Add("[Vff]");
+                dataTable.Columns.Add("F");
+                dataTable.Columns.Add("[FF]");
+                dataTable.Columns.Add("  ");
+                dataTable.Columns.Add("[ZU1]");
+                dataTable.Columns.Add("[ZU2]");
+                dataTable.Columns.Add("[ZU3]");
+
+                
+                dataTable.Rows.Add(new string[] { " ", "Bezeichnung Rangiersignale / Schutzsignale", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "1 ", "Bezeichnung Signale", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "2 ", "Standort [km] / Strecke", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "3 ", "Standort [km] / Strecke", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "4 ", "sonstige zulässige Anordnung", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "5 ", "obere Lichtpunkthöhe [mm]", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "6 ", "Rz S8000.5.6 Bild Nr.", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "7 ", "Rz S6250/2440 Blatt 15 Bild Nr.", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "8 ", "Signalsicht (Soll-/Mindestsignalsicht) [m]", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "9 ", "Richtpunktentfernung [m]", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "10 ", "Streuscheibe / Betriebsstellung", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+
+                dataTable.Rows.Add(new string[] { "11 ", "Fundament Art / Höhe [mm] 2), 7)", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+                dataTable.Rows.Add(new string[] { "12 ", "Sonderkonstruktion", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " });
+
+
+                table.DataSource = dataTable;
+                
+                int rowsNumber = table.Rows.Count + 1;
+                int colsNumber = table.Columns.Count;
+                
+                table.Style.ShowHeader = true;
+                table.Style.CellPadding = 15;
+                table.Style.HeaderSource = PdfHeaderSource.ColumnCaptions;
+                table.Style.HeaderRowCount = 1;
+
+                table.Style.HeaderStyle.BackgroundBrush = PdfBrushes.LightSeaGreen;
+                table.Style.HeaderStyle.Font = new PdfTrueTypeFont(new Font("Times New Roman", 12f, System.Drawing.FontStyle.Bold));
+                table.Style.HeaderStyle.StringFormat = new PdfStringFormat(PdfTextAlignment.Left);
+                table.Style.HeaderStyle.TextBrush = PdfBrushes.White;
+
+                float widthofPage = page.Canvas.ClientSize.Width;
+
+                float heightofPage = page.Canvas.ClientSize.Height;
+
+                float tableWidth = 0;
+                tableWidth += table.Columns[0].Width;
+                table.Columns[0].Width = widthofPage * 0.1f * widthofPage;
+               
+                table.Columns[1].StringFormat
+                    = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+                tableWidth += table.Columns[1].Width;
+                table.Columns[1].Width = widthofPage * 0.32f * widthofPage;
+              
+                for (int i=2;i < 14;i++)
+                {
+                    table.Columns[i].StringFormat
+                    = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+                    tableWidth += table.Columns[i].Width;
+                    table.Columns[i].Width = widthofPage * 0.1f * widthofPage;
+                    
+                }               
+                
+
+                table.BeginRowLayout += Table_BeginRowLayout;
+                float y = 20f;
+                PdfLayoutResult result = table.Draw(page, new RectangleF(0,y,900,1604));
+                //PdfLayoutResult result = table.Draw(page, new PointF(0, y));
+                y = y + (rowsNumber-1) * (25f + 2* table.Style.CellPadding);  //25f is the minimum row height--> Table_BeginRowLayout
+
+ 
+
+
+
+                Spire.Pdf.Graphics.Layer.PdfLayer layer = doc.Layers.AddLayer("Image Layer");
+                SizeF size = doc.Pages[0].Size;
+
+                int pageCount = doc.Pages.Count;
+                PdfCanvas canvas;
+                for (int i = 0; (i < pageCount); i++)
+                {
+                    //Draw an image on the layer
+                    var dbform = APLan.Properties.Resources.dblogo;
+                    PdfImage pdfImage = PdfImage.FromFile(@"../../../Resources/Images/dbform2.png");
+
+                    float widthImage = pdfImage.Width;
+                    float heightImage = pdfImage.Height;
+                    page = doc.Pages[i];
+                    canvas = layer.CreateGraphics(page.Canvas);
+                    
+                    canvas.DrawImage(pdfImage, 550, y, widthImage - 350, heightImage - 200);
+
+                    ////Draw a line on the layer
+                    //PdfPen pen = new PdfPen(PdfBrushes.DarkGray, 2);
+                    //canvas.DrawLine(pen, x, (y + (height + 5)), (size.Width - x), (y + (height + 2)));
+                }
+              
+                PdfBrush brush1 = PdfBrushes.Black;
+                PdfTrueTypeFont font2 = new PdfTrueTypeFont(new Font("Times New Roman", 12f, System.Drawing.FontStyle.Underline));
+                PdfTrueTypeFont font3 = new PdfTrueTypeFont(new Font("Times New Roman", 12f, System.Drawing.FontStyle.Regular));
+                page.Canvas.DrawString("Erläuterungen", font2, brush1, 0, y);
+                page.Canvas.DrawString("Anmerkungen:", font2, brush1, 250, y);
+                y = y + 25;
+                page.Canvas.DrawString("B/[m]    Beton/Fundamentlänge", font3, brush1, 0, y);
+                page.Canvas.DrawString("1) Festlegung der verbindlichen Signalstandorte vor Ort", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("S        Sonderfundament", font3, brush1, 0, y);
+                page.Canvas.DrawString("unter der Beachtung der Signalsicht gemäß Ril 819.0202", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("Mvk      Mastvorderkante", font3, brush1, 0, y);
+                page.Canvas.DrawString("und der örtlichen Verhältnisse vornehmen.", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("Fvk      Fundamentvorderkante", font3, brush1, 0, y);
+                page.Canvas.DrawString("Sonstige zulässige Anordnungen, die nicht", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("H        Mastschild Hauptsignal Ws/rt/ws", font3, brush1, 0, y);
+                page.Canvas.DrawString("der Regelanordnung entsprechen, sind so anzugeben,", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("V        Mastschild Vorsignal", font3, brush1, 0, y);
+                page.Canvas.DrawString("dass die Eintragungen in den betrieblichen Unterlagen", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("Sp       Mastschild", font3, brush1, 0, y);
+                page.Canvas.DrawString("Sperrsignal des Fahrpersonals abgeleitet werden können.", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("O        Ortsfundament", font3, brush1, 0, y);
+                page.Canvas.DrawString(" *)         Nichtgeltung für Fahrten auf dem Gegengleis", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("z        zugbedient", font3, brush1, 0, y);
+                page.Canvas.DrawString(" **)        Anordnung des Signals rechts am Gleis", font3, brush1, 250, y);
+                y = y + 20;
+                page.Canvas.DrawString("w        wärterbedient", font3, brush1, 0, y);
+                page.Canvas.DrawString(" ***)       Anordnung des Signals rechts am Gleis", font3, brush1, 250, y);
+
+
+
+
+
+                // save and launch the file
+                safeFileDialog1.Filter = "Data Files (*.pdf)|*.pdf";
+                safeFileDialog1.DefaultExt = "pdf";
+                safeFileDialog1.AddExtension = true;
+
+                if (safeFileDialog1.ShowDialog() == true)
+                {
+
+                    doc.SaveToFile(safeFileDialog1.FileName);
+                    doc.Close();
+                }
+
+                //System.Diagnostics.Process.Start("SimpleTable.pdf");
+
+
             }
             else if (exportType == "dxf")
             {

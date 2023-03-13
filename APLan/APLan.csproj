@@ -107,6 +107,7 @@
     <None Remove="Resources\Icons\ColorSwatchCircle.png" />
     <None Remove="Resources\Icons\ColorSwatchSquare1.png" />
     <None Remove="Resources\Icons\ColorSwatchSquare2.png" />
+    <None Remove="Resources\Icons\dbform2.png" />
     <None Remove="Resources\Icons\dblogo.png" />
     <None Remove="Resources\Icons\delete.png" />
     <None Remove="Resources\Icons\drag.png" />
@@ -116,6 +117,8 @@
     <None Remove="Resources\Icons\export.png" />
     <None Remove="Resources\Icons\export_2.png" />
     <None Remove="Resources\Icons\icons8-import-30.png" />
+    <None Remove="Resources\Icons\img_arrow.png" />
+    <None Remove="Resources\Icons\img_services_dropdown.png" />
     <None Remove="Resources\Icons\import.png" />
     <None Remove="Resources\Icons\info.png" />
     <None Remove="Resources\Icons\info2.png" />
@@ -127,6 +130,7 @@
     <None Remove="Resources\Icons\line_parallel.png" />
     <None Remove="Resources\Icons\line_parallel.svg" />
     <None Remove="Resources\Icons\line_vertical.png" />
+    <None Remove="Resources\Icons\merge.png" />
     <None Remove="Resources\Icons\Microsoft_WPF.jpg" />
     <None Remove="Resources\Icons\Microsoft_WPF.png" />
     <None Remove="Resources\Icons\move.png" />
@@ -141,11 +145,16 @@
     <None Remove="Resources\Icons\save_as.png" />
     <None Remove="Resources\Icons\scale.png" />
     <None Remove="Resources\Icons\select.png" />
+    <None Remove="Resources\Icons\sidebar.png" />
+    <None Remove="Resources\Icons\sidebar2.png" />
+    <None Remove="Resources\Icons\snapshot.png" />
     <None Remove="Resources\Icons\success.png" />
     <None Remove="Resources\Icons\text.png" />
     <None Remove="Resources\Icons\undo.png" />
     <None Remove="Resources\Icons\validate.png" />
+    <None Remove="Resources\Icons\viewer.png" />
     <None Remove="Resources\Image1.png" />
+    <None Remove="Resources\Images\dbform2.png" />
     <None Remove="Resources\Kabelformstein.png" />
     <None Remove="Resources\Kabelmuffe.png" />
     <None Remove="Resources\Kabelschacht.png" />
@@ -463,6 +472,7 @@
     <PackageReference Include="ERDM" Version="0.2.0" />
     <PackageReference Include="EulynxDpLibrary" Version="1.0.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+    <PackageReference Include="FreeSpire.PDF" Version="8.6.0" />
     <PackageReference Include="GeoJSON.Net" Version="1.2.19" />
     <PackageReference Include="LiteDB" Version="5.0.11" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
@@ -470,6 +480,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15-beta2" />
     <PackageReference Include="NPOI" Version="2.6.0" />
+    <PackageReference Include="Pdfium.Net.SDK" Version="4.78.2704" />
     <PackageReference Include="Saxon-HE" Version="10.8.0" />
     <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
     <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
@@ -494,6 +505,8 @@
     <Resource Include="Resources\Icons\export.png" />
     <Resource Include="Resources\Icons\export_2.png" />
     <Resource Include="Resources\Icons\icons8-import-30.png" />
+    <Resource Include="Resources\Icons\img_arrow.png" />
+    <Resource Include="Resources\Icons\img_services_dropdown.png" />
     <Resource Include="Resources\Icons\info2.png" />
     <Resource Include="Resources\Icons\import.png" />
     <Resource Include="Resources\Icons\info.png" />
@@ -504,6 +517,7 @@
     <Resource Include="Resources\Icons\line_horizontal.png" />
     <Resource Include="Resources\Icons\line_parallel.png" />
     <Resource Include="Resources\Icons\line_vertical.png" />
+    <Resource Include="Resources\Icons\merge.png" />
     <Resource Include="Resources\Icons\Microsoft_WPF.jpg" />
     <Resource Include="Resources\Icons\move.png" />
     <Resource Include="Resources\Icons\new.png" />
@@ -517,10 +531,15 @@
     <Resource Include="Resources\Icons\save_as.png" />
     <Resource Include="Resources\Icons\scale.png" />
     <Resource Include="Resources\Icons\select.png" />
+    <Resource Include="Resources\Icons\sidebar.png" />
+    <Resource Include="Resources\Icons\sidebar2.png" />
+    <Resource Include="Resources\Icons\snapshot.png" />
     <Resource Include="Resources\Icons\success.png" />
     <Resource Include="Resources\Icons\text.png" />
     <Resource Include="Resources\Icons\undo.png" />
     <Resource Include="Resources\Icons\validate.png" />
+    <Resource Include="Resources\Icons\viewer.png" />
+    <Resource Include="Resources\Images\dbform2.png" />
     <Resource Include="Resources\Kiel\Entwurfselement_HO.geojson" />
     <Resource Include="Resources\Kiel\Entwurfselement_KM.geojson" />
     <Resource Include="Resources\Kiel\Entwurfselement_LA.geojson" />

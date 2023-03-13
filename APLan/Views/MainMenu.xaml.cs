@@ -79,12 +79,14 @@ namespace APLan.Views
             if (item.IsChecked)
             {
                 ((MenuItem)sender).IsChecked = false;
-                Panel.SetZIndex(MainWindow.aplanCADViewer, -1);
+                //Panel.SetZIndex(MainWindow.aplanCADViewer, -1);
+                Panel.SetZIndex(MainWindow.aplanCADViewerSideBar, -1);
             }
             else
             {
                 ((MenuItem)sender).IsChecked = true;
-                Panel.SetZIndex(MainWindow.aplanCADViewer, 0);
+                //Panel.SetZIndex(MainWindow.aplanCADViewer, 0);
+                Panel.SetZIndex(MainWindow.aplanCADViewerSideBar, 0);
                 Panel.SetZIndex(MainWindow.Canvas_Content, -1);
                 Panel.SetZIndex(MainWindow.visualized_Data, -1);
                 visualizedDataItem.IsChecked = false;

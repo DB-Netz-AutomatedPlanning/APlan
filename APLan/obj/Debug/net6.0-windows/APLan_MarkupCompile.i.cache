@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-F:\ERDM\GitHub-Aplan\APlan\APLan\obj\Debug\net6.0-windows\
+C:\Users\user\Desktop\latest\APLan\obj\Debug\net6.0-windows\
 APLan
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-F:\ERDM\GitHub-Aplan\APlan\APLan\App.xaml
-30945039160
+C:\Users\user\Desktop\latest\APLan\App.xaml
+32796013398
 
-1371547300310
-233-1602511873
-MainWindow.xaml;Resources\Symbols\Symbols.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\APlanCadToolView.xaml;Views\AplanCADViewer.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\ChooseProject.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\DrawingUpperLayer.xaml;Views\ERDMproject.xaml;Views\ERDMvalidator.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\pdfDetail.xaml;Views\PlanningTab.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
+1391846744636
+237395155431
+MainWindow.xaml;Resources\Symbols\Symbols.xaml;Views\AboutWPF.xaml;Views\AddDataWindow.xaml;Views\APlanCadToolView.xaml;Views\AplanCADViewerSideBar.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\ChooseProject.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\DrawingUpperLayer.xaml;Views\ERDMproject.xaml;Views\ERDMvalidator.xaml;Views\EulynxValidator.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProjectWindow.xaml;Views\pdfDetail.xaml;Views\PdfViewer.xaml;Views\PlanningTab.xaml;Views\PopupUserControl.xaml;Views\PreviewDataWindow.xaml;Views\RemoveDataWindow.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\Tabs.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
 
-False
+True
 

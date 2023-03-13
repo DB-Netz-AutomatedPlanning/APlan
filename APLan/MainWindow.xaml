@@ -118,8 +118,9 @@
                               Grid.Column="0"
                               Grid.Row="2"
                               Panel.ZIndex="-1"/>
-        <views:AplanCADViewer 
-                              x:Name="AplanCADViewer"
+        
+        <views:AplanCADViewerSideBar 
+                              x:Name="AplanCADViewerSideBar"
                               Grid.Column="0"
                               Grid.Row="2"
                               Panel.ZIndex="-1"/>
