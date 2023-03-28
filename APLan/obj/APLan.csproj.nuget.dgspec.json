@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj": {}
+    "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {}
   },
   "projects": {
-    "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj": {
+    "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj",
+        "projectUniqueName": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
         "projectName": "APLan",
-        "projectPath": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\APLan.csproj",
+        "projectPath": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
         "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
-        "outputPath": "F:\\ERDM\\GitHUB-APLAN\\APlan\\APLan\\obj\\",
+        "outputPath": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -22,8 +22,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "F:\\ERDM\\Libraries": {},
-          "F:\\RCA\\RCA_Nuget": {}
+          "E:\\ERDM\\Libraries": {},
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net6.0-windows7.0": {
@@ -41,13 +41,17 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "dependencies": {
+            "ACadSharp": {
+              "target": "Package",
+              "version": "[1.4.1-alpha, )"
+            },
             "CommunityToolkit.Mvvm": {
               "target": "Package",
               "version": "[8.0.0, )"
             },
-            "ERDMlibrary": {
+            "ERDM": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[0.3.0, )"
             },
             "EulynxDpLibrary": {
               "target": "Package",
@@ -56,6 +60,10 @@
             "Extended.Wpf.Toolkit": {
               "target": "Package",
               "version": "[4.5.0, )"
+            },
+            "FreeSpire.PDF": {
+              "target": "Package",
+              "version": "[8.6.0, )"
             },
             "GeoJSON.Net": {
               "target": "Package",
@@ -81,9 +89,9 @@
               "target": "Package",
               "version": "[3.0.15-beta2, )"
             },
-            "Saxon-HE": {
+            "Pdfium.Net.SDK": {
               "target": "Package",
-              "version": "[10.8.0, )"
+              "version": "[4.81.2704, )"
             },
             "System.Collections.NonGeneric": {
               "target": "Package",
@@ -129,24 +137,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x86",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[6.0.11, 6.0.11]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -155,7 +145,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

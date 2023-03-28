@@ -10,16 +10,315 @@
              DataContext="{StaticResource mainMenuViewModel}"
              d:DesignHeight="450" d:DesignWidth="800" Loaded="MenuItem_OnLoaded">
     <UserControl.InputBindings>
-        <KeyBinding Command="{Binding Undo}"                    
+        <!--<KeyBinding Command="{Binding Undo}"                    
                     Key="Z" 
                     Modifiers="Control"      />
         <KeyBinding Command="{Binding Redo}"                    
                     Key="Y" 
-                    Modifiers="Control"      />
+                    Modifiers="Control"      />-->
     </UserControl.InputBindings>
     <UserControl.Resources>
-        <Style TargetType="MenuItem">
+        <Style x:Key="MenuItem_With_Dropdown_Vertical"
+               TargetType="MenuItem">
             <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="border"
+                                Background="#404D5B"
+                                BorderThickness="0"
+                                Height="30"
+                                Width="145">
+                            <Grid>
+                                <!--// Icon //-->
+                                <ContentPresenter ContentSource="Icon"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Height="25"
+                                                  Width="25"
+                                                  Margin="5,0,0,0" />
+
+                                <!--// Text //-->
+                                <ContentPresenter ContentSource="Header"
+                                                  TextBlock.Foreground="White"
+                                                  TextBlock.FontFamily="Rubik Medium"
+                                                  TextBlock.FontSize="12"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Margin="40,0,0,0" />
+
+                                <!--// Dropdown Icon //-->
+                                <Image Source="/Resources/Icons/img_services_dropdown.png"
+                                       Stretch="None"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0" />
+
+                                <!--// Popup //-->
+                                <Popup x:Name="PART_Popup"
+                                       AllowsTransparency="True"
+                                       IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Placement="Bottom"
+                                       PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+
+                                    <Border x:Name="SubMenuBorder"
+                                            Background="#404D5B"
+                                            BorderBrush="#404D5B">
+
+                                        <ScrollViewer x:Name="SubMenuScrollViewer"
+                                                      Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer,TypeInTargetAssembly={x:Type FrameworkElement}}}">
+
+                                            <Grid RenderOptions.ClearTypeHint="Enabled">
+
+                                                <Canvas HorizontalAlignment="Left"
+                                                        VerticalAlignment="Top" />
+
+                                                <ItemsPresenter x:Name="ItemsPresenter" />
+
+                                            </Grid>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsSuspendingPopupAnimation"
+                                     Value="True">
+                                <Setter Property="PopupAnimation"
+                                        TargetName="PART_Popup"
+                                        Value="None" />
+                            </Trigger>
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="#524E4F" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="#524E4F" />
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Sub_MenuItem_Vertical"
+               TargetType="MenuItem">
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="border"
+                                Background="#404D5B"
+                                BorderThickness="0"
+                                Height="30"
+                                Width="145">
+                            <Grid>
+                                <!--// Icon //-->
+                                <ContentPresenter ContentSource="Icon"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Height="18"
+                                                  Width="18"
+                                                  Margin="8,0,0,0"
+                                                  
+                                                  />
+                                <!--// Text //-->
+                                <ContentPresenter ContentSource="Header"
+                                                  TextBlock.Foreground="#D3D7DC"
+                                                  TextBlock.FontFamily="Rubik Medium"
+                                                  TextBlock.FontSize="12"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Margin="35,0,0,0"
+                                                  />
+
+                                <Grid x:Name="Highlighter"
+                                      Height="35"
+                                      Width="2"
+                                      Background="#FFFFFF"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      Visibility="Collapsed" />
+
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="#3E3C3D" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="#3E3C3D" />
+                                <Setter Property="Visibility"
+                                        TargetName="Highlighter"
+                                        Value="Visible" />
+
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MenuItem_With_Dropdown_Horizontal"
+               TargetType="MenuItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="border"
+                                Background="#404D5B"
+                                BorderThickness="0"
+                                Height="30"
+                                Width="145">
+                            <Grid>
+                                <!--// Icon //-->
+                                <ContentPresenter ContentSource="Icon"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Height="18"
+                                                  Width="18"
+                                                  Margin="8,0,0,0" />
+
+                                <!--// Text //-->
+                                <ContentPresenter ContentSource="Header"
+                                                  TextBlock.Foreground="#D3D7DC"
+                                                  TextBlock.FontFamily="Rubik Medium"
+                                                  TextBlock.FontSize="12"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Margin="35,0,0,0" />
+
+                                <Grid x:Name="Highlighter"
+                                      Height="35"
+                                      Width="2"
+                                      Background="#FFFFFF"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      Visibility="Collapsed" />
+
+                                <!--// Dropdown Icon //-->
+                                <Image Source="/Resources/Icons/img_arrow.png"
+                                       Stretch="None"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,8,0" />
+
+                                <!--// Popup //-->
+                                <Popup x:Name="PART_Popup"
+                                       AllowsTransparency="True"
+                                       IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Placement="Right"
+                                       PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}">
+
+                                    <Border x:Name="SubMenuBorder"
+                                            Background="#484546"
+                                            BorderBrush="#484546">
+
+                                        <ScrollViewer x:Name="SubMenuScrollViewer"
+                                                      Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer,TypeInTargetAssembly={x:Type FrameworkElement}}}">
+
+                                            <Grid RenderOptions.ClearTypeHint="Enabled">
+
+                                                <Canvas HorizontalAlignment="Left"
+                                                        VerticalAlignment="Top" />
+
+                                                <ItemsPresenter x:Name="ItemsPresenter" />
+
+                                            </Grid>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsSuspendingPopupAnimation"
+                                     Value="True">
+                                <Setter Property="PopupAnimation"
+                                        TargetName="PART_Popup"
+                                        Value="None" />
+                            </Trigger>
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="#3E3C3D" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="#3E3C3D" />
+                                <Setter Property="Visibility"
+                                        TargetName="Highlighter"
+                                        Value="Visible" />
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Sub_MenuItem_Horizontal"
+               TargetType="MenuItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type MenuItem}">
+                        <Border x:Name="border"
+                                Background="#404D5B"
+                                BorderThickness="0"
+                                Height="30"
+                                Width="145">
+                            <Grid>
+                                <!--// Icon //-->
+                                <ContentPresenter ContentSource="Icon"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Height="18"
+                                                  Width="18"
+                                                  Margin="8,0,0,0" />
+                                <!--// Text //-->
+                                <ContentPresenter ContentSource="Header"
+                                                  TextBlock.Foreground="#D3D7DC"
+                                                  TextBlock.FontFamily="Rubik Medium"
+                                                  TextBlock.FontSize="10"
+                                                  HorizontalAlignment="Left"
+                                                  VerticalAlignment="Center"
+                                                  Margin="35,0,0,0" />
+
+                                <Grid x:Name="Highlighter"
+                                      Height="35"
+                                      Width="2"
+                                      Background="#FFFFFF"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      Visibility="Collapsed" />
+
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="#3E3C3D" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="#3E3C3D" />
+                                <Setter Property="Visibility"
+                                        TargetName="Highlighter"
+                                        Value="Visible" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
     <Grid>
@@ -29,51 +328,37 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Menu VerticalAlignment="Stretch" Background="white" >
-            <MenuItem Header="_File">
-                <MenuItem Header="_New project" 
-                      Command="{Binding Source={StaticResource mainMenuViewModel}, Path=ChooseProjectType}"
-                      CommandParameter="{Binding RelativeSource=
-                                        {RelativeSource
-                                        Mode=FindAncestor,
-                                        AncestorType={x:Type Window}}}">
+            <MenuItem Header="File" Style="{StaticResource MenuItem_With_Dropdown_Vertical}">
+                <MenuItem Header="New project" Style="{StaticResource Sub_MenuItem_Vertical}"
+                      Click="NewProject_Click">
                     <MenuItem.Icon>
+
                         <Image Source="/Resources/Icons/new.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Open"
-                  Command="{Binding Source={StaticResource newProjectViewModel}, Path=Open}">
+                <MenuItem Header="Open" Style="{StaticResource Sub_MenuItem_Vertical}"
+                  Command="{Binding  Path=Open}" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Icons/open.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <!--<MenuItem Header="_Import"
-                      IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=ImportButtonActive}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/import.png"/>
-                </MenuItem.Icon>
-            </MenuItem>-->
-                <MenuItem Header="_Save"  
-                      IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=SaveButtonActive}"
-                      Command="{Binding Save}">
+
+                <MenuItem Header="Save" Style="{StaticResource Sub_MenuItem_Vertical}" 
+                      IsEnabled="{Binding  Path=SaveButtonActive}"
+                      Command="{Binding Save}" >
                     <MenuItem.Icon>
                         <Image Source="/Resources/Icons/save.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Save as"
-                      IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=SaveAsButtonActive}"
+                <MenuItem Header="Save as" Style="{StaticResource Sub_MenuItem_Vertical}"
+                      IsEnabled="{Binding  Path=SaveAsButtonActive}"
                       Command="{Binding SaveAs}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Icons/save_as.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <!--<MenuItem Header="_Print"
-                      IsEnabled="{Binding Source={StaticResource newProjectViewModel}, Path=PrintButtonActive}"
-                      Command="{Binding  Print}">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/Icons/printer.png"/>
-                </MenuItem.Icon>
-            </MenuItem>-->
-                <MenuItem Header="_Exit"
+
+                <MenuItem Header="Exit" Style="{StaticResource Sub_MenuItem_Vertical}"
                       Command="{Binding ExitProgram}"
                       CommandParameter="{Binding RelativeSource=
                                         {RelativeSource
@@ -84,76 +369,97 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            
-            <MenuItem Header="_Edit">
-                 
-                    <MenuItem Name="undo" Header="_Undo(Ctrl+Z)" Command="{Binding Undo}"
+
+            <MenuItem Header="Edit" Style="{StaticResource MenuItem_With_Dropdown_Vertical}">
+
+                <MenuItem Name="undo" Header="Undo(Ctrl+Z)" Command="{Binding Undo}"
+                              Style="{StaticResource Sub_MenuItem_Vertical}"
                       IsChecked="False"></MenuItem>
-            <MenuItem Header="_Redo(Ctrl+Y)" Command="{Binding Redo}"
-                       IsChecked="False">
+                <MenuItem Header="Redo(Ctrl+Y)" Command="{Binding Redo}"
+                       IsChecked="False" Style="{StaticResource Sub_MenuItem_Vertical}">
                 </MenuItem>
                 <MenuItem Header="Color" Command="{Binding ColorPicker}"
-                       IsChecked="False">
+                       IsChecked="False" Style="{StaticResource Sub_MenuItem_Vertical}">
+                </MenuItem>
+                <MenuItem Header="Snapshot" Command="{Binding Snapshot}"
+                       IsChecked="False" Style="{StaticResource Sub_MenuItem_Vertical}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/snapshot.png"/>
+                    </MenuItem.Icon>
                 </MenuItem>
 
 
 
-                <MenuItem Header="_Canvas">
+                <MenuItem Header="Canvas" Style="{StaticResource MenuItem_With_Dropdown_Horizontal}">
                     <MenuItem Header="BlackTheme"
                           IsChecked="False"
-                          Click="MenuItem_Grid_Click"></MenuItem>
+                          Click="MenuItem_Grid_Click" Style="{StaticResource Sub_MenuItem_Horizontal}"></MenuItem>
                 </MenuItem>
-                 
+
             </MenuItem>
-            <MenuItem Header="_View">
+            <MenuItem Header="View" Style="{StaticResource MenuItem_With_Dropdown_Vertical}">
                 <!--<MenuItem Header="_XML-JSON" IsEnabled="False"/>-->
                 <MenuItem     x:Name="visualizedDataItem"
-                          Header="_Visualized Data"
-                          Click="MenuItem_VisualizedData"/>
+                          Header="Visualized Data"
+                              Style="{StaticResource Sub_MenuItem_Vertical}"
+                          Click="MenuItem_VisualizedData"
+                              />
                 <MenuItem     x:Name="canvasContentItem"
-                          Header="_Canvas Content"
-                          Click="MenuItem_CanvasContent"/>
+                          Header="Canvas Content"
+                              Style="{StaticResource Sub_MenuItem_Vertical}"
+                          Click="MenuItem_CanvasContent"
+                               />
                 <MenuItem     x:Name="aplanCadViewerItem"
-                          Header="_Aplan CAD Viewer"
+                          Header="Aplan CAD Viewer"
+                              Style="{StaticResource Sub_MenuItem_Vertical}"
+                               
                           Click="MenuItem_AplanCADViewer"/>
-                <MenuItem Header="_Planning/Canvas tabs"
+                <MenuItem Header="Planning/Canvas tab"
                           IsChecked="True"
+                          Style="{StaticResource Sub_MenuItem_Vertical}"
+                           
                           Click="MenuItem_Planningtab"/>
-                <MenuItem Header="_Symbols/Selection tabs"
+                <MenuItem Header="Symbols tab"
                           IsChecked="True"
+                           
+                          Style="{StaticResource Sub_MenuItem_Vertical}"
                           Click="MenuItem_Symbols"/>
                 <!--<MenuItem Header="_Object parameters">-->
                 <MenuItem Name="SignalItem"
-                      Header="_Planned Signals info" 
+                      Header="Planned Signals info"
+                          Style="{StaticResource Sub_MenuItem_Vertical}"
                       Click="MenuItem_Signal"/>
 
                 <!--</MenuItem>-->
             </MenuItem>
-            <MenuItem Header="_Tools">
-                <!--<MenuItem Header="_Access Data">
-                <MenuItem Header="_Add Data"  
-                          Command="{Binding AddData}"/>
-                <MenuItem Header="_Preview Data" 
-                          Command="{Binding PreviewData}"/>
-                <MenuItem Header="_Remove Data" 
-                          Command="{Binding RemoveData}"/>
-            </MenuItem>-->
-                <MenuItem Header="_EULYNX Validator" 
-                      Command="{Binding EulynxValidator}">
+            <MenuItem Header="Tools" Style="{StaticResource MenuItem_With_Dropdown_Vertical}">
+                <MenuItem Header="Validator" 
+                         Click="Validator_Click"
+                          Style="{StaticResource Sub_MenuItem_Vertical}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Icons/validate.png"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_ERDM Validator" 
-                      Command="{Binding ERDMvalidator}">
+                <MenuItem Header="MergePDF" 
+                      Command="{Binding MergePdfFiles}"
+                          Style="{StaticResource Sub_MenuItem_Vertical}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/Icons/validate.png"></Image>
+                        <Image Source="/Resources/Icons/merge.png"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem Header="PDFViewer" 
+                      Command="{Binding PdfViewer}"
+                          Style="{StaticResource Sub_MenuItem_Vertical}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Icons/viewer.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+
             </MenuItem>
-            <MenuItem Header="_Help">
-                <MenuItem Header="_About WPF"  
-                      Command="{Binding AboutWPF}">
+            <MenuItem Header="Help" Style="{StaticResource MenuItem_With_Dropdown_Vertical}">
+                <MenuItem Header="About WPF"  
+                      Command="{Binding AboutWPF}"
+                          Style="{StaticResource Sub_MenuItem_Vertical}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Icons/info.png"></Image>
                     </MenuItem.Icon>
@@ -163,7 +469,7 @@
         <TextBlock Grid.Column="1"
                    VerticalAlignment="Center"
                    FontWeight="Bold"
-                   Text="{Binding Source={StaticResource newProjectViewModel}, Path=CurrentProjectNameBind}">
+                   Text="{Binding ProjectName}">
         </TextBlock>
         <Grid Grid.Column="2"
               Background="White">
@@ -185,5 +491,5 @@
             </WrapPanel>
         </Grid>
     </Grid>
-    
+
 </UserControl>

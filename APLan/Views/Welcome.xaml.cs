@@ -24,5 +24,17 @@ namespace APLan.Views
         {
             InitializeComponent();
         }
+
+        private void NewProject_Click(object sender, RoutedEventArgs e)
+        {
+            NewProject newProject = new();
+            newProject.ShowDialog();
+        }
+
+        private void Validate_Click(object sender, RoutedEventArgs e)
+        {
+            Validator validator = new();
+            validator.ShowDialog();
+        }
     }
 }

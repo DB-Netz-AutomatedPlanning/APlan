@@ -27,7 +27,6 @@ namespace APLan.Views
             InitializeComponent();
             this.Loaded += MenuItem_OnLoaded;
         }
-
         private void MenuItem_OnLoaded(object sender, RoutedEventArgs e)
         {
             
@@ -54,7 +53,6 @@ namespace APLan.Views
             }
 
         }
-
         private void MenuItem_CanvasContent(object sender, RoutedEventArgs e)
         {
             MenuItem item = ((MenuItem)sender);
@@ -72,7 +70,6 @@ namespace APLan.Views
             }
 
         }
-
         private void MenuItem_AplanCADViewer(object sender, RoutedEventArgs e)
         {
             MenuItem item = ((MenuItem)sender);
@@ -91,7 +88,6 @@ namespace APLan.Views
             }
 
         }
-
         private void MenuItem_Symbols(object sender, RoutedEventArgs e)
         {
             MenuItem item = ((MenuItem)sender);
@@ -112,7 +108,6 @@ namespace APLan.Views
                 MainWindow.c3.Width = new GridLength(1, GridUnitType.Star);
             }
         }
-
         private void MenuItem_Planningtab(object sender, RoutedEventArgs e)
         {
             MenuItem item = ((MenuItem)sender);
@@ -127,7 +122,6 @@ namespace APLan.Views
                 MainWindow.r1.Height = new GridLength(130);
             }
         }
-
         private void MenuItem_Signal(object sender, RoutedEventArgs e)
         {
             MenuItem item = ((MenuItem)sender);
@@ -144,12 +138,6 @@ namespace APLan.Views
                 MainWindow.r4.Height = new GridLength(7.5, GridUnitType.Star);
             }
         }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void MenuItem_Grid_Click(object sender, RoutedEventArgs e)
         {
             var menuItem = (MenuItem)sender;
@@ -164,7 +152,19 @@ namespace APLan.Views
                 menuItem.IsChecked = true;
             }
         }
-
-        
+        private void NewProject_Click(object sender, RoutedEventArgs e)
+        {
+            NewProject chooseProject = new();
+            chooseProject.ShowDialog();
+        }
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
+        }
+        private void Validator_Click(object sender, RoutedEventArgs e)
+        {
+            Validator validator = new();
+            validator.ShowDialog();
+        }
     }
 }

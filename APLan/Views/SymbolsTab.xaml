@@ -8,9 +8,10 @@
              xmlns:viewModels="clr-namespace:APLan.ViewModels"
              xmlns:commands="clr-namespace:APLan.Commands"
              mc:Ignorable="d"
-             DataContext="{StaticResource symbolsTabViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
-
+    <UserControl.DataContext>
+        <viewModels:SymbolsTabViewModel/>
+    </UserControl.DataContext>
     <ListView BorderBrush="White" ItemsSource="{Binding items}">
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -21,7 +22,7 @@
                                    Margin="20,0,20,0" 
                                    RenderOptions.BitmapScalingMode="HighQuality" 
                                    RenderOptions.EdgeMode="Aliased"
-                                   commands:MouseBehaviour.MouseDownCommand="{Binding Source={StaticResource symbolsTabViewModel}, Path=MouseDownCommand}"/>
+                                   commands:MouseBehaviour.MouseDownCommand="{Binding MouseDownCommand}"/>
 
                     <TextBlock Text="{Binding Name}" 
                                        VerticalAlignment="Center" 

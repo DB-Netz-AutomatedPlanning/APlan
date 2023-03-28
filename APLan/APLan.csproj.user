@@ -10,9 +10,6 @@
     <Compile Update="Views\AboutWPF.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\AddDataWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\APlanCadToolView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,7 +31,7 @@
     <Compile Update="Views\DrawingUpperLayer.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\EulynxValidator.xaml.cs">
+    <Compile Update="Views\Validator.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\ExportConfirmationAndValidation.xaml.cs">
@@ -46,16 +43,10 @@
     <Compile Update="Views\MainMenu.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\NewProjectWindow.xaml.cs">
+    <Compile Update="Views\NewProject.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\PlanningTab.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\PreviewDataWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\RemoveDataWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\RightTabs.xaml.cs">
@@ -70,7 +61,7 @@
     <Compile Update="Views\SymbolsTab.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Tabs.xaml.cs">
+    <Compile Update="Views\UpperTabs.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\VisualizedData.xaml.cs">
@@ -89,10 +80,10 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\AboutWPF.xaml">
+    <Page Update="Styles.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\AddDataWindow.xaml">
+    <Page Update="Views\AboutWPF.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\APlanCadToolView.xaml">
@@ -116,7 +107,13 @@
     <Page Update="Views\DrawingUpperLayer.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\EulynxValidator.xaml">
+    <Page Update="Views\PdfViewer.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\PopupUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Validator.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\ExportConfirmationAndValidation.xaml">
@@ -128,16 +125,10 @@
     <Page Update="Views\MainMenu.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\NewProjectWindow.xaml">
+    <Page Update="Views\NewProject.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\PlanningTab.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\PreviewDataWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\RemoveDataWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\RightTabs.xaml">
@@ -152,7 +143,7 @@
     <Page Update="Views\SymbolsTab.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Tabs.xaml">
+    <Page Update="Views\UpperTabs.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\VisualizedData.xaml">

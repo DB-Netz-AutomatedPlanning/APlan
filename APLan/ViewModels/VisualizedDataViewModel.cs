@@ -1,6 +1,6 @@
 ﻿using APLan.Commands;
+using System;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,146 +9,152 @@ namespace APLan.ViewModels
 {
     public class VisualizedDataViewModel : BaseViewModel
     {
-        #region attributes
 
-        private double lineThicnkess = 0.5;
-        public double LineThicnkess
+        #region staticPropertyChanged
+        public static new event EventHandler<PropertyChangedEventArgs> StaticPropertyChanged;
+        public static new void RaiseStaticPropertyChanged(string PropertyName)
         {
-            get => lineThicnkess;
-            set
-            {
-                lineThicnkess = value;
-                OnPropertyChanged();
-            }
-
+            StaticPropertyChanged?.Invoke(null, new PropertyChangedEventArgs(PropertyName));
         }
 
+        public static  event EventHandler<PropertyChangedEventArgs> StaticPropertyPointVisibilityChanged;
+        public static void RaiseStaticPropertyPointVisibilityChanged(string PropertyName)
+        {
+            StaticPropertyPointVisibilityChanged?.Invoke(null, new PropertyChangedEventArgs(PropertyName));
+        }
+        #endregion
+
+        #region attributes
+
+
         //lines and Nodes visibility
-        private Visibility _gleisKantenVisibility;
-        private Visibility _Entwurfselement_LA_Visibility;
-        private Visibility _Entwurfselement_KM_Visibility;
-        private Visibility _Entwurfselement_HO_Visibility;
-        private Visibility _Entwurfselement_UH_Visibility;
-        private Visibility _gleisknotenVisibility;
+        private static Visibility _gleisKantenVisibility;
+        private static Visibility _Entwurfselement_LA_Visibility;
+        private static Visibility _Entwurfselement_KM_Visibility;
+        private static Visibility _Entwurfselement_HO_Visibility;
+        private static Visibility _Entwurfselement_UH_Visibility;
+        private static Visibility _gleisknotenVisibility;
 
 
         //points visibility
-        private Visibility _gleisKantenPointsVisibility;
-        private Visibility _Entwurfselement_LA_PointsVisibility;
-        private Visibility _Entwurfselement_KM_PointsVisibility;
-        private Visibility _Entwurfselement_HO_PointsVisibility;
-        private Visibility _Entwurfselement_UH_PointsVisibility;
-
-        public Visibility gleisKantenVisibility
+        private static Visibility _gleisKantenPointsVisibility;
+        private static Visibility _Entwurfselement_LA_PointsVisibility;
+        private static Visibility _Entwurfselement_KM_PointsVisibility;
+        private static Visibility _Entwurfselement_HO_PointsVisibility;
+        private static Visibility _Entwurfselement_UH_PointsVisibility;
+        #endregion
+        
+        #region properties
+        public static Visibility GleisKantenVisibility
         {
             get => _gleisKantenVisibility;
             set
             {
                 _gleisKantenVisibility = value;
-                OnPropertyChanged("gleisKantenVisibility");
+                RaiseStaticPropertyChanged("gleisKantenVisibility");
             }
 
         }
         //horizontal
-        public Visibility Entwurfselement_LA_Visibility
+        public static Visibility Entwurfselement_LA_Visibility
         {
             get => _Entwurfselement_LA_Visibility;
             set
             {
                 _Entwurfselement_LA_Visibility = value;
-                OnPropertyChanged("Entwurfselement_LA_Visibility");
+                RaiseStaticPropertyChanged("Entwurfselement_LA_Visibility");
             }
         }
         //meilage
-        public Visibility Entwurfselement_KM_Visibility
+        public static Visibility Entwurfselement_KM_Visibility
         {
             get => _Entwurfselement_KM_Visibility;
             set
             {
                 _Entwurfselement_KM_Visibility = value;
-                OnPropertyChanged("Entwurfselement_KM_Visibility");
+                RaiseStaticPropertyChanged("Entwurfselement_KM_Visibility");
             }
         }
         //vertical
-        public Visibility Entwurfselement_HO_Visibility
+        public static Visibility Entwurfselement_HO_Visibility
         {
             get => _Entwurfselement_HO_Visibility;
             set
             {
                 _Entwurfselement_HO_Visibility = value;
-                OnPropertyChanged("Entwurfselement_HO_Visibility");
+                RaiseStaticPropertyChanged("Entwurfselement_HO_Visibility");
             }
         }
         //cant
-        public Visibility Entwurfselement_UH_Visibility
+        public static Visibility Entwurfselement_UH_Visibility
         {
             get => _Entwurfselement_UH_Visibility;
             set
             {
                 _Entwurfselement_UH_Visibility = value;
-                OnPropertyChanged("Entwurfselement_UH_Visibility");
+                RaiseStaticPropertyChanged("Entwurfselement_UH_Visibility");
             }
         }
         //nodes
-        public Visibility gleisknotenVisibility
+        public static Visibility GleisknotenVisibility
         {
             get => _gleisknotenVisibility;
             set
             {
                 _gleisknotenVisibility = value;
-                OnPropertyChanged("gleisknotenVisibility");
+                RaiseStaticPropertyChanged("GleisknotenVisibility");
             }
         }
 
 
-        public Visibility GleisKantenPointsVisibility
+        public static Visibility GleisKantenPointsVisibility
         {
             get => _gleisKantenPointsVisibility;
             set
             {
                 _gleisKantenPointsVisibility = value;
-                OnPropertyChanged();
+                RaiseStaticPropertyPointVisibilityChanged("GleisKantenPointsVisibility");
             }
 
         }
         //horizontal
-        public Visibility Entwurfselement_LA_PointsVisibility
+        public static Visibility Entwurfselement_LA_PointsVisibility
         {
             get => _Entwurfselement_LA_PointsVisibility;
             set
             {
                 _Entwurfselement_LA_PointsVisibility = value;
-                OnPropertyChanged();
+                RaiseStaticPropertyPointVisibilityChanged("Entwurfselement_LA_PointsVisibility");
             }
         }
         //meilage
-        public Visibility Entwurfselement_KM_PointsVisibility
+        public static Visibility Entwurfselement_KM_PointsVisibility
         {
             get => _Entwurfselement_KM_PointsVisibility;
             set
             {
                 _Entwurfselement_KM_PointsVisibility = value;
-                OnPropertyChanged();
+                RaiseStaticPropertyPointVisibilityChanged("Entwurfselement_KM_PointsVisibility");
             }
         }
         //vertical
-        public Visibility Entwurfselement_HO_PointsVisibility
+        public static Visibility Entwurfselement_HO_PointsVisibility
         {
             get => _Entwurfselement_HO_PointsVisibility;
             set
             {
                 _Entwurfselement_HO_PointsVisibility = value;
-                OnPropertyChanged();
+                RaiseStaticPropertyPointVisibilityChanged("Entwurfselement_HO_PointsVisibility");
             }
         }
         //cant
-        public Visibility Entwurfselement_UH_PointsVisibility
+        public static Visibility Entwurfselement_UH_PointsVisibility
         {
             get => _Entwurfselement_UH_PointsVisibility;
             set
             {
                 _Entwurfselement_UH_PointsVisibility = value;
-                OnPropertyChanged();
+                RaiseStaticPropertyPointVisibilityChanged("Entwurfselement_UH_PointsVisibility");
             }
         }
 
@@ -190,12 +196,12 @@ namespace APLan.ViewModels
             CantPoints = new RelayCommand(ExecuteCantPoints);
 
 
-            gleisKantenVisibility = Visibility.Visible;
+            GleisKantenVisibility = Visibility.Visible;
             Entwurfselement_LA_Visibility = Visibility.Visible;
             Entwurfselement_KM_Visibility = Visibility.Visible;
             Entwurfselement_HO_Visibility = Visibility.Visible;
             Entwurfselement_UH_Visibility = Visibility.Visible;
-            gleisknotenVisibility = Visibility.Visible;
+            GleisknotenVisibility = Visibility.Visible;
 
 
             GleisKantenPointsVisibility = Visibility.Collapsed;
@@ -210,32 +216,30 @@ namespace APLan.ViewModels
         private void ExecuteKanten(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);
-            if (gleisKantenVisibility == Visibility.Visible)
+            if (GleisKantenVisibility == Visibility.Visible)
             {
-                gleisKantenVisibility = Visibility.Collapsed;
-                LineThicnkess = 0;
+                GleisKantenVisibility = Visibility.Collapsed;
                 box.IsChecked = false;
             }
             else
             {
-                gleisKantenVisibility = Visibility.Visible;
-                LineThicnkess = 0.5;
+                GleisKantenVisibility = Visibility.Visible;
                 box.IsChecked = true;
-                
+
             }
         }
         private void ExecuteKnoten(object parameter)
         {
 
             CheckBox box = ((CheckBox)parameter);
-            if (gleisknotenVisibility == Visibility.Visible)
+            if (GleisknotenVisibility == Visibility.Visible)
             {
-                gleisknotenVisibility = Visibility.Collapsed;
+                GleisknotenVisibility = Visibility.Collapsed;
                 box.IsChecked = false;
             }
             else
             {
-                gleisknotenVisibility = Visibility.Visible;
+                GleisknotenVisibility = Visibility.Visible;
                 box.IsChecked = true;
             }
         }
@@ -295,7 +299,6 @@ namespace APLan.ViewModels
                 box.IsChecked = true;
             }
         }
-
         private void ExecuteKantenPoints(object parameter)
         {
             CheckBox box = ((CheckBox)parameter);

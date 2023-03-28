@@ -15,79 +15,42 @@
     </UserControl.Resources>
     <Border BorderThickness="2" CornerRadius="5" Background="White" BorderBrush="{StaticResource themeColor}">
         <TreeView Name="myTreeViewEvent" >
-            <!--GleisKantenLines-->
+            <!--polyLines-->
             <TreeViewItem>
                 <TreeViewItem.Header>
-                    <TextBlock Text="Gleiskanten" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="Line" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                     ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=gleiskantenList}">
+                     ItemsSource="{Binding Lines}">
                 </ListView>
             </TreeViewItem>
-            <!--Entwurfselement_HO_Lines-->
+            <!--Circles-->
             <TreeViewItem>
                 <TreeViewItem.Header>
-                    <TextBlock Text="Entwurfselement_HO" FontWeight="Bold"></TextBlock>
-                </TreeViewItem.Header>
-                <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}" 
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Entwurfselement_HO_list}">
-                </ListView>
-            </TreeViewItem>
-            <!--Entwurfselement_KM_Lines-->
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <TextBlock Text="Entwurfselement_KM" FontWeight="Bold"></TextBlock>
-                </TreeViewItem.Header>
-                <ListView  ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                           ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Entwurfselement_KM_list}">
-                </ListView>
-            </TreeViewItem>
-            <!--Entwurfselement_LA_Lines-->
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <TextBlock Text="Entwurfselement_LA" FontWeight="Bold"></TextBlock>
+                    <TextBlock Text="Ellipse" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Entwurfselement_LA_list}">
-                    
+                     ItemsSource="{Binding Ellipses}">
                 </ListView>
             </TreeViewItem>
-            <!--Entwurfselement_UH_Lines-->
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <TextBlock Text="Entwurfselement_UH" FontWeight="Bold"></TextBlock>
-                </TreeViewItem.Header>
-                <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}" 
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Entwurfselement_UH_list}">
-                </ListView>
-            </TreeViewItem>
-            <!--GleisKnoten Points-->
-            <TreeViewItem>
-                <TreeViewItem.Header>
-                    <TextBlock Text="Gleisknoten" FontWeight="Bold"></TextBlock>
-                </TreeViewItem.Header>
-                <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=gleisknotenList}">
-                </ListView>
-            </TreeViewItem>
-            <TreeViewItem>
+
+            <!--<TreeViewItem>
                 <TreeViewItem.Header>
                     <TextBlock Text="LwPolyline" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Polyline_LW_list}">
+                    ItemsSource="{Binding Source={StaticResource baseViewModel}, Path=Polyline_LW_list}">
                 </ListView>
-            </TreeViewItem>
+            </TreeViewItem>-->
 
-            <TreeViewItem>
+            <!--<TreeViewItem>
                 <TreeViewItem.Header>
                     <TextBlock Text="Lines" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Polyline_List}">
+                    ItemsSource="{Binding Source={StaticResource baseViewModel}, Path=Polyline_List}">
                 </ListView>
-            </TreeViewItem>
-
+            </TreeViewItem>-->
             <!--<TreeViewItem>
                 <TreeViewItem.Header>
                     <TextBlock Text="Solid" FontWeight="Bold"></TextBlock>
@@ -96,12 +59,12 @@
                     ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Rectangle_Shape_points_List}">
                 </ListView>
             </TreeViewItem>-->
-            <TreeViewItem>
+            <!--<TreeViewItem>
                 <TreeViewItem.Header>
                     <TextBlock Text="Circle" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Circle_List}">
+                    ItemsSource="{Binding Source={StaticResource baseViewModel}, Path=Circle_List}">
                 </ListView>
             </TreeViewItem>
 
@@ -110,17 +73,16 @@
                     <TextBlock Text="Ellipse" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Ellipse_List}">
+                    ItemsSource="{Binding Source={StaticResource baseViewModel}, Path=Ellipse_List}">
                     
                 </ListView>
-            </TreeViewItem>
-
+            </TreeViewItem>-->
             <TreeViewItem>
                 <TreeViewItem.Header>
                     <TextBlock Text="Arc" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Arc_List}">
+                    ItemsSource="{Binding Arcs}">
                 </ListView>
             </TreeViewItem>
             <TreeViewItem>
@@ -128,16 +90,15 @@
                     <TextBlock Text="Text" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Text_List}">
+                    ItemsSource="{Binding Texts}">
                 </ListView>
             </TreeViewItem>
-
             <TreeViewItem>
                 <TreeViewItem.Header>
                     <TextBlock Text="Image" FontWeight="Bold"></TextBlock>
                 </TreeViewItem.Header>
                 <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
-                    ItemsSource="{Binding Source={StaticResource newProjectViewModel}, Path=Image_List}">
+                    ItemsSource="{Binding Images}">
                 </ListView>
             </TreeViewItem>
         </TreeView>

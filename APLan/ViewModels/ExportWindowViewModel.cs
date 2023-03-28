@@ -1,4 +1,5 @@
-﻿using APLan.Commands;
+﻿using aplan.eulynx;
+using APLan.Commands;
 using APLan.HelperClasses;
 using ERDM_Implementation;
 using System.IO;
@@ -81,7 +82,7 @@ namespace APLan.ViewModels
         }
         #endregion
 
-        #region logic
+        #region command logic
         private void ExecuteCancelButton(object parameter)
         {
             ((Window)parameter).Close();
@@ -132,7 +133,7 @@ namespace APLan.ViewModels
         private void ExecuteSelectFolderButton(object parameter)
         {
             folderBrowserDialog1.ShowDialog();
-            OutputFolder= folderBrowserDialog1.SelectedPath;
+            OutputFolder = folderBrowserDialog1.SelectedPath;
         }
         private void ExecuteCancel(object parameter)
         {
@@ -141,22 +142,29 @@ namespace APLan.ViewModels
         private void ExecuteValidateXML(object parameter)
         {
             closeWindow(parameter);
-            Views.EulynxValidator validator = new Views.EulynxValidator();
+            Views.Validator validator = new Views.Validator();
             validator.ShowDialog();
             LoadingReport = "loading Euxml";
         }
-        
+        #endregion
+
+        #region logic
+
+        #endregion
+
+        #region async logic
         private async Task<bool> exportToEuxml(string projectName, string exportPath)
         {
             await Task.Run(() =>
-            {   
-                ModelViewModel.eulynxService.serialization(ModelViewModel.eulynx, projectName, exportPath);
+            {
+                EulynxService service = new();
+                service.serialization(eulynxModel, projectName, exportPath);
                 InfoExtractor.extractExtraInfo(exportPath, projectName);
                 Successfull = "Exporting to XML was Successfull";
                 //XmlReader xmlReader = XmlReader.Create(OutputFolder + "/eulynx" + projectName + ".euxml");
             });
-            
-            
+
+
             return true;
         }
         /// <summary>
@@ -175,12 +183,12 @@ namespace APLan.ViewModels
         /// <returns></returns>
         private async Task<string> readingEuxmlAsText()
         {
-            string text=null;
+            string text = null;
             await Task.Run(() =>
             {
                 text = File.ReadAllText(OutputFolder + "/eulynx" + _projectName + ".euxml");
             });
-            
+
             return text;
         }
         #endregion

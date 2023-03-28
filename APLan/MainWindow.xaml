@@ -7,16 +7,17 @@
         xmlns:views="clr-namespace:APLan.Views"
         xmlns:viewModels="clr-namespace:APLan.ViewModels"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:Converters="clr-namespace:APLan.Converters" x:Class="APLan.MainWindow"
+        xmlns:Converters="clr-namespace:APLan.Converters" 
+        x:Class="APLan.MainWindow"
         mc:Ignorable="d"
         WindowState="Maximized"
         Icon="/Resources/Icons/eulynx-logo.png"
         ResizeMode="CanResize"
-        Title="MainWindow"
-         >
+        Title="MainWindow">
     
     <Window.DataContext>
-        <StaticResource ResourceKey="drawViewModel"/>
+        <!--<StaticResource ResourceKey="drawViewModel"/>-->
+        <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>
     </Window.DataContext>
     <i:Interaction.Triggers>
         
@@ -26,7 +27,6 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        
         <Grid.RowDefinitions >
             <RowDefinition x:Name="R0" Height="30"/>
             <RowDefinition x:Name="R1" Height="130"/>
@@ -42,12 +42,11 @@
         </Grid.ColumnDefinitions>
         <views:MainMenu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="4" 
                         Panel.ZIndex="2"/>
-
         <views:Welcome Grid.Row="1"
                        Grid.ColumnSpan="4" 
-                       Grid.RowSpan="4"
-                       Panel.ZIndex="3"></views:Welcome>
-        <views:Tabs Grid.Row="1"
+                       Grid.RowSpan="5"
+                       Panel.ZIndex="3"/>
+        <views:UpperTabs Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
                     Background="White"
@@ -118,8 +117,8 @@
                               Grid.Column="0"
                               Grid.Row="2"
                               Panel.ZIndex="-1"/>
-        <views:AplanCADViewer 
-                              x:Name="AplanCADViewer"
+        <views:AplanCADViewerSideBar 
+                              x:Name="AplanCADViewerSideBar"
                               Grid.Column="0"
                               Grid.Row="2"
                               Panel.ZIndex="-1"/>

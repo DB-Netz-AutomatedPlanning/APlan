@@ -11,6 +11,9 @@ namespace APLan.ViewModels
         private Brush _moveBrush;
         private Brush _dragBrush;
         private Brush _selectedBrush;
+        #endregion
+
+        #region properties
         public Brush SelectBrush
         {
             get
@@ -85,7 +88,7 @@ namespace APLan.ViewModels
         }
         #endregion
         
-        #region logic 
+        #region  command logic 
         /// <summary>
         /// allow selection
         /// </summary>
