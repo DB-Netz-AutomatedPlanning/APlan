@@ -37,6 +37,9 @@ namespace APLan.Views
         #region logic
         private void fileBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (projectType.SelectedItem == null)
+                return;
+
             TextBox textbox = ((TextBox)sender);
             if (projectType.SelectedItem.ToString().Contains("ERDM"))
             {

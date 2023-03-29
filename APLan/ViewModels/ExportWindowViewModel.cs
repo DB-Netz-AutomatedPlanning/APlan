@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using MessageBox = System.Windows.MessageBox;
 
 namespace APLan.ViewModels
 {
@@ -90,7 +91,7 @@ namespace APLan.ViewModels
         private async void ExecuteExportButton(object parameter)
         {
             startLoading();
-            LoadingReport = "exporting to Euxml";
+
             var objects = (object[])parameter;
             var exportType = ((TextBlock)objects[0]).Text;
             var exportPath = ((System.Windows.Controls.TextBox)objects[1]).Text;
@@ -103,12 +104,14 @@ namespace APLan.ViewModels
                 ERDMserializer eRDMserializer = new(BaseViewModel.erdmModel);
 
                 System.IO.File.WriteAllText(exportPath + "\\" + projectName + ".json", eRDMserializer.serializeERDM());
+                MessageBox.Show("Export was sucessfull");
             }
             else if (exportType.Equals("XML(ERDM)") && BaseViewModel.erdmModel != null)
             {
                 ERDMserializer eRDMserializer = new(BaseViewModel.erdmModel);
 
                 eRDMserializer.serializeERDMtoXML(exportPath + "\\" + projectName + ".xml");
+                MessageBox.Show("Export was sucessfull");
             }
             else
             if (exportType.Equals("Eulynx") && exportType != null && projectName != null && Directory.Exists(exportPath))
@@ -116,12 +119,10 @@ namespace APLan.ViewModels
                 await exportToEuxml(projectName, exportPath);
                 Views.ExportConfirmationAndValidation exportConfirmValidate = new();
                 exportConfirmValidate.Show();
-                startLoading();
-                LoadingReport = "Loading the Euxml file.";
                 Task<string> task = readingEuxmlAsText();
                 EuxmlResult = await task;
-                stopLoading();
-                LoadingReport = "";
+
+                MessageBox.Show("Export was sucessfull");
             }
             else
             {
@@ -144,12 +145,7 @@ namespace APLan.ViewModels
             closeWindow(parameter);
             Views.Validator validator = new Views.Validator();
             validator.ShowDialog();
-            LoadingReport = "loading Euxml";
         }
-        #endregion
-
-        #region logic
-
         #endregion
 
         #region async logic

@@ -42,14 +42,17 @@ namespace APLan.Views
             if (item.IsChecked)
             {
                 ((MenuItem)sender).IsChecked = false;
-                Panel.SetZIndex(MainWindow.visualized_Data, -1);
+                ((UserControl)MainWindow.visualized_Data).Visibility = Visibility.Collapsed;
             }
             else
             {
                 ((MenuItem)sender).IsChecked = true;
-                Panel.SetZIndex(MainWindow.visualized_Data, 0);
-                Panel.SetZIndex(MainWindow.Canvas_Content, -1);
+                ((UserControl)MainWindow.visualized_Data).Visibility = Visibility.Visible;
+
+                ((UserControl)MainWindow.aplanCADViewer).Visibility = Visibility.Collapsed;
+                ((UserControl)MainWindow.Canvas_Content).Visibility = Visibility.Collapsed;
                 canvasContentItem.IsChecked = false;
+                aplanCadViewerItem.IsChecked = false;
             }
 
         }
@@ -59,14 +62,16 @@ namespace APLan.Views
             if (item.IsChecked)
             {
                 ((MenuItem)sender).IsChecked = false;
-                Panel.SetZIndex(MainWindow.Canvas_Content, -1);
+                ((UserControl)MainWindow.Canvas_Content).Visibility = Visibility.Collapsed;
             }
             else
             {
                 ((MenuItem)sender).IsChecked = true;
-                Panel.SetZIndex(MainWindow.Canvas_Content, 0);
-                Panel.SetZIndex(MainWindow.visualized_Data, -1);
+                ((UserControl)MainWindow.Canvas_Content).Visibility = Visibility.Visible;
+                ((UserControl)MainWindow.visualized_Data).Visibility = Visibility.Collapsed;
+                ((UserControl)MainWindow.aplanCADViewer).Visibility = Visibility.Collapsed;
                 visualizedDataItem.IsChecked = false;
+                aplanCadViewerItem.IsChecked = false;
             }
 
         }
@@ -76,15 +81,16 @@ namespace APLan.Views
             if (item.IsChecked)
             {
                 ((MenuItem)sender).IsChecked = false;
-                Panel.SetZIndex(MainWindow.aplanCADViewer, -1);
+                ((UserControl)MainWindow.aplanCADViewer).Visibility = Visibility.Collapsed;
             }
             else
             {
                 ((MenuItem)sender).IsChecked = true;
-                Panel.SetZIndex(MainWindow.aplanCADViewer, 0);
-                Panel.SetZIndex(MainWindow.Canvas_Content, -1);
-                Panel.SetZIndex(MainWindow.visualized_Data, -1);
+                ((UserControl)MainWindow.aplanCADViewer).Visibility = Visibility.Visible;
+                ((UserControl)MainWindow.visualized_Data).Visibility = Visibility.Collapsed;
+                ((UserControl)MainWindow.Canvas_Content).Visibility = Visibility.Collapsed;
                 visualizedDataItem.IsChecked = false;
+                canvasContentItem.IsChecked = false;
             }
 
         }
