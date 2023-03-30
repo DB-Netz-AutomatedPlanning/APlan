@@ -122,7 +122,7 @@ namespace APLan.ViewModels
         }
         private async void ExecuteValidate(object parameter)
         {
-
+            Report = null;
             switch (ProjectType)
             {
                 case "ERDM":

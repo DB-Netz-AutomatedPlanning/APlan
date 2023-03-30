@@ -101,7 +101,7 @@
                     <ScrollViewer 
                           VerticalScrollBarVisibility="Auto" 
                           HorizontalScrollBarVisibility="Auto">
-                        <TextBox Text="{Binding Report}" IsReadOnly="True" VerticalAlignment="Top" BorderBrush="White"></TextBox>
+                        <TextBox x:Name="reportBox" Text="{Binding Report}" IsReadOnly="True" VerticalAlignment="Top" BorderBrush="White"></TextBox>
                     </ScrollViewer>
                 </TabItem>
                 <TabItem x:Name="RulesItem"  Header="Rules validation" Background="{StaticResource themeColor}">

@@ -31,6 +31,9 @@ namespace APLan.Views
         {
             InitializeComponent();
             themeColor = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
+            fileBox.Text = null;
+            outputBox.Text = null;
+            projectType.SelectedIndex = 0;
         }
         #endregion
 
@@ -119,11 +122,15 @@ namespace APLan.Views
                     RulesItem.Visibility = Visibility.Visible;
                 }
             }
+            if (reportBox != null)
+                reportBox.Text = null;
             activateValidation();
         }
 
         private void activateValidation()
         {
+            if (validate == null)
+                return;
             if (fileBox.Background == themeColor && outputBox.Background == themeColor)
             {
                 validate.IsEnabled = true;

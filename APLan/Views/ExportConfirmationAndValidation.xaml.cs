@@ -22,6 +22,7 @@ namespace APLan.Views
         public ExportConfirmationAndValidation()
         {
             InitializeComponent();
+            outputText.Text = null;
         }
     }
 }
