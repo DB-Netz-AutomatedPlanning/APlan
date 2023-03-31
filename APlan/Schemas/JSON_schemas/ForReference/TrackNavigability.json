@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"fromTrackEdge": {},"fromTrackEdgeSide": {},"toTrackEdge": {},"toTrackEdgeSide": {},"appliesToTrackNode": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"fromTrackEdge"
+            ,"fromTrackEdgeSide"
+            ,"toTrackEdge"
+            ,"toTrackEdgeSide"
+            ,"appliesToTrackNode"
+            ],
+    "additionalProperties": false
+    }

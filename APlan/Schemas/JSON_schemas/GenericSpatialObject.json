@@ -1,0 +1,28 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "geometricConstruct": {
+            "type": "string",
+            "format": "uuid"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "geometricConstruct"
+    ],
+    "additionalProperties": false
+}

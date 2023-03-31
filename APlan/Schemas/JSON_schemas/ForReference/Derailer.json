@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgePoint": {},"appliesToDpsGroup": {},"appliesToDps": {},"reversalTime": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgePoint"
+            ,"appliesToDpsGroup"
+            ,"appliesToDps"
+            ,"reversalTime"
+            ],
+    "additionalProperties": false
+    }

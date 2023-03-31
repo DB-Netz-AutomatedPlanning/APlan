@@ -1,0 +1,47 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackEdgeSection": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "flankProtectionDirection": {
+            "type": "string",
+            "enum": [
+                "None",
+                "Start to End",
+                "End to Start",
+                "Both"
+            ]
+        },
+        "minimalDrivability": {
+            "type": "string",
+            "enum": [
+                "None",
+                "Full",
+                "Limited"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackEdgeSection",
+        "flankProtectionDirection",
+        "minimalDrivability"
+    ],
+    "additionalProperties": false
+}

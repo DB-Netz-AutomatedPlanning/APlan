@@ -1,0 +1,413 @@
+{
+    "type": "object",
+    "properties": {
+        "Tier0": {
+            "properties": {
+                "Version": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "Version.json"
+                    }
+                },
+                "MapData": {
+                    "items": {
+                        "$ref": "MapData.json"
+                    }
+                },
+                "Release": {
+                    "items": {
+                        "$ref": "Release.json"
+                    }
+                },
+                "GeoCoordinates": {
+                    "items": {
+                        "$ref": "GeoCoordinates.json"
+                    }
+                },
+                "LineReference": {
+                    "items": {
+                        "$ref": "LineReference.json"
+                    }
+                },
+                "OperationalPoint": {
+                    "items": {
+                        "$ref": "OperationalPoint.json"
+                    }
+                }
+            },
+            "required": [
+                "Version",
+                "MapData",
+                "Release",
+                "GeoCoordinates",
+                "LineReference",
+                "OperationalPoint"
+            ],
+            "additionalProperties": false
+        },
+        "Tier1": {
+            "properties": {
+                "TrackNode": {
+                    "items": {
+                        "$ref": "TrackNode.json"
+                    }
+                },
+                "TrackEdge": {
+                    "items": {
+                        "$ref": "TrackEdge.json"
+                    }
+                },
+                "TrackNavigability": {
+                    "items": {
+                        "$ref": "TrackNavigability.json"
+                    }
+                }
+            },
+            "required": [
+                "TrackNode",
+                "TrackEdge",
+                "TrackNavigability"
+            ],
+            "additionalProperties": false
+        },
+        "Tier2": {
+            "properties": {
+                "AreaOfControl": {
+                    "items": {
+                        "$ref": "AreaOfControl.json"
+                    }
+                },
+                "TrackEdgePoint": {
+                    "items": {
+                        "$ref": "TrackEdgePoint.json"
+                    }
+                },
+                "DirectedTrackEdgePoint": {
+                    "items": {
+                        "$ref": "DirectedTrackEdgePoint.json"
+                    }
+                },
+                "TrackEdgeSection": {
+                    "items": {
+                        "$ref": "TrackEdgeSection.json"
+                    }
+                },
+                "DirectedTrackEdgeSection": {
+                    "items": {
+                        "$ref": "DirectedTrackEdgeSection.json"
+                    }
+                },
+                "TrackArea": {
+                    "items": {
+                        "$ref": "TrackArea.json"
+                    }
+                },
+                "ContiguousTrackArea": {
+                    "items": {
+                        "$ref": "ContiguousTrackArea.json"
+                    }
+                },
+                "LinearContiguousTrackArea": {
+                    "items": {
+                        "$ref": "LinearContiguousTrackArea.json"
+                    }
+                }
+            },
+            "required": [
+                "AreaOfControl",
+                "TrackEdgePoint",
+                "DirectedTrackEdgePoint",
+                "TrackEdgeSection",
+                "DirectedTrackEdgeSection",
+                "TrackArea",
+                "ContiguousTrackArea",
+                "LinearContiguousTrackArea"
+            ],
+            "additionalProperties": false
+        },
+        "Tier3": {
+            "properties": {
+                "AdjacentAreaOfControl": {
+                    "items": {
+                        "$ref": "AdjacentAreaOfControl.json"
+                    }
+                },
+                "StaticSpeedProfile": {
+                    "items": {
+                        "$ref": "StaticSpeedProfile.json"
+                    }
+                },
+                "SpecificStaticSpeedProfile": {
+                    "items": {
+                        "$ref": "SpecificStaticSpeedProfile.json"
+                    }
+                },
+                "AxleLoadSpeedProfile": {
+                    "items": {
+                        "$ref": "AxleLoadSpeedProfile.json"
+                    }
+                },
+                "GradientSegmentLine": {
+                    "items": {
+                        "$ref": "GradientSegmentLine.json"
+                    }
+                },
+                "GradientSegmentArc": {
+                    "items": {
+                        "$ref": "GradientSegmentArc.json"
+                    }
+                },
+                "CurveSegmentLine": {
+                    "items": {
+                        "$ref": "CurveSegmentLine.json"
+                    }
+                },
+                "CurveSegmentArc": {
+                    "items": {
+                        "$ref": "CurveSegmentArc.json"
+                    }
+                },
+                "CurveSegmentTransition": {
+                    "items": {
+                        "$ref": "CurveSegmentTransition.json"
+                    }
+                },
+                "CantSegmentLine": {
+                    "items": {
+                        "$ref": "CantSegmentLine.json"
+                    }
+                },
+                "AllocationSection": {
+                    "items": {
+                        "$ref": "AllocationSection.json"
+                    }
+                },
+                "DriveProtectionSection": {
+                    "items": {
+                        "$ref": "DriveProtectionSection.json"
+                    }
+                },
+                "DriveProtectionSectionGroup": {
+                    "items": {
+                        "$ref": "DriveProtectionSectionGroup.json"
+                    }
+                },
+                "Balise": {
+                    "items": {
+                        "$ref": "Balise.json"
+                    }
+                },
+                "BaliseGroup": {
+                    "items": {
+                        "$ref": "BaliseGroup.json"
+                    }
+                },
+                "SegmentProfile": {
+                    "items": {
+                        "$ref": "SegmentProfile.json"
+                    }
+                },
+                "Landmark": {
+                    "items": {
+                        "$ref": "Landmark.json"
+                    }
+                },
+                "LightSignal": {
+                    "items": {
+                        "$ref": "LightSignal.json"
+                    }
+                },
+                "ETCSMarker": {
+                    "items": {
+                        "$ref": "ETCSMarker.json"
+                    }
+                },
+                "StopLocation": {
+                    "items": {
+                        "$ref": "StopLocation.json"
+                    }
+                },
+                "PlatformEdge": {
+                    "items": {
+                        "$ref": "PlatformEdge.json"
+                    }
+                },
+                "TunnelPortal": {
+                    "items": {
+                        "$ref": "TunnelPortal.json"
+                    }
+                },
+                "TunnelTube": {
+                    "items": {
+                        "$ref": "TunnelTube.json"
+                    }
+                },
+                "Tunnel": {
+                    "items": {
+                        "$ref": "Tunnel.json"
+                    }
+                },
+                "SimplePoint": {
+                    "items": {
+                        "$ref": "SimplePoint.json"
+                    }
+                },
+                "SlipCrossing": {
+                    "items": {
+                        "$ref": "SlipCrossing.json"
+                    }
+                },
+                "Derailer": {
+                    "items": {
+                        "$ref": "Derailer.json"
+                    }
+                },
+                "DiamondCrossing": {
+                    "items": {
+                        "$ref": "DiamondCrossing.json"
+                    }
+                },
+                "LevelCrossing": {
+                    "items": {
+                        "$ref": "LevelCrossing.json"
+                    }
+                },
+                "TrackCondition": {
+                    "items": {
+                        "$ref": "TrackCondition.json"
+                    }
+                },
+                "TractionSystem": {
+                    "items": {
+                        "$ref": "TractionSystem.json"
+                    }
+                },
+                "CurrentLimitation": {
+                    "items": {
+                        "$ref": "CurrentLimitation.json"
+                    }
+                },
+                "PermittedBrakingDistance": {
+                    "items": {
+                        "$ref": "PermittedBrakingDistance.json"
+                    }
+                },
+                "TrackProperties": {
+                    "items": {
+                        "$ref": "TrackProperties.json"
+                    }
+                },
+                "TracksideTrainDetectionArea": {
+                    "items": {
+                        "$ref": "TracksideTrainDetectionArea.json"
+                    }
+                },
+                "MpTargetMarker": {
+                    "items": {
+                        "$ref": "MpTargetMarker.json"
+                    }
+                },
+                "RiskBufferConfiguration": {
+                    "items": {
+                        "$ref": "RiskBufferConfiguration.json"
+                    }
+                },
+                "Zone": {
+                    "items": {
+                        "$ref": "Zone.json"
+                    }
+                },
+                "TrackZone": {
+                    "items": {
+                        "$ref": "TrackZone.json"
+                    }
+                },
+                "NearTrackZone": {
+                    "items": {
+                        "$ref": "NearTrackZone.json"
+                    }
+                },
+                "ProtectionZone": {
+                    "items": {
+                        "$ref": "ProtectionZone.json"
+                    }
+                },
+                "OverheadLineEquipmentZone": {
+                    "items": {
+                        "$ref": "OverheadLineEquipmentZone.json"
+                    }
+                },
+                "GenericSpatialObject": {
+                    "items": {
+                        "$ref": "GenericSpatialObject.json"
+                    }
+                },
+                "GenericLinearObject": {
+                    "items": {
+                        "$ref": "GenericLinearObject.json"
+                    }
+                },
+                "GenericSpotObject": {
+                    "items": {
+                        "$ref": "GenericSpotObject.json"
+                    }
+                }
+            },
+            "required": [
+                "AdjacentAreaOfControl",
+                "StaticSpeedProfile",
+                "SpecificStaticSpeedProfile",
+                "AxleLoadSpeedProfile",
+                "GradientSegmentLine",
+                "GradientSegmentArc",
+                "CurveSegmentLine",
+                "CurveSegmentArc",
+                "CurveSegmentTransition",
+                "CantSegmentLine",
+                "AllocationSection",
+                "DriveProtectionSection",
+                "DriveProtectionSectionGroup",
+                "Balise",
+                "BaliseGroup",
+                "SegmentProfile",
+                "Landmark",
+                "LightSignal",
+                "ETCSMarker",
+                "StopLocation",
+                "PlatformEdge",
+                "TunnelPortal",
+                "TunnelTube",
+                "Tunnel",
+                "SimplePoint",
+                "SlipCrossing",
+                "Derailer",
+                "DiamondCrossing",
+                "LevelCrossing",
+                "TrackCondition",
+                "TractionSystem",
+                "CurrentLimitation",
+                "PermittedBrakingDistance",
+                "TrackProperties",
+                "TracksideTrainDetectionArea",
+                "MpTargetMarker",
+                "RiskBufferConfiguration",
+                "Zone",
+                "TrackZone",
+                "NearTrackZone",
+                "ProtectionZone",
+                "OverheadLineEquipmentZone",
+                "GenericSpatialObject",
+                "GenericLinearObject",
+                "GenericSpotObject"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "Tier0",
+        "Tier1",
+        "Tier2",
+        "Tier3"
+    ],
+    "additionalProperties": false
+}

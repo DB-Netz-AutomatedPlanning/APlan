@@ -1,0 +1,49 @@
+{
+    "type": "object",
+    "properties": {
+
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "consistsOfTrackEdgeSection": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        },
+        "areaOfControlIdentifier": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "adjacentAreaOfControl": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            }
+        }
+    },
+    "required": [
+        "version",
+        "name",
+        "id",
+        "consistsOfTrackEdgeSection",
+        "areaOfControlIdentifier",
+        "adjacentAreaOfControl"
+    ],
+    "additionalProperties": false
+}

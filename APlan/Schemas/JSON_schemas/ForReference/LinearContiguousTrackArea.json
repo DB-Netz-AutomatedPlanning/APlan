@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"consistsOfTrackEdgeSection": {},"startTrackEdgePoint": {},"viaTrackEdgePoint": {},"endTrackEdgePoint": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"consistsOfTrackEdgeSection"
+            ,"startTrackEdgePoint"
+            ,"viaTrackEdgePoint"
+            ,"endTrackEdgePoint"
+            ],
+    "additionalProperties": false
+    }

@@ -1,0 +1,65 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "verticalOffset": {
+            "type": [
+                "number",
+                "null"
+            ],
+            "minimum": 0,
+            "maximum": 99.999,
+            "multipleOf": 0.001
+        },
+        "length": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 999999.999,
+            "multipleOf": 0.001
+        },
+        "lateralOffset": {
+            "type": [
+                "number",
+                "null"
+            ],
+            "minimum": -99.999,
+            "maximum": 99.999,
+            "multipleOf": 0.001
+        },
+        "hasStartTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "hasEndTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "isPartOfTrackEdge": {
+            "type": "string",
+            "format": "uuid"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "verticalOffset",
+        "length",
+        "lateralOffset",
+        "hasStartTrackEdgePoint",
+        "hasEndTrackEdgePoint",
+        "isPartOfTrackEdge"
+    ],
+    "additionalProperties": false
+}

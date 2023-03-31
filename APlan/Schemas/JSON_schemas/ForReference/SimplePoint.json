@@ -1,0 +1,19 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackNode": {},"appliesToTrackArea": {},"appliesToAllocationSection": {},"reversalTime": {},"appliesToDpsGroup": {},"appliesToDpsRight": {},"appliesToDpsLeft": {},"speedRightRoute": {},"speedLeftRoute": {},"hasTrailDetection": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackNode"
+            ,"appliesToTrackArea"
+            ,"appliesToAllocationSection"
+            ,"reversalTime"
+            ,"appliesToDpsGroup"
+            ,"appliesToDpsRight"
+            ,"appliesToDpsLeft"
+            ,"speedRightRoute"
+            ,"speedLeftRoute"
+            ,"hasTrailDetection"
+            ],
+    "additionalProperties": false
+    }

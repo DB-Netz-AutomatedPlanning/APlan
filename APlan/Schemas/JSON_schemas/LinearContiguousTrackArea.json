@@ -1,0 +1,54 @@
+{
+    "type": "object",
+    "properties": {
+
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "consistsOfTrackEdgeSection": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        },
+        "startTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "viaTrackEdgePoint": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            }
+        },
+        "endTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        }
+    },
+    "required": [
+        "version",
+        "name",
+        "id",
+        "consistsOfTrackEdgeSection",
+        "startTrackEdgePoint",
+        "viaTrackEdgePoint",
+        "endTrackEdgePoint"
+    ],
+    "additionalProperties": false
+}

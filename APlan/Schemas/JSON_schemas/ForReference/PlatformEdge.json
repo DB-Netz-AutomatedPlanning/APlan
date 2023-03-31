@@ -1,0 +1,14 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToLinearContiguousTrackArea": {},"situatedSide": {},"length": {},"hasStopLocation": {},"hasAccessViaTracks": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToLinearContiguousTrackArea"
+            ,"situatedSide"
+            ,"length"
+            ,"hasStopLocation"
+            ,"hasAccessViaTracks"
+            ],
+    "additionalProperties": false
+    }

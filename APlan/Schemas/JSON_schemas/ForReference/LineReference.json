@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"lineKilometre": {},"lineNumber": {},"trackNumber": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"lineKilometre"
+            ,"lineNumber"
+            ,"trackNumber"
+            ],
+    "additionalProperties": false
+    }

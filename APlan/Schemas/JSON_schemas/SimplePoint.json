@@ -1,0 +1,109 @@
+{
+    "type": "object",
+    "properties": {
+
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackNode": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 1,
+                    "maxItems": 1
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                }
+            ]
+        },
+        "appliesToTrackArea": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToAllocationSection": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "reversalTime": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 20
+        },
+        "appliesToDpsGroup": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToDpsRight": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToDpsLeft": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "speedRightRoute": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "minimum": 0,
+            "maximum": 600
+        },
+        "speedLeftRoute": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "minimum": 0,
+            "maximum": 600
+        },
+        "hasTrailDetection": {
+            "type": "boolean"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackNode",
+        "appliesToTrackArea",
+        "appliesToAllocationSection",
+        "reversalTime",
+        "appliesToDpsGroup",
+        "appliesToDpsRight",
+        "appliesToDpsLeft",
+        "speedRightRoute",
+        "speedLeftRoute",
+        "hasTrailDetection"
+    ],
+    "additionalProperties": false
+}

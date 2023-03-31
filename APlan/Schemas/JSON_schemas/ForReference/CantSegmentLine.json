@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgeSection": {},"startCant": {},"endCant": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgeSection"
+            ,"startCant"
+            ,"endCant"
+            ],
+    "additionalProperties": false
+    }

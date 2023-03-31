@@ -1,0 +1,93 @@
+{
+    "type": "object",
+    "properties": {
+
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "verticalOffset": {
+            "type": [
+                "number",
+                "null"
+            ],
+            "minimum": 0,
+            "maximum": 99.999,
+            "multipleOf": 0.001
+        },
+        "offset": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 999999.999,
+            "multipleOf": 0.001
+        },
+        "lateralOffset": {
+            "type": [
+                "number",
+                "null"
+            ],
+            "minimum": -99.999,
+            "maximum": 99.999,
+            "multipleOf": 0.001
+        },
+        "isPositionedOnTrackEdge": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "isLocatedAtGeoCoordinates": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "hasOperationalPoint": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            ]
+        },
+        "lineReference": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            }
+        },
+        "direction": {
+            "type": "string",
+            "enum": [
+                "Start to End",
+                "End to Start",
+                "Both"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "verticalOffset",
+        "offset",
+        "lateralOffset",
+        "isPositionedOnTrackEdge",
+        "isLocatedAtGeoCoordinates",
+        "hasOperationalPoint",
+        "lineReference",
+        "direction"
+    ],
+    "additionalProperties": false
+}
