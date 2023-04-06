@@ -201,6 +201,10 @@
                     "items": {
                         "$ref": "BaliseGroup.json"
                     }
+                },"TimingPoint": {
+                    "items": {
+                        "$ref": "TimingPoint.json"
+                    }
                 },
                 "SegmentProfile": {
                     "items": {
@@ -369,6 +373,7 @@
                 "DriveProtectionSectionGroup",
                 "Balise",
                 "BaliseGroup",
+                "TimingPoint",
                 "SegmentProfile",
                 "Landmark",
                 "LightSignal",

@@ -147,7 +147,10 @@ namespace APLan.ViewModels
             ERDMvalidator erdmValidator = new();
             startLoading();
             //define XSD validation version based on the imported xml.
-            Report = await erdmValidator.validate(InputFile, Path);
+            var report = await erdmValidator.validate(InputFile, Path);
+            Report = report;
+            if (string.IsNullOrEmpty(report))
+                Report = "validation was sucessfull";
             //validate according to the rules in German book.
             //await RulesValidate(JSON);
             stopLoading();
@@ -158,7 +161,9 @@ namespace APLan.ViewModels
             EulynxValidator eulynxValidator = new();
             startLoading();
             //define XSD validation version based on the imported xml.
-            Report = await eulynxValidator.validate(InputFile, Path);
+            var report = await eulynxValidator.validate(InputFile, Path);
+            if (string.IsNullOrEmpty(report))
+                Report = "validation was sucessfull";
             //validate according to the rules in German book.
             //await RulesValidate(JSON);
             stopLoading();

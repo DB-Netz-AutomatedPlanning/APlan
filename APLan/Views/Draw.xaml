@@ -71,8 +71,8 @@
                     </i:Interaction.Triggers>-->
             <Canvas x:Name="mycanvas" 
                             Background="White" 
-                            Width="{Binding CanvasSize}" 
-                            Height="{Binding CanvasSize}"
+                            Width="1000" 
+                            Height="1000"
                             AllowDrop="True"
                             UseLayoutRounding="False"
                             SnapsToDevicePixels="False"
@@ -100,7 +100,8 @@
                                                                 PassEventArgsToCommand="True"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-
+                <Path Stroke="Black" StrokeThickness="1">
+                </Path>
                 <ItemsControl ItemsSource="{Binding Lines}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

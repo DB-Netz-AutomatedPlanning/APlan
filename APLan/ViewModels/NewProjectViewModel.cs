@@ -12,6 +12,7 @@ using APLan.ViewModels.ModelsLogic;
 using APLan.Model.MiscellaneousInputLogic;
 using APLan.Model.HelperClasses;
 using File = System.IO.File;
+using C_sharp_learning;
 
 namespace APLan.ViewModels
 {
@@ -317,7 +318,7 @@ namespace APLan.ViewModels
             switch (ProjectType)
             {
                 case "ERDM":
-                    openFileDialog1.Filter = "Types (*.xls)|*.xls";
+                    openFileDialog1.Filter = "Excel and CSV files (*.xls;*.csv)|*.xls;*.csv";
                     openFileDialog1.Multiselect = true;
                     break;
                 default:
@@ -383,7 +384,19 @@ namespace APLan.ViewModels
             clearDrawings(); //clear previous drawing data.
 
             loadingObject.startLoading();
+            if (ProjectType.Equals("Sweden"))
+            {
+                loadingObject.LoadingReport = "Creating ERDM Object...";
 
+                if (format.Contains(".xml"))
+                {
+                    SwedenDataHandler swedenHandler = new(XML);
+                    ErdmModelHandler erdmHandler = new();
+
+                    BaseViewModel.erdmModel = swedenHandler.getInfraStructure();
+                    erdmHandler.drawERDM(erdmModel, Lines, Ellipses);
+                }
+            }
             if (ProjectType.Equals("EULYNX"))
             {
 

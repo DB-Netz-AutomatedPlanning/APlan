@@ -107,7 +107,7 @@
         </Grid>
 
         <ComboBox  x:Name="projectType"  Height="30" Grid.Row="2" Grid.Column="1"  SelectedItem="{Binding ProjectType, Mode=TwoWay}" SelectionChanged="projectType_SelectionChanged">
-
+            <ComboBoxItem Content = "Sweden" />
             <ComboBoxItem Content = "ERDM" />
             <ComboBoxItem Content = "EULYNX" />
             <ComboBoxItem Content = "CAD" />
@@ -119,7 +119,7 @@
             <ComboBoxItem Content = ".euxml" Visibility="Collapsed" />
             <ComboBoxItem Content = ".dxf"  Visibility="Collapsed" />
             <ComboBoxItem Content = ".dwg"  Visibility="Collapsed" />
-            <ComboBoxItem Content = ".xls"  Visibility="Collapsed"/>
+            <ComboBoxItem Content = ".xls/.csv"  Visibility="Collapsed"/>
             <ComboBoxItem Content = ".xml"  Visibility="Collapsed"/>
         </ComboBox>
 

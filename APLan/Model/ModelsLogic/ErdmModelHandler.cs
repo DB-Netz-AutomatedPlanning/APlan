@@ -23,6 +23,8 @@ using System.Text.Json.Serialization;
 using NPOI.HPSF;
 using System.Xml.Serialization;
 using System.Windows;
+using System.Reflection;
+using NPOI.Util.ArrayExtensions;
 
 namespace APLan.ViewModels.ModelsLogic
 {
@@ -108,6 +110,8 @@ namespace APLan.ViewModels.ModelsLogic
                 polyLine.CustomPoints.Add(new() { Point = point1 });
                 polyLine.CustomPoints.Add(new() { Point = point2 });
                 polyLine.Color = System.Windows.Media.Brushes.Red;
+
+                attachData(segment, polyLine.Data);
                 lines.Add(polyLine);
             }
             return lines;
@@ -122,6 +126,10 @@ namespace APLan.ViewModels.ModelsLogic
             var nodes = getAllNodesOfMapData(mapData, erdmModel);
             var geoID = nodes.Select(x => ((TrackNode)x).isLocatedAtGeoCoordinates);
             var geoCoordinates = erdmModel.Tier0.GeoCoordinates.FindAll(x => geoID.Contains(x.id));
+
+            if (ViewModels.DrawViewModel.GlobalDrawingPoint.X == 0 && geoCoordinates!=null && geoCoordinates[0]!=null)
+                ViewModels.DrawViewModel.GlobalDrawingPoint = new((double)geoCoordinates[0].xCoordinate, (double)geoCoordinates[0].yCoordinate);
+
             geoCoordinates.ForEach(x => {
                 Circles.Add(
                     new()
@@ -163,7 +171,6 @@ namespace APLan.ViewModels.ModelsLogic
             var mapDataNodes = nodes.FindAll(x => mapData.consistsOfTier1Objects.Contains(x.id)).ToList();
             return mapDataNodes;
         }
-
         public async Task<ERDM.ERDMmodel> deserializeFromJSON(string JSON)
         {
             ERDM.ERDMmodel erdModel = null;
@@ -183,7 +190,6 @@ namespace APLan.ViewModels.ModelsLogic
             });
             return erdModel;
         }
-
         public async Task<ERDM.ERDMmodel> deserializeFromXML(string XML)
         {
             ERDM.ERDMmodel erdModel = null;
@@ -207,6 +213,17 @@ namespace APLan.ViewModels.ModelsLogic
                 }
             });
             return erdModel;
+        }
+        private void attachData(object currentObject, ObservableCollection<HelperClasses.KeyValue> dataCollection)
+        {
+            Type type = currentObject.GetType();
+   
+            foreach (PropertyInfo prop in type.GetProperties())
+            {
+                string propName = prop.Name;
+                object propValue = prop.GetValue(currentObject);
+                dataCollection.Add(new() { Key = propName, Value = propValue!=null? propValue:"null" });
+            }
         }
         #endregion
 

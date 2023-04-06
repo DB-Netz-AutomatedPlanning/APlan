@@ -54,9 +54,9 @@ namespace APLan.ViewModels
         private static double canvasScale = 1;
         private double gridThicnkess = 0.5;
         private double lineThicnkess = 2;
-        private double canvasSize = 100000;
+        private double canvasSize = 1000000;
         private double signalSize;
-        public static double sharedCanvasSize = 100000; //this should be always equal canvasSize.
+        public static double sharedCanvasSize = 1000000; //this should be always equal canvasSize.
         public static double drawingScale = 1;
         public static double signalSizeForConverter;
         public static Point GlobalDrawingPoint = new Point(0, 0);

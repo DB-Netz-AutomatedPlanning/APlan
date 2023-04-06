@@ -98,6 +98,9 @@
     <Page Update="Views\CanvasToolsTab.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="DataTemplates.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Draw.xaml">
       <SubType>Designer</SubType>
     </Page>

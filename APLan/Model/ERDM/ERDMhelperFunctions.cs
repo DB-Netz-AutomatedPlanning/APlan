@@ -17,10 +17,10 @@ namespace ERDM_Implementation
 {
     public class ERDMhelperFunctions
     {
-        public static TrackEdgeSection CreateOrFindTrackEdgeSection(double x1, double y1, double z1, double offset1, double x2, double y2, double z2, double offset2,string segmentID,string trackEdgeID,double length,MapData mapData, ERDM.Tier_0.Version verison, ERDM.ERDMmodel erdmModel)
+        public static TrackEdgeSection CreateOrFindTrackEdgeSection(double x1, double y1, double z1, double offset1, double x2, double y2, double z2,string trackEdgeID,double length,MapData mapData, ERDM.Tier_0.Version verison, ERDM.ERDMmodel erdmModel)
         {
-        
-            TrackEdge trackEdge = erdmModel?.Tier1?.TrackEdge.Find(x => x is TrackEdge && x.name.Equals(trackEdgeID)) as TrackEdge;
+            var edgeID = ReplaceNonAlphaNumericalChar(trackEdgeID);
+            TrackEdge trackEdge = erdmModel?.Tier1?.TrackEdge.Find(x => x is TrackEdge && x.name.Equals(edgeID)) as TrackEdge;
 
             var startTrackEdge = CreatOrFindTrackEdgePoint(x1, y1, z1,offset1,trackEdge ,mapData, verison,erdmModel);
             var endTrackEdge = CreatOrFindTrackEdgePoint(x2, y2, z2, offset1,trackEdge, mapData, verison, erdmModel);
@@ -30,7 +30,7 @@ namespace ERDM_Implementation
 
             // assign ids.
             TES.id = Guid.NewGuid().ToString();
-            TES.name = segmentID;
+            TES.name = $"EdgeSection";
             TES.length = length;
 
             TES.hasStartTrackEdgePoint = startTrackEdge.id;
@@ -112,7 +112,7 @@ namespace ERDM_Implementation
                 name = name,
                 version = version.id,
                 length = length,
-                //gauge = new List<TrackEdgeGauge?>() { TrackEdgeGauge._750 }, //introduced for validation.
+                gauge = new List<TrackEdgeGauge?>() { TrackEdgeGauge._750 }, //introduced for validation.
                 hasStartTrackNode = startNode?.id,
                 hasEndTrackNode = endNode?.id
             };
@@ -199,7 +199,7 @@ namespace ERDM_Implementation
         public static List<string> ExtractTrackEdgeSectionsForGradients(double startKM, double endKM,MapData mapData,ERDM.ERDMmodel erdmModel)
         {
             var trackEdgeSections = new List<string>();
-            var result = erdmModel.Tier2.TrackEdgePoint.FindAll(x => x is TrackEdgePoint && (((TrackEdgePoint)x).offset >= startKM && ((TrackEdgePoint)x).offset <= endKM));
+            var result = erdmModel.Tier2.TrackEdgePoint.FindAll(x => x is TrackEdgePoint && (((TrackEdgePoint)x).offset >= startKM && ((TrackEdgePoint)x).offset <= endKM) && (mapData.consistsOfTier2Objects.Contains(x.id)));
 
             foreach (var item in erdmModel.Tier2.TrackEdgeSection)
             {

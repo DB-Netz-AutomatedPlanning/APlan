@@ -60,7 +60,7 @@
           }
         }
       },
-      "ERDM/0.3.0": {
+      "ERDM/0.4.0": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "9.0.1",
@@ -1135,13 +1135,13 @@
         "lib/netstandard2.1/Enums.NET.xml"
       ]
     },
-    "ERDM/0.3.0": {
-      "sha512": "jb0b4w+oFXh2XgSVeh8cDJDx6ROBupcZrbdQ96xVhxvHFyb+xc9LtLqS46IqEVq/jO24yCNTkNtytAtXq/Qh5Q==",
+    "ERDM/0.4.0": {
+      "sha512": "z1F3yFpeNQWaixha1MtbfAtmqAvmqb8t+XgOqGBUPRDj6DasUaALEAMJ/RAqiTdTFDxGazAJbEag/MatTXm49w==",
       "type": "package",
-      "path": "erdm/0.3.0",
+      "path": "erdm/0.4.0",
       "files": [
         ".nupkg.metadata",
-        "erdm.0.3.0.nupkg.sha512",
+        "erdm.0.4.0.nupkg.sha512",
         "erdm.nuspec",
         "lib/net6.0/ERDMlibrary.dll"
       ]
@@ -3238,7 +3238,7 @@
     "net6.0-windows7.0": [
       "ACadSharp >= 1.4.1-alpha",
       "CommunityToolkit.Mvvm >= 8.0.0",
-      "ERDM >= 0.3.0",
+      "ERDM >= 0.4.0",
       "EulynxDpLibrary >= 1.0.0",
       "Extended.Wpf.Toolkit >= 4.5.0",
       "FreeSpire.PDF >= 8.6.0",
@@ -3309,7 +3309,7 @@
           },
           "ERDM": {
             "target": "Package",
-            "version": "[0.3.0, )"
+            "version": "[0.4.0, )"
           },
           "EulynxDpLibrary": {
             "target": "Package",

@@ -146,20 +146,30 @@ namespace ERDM_Implementation
             foreach (Dictionary<string, string> dict in xlsItems)
             {
                 dict.TryGetValue("Type", out var _type);
-                dict.TryGetValue("KM_Begin [km]", out var _beginKm);
-                dict.TryGetValue("KM_End [km]", out var _endKm);
-                dict.TryGetValue("Length [km]", out var _length);
-                dict.TryGetValue("Radius_Begin [m]", out var _radiusBegin);
-                dict.TryGetValue("Radius_End [m]", out var _radiusEnd);
-                dict.TryGetValue("Radius_Direction", out var _radiusDirection);
-                dict.TryGetValue("St_Pkt_East[m]", out var _x1);
-                dict.TryGetValue("St_Pkt_North [m]", out var _y1);
-                dict.TryGetValue("St_Pkt_Height [m]", out var _z1);
-                dict.TryGetValue("End_Pkt_East [m]", out var _x2);
-                dict.TryGetValue("End_Pkt_North [m]", out var _y2);
-                dict.TryGetValue("End_Pkt_Height [m]", out var _z2);
-                dict.TryGetValue("Segment_ID", out var _segmentID);
-                dict.TryGetValue("Track_Edge", out var _trackEdge);
+                dict.TryGetValue("KM_start [km]", out var _beginKm);
+                dict.TryGetValue("KM_end [km]", out var _endKm);
+                dict.TryGetValue("SegmentLength [m]", out var _length);
+                dict.TryGetValue("Start ETRS89 X [m]", out var _x1);
+                dict.TryGetValue("Start ETRS89 Y [m]", out var _y1);
+                dict.TryGetValue("Start ETRS89 Z [m]", out var _z1);
+                dict.TryGetValue("End ETRS89 X [m]", out var _x2);
+                dict.TryGetValue("End ETRS89 Y [m]", out var _y2);
+                dict.TryGetValue("End ETRS89 Z [m]", out var _z2);
+                dict.TryGetValue("Segment ID", out var _segmentID);
+                dict.TryGetValue("Track Edge", out var _trackEdge);
+
+                dict.TryGetValue("Start Radius [m]", out var _radiusBegin);
+                dict.TryGetValue("End Radius [m]", out var _radiusEnd);
+                //dict.TryGetValue("Radius_Direction", out var _radiusDirection);
+
+
+                dict.TryGetValue("initialLength [m]", out var _initialLength);
+                dict.TryGetValue("Start Azimuth Angle [Â°]", out var _startAzimuth);
+                dict.TryGetValue("End Azimuth Angle [Â°]", out var _endAzimuth);
+                dict.TryGetValue("Arc Center ETRS89 X [m]", out var _arcCenterX);
+                dict.TryGetValue("Arc Center ETRS89 Y [m]", out var _arcCenterY);
+                dict.TryGetValue("Arc Center ETRS89 Z [m]", out var _arcCenterZ);
+                dict.TryGetValue("Colthoiden param [m]", out var _clothoidParameter);
 
                 _segmentID = ERDMhelperFunctions.ReplaceNonAlphaNumericalChar(_segmentID);
                 _trackEdge = ERDMhelperFunctions.ReplaceNonAlphaNumericalChar(_trackEdge);
@@ -175,20 +185,27 @@ namespace ERDM_Implementation
                 var length = ERDMhelperFunctions.parseDouble(_length);
                 var radiusBegin = ERDMhelperFunctions.parseDouble(_radiusBegin);
                 var radiusEnd = ERDMhelperFunctions.parseDouble(_radiusEnd);
+                var startAzimuth = ERDMhelperFunctions.parseDouble(_startAzimuth);
+                var initialLength = ERDMhelperFunctions.parseDouble(_initialLength);
 
-                TrackEdgeSection trackSection = ERDMhelperFunctions.CreateOrFindTrackEdgeSection(x1, y1, z1, beginKm, x2, y2, z2, endKM, _segmentID, _trackEdge, length, mapdata, version,erdmModel);
+                var arcCenterX = ERDMhelperFunctions.parseDouble(_arcCenterX);
+                var arcCenterY = ERDMhelperFunctions.parseDouble(_arcCenterY);
+                var arcCenterZ = ERDMhelperFunctions.parseDouble(_arcCenterZ);
+                var clothoidParameter = ERDMhelperFunctions.parseDouble(_clothoidParameter);
+
+                TrackEdgeSection trackSection = ERDMhelperFunctions.CreateOrFindTrackEdgeSection(x1, y1, z1, beginKm, x2, y2, z2, _trackEdge, length, mapdata, version,erdmModel);
                 areaOfControl?.consistsOfTrackEdgeSection?.Add(trackSection.id);
 
                 switch (_type)
                 {
                     case "Straight":
-                        CreateSegmentLine(_segmentID, trackSection,mapdata,version,erdmModel);
+                        CreateSegmentLine(_segmentID, startAzimuth, trackSection,mapdata,version,erdmModel);
                         break;
                     case "Radius":
-                        CreateCurveSegmentArc(radiusBegin,_segmentID, trackSection, mapdata, version, erdmModel);
+                        CreateCurveSegmentArc(radiusBegin,_segmentID, initialLength, arcCenterX, arcCenterY, arcCenterZ, trackSection, mapdata, version, erdmModel);
                         break;
                     case "Transition":
-                        CreateCurveSegmentTransition(_segmentID,trackSection, mapdata, version, erdmModel);
+                        CreateCurveSegmentTransition(_segmentID, initialLength, arcCenterX, arcCenterY, arcCenterZ,clothoidParameter,startAzimuth, trackSection, mapdata, version, erdmModel);
                         break;
                     default:
                         break;
@@ -203,24 +220,40 @@ namespace ERDM_Implementation
         {
             foreach (Dictionary<string, string> dict in xlsItems)
             {
-                dict.TryGetValue("Start_height [m]", out var _altitute);
-                dict.TryGetValue("Gradient [‰]", out var _gradient);
+                dict.TryGetValue("Start ETRS89 X [m]", out var _startX);
+                dict.TryGetValue("Start ETRS89 Y [m]", out var _startY);
+                dict.TryGetValue("Start ETRS89 Z [m]", out var _startZ);
+                dict.TryGetValue("End ETRS89 X [m]", out var _endX);
+                dict.TryGetValue("End ETRS89 Y [m]", out var _endY);
+                dict.TryGetValue("End ETRS89 Z [m]", out var _endZ);
+
+                dict.TryGetValue("SegmentLength [m]", out var _segmentLength);
+                dict.TryGetValue("Start_Alt [m]", out var _startAltitute);
+                dict.TryGetValue("Gradient [per mill]", out var _gradient);
                 dict.TryGetValue("Segment ID", out var segmentID);
                 dict.TryGetValue("Start_KM [km]", out var _startKM);
                 dict.TryGetValue("End_KM [km]", out var _endKM);
+                dict.TryGetValue("Edge_ID", out var _edgeID);
 
                 segmentID = ERDMhelperFunctions.ReplaceNonAlphaNumericalChar(segmentID);
 
-                var altitude = ERDMhelperFunctions.parseDouble(_altitute);
+                var startX = ERDMhelperFunctions.parseDouble(_startX);
+                var startY = ERDMhelperFunctions.parseDouble(_startY);
+                var startZ = ERDMhelperFunctions.parseDouble(_startZ);
+                var endX = ERDMhelperFunctions.parseDouble(_endX);
+                var endY = ERDMhelperFunctions.parseDouble(_endY);
+                var endZ = ERDMhelperFunctions.parseDouble(_endZ);
                 var gradient = ERDMhelperFunctions.parseDouble(_gradient);
                 var startKM = ERDMhelperFunctions.parseDouble(_startKM);
                 var endKM = ERDMhelperFunctions.parseDouble(_endKM);
+                var startAltitute = ERDMhelperFunctions.parseDouble(_startAltitute);
+                var segmentLength = ERDMhelperFunctions.parseDouble(_segmentLength);
 
                 GradientSegmentLine GSL = new()
                 {
                     id = Guid.NewGuid().ToString(),
                     name = segmentID,
-                    startAltitude = altitude,
+                    startAltitude = startAltitute,
                     gradient = gradient,
                     appliesToTrackEdgeSection = new(),
                     version = version.id
@@ -228,12 +261,14 @@ namespace ERDM_Implementation
 
                 var trackEdgeSectionslist = ERDMhelperFunctions.ExtractTrackEdgeSectionsForGradients(startKM,endKM,mapdata,erdmModel);
 
+                //var section = ERDMhelperFunctions.CreateOrFindTrackEdgeSection(startX,startY,startZ, startKM,endX,endY,endZ, _edgeID, segmentLength,mapdata,version,erdmModel);
+
                 GSL.appliesToTrackEdgeSection.AddRange(trackEdgeSectionslist);
 
                 //this part is just a simulation and should be replaced when the issure is solved.
-                if (trackEdgeSectionslist.Count==0)
+                if (trackEdgeSectionslist.Count == 0)
                 {
-                    //GSL.appliesToTrackEdgeSection.Add(Guid.NewGuid().ToString()); //simulated for validation
+                    GSL.appliesToTrackEdgeSection.Add(ERDMhelperFunctions.CreateOrFindTrackEdgeSection(startX, startY, startZ, startKM, endX, endY, endZ, _edgeID, segmentLength, mapdata, version, erdmModel).id); //simulated for validation
                 }
 
                 mapdata?.consistsOfTier3Objects?.Add(GSL.id);
@@ -246,13 +281,14 @@ namespace ERDM_Implementation
         /// </summary>
         /// <param name="dict"></param>
         /// <param name="mapdata"></param>
-        private void CreateSegmentLine(string segmentID,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
+        private void CreateSegmentLine(string segmentID,double Azimuth,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
             CurveSegmentLine curveSegment = new();
             curveSegment.id = Guid.NewGuid().ToString();
             curveSegment.appliesToTrackEdgeSection = new();
             curveSegment.appliesToTrackEdgeSection.Add(trackEdgeSection?.id);
             curveSegment.version = version.id;
+            curveSegment.azimuthAngle = Azimuth;
             //curveSegment.azimuthAngle = 0; //until it is calculated or given.
 
             curveSegment.name = segmentID;
@@ -265,7 +301,7 @@ namespace ERDM_Implementation
         /// </summary>
         /// <param name="dict"></param>
         /// <param name="mapdata"></param>
-        private void CreateCurveSegmentArc(double radiusBegin,string segmentID,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version,ERDM.ERDMmodel erdmModel)
+        private void CreateCurveSegmentArc(double radiusBegin,string segmentID,double initialLength,double arcCenterX, double arcCenterY, double arcCenterZ, TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version,ERDM.ERDMmodel erdmModel)
         {
             CurveSegmentArc curveSegment = new();
             curveSegment.id = Guid.NewGuid().ToString();
@@ -274,6 +310,9 @@ namespace ERDM_Implementation
             curveSegment.version = version.id;
             curveSegment.name = segmentID;
             curveSegment.radius = radiusBegin;
+            curveSegment.initialArcLength = initialLength;
+            curveSegment.hasCenterAtGeoCoordinates = ERDMhelperFunctions.CreatOrFindGeoCoordinates(arcCenterX, arcCenterY, arcCenterZ, mapdata, erdmModel).id;
+
             //curveSegment.initialArcLength = 0; // to be adjusted.
             //curveSegment.hasCenterAtGeoCoordinates = Guid.NewGuid().ToString(); //to be adjusted.
 
@@ -286,7 +325,7 @@ namespace ERDM_Implementation
         /// </summary>
         /// <param name="dict"></param>
         /// <param name="mapdata"></param>
-        private void CreateCurveSegmentTransition(string segmentID,TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
+        private void CreateCurveSegmentTransition(string segmentID, double initialLength, double arcCenterX, double arcCenterY, double arcCenterZ, double clothoidParameter, double startAzimuth, TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
   
 
@@ -296,11 +335,15 @@ namespace ERDM_Implementation
             curveSegment.appliesToTrackEdgeSection.Add(trackEdgeSection.id);
             curveSegment.version = version.id;
             curveSegment.name = segmentID;
+            curveSegment.initialArcLength = initialLength;
+            curveSegment.clothoidParameter = clothoidParameter;
+            curveSegment.azimuthAngle = startAzimuth;
+            curveSegment.hasCenterAtGeoCoordinates = ERDMhelperFunctions.CreatOrFindGeoCoordinates(arcCenterX, arcCenterY, arcCenterZ, mapdata, erdmModel).id;
 
-           // curveSegment.initialArcLength = 0; // to be adjusted.
-           // curveSegment.azimuthAngle = 0; // to be adjusted.
-           // curveSegment.clothoidParameter = 0.001; //to be adjusted.
-           // curveSegment.hasCenterAtGeoCoordinates = Guid.NewGuid().ToString();// to be adjusted.
+            // curveSegment.initialArcLength = 0; // to be adjusted.
+            // curveSegment.azimuthAngle = 0; // to be adjusted.
+            // curveSegment.clothoidParameter = 0.001; //to be adjusted.
+            // curveSegment.hasCenterAtGeoCoordinates = Guid.NewGuid().ToString();// to be adjusted.
 
             mapdata.consistsOfTier3Objects?.Add(curveSegment.id);
             erdmModel.Tier3?.CurveSegmentTransition.Add(curveSegment);

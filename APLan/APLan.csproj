@@ -468,7 +468,7 @@
     <PackageReference Include="ACadSharp" Version="1.4.1-alpha" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="dsafa.WpfColorPicker" Version="1.3.0" />
-    <PackageReference Include="ERDM" Version="0.3.0" />
+    <PackageReference Include="ERDM" Version="0.4.0" />
     <PackageReference Include="EulynxDpLibrary" Version="1.0.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="FreeSpire.PDF" Version="8.6.0" />

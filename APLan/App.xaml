@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml"/>
+                <ResourceDictionary Source="DataTemplates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Cursor x:Key="arrow">Arrow</Cursor>
             <SolidColorBrush x:Key="backGround">white</SolidColorBrush>
@@ -128,7 +129,6 @@
             <!--for polyLines-->
             <DataTemplate  x:Key="CustomPolylineTempalte" DataType="{x:Type Path}">
                 <Border BorderBrush="{StaticResource themeColor}" BorderThickness="1" Padding="3">
-
                     <StackPanel>
                         <TextBlock>
                             <TextBlock.Text>
@@ -137,19 +137,18 @@
                         </TextBlock>
                         <TreeView BorderThickness="0" 
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                      >
-                            <TreeViewItem Header="Eulynx attributes">
-                                <DataGrid 
-                                  AutoGenerateColumns="False"
-                                  AlternatingRowBackground = "White"
-                                  IsReadOnly="True"
-                                  ItemsSource="{Binding DataContext.Data}">
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <TreeViewItem Header="Attributes">
+                                <DataGrid ItemsSource="{Binding DataContext.Data}" AutoGenerateColumns="False">
                                     <DataGrid.Columns>
-                                        <DataGridTextColumn Header = "Property" Binding="{Binding Path=Key}"/>
-                                        <DataGridTextColumn Header = "Value" Binding="{Binding Path=Value}"/>
-                                    </DataGrid.Columns >
+                                        <DataGridTextColumn Header="Proeprty" Binding="{Binding Key}" />
+
+                                        <!-- Column for hierarchical data -->
+                                        <DataGridTemplateColumn Header="Values" CellTemplateSelector="{StaticResource ValueTemplateSelector}">
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
                                 </DataGrid>
+
                             </TreeViewItem>
                             <TreeViewItem Header="Source files attributes">
                                 <DataGrid 

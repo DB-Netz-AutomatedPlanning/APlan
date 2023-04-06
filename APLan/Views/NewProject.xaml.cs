@@ -64,7 +64,7 @@ namespace APLan.Views
                     case ".dxf":
                         collapseOtherChoices(8);
                         break;
-                    case ".xls":
+                    case ".xls/.csv":
                         collapseOtherChoices(9);
                         break;
                     case ".xml":
@@ -83,6 +83,25 @@ namespace APLan.Views
             fileType.SelectedItem = null;
             collapseOtherChoices(0);
 
+            if (((ComboBox)sender).SelectedItem.ToString().Contains("Sweden"))
+            {
+                if (fileType != null)
+                {
+                    foreach (ComboBoxItem item in fileType.Items)
+                    {
+                        switch (item.Content)
+                        {
+                            case ".xml":
+                                item.Visibility = Visibility.Visible;
+                                break;
+                            default:
+                                item.Visibility = Visibility.Collapsed;
+                                break;
+                        }
+                    }
+                }
+            }
+
             if (((ComboBox)sender).SelectedItem.ToString().Contains("ERDM"))
             {
                 if (fileType != null)
@@ -91,7 +110,7 @@ namespace APLan.Views
                     {
                         switch (item.Content)
                         {
-                            case ".xls":
+                            case ".xls/.csv":
                                 item.Visibility = Visibility.Visible;
                                 break;
                             case ".json":
@@ -225,6 +244,7 @@ namespace APLan.Views
         private void xmlFileBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             checkFileValidity("ERDM", ((TextBox)sender), ".xml");
+            checkFileValidity("Sweden", ((TextBox)sender), ".xml");
         }
         #endregion
 
@@ -279,13 +299,13 @@ namespace APLan.Views
             for (int i = 0; i < files.Count; i++)
             {
                 FileInfo info = new(files[i]);
-                if (!File.Exists(files[i]) && !info.Extension.Equals(".xls"))
+                if (!File.Exists(files[i]) && (!info.Extension.Equals(".xls")|| !info.Extension.Equals(".csv")))
                 {
                     return false;
                 }
                 else
                 {
-                    files[i] = info.Name.Replace(".xls", "");
+                    files[i] = info.Name.Replace(".xls", "").Replace(".csv", "");
                 }
             }
 
@@ -366,9 +386,10 @@ namespace APLan.Views
                     }
                 }
         }
+
+
         #endregion
 
-     
-      
+        
     }
 }

@@ -141,12 +141,12 @@ namespace APLan.Model.ModelsLogic
         /// <returns></returns>
         private string ListReportToString(IList<string> schema_validation_report, ArrayList referenceTypesValidationReport)
         {
-            var report = "Schema Report : " + "\n\n";
+            var report = "";
             foreach (var item in schema_validation_report)
             {
                 report += item + "\n";
             }
-            report += "References Types Report :" + "\n\n";
+            report += "";
             foreach (var item in referenceTypesValidationReport)
             {
                 report += item + "\n";

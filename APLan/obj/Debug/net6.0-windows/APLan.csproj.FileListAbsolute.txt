@@ -831,3 +831,4 @@ E:\ERDM\GitHub-Aplan\APlan\APLan\obj\Debug\net6.0-windows\Views\PdfViewer.baml
 E:\ERDM\GitHub-Aplan\APlan\APLan\obj\Debug\net6.0-windows\Views\PopupUserControl.baml
 E:\ERDM\GitHub-Aplan\APlan\APLan\obj\Debug\net6.0-windows\Views\UpperTabs.baml
 E:\ERDM\GitHub-Aplan\APlan\APLan\obj\Debug\net6.0-windows\Views\Validator.baml
+E:\ERDM\GitHub-Aplan\APlan\APLan\obj\Debug\net6.0-windows\DataTemplates.baml
