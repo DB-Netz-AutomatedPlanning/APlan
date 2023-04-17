@@ -68,13 +68,6 @@ namespace ERDM_Implementation
             erdmModel.Tier0.Version.Add(version);
             erdmModel.Tier0.MapData.Add(mapData);
             erdmModel.Tier2.AreaOfControl.Add(areaOfControl);
-
-            //trials of some attributes
-            //erdmModel.Tier3.Balise.Add(new() { baliseTelegram = new ERDM.CustomBitArray(new bool[] { true, false, true }) });
-            //erdmModel.Tier3.SegmentProfile.Add(new SegmentProfile() { utcTimeOffset = new ERDM.CustomTime() { value=TimeSpan.FromHours(-0.5) } });
-            //LightSignal signal = new() { id = Guid.NewGuid().ToString() };
-            //erdmModel.Tier3.LightSignal.Add(signal);
-            //erdmModel.Tier3.TimingPoint.Add(new() {refersToSignal= signal.id });
             
             ERDMobjectsCreator creator = new ERDMobjectsCreator();
 
@@ -106,7 +99,10 @@ namespace ERDM_Implementation
 
                 nodeID = ERDMhelperFunctions.ReplaceNonAlphaNumericalChar(nodeID);
 
-                GeoCoordinates geoCoordiante = ERDMhelperFunctions.CreatOrFindGeoCoordinates(Gx, Gy, Gz, mapdata, erdmModel);
+                GeoCoordinates geoCoordiante = ERDMhelperFunctions.FindGeoCoordinate(Gx, Gy, Gz, erdmModel);
+
+                if (geoCoordiante == null)
+                    geoCoordiante = ERDMhelperFunctions.CreateGeoCoordinate(Gx, Gy, Gz, mapdata, erdmModel);
 
                 ERDMhelperFunctions.CreateNewTrackNode(geoCoordiante, nodeID, mapdata, version, erdmModel);
             }
@@ -132,7 +128,7 @@ namespace ERDM_Implementation
                 var start = erdmModel.Tier1?.TrackNode.Find(x => x.name.Equals(startNode) && x is TrackNode);
                 var end = erdmModel.Tier1?.TrackNode.Find(x => x.name.Equals(endNode) && x is TrackNode);
                 var length = ERDMhelperFunctions.ExtractEdgeLengthFromSegmentsFile(edgeID, segmentsXlsItems);
-                ERDMhelperFunctions.CreateNewTrackEdge(edgeID, length, start as TrackNode, end as TrackNode, mapdata, version, erdmModel);
+                ERDMhelperFunctions.CreateTrackEdge(edgeID, length, start as TrackNode, end as TrackNode, mapdata, version, erdmModel);
            }
         }
         /// <summary>
@@ -193,7 +189,10 @@ namespace ERDM_Implementation
                 var arcCenterZ = ERDMhelperFunctions.parseDouble(_arcCenterZ);
                 var clothoidParameter = ERDMhelperFunctions.parseDouble(_clothoidParameter);
 
-                TrackEdgeSection trackSection = ERDMhelperFunctions.CreateOrFindTrackEdgeSection(x1, y1, z1, beginKm, x2, y2, z2, _trackEdge, length, mapdata, version,erdmModel);
+                var trackSection = ERDMhelperFunctions.FindTrackEdgeSection(x1, y1, z1, x2, y2, z2, length, erdmModel);
+                if(trackSection==null)
+                      trackSection = ERDMhelperFunctions.CreateTrackEdgeSection(x1, y1, z1, beginKm, x2, y2, z2, _trackEdge, length, mapdata, version,erdmModel);
+                
                 areaOfControl?.consistsOfTrackEdgeSection?.Add(trackSection.id);
 
                 switch (_type)
@@ -261,14 +260,12 @@ namespace ERDM_Implementation
 
                 var trackEdgeSectionslist = ERDMhelperFunctions.ExtractTrackEdgeSectionsForGradients(startKM,endKM,mapdata,erdmModel);
 
-                //var section = ERDMhelperFunctions.CreateOrFindTrackEdgeSection(startX,startY,startZ, startKM,endX,endY,endZ, _edgeID, segmentLength,mapdata,version,erdmModel);
-
                 GSL.appliesToTrackEdgeSection.AddRange(trackEdgeSectionslist);
 
                 //this part is just a simulation and should be replaced when the issure is solved.
                 if (trackEdgeSectionslist.Count == 0)
                 {
-                    GSL.appliesToTrackEdgeSection.Add(ERDMhelperFunctions.CreateOrFindTrackEdgeSection(startX, startY, startZ, startKM, endX, endY, endZ, _edgeID, segmentLength, mapdata, version, erdmModel).id); //simulated for validation
+                    GSL.appliesToTrackEdgeSection.Add(ERDMhelperFunctions.CreateTrackEdgeSection(startX, startY, startZ, startKM, endX, endY, endZ, _edgeID, segmentLength, mapdata, version, erdmModel).id); //simulated for validation
                 }
 
                 mapdata?.consistsOfTier3Objects?.Add(GSL.id);
@@ -285,11 +282,9 @@ namespace ERDM_Implementation
         {
             CurveSegmentLine curveSegment = new();
             curveSegment.id = Guid.NewGuid().ToString();
-            curveSegment.appliesToTrackEdgeSection = new();
-            curveSegment.appliesToTrackEdgeSection.Add(trackEdgeSection?.id);
+            curveSegment.appliesToTrackEdgeSection = new() { trackEdgeSection?.id };
             curveSegment.version = version.id;
             curveSegment.azimuthAngle = Azimuth;
-            //curveSegment.azimuthAngle = 0; //until it is calculated or given.
 
             curveSegment.name = segmentID;
 
@@ -311,7 +306,13 @@ namespace ERDM_Implementation
             curveSegment.name = segmentID;
             curveSegment.radius = radiusBegin;
             curveSegment.initialArcLength = initialLength;
-            curveSegment.hasCenterAtGeoCoordinates = ERDMhelperFunctions.CreatOrFindGeoCoordinates(arcCenterX, arcCenterY, arcCenterZ, mapdata, erdmModel).id;
+
+            var geoCoordiante = ERDMhelperFunctions.FindGeoCoordinate(arcCenterX, arcCenterY, arcCenterZ, erdmModel);
+
+            if (geoCoordiante == null)
+                geoCoordiante = ERDMhelperFunctions.CreateGeoCoordinate(arcCenterX, arcCenterY, arcCenterZ, mapdata, erdmModel);
+
+            curveSegment.hasCenterAtGeoCoordinates = geoCoordiante.id;
 
             //curveSegment.initialArcLength = 0; // to be adjusted.
             //curveSegment.hasCenterAtGeoCoordinates = Guid.NewGuid().ToString(); //to be adjusted.
@@ -319,7 +320,6 @@ namespace ERDM_Implementation
             mapdata.consistsOfTier3Objects?.Add(curveSegment.id);
             erdmModel.Tier3?.CurveSegmentArc.Add(curveSegment);
         }
-    
         /// <summary>
         /// Create a CurveSegmentTransition which correspond to Transition type in the xls file
         /// </summary>
@@ -328,7 +328,6 @@ namespace ERDM_Implementation
         private void CreateCurveSegmentTransition(string segmentID, double initialLength, double arcCenterX, double arcCenterY, double arcCenterZ, double clothoidParameter, double startAzimuth, TrackEdgeSection trackEdgeSection, MapData mapdata, ERDM.Tier_0.Version version, ERDM.ERDMmodel erdmModel)
         {
   
-
             CurveSegmentTransition curveSegment = new();
             curveSegment.id = Guid.NewGuid().ToString();
             curveSegment.appliesToTrackEdgeSection = new();
@@ -338,7 +337,13 @@ namespace ERDM_Implementation
             curveSegment.initialArcLength = initialLength;
             curveSegment.clothoidParameter = clothoidParameter;
             curveSegment.azimuthAngle = startAzimuth;
-            curveSegment.hasCenterAtGeoCoordinates = ERDMhelperFunctions.CreatOrFindGeoCoordinates(arcCenterX, arcCenterY, arcCenterZ, mapdata, erdmModel).id;
+
+            var geoCoordiante = ERDMhelperFunctions.FindGeoCoordinate(arcCenterX, arcCenterY, arcCenterZ, erdmModel);
+
+            if (geoCoordiante == null)
+                geoCoordiante = ERDMhelperFunctions.CreateGeoCoordinate(arcCenterX, arcCenterY, arcCenterZ, mapdata, erdmModel);
+
+            curveSegment.hasCenterAtGeoCoordinates = geoCoordiante.id;
 
             // curveSegment.initialArcLength = 0; // to be adjusted.
             // curveSegment.azimuthAngle = 0; // to be adjusted.

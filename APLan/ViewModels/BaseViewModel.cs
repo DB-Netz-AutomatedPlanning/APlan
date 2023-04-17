@@ -241,6 +241,7 @@ namespace APLan.ViewModels
             CollectionViewSource.GetDefaultView(Ellipses).Refresh();
             CollectionViewSource.GetDefaultView(Arcs).Refresh();
             CollectionViewSource.GetDefaultView(Texts).Refresh();
+            CollectionViewSource.GetDefaultView(Signals).Refresh();
         }
         #endregion
     }

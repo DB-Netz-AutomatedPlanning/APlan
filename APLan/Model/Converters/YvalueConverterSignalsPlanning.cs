@@ -20,7 +20,7 @@ namespace APLan.Converters
             // conver to represent cartesian coordiante.
             // shift according to the desired size of the signal.
             // then transalte it to the middle of the canvas.
-            return -((double)value - ViewModels.DrawViewModel.GlobalDrawingPoint.Y) - ViewModels.DrawViewModel.signalSizeForConverter / 2 + ViewModels.DrawViewModel.sharedCanvasSize / 2;
+            return -((double)value * CoordinatesConverter.scaleValue - ViewModels.DrawViewModel.GlobalDrawingPoint.Y) - ViewModels.DrawViewModel.signalSizeForConverter / 2 + ViewModels.DrawViewModel.sharedCanvasSize / 2;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -69,6 +69,7 @@ namespace APLan.ViewModels.ModelsLogic
                     var drawingContent = drawMapData((MapData)mapData, erdmModel);
                     lines.AddRange((List<CustomPolyLine>)drawingContent[0]);
                     nodes.AddRange((List<CustomCircle>)drawingContent[1]);
+                    nodes.AddRange((List<CustomCircle>)drawingContent[2]);
                 }); // draw each one.
             });
             lines.ForEach(x => PolyLines.Add(x));
@@ -81,8 +82,9 @@ namespace APLan.ViewModels.ModelsLogic
         {
             var lines = drawSegments(mapData, erdmModel); //Segments
             var nodes = drawNodes(mapData, erdmModel); //Nodes
+            var lightSignals = drawLightSignal(mapData, erdmModel); //lightSignals
 
-            return new object[] { lines, nodes };
+            return new object[] { lines, nodes,lightSignals };
         }
         /// <summary>
         /// add the segments to the LA list and the corresponding points.
@@ -97,7 +99,7 @@ namespace APLan.ViewModels.ModelsLogic
                 CustomPolyLine polyLine = new();
                 TrackEdgeSection Section = erdmModel.Tier2.TrackEdgeSection.Find(x => (x is TrackEdgeSection) && segment.appliesToTrackEdgeSection.Contains(x.id)) as TrackEdgeSection;
                 var trackEdgePoints = erdmModel.Tier2.TrackEdgePoint.FindAll(x => (x is TrackEdgePoint) && Section.hasStartTrackEdgePoint.Equals(x.id) || Section.hasEndTrackEdgePoint.Equals(x.id));
-                var geoCoordinates = erdmModel.Tier0.GeoCoordinates.FindAll(x => (x is GeoCoordinates) && (x.id.Equals((trackEdgePoints[0] as TrackEdgePoint).isLocatedAtGeoCoordinates) || x.id.Equals((trackEdgePoints[1] as TrackEdgePoint).isLocatedAtGeoCoordinates)));
+                var geoCoordinates = erdmModel.Tier0.GeoCoordinates.FindAll(x => (x is GeoCoordinates) && (x.id.Equals((trackEdgePoints[0]).isLocatedAtGeoCoordinates) || x.id.Equals((trackEdgePoints[1]).isLocatedAtGeoCoordinates)));
 
                 var point1 = new System.Windows.Point((double)((GeoCoordinates)geoCoordinates[0]).xCoordinate, (double)((GeoCoordinates)geoCoordinates[0]).yCoordinate);
                 var point2 = new System.Windows.Point((double)((GeoCoordinates)geoCoordinates[1]).xCoordinate, (double)((GeoCoordinates)geoCoordinates[1]).yCoordinate);
@@ -124,22 +126,53 @@ namespace APLan.ViewModels.ModelsLogic
         {
             List<CustomCircle> Circles = new();
             var nodes = getAllNodesOfMapData(mapData, erdmModel);
-            var geoID = nodes.Select(x => ((TrackNode)x).isLocatedAtGeoCoordinates);
-            var geoCoordinates = erdmModel.Tier0.GeoCoordinates.FindAll(x => geoID.Contains(x.id));
 
-            if (ViewModels.DrawViewModel.GlobalDrawingPoint.X == 0 && geoCoordinates!=null && geoCoordinates[0]!=null)
-                ViewModels.DrawViewModel.GlobalDrawingPoint = new((double)geoCoordinates[0].xCoordinate, (double)geoCoordinates[0].yCoordinate);
 
-            geoCoordinates.ForEach(x => {
-                Circles.Add(
-                    new()
-                    {
-                        Center = new() { Point = new System.Windows.Point((double)((x as GeoCoordinates).xCoordinate), (double)((x as GeoCoordinates).yCoordinate)) },
-                        Color = System.Windows.Media.Brushes.Red,
-                        RadiusX = 5,
-                        RadiusY = 5,
-                    });
-            });
+            foreach (var node in nodes)
+            {
+                var geoCoordinates = erdmModel.Tier0.GeoCoordinates.Find(x => node.isLocatedAtGeoCoordinates.Equals(x.id));
+                if (ViewModels.DrawViewModel.GlobalDrawingPoint.X == 0 && geoCoordinates != null)
+                    ViewModels.DrawViewModel.GlobalDrawingPoint = new((double)geoCoordinates.xCoordinate, (double)geoCoordinates.yCoordinate);
+
+                CustomCircle circle = new()
+                {
+                    Center = new() { Point = new System.Windows.Point((double)(geoCoordinates.xCoordinate), (double)(geoCoordinates.yCoordinate)) },
+                    Color = System.Windows.Media.Brushes.Red,
+                    RadiusX = 5,
+                    RadiusY = 5,
+                };
+
+                attachData(node, circle.Data);
+                Circles.Add(circle);
+
+            } 
+            return Circles;
+        }
+        private List<CustomCircle> drawLightSignal(MapData mapData, ERDM.ERDMmodel erdmModel)
+        {
+            List<CustomCircle> Circles = new();
+            var lightSignals = getAllLightSignalsOfMapData(mapData, erdmModel);
+            foreach (var lightSignal in lightSignals)
+            {
+                var trackEdgePoints = erdmModel.Tier2.TrackEdgePoint.Find(x=>lightSignal.appliesToTrackEdgePoint.Contains(x.id));
+
+                var geoCoordinates = erdmModel.Tier0.GeoCoordinates.Find(x => trackEdgePoints.isLocatedAtGeoCoordinates.Equals(x.id));
+
+                if (ViewModels.DrawViewModel.GlobalDrawingPoint.X == 0 && geoCoordinates != null)
+                    ViewModels.DrawViewModel.GlobalDrawingPoint = new((double)geoCoordinates.xCoordinate, (double)geoCoordinates.yCoordinate);
+
+                CustomCircle circle = new()
+                {
+                    Center = new() { Point = new System.Windows.Point((double)(geoCoordinates.xCoordinate), (double)(geoCoordinates.yCoordinate)) },
+                    Color = System.Windows.Media.Brushes.Blue,
+                    RadiusX = 5,
+                    RadiusY = 5,
+                };
+
+                attachData(lightSignal, circle.Data);
+                Circles.Add(circle);
+
+            }  
             return Circles;
         }
         /// <summary>
@@ -170,6 +203,12 @@ namespace APLan.ViewModels.ModelsLogic
             var nodes = erdmModel.Tier1.TrackNode.FindAll(x => (x is TrackNode));
             var mapDataNodes = nodes.FindAll(x => mapData.consistsOfTier1Objects.Contains(x.id)).ToList();
             return mapDataNodes;
+        }
+        private List<LightSignal> getAllLightSignalsOfMapData(MapData mapData, ERDM.ERDMmodel erdmModel)
+        {
+            var lightSignals = erdmModel.Tier3.LightSignal.FindAll(x => (x is LightSignal));
+            var mapDataLightSignals = lightSignals.FindAll(x => mapData.consistsOfTier1Objects.Contains(x.id)).ToList();
+            return mapDataLightSignals;
         }
         public async Task<ERDM.ERDMmodel> deserializeFromJSON(string JSON)
         {

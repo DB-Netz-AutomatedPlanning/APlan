@@ -71,8 +71,8 @@
                     </i:Interaction.Triggers>-->
             <Canvas x:Name="mycanvas" 
                             Background="White" 
-                            Width="1000" 
-                            Height="1000"
+                            Width="{Binding CanvasSize}" 
+                            Height="{Binding CanvasSize}"
                             AllowDrop="True"
                             UseLayoutRounding="False"
                             SnapsToDevicePixels="False"
@@ -100,9 +100,7 @@
                                                                 PassEventArgsToCommand="True"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                <Path Stroke="Black" StrokeThickness="1">
-                </Path>
-                <ItemsControl ItemsSource="{Binding Lines}">
+                <ItemsControl ItemsSource="{Binding Lines, IsAsync=True}" >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas />
@@ -133,7 +131,7 @@
                                         </ToolTip>
                                     </Path.ToolTip>
                                 </Path>
-                                <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints, IsAsync=True}">
+                                <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints , IsAsync=True}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <Canvas/>
@@ -185,7 +183,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <ItemsControl  ItemsSource="{Binding Ellipses}">
+                <ItemsControl  ItemsSource="{Binding Ellipses , IsAsync=True}" >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
@@ -200,7 +198,7 @@
                                 <Path.ToolTip>
                                     <ToolTip>
                                         <StackPanel>
-                                            <!--<Label Content="{Binding Data[0].Value}"/>-->
+                                            <Label Content="{Binding Data[0].Value}"/>
                                         </StackPanel>
                                     </ToolTip>
                                 </Path.ToolTip>
@@ -238,7 +236,7 @@
                                         </PathGeometry>
                                     </Path.Data>
                                 </Path>
-                                <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints, IsAsync=True}">
+                                <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <Canvas/>

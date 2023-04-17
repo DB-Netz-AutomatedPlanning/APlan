@@ -11,7 +11,6 @@ namespace APLan.Model.HelperClasses
 {
     public class HelperFunctions
     {
-
         /// <summary>
         /// given set of files concatenated in a string with separation +~+. copy them to specific path.
         /// </summary>
@@ -37,7 +36,5 @@ namespace APLan.Model.HelperClasses
             files.RemoveAll(x => string.IsNullOrWhiteSpace(x));
             return files;
         }
-
-
     }
 }

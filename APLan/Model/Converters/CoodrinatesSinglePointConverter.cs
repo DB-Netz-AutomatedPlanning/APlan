@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace APLan.Converters
 {
@@ -25,12 +26,25 @@ namespace APLan.Converters
             // then transalte it to the middle of the canvas
             if (value is CustomPoint)
             {
-                return new Point((((CustomPoint)value).Point.X - DrawViewModel.GlobalDrawingPoint.X) + DrawViewModel.sharedCanvasSize / 2
-                          , -(((CustomPoint)value).Point.Y - DrawViewModel.GlobalDrawingPoint.Y) + DrawViewModel.sharedCanvasSize / 2);
+                if (DrawViewModel.GlobalDrawingPoint.X == 0)
+                {
+                    DrawViewModel.GlobalDrawingPoint.X = ((CustomPoint)value).Point.X*CoordinatesConverter.scaleValue;
+                    DrawViewModel.GlobalDrawingPoint.Y = ((CustomPoint)value).Point.Y*CoordinatesConverter.scaleValue;
+                }
+                var x = (((CustomPoint)value).Point.X * CoordinatesConverter.scaleValue - DrawViewModel.GlobalDrawingPoint.X)  + (DrawViewModel.sharedCanvasSize / 2);
+                var y = -(((CustomPoint)value).Point.Y * CoordinatesConverter.scaleValue - DrawViewModel.GlobalDrawingPoint.Y)  + (DrawViewModel.sharedCanvasSize / 2);
+                
+                return new Point(x , y);
             }else
             {
-                return new Point((((Point)value).X - DrawViewModel.GlobalDrawingPoint.X) + DrawViewModel.sharedCanvasSize / 2
-                         , -(((Point)value).Y - DrawViewModel.GlobalDrawingPoint.Y) + DrawViewModel.sharedCanvasSize / 2);
+                if (DrawViewModel.GlobalDrawingPoint.X == 0)
+                {
+                    DrawViewModel.GlobalDrawingPoint.X = ((Point)value).X * CoordinatesConverter.scaleValue;
+                    DrawViewModel.GlobalDrawingPoint.Y = ((Point)value).Y * CoordinatesConverter.scaleValue;
+                }
+                var x = (((Point)value).X * CoordinatesConverter.scaleValue - DrawViewModel.GlobalDrawingPoint.X) + (DrawViewModel.sharedCanvasSize / 2) ;
+                var y = -(((Point)value).Y * CoordinatesConverter.scaleValue - DrawViewModel.GlobalDrawingPoint.Y) + (DrawViewModel.sharedCanvasSize / 2);
+                return new Point(x, y);
             }
             
         }

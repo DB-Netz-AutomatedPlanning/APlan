@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using APLan.HelperClasses;
 using APLan.Model.CADlogic;
 using APLan.Model.CustomObjects;
+using APLan.Converters;
 
 namespace APLan.ViewModels
 {
@@ -277,6 +278,7 @@ namespace APLan.ViewModels
             SignalSize = 10;
 
             RotateSelectionButton = new RelayCommand(ExecuteRotateSelectionButton);
+            
             GridColorActivation = new RelayCommand(ExecuteGridColorActivation);
             GridColor = Brushes.Gray;
 
@@ -294,9 +296,6 @@ namespace APLan.ViewModels
             SelectedColorForACAD = Colors.Black;
 
             RecGeometry = new RectangleGeometry();
-            
-
-
         }
         #endregion
 
@@ -317,6 +316,7 @@ namespace APLan.ViewModels
         private ICommand _RotateItemSlider { get; set; }
         private ICommand _ScaleItemSlider { get; set; }
         public ICommand RotateSelectionButton { get; set; }
+        
 
 
         public ICommand LeftMouseButtonDown
@@ -429,6 +429,8 @@ namespace APLan.ViewModels
                    });
             }
         }
+
+
         #endregion
 
         #region mouse events logic
@@ -465,11 +467,11 @@ namespace APLan.ViewModels
 
             //update the mouse coordinates.
 
-            DrawingLowerTabViewModel.Xlocation = ((e.GetPosition(element).X - canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.X).ToString();
-            DrawingLowerTabViewModel.Ylocation = ((-e.GetPosition(element).Y + canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.Y).ToString();
-
-            //Xlocation = (e.GetPosition(element).X).ToString();
-            //Ylocation = (e.GetPosition(element).Y).ToString();
+            DrawingLowerTabViewModel.Xlocation = (((e.GetPosition(element).X  - canvasSize / 2)+ GlobalDrawingPoint.X) * (1 / CoordinatesConverter.scaleValue)).ToString();
+            DrawingLowerTabViewModel.Ylocation = (((-e.GetPosition(element).Y + canvasSize / 2) + GlobalDrawingPoint.Y) * (1 / CoordinatesConverter.scaleValue)).ToString();
+     
+            //DrawingLowerTabViewModel.Xlocation = (e.GetPosition(element).X).ToString();
+            //DrawingLowerTabViewModel.Ylocation = (e.GetPosition(element).Y).ToString();
 
             if (element.Children.Contains(indicationLine))
             {
@@ -594,6 +596,8 @@ namespace APLan.ViewModels
 
             
         }
+
+ 
 
         /// <summary>
         /// apply the mouseWheel action on the drawing canvas.

@@ -267,6 +267,9 @@ namespace APLan.ViewModels
                 case "ERDM":
                     openFileDialog1.Filter = "Types (*.xml)|*.xml";
                     break;
+                case "Sweden":
+                    openFileDialog1.Filter = "Types (*.xml)|*.xml";
+                    break;
                 default:
                     break;
             }
@@ -393,7 +396,7 @@ namespace APLan.ViewModels
                     SwedenDataHandler swedenHandler = new(XML);
                     ErdmModelHandler erdmHandler = new();
 
-                    BaseViewModel.erdmModel = swedenHandler.getInfraStructure();
+                    BaseViewModel.erdmModel = await swedenHandler.getInfraStructure();
                     erdmHandler.drawERDM(erdmModel, Lines, Ellipses);
                 }
             }

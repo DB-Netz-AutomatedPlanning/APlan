@@ -19,7 +19,7 @@ namespace APLan.Converters
             // remove from the component the GlobalDrawingPoint x-component which represent the first point in the whole drawing to make the drawing near.
             // shift according to the desired size of the signal.
             // then transalte it to the middle of the canvas.
-            return (double)value - ViewModels.DrawViewModel.GlobalDrawingPoint.X - ViewModels.DrawViewModel.signalSizeForConverter/2 + ViewModels.DrawViewModel.sharedCanvasSize / 2;
+            return (double)value * CoordinatesConverter.scaleValue - ViewModels.DrawViewModel.GlobalDrawingPoint.X - ViewModels.DrawViewModel.signalSizeForConverter/2 + ViewModels.DrawViewModel.sharedCanvasSize / 2;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
