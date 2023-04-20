@@ -305,9 +305,9 @@
                                                     <PathFigure.Segments>
                                                         <PathSegmentCollection>
                                                             <ArcSegment Size="{Binding Size}" 
-                                            IsLargeArc="{Binding IsLargeArc}"
-                                            SweepDirection="{Binding SweepDirection}"
-                                            Point="{Binding EndPoint,Converter ={StaticResource SingleCoordinateConverter}}" />
+                                                                        IsLargeArc="{Binding IsLargeArc}"
+                                                                        SweepDirection="{Binding SweepDirection}"
+                                                                        Point="{Binding EndPoint,Converter ={StaticResource SingleCoordinateConverter}}" />
                                                         </PathSegmentCollection>
                                                     </PathFigure.Segments>
                                                 </PathFigure>

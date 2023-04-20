@@ -16,5 +16,5 @@ E:\ERDM\GitHub-Aplan\APlan\APLan\App.xaml
 229-995024561
 DataTemplates.xaml;MainWindow.xaml;Resources\Symbols\Symbols.xaml;Styles.xaml;Views\AboutWPF.xaml;Views\APlanCadToolView.xaml;Views\AplanCADViewer.xaml;Views\AplanCADViewerSideBar.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\DrawingUpperLayer.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProject.xaml;Views\pdfDetail.xaml;Views\PdfViewer.xaml;Views\PlanningTab.xaml;Views\PopupUserControl.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\UpperTabs.xaml;Views\Validator.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
 
-False
+True
 

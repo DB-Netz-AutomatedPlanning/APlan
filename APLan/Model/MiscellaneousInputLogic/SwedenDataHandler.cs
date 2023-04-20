@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Xml;
 using System.Xml.Linq;
+using Point = System.Windows.Point;
 
 namespace C_sharp_learning
 {
@@ -187,23 +188,31 @@ namespace C_sharp_learning
 
                 double offset1 = 0;
                 double offset2 = 0;
-                for (int i = 0; i < coordiantes.Count - 1; i++)
-                {
-                    var coor1 = addCoordianteToERDM(coordiantes[i], erdmModel);
-                    var coor2 = addCoordianteToERDM(coordiantes[i + 1], erdmModel);
-                    //update offsets of coor1 and coor2 on the edge
-                    offset1 += offset2;
-                    offset2 += distanceBetweenTwoCoordinates2D(coor1, coor2);
+                var startCoor = addCoordianteToERDM(coordiantes[0], erdmModel);
+                var endCoor = addCoordianteToERDM(coordiantes[0], erdmModel);
 
-                    var point1 = addTrackEdgePoint(coor1, edge, offset1, erdmModel);
-                    var point2 = addTrackEdgePoint(coor2, edge, offset2, erdmModel);
+                var centerPoint = getCenterPoint(new((double)startCoor.xCoordinate, (double)startCoor.yCoordinate), new((double)startCoor.xCoordinate, (double)startCoor.yCoordinate),100);
 
-                    var section = addTrackEdgeSection(point1, point2, offset2 - offset1, edge, erdmModel);
+                var point1 = addTrackEdgePoint(startCoor, edge, offset1, erdmModel);
+                var point2 = addTrackEdgePoint(endCoor, edge, offset2, erdmModel);
 
-                    var azimuth = calculateAzimuthAngleFromTwoPoints(coor1, coor2);
+                //for (int i = 0; i < coordiantes.Count - 1; i++)
+                //{
+                //    var coor1 = addCoordianteToERDM(coordiantes[i], erdmModel);
+                //    var coor2 = addCoordianteToERDM(coordiantes[i + 1], erdmModel);
+                //    //update offsets of coor1 and coor2 on the edge
+                //    offset1 += offset2;
+                //    offset2 += distanceBetweenTwoCoordinates2D(coor1, coor2);
 
-                    addCurveSegmentLine(point1, point2, azimuth, $"{UniversalId} {coordiantes[i][0]} {coordiantes[i][1]} {coordiantes[i + 1][0]} {coordiantes[i + 1][1]}", erdmModel);
-                }
+                //    var point1 = addTrackEdgePoint(coor1, edge, offset1, erdmModel);
+                //    var point2 = addTrackEdgePoint(coor2, edge, offset2, erdmModel);
+
+                //    var section = addTrackEdgeSection(point1, point2, offset2 - offset1, edge, erdmModel);
+
+                //    var azimuth = calculateAzimuthAngleFromTwoPoints(coor1, coor2);
+
+                //    addCurveSegmentLine(point1, point2, azimuth, $"{UniversalId} {coordiantes[i][0]} {coordiantes[i][1]} {coordiantes[i + 1][0]} {coordiantes[i + 1][1]}", erdmModel);
+                //}
 
             }
         }
@@ -347,6 +356,23 @@ namespace C_sharp_learning
             }
             return 0;
 
+        }
+        private Point getCenterPoint(Point startPoint, Point endPoint, double radius)
+        {
+
+            // Calculate the midpoint between the start and end points
+            Point midpoint = new Point((startPoint.X + endPoint.X) / 2, (startPoint.Y + endPoint.Y) / 2);
+
+            // Calculate the distance between the midpoint and either the start or end point
+            double distance = Math.Sqrt(Math.Pow(midpoint.X - startPoint.X, 2) + Math.Pow(midpoint.Y - startPoint.Y, 2));
+
+            // Draw a perpendicular line from the midpoint to the center point of the circle
+            double perpendicularDistance = Math.Sqrt(Math.Pow(radius, 2) - Math.Pow(distance, 2));
+            Point perpendicularPoint = new Point(midpoint.X - (perpendicularDistance * (endPoint.Y - startPoint.Y) / (2 * distance)),
+                                                 midpoint.Y + (perpendicularDistance * (endPoint.X - startPoint.X) / (2 * distance)));
+
+            // Calculate the coordinates of the center point
+            return new Point(2 * midpoint.X - perpendicularPoint.X, 2 * midpoint.Y - perpendicularPoint.Y);
         }
         #endregion
     }
