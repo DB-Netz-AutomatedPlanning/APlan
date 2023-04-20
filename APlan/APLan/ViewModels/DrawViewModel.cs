@@ -10,8 +10,16 @@ using System.Collections;
 using System.Collections.Generic;
 using APLan.HelperClasses;
 using APLan.Model.CADlogic;
-using APLan.Model.CustomObjects;
 
+using APLan.Model.CustomObjects;
+using System.Windows.Markup;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using NPOI.SS.Formula.Functions;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using static ACadSharp.Objects.MLStyle;
 
 namespace APLan.ViewModels
 {
@@ -25,7 +33,11 @@ namespace APLan.ViewModels
             Drag,
             Move,
             Rotate,
-            Scale
+            Scale,
+            Grid,
+            Copy,
+            Cut,
+            Paste
         }
         public enum SelectedToolForCAD
         {
@@ -39,13 +51,15 @@ namespace APLan.ViewModels
             Ellipse,
             Polyline,
             TwoPointArc,
-            ThreePointArc
+            ThreePointArc,
+            HorizontalDistance,
+            VerticalDistance
         }
         #endregion
          
         #region attributes
         //canvas data
-        private DrawLogic drawLogic;
+        public DrawLogic drawLogic;
         private double canvasRotation;
         private double xdiff;
         private double ydiff;
@@ -82,6 +96,8 @@ namespace APLan.ViewModels
         public static SelectedToolForCAD toolCAD;
  
         private RectangleGeometry recGeometry;
+
+        private Canvas _drawCanvas;
 
         #endregion
         
@@ -187,6 +203,16 @@ namespace APLan.ViewModels
             }
         }
 
+        public Canvas LayoutCanvas
+        {
+            get => _drawCanvas;
+            set
+            {
+                _drawCanvas = value;
+                OnPropertyChanged("LayoutCanvas");
+            }
+        }
+
         #endregion
 
         #region constructor
@@ -218,9 +244,10 @@ namespace APLan.ViewModels
 
             RotateSelectionButton = new RelayCommand(ExecuteRotateSelectionButton);
             GridColorActivation = new RelayCommand(ExecuteGridColorActivation);
-            GridColor = Brushes.Gray;  
-           
-          
+            GridColor = Brushes.Gray;
+            LayoutCanvas = new Canvas();
+
+
 
             RecGeometry = new RectangleGeometry();
             
@@ -411,7 +438,9 @@ namespace APLan.ViewModels
             if (tool == SelectedTool.Drag && e.LeftButton == MouseButtonState.Pressed)
             {
                 dragSelection(e);
+               
             }
+            
 
             if (tool == SelectedTool.MultiSelect)
             {
@@ -537,8 +566,7 @@ namespace APLan.ViewModels
             {
                 case SelectedTool.Move:
                     moveSelection(e); //moving the selected items
-                    break;
-                
+                    break;               
                 default:
                     singleSelection(e); // select an item.
                     break;
@@ -575,6 +603,12 @@ namespace APLan.ViewModels
                     break;
                 case SelectedToolForCAD.AngularLine:
                     drawAngularLine(e);
+                    break;
+                case SelectedToolForCAD.HorizontalDistance:
+                    drawHorizontalDistance(e);
+                    break;
+                case SelectedToolForCAD.VerticalDistance:
+                    drawVerticalDistance(e);
                     break;
                 default:
                     break;
@@ -701,7 +735,16 @@ namespace APLan.ViewModels
         }
         #endregion
 
-        #region CAD drawing logic
+        #region CAD drawing logic             
+            
+        private void drawVerticalDistance(MouseEventArgs e)
+        {
+            drawLogic.drawVerticalDistance(e, sharedCanvasSize, GlobalDrawingPoint, Arrows, UndoStack);
+        }
+        private void drawHorizontalDistance(MouseEventArgs e)
+        {
+            drawLogic.drawHorizontalDistance(e, sharedCanvasSize, GlobalDrawingPoint ,Arrows, UndoStack);
+        }
         private void drawTwoPointLine(MouseEventArgs e)
         {
             drawLogic.drawTwoPointLine(e, sharedCanvasSize, GlobalDrawingPoint, Lines,UndoStack);
@@ -869,6 +912,8 @@ namespace APLan.ViewModels
         /// select a single item.
         /// </summary>
         /// <param name="e"></param>
+        /// 
+       
         private void singleSelection(MouseEventArgs e)
         {
 
@@ -883,7 +928,7 @@ namespace APLan.ViewModels
                 {
                     ClearSelection(selected);
                 }
-
+                
                 if (result != null && ((UIElement)result.VisualHit).IsVisible == true)
                 {
                     UIElement element = (UIElement)result.VisualHit;
@@ -900,6 +945,7 @@ namespace APLan.ViewModels
                     {
                         removeItemFromSelection(selected, element);
                     }
+                    
                 }
             }
 
@@ -967,7 +1013,8 @@ namespace APLan.ViewModels
             }
             DraOffset.X = Mouse.GetPosition(drawingCanvas).X - InitialDragPoint.X;
             DraOffset.Y = Mouse.GetPosition(drawingCanvas).Y - InitialDragPoint.Y;
-            updateSelectionMoveOperation(DraOffset.X, DraOffset.Y);
+            updateSelectionMoveOperation(DraOffset.X, DraOffset.Y);                        
+            
             InitialDragPoint = Mouse.GetPosition(drawingCanvas);
 
         }
@@ -998,11 +1045,46 @@ namespace APLan.ViewModels
                     MatrixTransform m = new MatrixTransform();
                     m.Matrix = oldMatrix * newMatrix;
                     element.RenderTransform = m;
+                    //changeCustomObjectPropeties(element, offsetX, offsetY);
                 }
 
             }
         }
 
+        //private void changeCustomObjectPropeties(UIElement element, double offsetX, double offsetY)
+        //{
+            
+        //        object customShape = (element as FrameworkElement).DataContext;
+        //        if (customShape.GetType() == typeof(CustomPolyLine))
+        //        {
+        //            CustomPolyLine customPolyLine = (CustomPolyLine)customShape;
+        //            Point startpoint = customPolyLine.CustomPoints[0].Point;
+        //            Point endpoint = customPolyLine.CustomPoints[1].Point;
+        //            startpoint.X -= offsetX;
+        //            startpoint.Y -= offsetY;
+        //            endpoint.X -= offsetX;
+        //            endpoint.Y -= offsetY;
+        //            customPolyLine.CustomPoints[0] = new CustomPoint { Point = startpoint };
+        //            customPolyLine.CustomPoints[1] = new CustomPoint { Point = endpoint };
+        //            customPolyLine.ShapeAttributeInfo.Clear();
+        //            customPolyLine.ShapeAttributeInfo.Add(new KeyValue()
+        //            {
+        //                Key = "NewStartPoint",
+        //                Value = "" + customPolyLine.CustomPoints[0].Point + ""
+        //            });
+        //            customPolyLine.ShapeAttributeInfo.Add(new KeyValue()
+        //            {
+        //                Key = "NewEndpoint",
+        //                Value = "" + customPolyLine.CustomPoints[1].Point + ""
+
+        //            });
+
+                
+        //    }
+              
+
+          
+        //}
         /// <summary>
         /// filtering the selection for a specific objects only.
         /// </summary>

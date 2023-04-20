@@ -1,4 +1,5 @@
 ﻿using APLan.ViewModels;
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -22,11 +23,14 @@ namespace APLan.Views
     /// </summary>
     public partial class MainMenu : UserControl
     {
+        
         public MainMenu()
         {
-            InitializeComponent();
+            InitializeComponent();           
             this.Loaded += MenuItem_OnLoaded;
+            
         }
+        
         private void MenuItem_OnLoaded(object sender, RoutedEventArgs e)
         {            
             Window window = Window.GetWindow(this);

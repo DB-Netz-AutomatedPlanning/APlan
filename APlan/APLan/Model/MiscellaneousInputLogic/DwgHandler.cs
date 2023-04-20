@@ -1,4 +1,5 @@
 ﻿using ACadSharp;
+
 using APLan.HelperClasses;
 using APLan.Model.CustomObjects;
 using System;
@@ -32,6 +33,69 @@ namespace APLan.Model.MiscellaneousInputLogic
         }
 
         #region DWG logic
+
+        public void createInsertEntitesRecursion(ACadSharp.Entities.Insert newInsert)
+        {
+            ACadSharp.Tables.BlockRecord block = newInsert.Block;
+            foreach (ACadSharp.Entities.Entity entity in block.Entities)
+            {
+                if (entity is ACadSharp.Entities.Line lines)
+                {
+                    createLineObjectDwg(lines);
+                }
+                else if (entity is ACadSharp.Entities.Arc arc)
+                {
+                    createArcObjectDwg(arc);
+                }
+                else if (entity is ACadSharp.Entities.Circle circle)
+                {
+                    createCircleObjDwg(circle);
+
+                }
+                else if (entity is ACadSharp.Entities.TextEntity txt)
+                {
+                    createTextObjDwg(txt);
+                }
+                else if (entity is ACadSharp.Entities.LwPolyline lwpline1)
+                {
+                    IEnumerable<ACadSharp.Entities.Entity> listOfEntity;
+                    if (lwpline1.IsClosed == true)
+                    {
+                        listOfEntity = lwpline1.Explode();
+
+                        foreach (ACadSharp.Entities.Entity lwpoylineEntity in listOfEntity)
+                        {
+                            if (lwpoylineEntity is ACadSharp.Entities.Line newline)
+                            {
+                                createLineObjectDwg(newline);
+                            }
+                            else if (lwpoylineEntity is ACadSharp.Entities.Arc arcLwPolyline)
+                            {
+                                createArcObjectDwg(arcLwPolyline);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        createLwPolylineObjectDwg(lwpline1);
+                    }
+
+
+                }
+                else if (entity is ACadSharp.Entities.Ellipse l)
+                {
+                    createEllipseObjectDwg(l);
+                }
+                else if (entity is ACadSharp.Entities.Insert ler)
+                {
+                    createInsertEntitesRecursion(ler);
+                }
+                else if(entity is ACadSharp.Entities.MText mtext)
+                {
+                    createMtextObjDwg(mtext);
+                }
+            }
+        }
         public void createDwgProject(string DWG)
         {
             ACadSharp.CadDocument doc = ACadSharp.IO.DwgReader.Read(DWG);
@@ -44,62 +108,14 @@ namespace APLan.Model.MiscellaneousInputLogic
                 ACadSharp.Entities.Entity e = doc.Entities.Remove(item);
                 transfer.Entities.Add(e);
             }
-
+            
             foreach (var e in transfer.Entities)
             {
                 if (e is ACadSharp.Entities.Insert insert)
                 {
-                    ACadSharp.Tables.BlockRecord block = insert.Block;
-                    foreach (ACadSharp.Entities.Entity entity in block.Entities)
-                    {
-                        if (entity is ACadSharp.Entities.Line lines)
-                        {
-                            createLineObjectDwg(lines);
-                        }
-                        else if (entity is ACadSharp.Entities.Arc arc)
-                        {
-                            createArcObjectDwg(arc);
-                        }
-                        else if (entity is ACadSharp.Entities.Circle circle)
-                        {
-                            createCircleObjDwg(circle);
-
-                        }
-                        else if (entity is ACadSharp.Entities.TextEntity txt)
-                        {
-                            createTextObjDwg(txt);
-                        }
-                        else if (entity is ACadSharp.Entities.LwPolyline lwpline1)
-                        {
-                            IEnumerable<ACadSharp.Entities.Entity> listOfEntity;
-                            if (lwpline1.IsClosed == true)
-                            {
-                                listOfEntity = lwpline1.Explode();
-
-                                foreach (ACadSharp.Entities.Entity lwpoylineEntity in listOfEntity)
-                                {
-                                    if (lwpoylineEntity is ACadSharp.Entities.Line newline)
-                                    {
-                                        createLineObjectDwg(newline);
-                                    }
-                                    else if (lwpoylineEntity is ACadSharp.Entities.Arc arcLwPolyline)
-                                    {
-                                        createArcObjectDwg(arcLwPolyline);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                createLwPolylineObjectDwg(lwpline1);
-                            }
-
-
-                        }
-                        else if (entity is ACadSharp.Entities.Ellipse l)
-                        {
-                            createEllipseObjectDwg(l);
-                        }
-                    }
+                    //SeqendCollection<ACadSharp.Entities.AttributeEntity> attentitites;
+                    //attentitites = insert.Attributes;
+                    createInsertEntitesRecursion(insert);
                 }
                 else if (e is ACadSharp.Entities.Circle circle)
                 {
@@ -155,6 +171,10 @@ namespace APLan.Model.MiscellaneousInputLogic
                 else if (e is ACadSharp.Entities.Arc arc)
                 {
                     createArcObjectDwg(arc);
+                }
+                else if (e is ACadSharp.Entities.MText mtext)
+                {
+                    createMtextObjDwg(mtext);
                 }
             }
         }
@@ -433,13 +453,14 @@ namespace APLan.Model.MiscellaneousInputLogic
 
                 });
 
-                textBlock.RotationAngle = (txt.Rotation * 180) / (Math.PI);
-
-                //A positive angle denotes a lean to the right; a negative value will have 2*PI added to it to convert it to its positive equivalent.
-                if (textBlock.RotationAngle < 0)
+                textBlock.ObliqueAngle = (txt.ObliqueAngle * 180) / (Math.PI);
+                if(textBlock.ObliqueAngle < 0)
                 {
-                    textBlock.RotationAngle += 360;
+                    textBlock.ObliqueAngle = ((txt.ObliqueAngle+2*Math.PI) * 180) / (Math.PI);
                 }
+
+                textBlock.RotationAngle =360- ((txt.Rotation * 180) / (Math.PI));
+
 
 
                 if (txt.HorizontalAlignment == ACadSharp.Entities.TextHorizontalAlignment.Left)
@@ -479,6 +500,48 @@ namespace APLan.Model.MiscellaneousInputLogic
                 {
                     textBlock.TxtVoriAlignment = System.Windows.VerticalAlignment.Center;
                 }
+
+                Text_List.Add(textBlock);
+            }
+        }
+
+        private void createMtextObjDwg(ACadSharp.Entities.MText txt)
+        {
+            if (txt.IsInvisible == false && txt.Value.Length > 0 && txt.ObjectType == ObjectType.MTEXT)
+            {
+                CustomTextBlock textBlock = new CustomTextBlock();
+                Point newPoint = new Point((((double)txt.InsertPoint.X)), (((double)txt.InsertPoint.Y)));
+                textBlock.NodePoint = new() { Point = newPoint };
+                textBlock.Name = txt.Value;
+                textBlock.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Name",
+                    Value = "" + txt.Value + ""
+
+                });
+                textBlock.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "NodePoint",
+                    Value = "" + newPoint + ""
+
+                });
+                textBlock.Height = txt.Height;
+                textBlock.ShapeAttributeInfo.Add(new KeyValue()
+                {
+                    Key = "Height",
+                    Value = "" + txt.Height + ""
+
+                });
+
+                textBlock.RotationAngle = (txt.Rotation * 180) / (Math.PI);
+                if (textBlock.RotationAngle < 0)
+                {
+                    textBlock.RotationAngle = ((txt.Rotation + 2 * Math.PI) * 180) / (Math.PI);
+                }
+                
+
+
+                
 
                 Text_List.Add(textBlock);
             }

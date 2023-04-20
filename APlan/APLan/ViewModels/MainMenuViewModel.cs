@@ -15,10 +15,24 @@ using aplan.core;
 using System.Threading.Tasks;
 using System;
 using System.Windows.Media.Imaging;
-using Patagames.Pdf.Net;
+
 using PdfDocument = Spire.Pdf.PdfDocument;
 using Spire.Pdf;
 using APLan.Model.CustomObjects;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+
+using System.Xml.Linq;
+using System.Windows.Xps.Packaging;
+using System.IO.Packaging;
+using System.Windows.Xps;
+using NPOI.HPSF;
+using System.Drawing.Printing;
+ 
+using GeoJSON.Net.Converters; 
+
+using System.Windows.Documents;
+
+
 
 namespace APLan.ViewModels
 {
@@ -121,13 +135,58 @@ namespace APLan.ViewModels
             openFileDialog1.Multiselect = false;
             openFileDialog1.Filter = "Types (*.pdf;*.pdf)|*.pdf;*.pdf";
             openFileDialog1.ShowDialog();
-            PdfCommon.Initialize();
+            //PdfCommon.Initialize();
 
-            //Open and load a PDF document from a file.
-            PdfViewer pdf = new();
-            pdf.pdfview.LoadDocument(openFileDialog1.FileName);
-            pdf.ShowDialog();
+            ////Open and load a PDF document from a file.
+            //PdfViewer pdf = new();
+            //pdf.pdfview.LoadDocument(openFileDialog1.FileName);
+            //pdf.ShowDialog();           
+
+            string fileName = System.IO.Path.GetRandomFileName();
+            try
+            {
+                PdfDocument doc = new PdfDocument();
+
+                doc.LoadFromFile(openFileDialog1.FileName);
+                doc.SaveToFile(fileName, FileFormat.XPS);
+
+                using (XpsDocument doc1 = new XpsDocument(fileName, FileAccess.Read))
+                {
+                    System.Windows.Documents.FixedDocumentSequence fds = doc1.GetFixedDocumentSequence();
+
+                    var window = new Window();
+
+                    window.Content = new DocumentViewer { Document = fds };
+
+                    window.ShowDialog();
+
+                }
+            }
+            catch(Exception e)
+            {
+                System.Windows.MessageBox.Show("Current Version is only limited to 10 pages");
+            }
+            finally
+            {
+                if (File.Exists(fileName))
+                {
+                    try
+                    {
+                        File.Delete(fileName);
+                    }
+                    catch (Exception exep)
+                    {
+                        Console.WriteLine(exep.Message);
+                        System.Windows.MessageBox.Show("Current Version is only limited to 10 pages");
+                    }
+                }
+            }
+
         }
+
+
+
+
         private void ExecuteSnapshot(object parameter)
         {
             int width = Convert.ToInt32(MainWindow.basCanvas.ActualWidth);
@@ -183,25 +242,15 @@ namespace APLan.ViewModels
             if (safeFileDialog1.ShowDialog() == true)
             {
 
-                docs[0].SaveToFile(safeFileDialog1.FileName);
-
-                //Initialize the SDK library
-                //You have to call this function before you can call any PDF processing functions.
+                docs[0].SaveToFile(safeFileDialog1.FileName);               
 
 
-            }
-            //PdfCommon.Initialize();
-
-            ////Open and load a PDF document from a file.
-            //PdfViewer pdf = new();
-            //pdf.pdfview.LoadDocument(safeFileDialog1.FileName);
-            //pdf.ShowDialog();
+            }           
 
             foreach (PdfDocument doc in docs)
             {
                 doc.Close();
-            }
-            //PDFDocumentViewer("MergeDocuments.pdf");
+            }           
         }
         private void ExecuteColorPickingView(object parameter)
         {
@@ -244,6 +293,12 @@ namespace APLan.ViewModels
                     RedoStack.Pop();
                     UndoStack.Push(newObject);
                 }
+                else if(newObject.GetType() == typeof(CustomArrowLine))
+                {
+                    Arrows.Add((CustomArrowLine)newObject);
+                    RedoStack.Pop();
+                    UndoStack.Push(newObject);
+                }
             }
         }
         private void ExecuteUndoProgram(object parameter)
@@ -252,8 +307,7 @@ namespace APLan.ViewModels
             {
                 object newObject = UndoStack.Peek();
                 if (newObject.GetType() == typeof(CustomArc))
-                {
-
+                { 
                     Arcs.Remove((CustomArc)newObject);
                     UndoStack.Pop();
                     RedoStack.Push(newObject);
@@ -276,16 +330,18 @@ namespace APLan.ViewModels
                     UndoStack.Pop();
                     RedoStack.Push(newObject);
                 }
+                else if(newObject.GetType() == typeof(CustomArrowLine))
+                {
+                    Arrows.Remove((CustomArrowLine)newObject);
+                    UndoStack.Pop();
+                    RedoStack.Push(newObject);
+                }
             }
         }
         private void ExecuteAcadDrawing(object parameter)
         {
             var NewProjectViewModel = System.Windows.Application.Current.FindResource("newProjectViewModel") as NewProjectViewModel;
-            NewProjectViewModel.WelcomeVisibility = Visibility.Collapsed;
-            object resourceCanvasGrid = Draw.drawing.TryFindResource("canvasGrid");
-            DrawingBrush gridBrush = (DrawingBrush)resourceCanvasGrid;
-            gridBrush.TileMode = TileMode.None;
-            gridBrush.Viewport = new Rect(0, 0, 0, 0);
+            NewProjectViewModel.WelcomeVisibility = Visibility.Collapsed;             
 
         }
         private void ExecutePrint(object parameter)

@@ -142,17 +142,12 @@ namespace APLan.ViewModels
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(selectedFileName);
                     bitmap.EndInit();
-                    //Image img = new Image();
-                    //img.Source = bitmap;
+                     
                     CustomImage customImage = new CustomImage();
                     customImage.Name = bitmap;
                     customImage.Height = drawViewModel.RecGeometry.Rect.Height;
                     customImage.Width = drawViewModel.RecGeometry.Rect.Width;
-                    //img.Stretch = Stretch.Fill;
-                    //double xCoordinatesAdjust = DrawViewModel.GlobalDrawingPoint.X - (DrawViewModel.sharedCanvasSize / 2);
-                    //double yCoordinatesAdjust = (DrawViewModel.sharedCanvasSize) / 2 + DrawViewModel.GlobalDrawingPoint.Y;
-                    //System.Windows.Controls.Canvas.SetLeft(img,drawViewModel.RecGeometry.Rect.X+xCoordinatesAdjust);
-                    //System.Windows.Controls.Canvas.SetTop(img, -drawViewModel.RecGeometry.Rect.Y+yCoordinatesAdjust);
+                    
                     customImage.SetLeft = drawViewModel.RecGeometry.Rect.Left;
                     customImage.SetTop = drawViewModel.RecGeometry.Rect.Top;
                     Images.Add(customImage);
@@ -175,17 +170,15 @@ namespace APLan.ViewModels
             {
 
                 string fileName = System.IO.Path.GetRandomFileName();
-
+                var drawViewModel = System.Windows.Application.Current.FindResource("drawViewModel") as DrawViewModel;
                 try
                 {
                     Application.Current.MainWindow.WindowState = WindowState.Maximized;
 
                     PdfDetailViewerVisibility = Visibility.Visible;
                     //getting static resource to remove the tile in canvas                  
-                    object resourceCanvasGrid = Draw.drawing.TryFindResource("canvasGrid");
-                    DrawingBrush gridBrush = (DrawingBrush)resourceCanvasGrid;
+                    DrawingBrush gridBrush = (DrawingBrush)drawViewModel.LayoutCanvas.TryFindResource("canvasGrid");
                     gridBrush.TileMode = TileMode.None;
-                    gridBrush.Viewport = new Rect(0, 0, 0, 0);
 
 
 
@@ -214,8 +207,8 @@ namespace APLan.ViewModels
 
                     //adding the tile in canvas again
 
+                     
                     gridBrush.TileMode = TileMode.Tile;
-                    gridBrush.Viewport = new Rect(0, 0, 100, 100);
 
                 }
                 finally

@@ -88,19 +88,37 @@
         <Button x:Name="drag"   
                 HorizontalAlignment="Center"
                 ToolTip="Drag items"
-                BorderBrush="{Binding DragBrush, Mode=TwoWay}"
-                Command="{Binding DragButton}">
+                BorderBrush="{Binding DragBrush , Mode=TwoWay}"
+                Command="{Binding DragButton }">
             <Image Source="/Resources/Icons/drag.png" Stretch="Fill"/>
         </Button>
         </Viewbox>
         <Viewbox Style="{StaticResource viewbox1}">
-            <!--<Image x:Name="Text"
-                Style="{StaticResource TextImageProperites}"
-                Source="/Resources/Icons/text.png" Stretch="Fill"
+            <Button x:Name="grid"   
                 HorizontalAlignment="Center"
-                ToolTip="drag and drop a Text"
-                commands:MouseBehaviour.MouseDownCommand="{Binding Source={StaticResource canvasToolsTabViewModel}, Path=MouseDownCommand}">
-            </Image>-->
+                ToolTip="Grid Select/Deselect"
+                BorderBrush="{Binding GridBrush, Mode=TwoWay}"
+                Command="{Binding GridButton }">
+                <Image Source="/Resources/Icons/gridIcon.png" Stretch="Fill"/>
+            </Button>
+        </Viewbox>
+        <Viewbox Style="{StaticResource viewbox1}">
+            <Button x:Name="Copy"   
+                HorizontalAlignment="Center"
+                ToolTip="Copy"
+                BorderBrush="{Binding CopyBrush, Mode=TwoWay}"
+                Command="{Binding CopyButton }">
+                <Image Source="/Resources/Icons/copy.png" Stretch="Fill"/>
+            </Button>
+        </Viewbox>
+        <Viewbox Style="{StaticResource viewbox1}">
+            <Button x:Name="Paste"   
+                HorizontalAlignment="Center"
+                ToolTip="Copy"
+                BorderBrush="{Binding PasteBrush, Mode=TwoWay}"
+                Command="{Binding PasteButton }">
+                <Image Source="/Resources/Icons/paste.png" Stretch="Fill"/>
+            </Button>
         </Viewbox>
         <!--<Button ToolTip="Delete selected items (press delete)"
                 HorizontalAlignment="Center">

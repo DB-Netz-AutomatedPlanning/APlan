@@ -17,9 +17,13 @@ namespace APLan.ViewModels
         private double angleLine;
         private Color selectedColorForACAD;
         private string Instruction = String.Empty;
+
+        
         #endregion
 
         #region properties
+
+        
         public Visibility AplanCadToolViewVisibility
         {
             get => aplanCadToolViewVisibility;
@@ -99,6 +103,8 @@ namespace APLan.ViewModels
         public ICommand PolylineDrawing { get; set; }
         public ICommand ArcDrawingTwoPointCenter { get; set; } 
         public ICommand threePointCurve { get; set; }
+        public ICommand horizontalScaler { get; set; }
+        public ICommand verticalScaler { get; set; }
         #endregion
 
         #region constructor
@@ -117,6 +123,8 @@ namespace APLan.ViewModels
             ArcDrawingTwoPointCenter = new RelayCommand(ExecuteArcDrawing2Points);
             threePointCurve = new RelayCommand(ExecutethreePointCurve);
             AngularDrawing = new RelayCommand(ExecuteAngularDrawing);
+            horizontalScaler = new RelayCommand(ExecuteHorizontalScaler);
+            verticalScaler = new RelayCommand(ExecuteVerticalScaler);
             
 
             DistanceForParallelLine = 20d;
@@ -127,6 +135,40 @@ namespace APLan.ViewModels
         #endregion
 
         #region logic
+        private void ExecuteVerticalScaler(object parameter)
+        {
+            if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.VerticalDistance)
+            {
+                Instructions = "Select two point to measure";
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.VerticalDistance;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+
+            }
+            else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.VerticalDistance)
+            {
+                Instructions = String.Empty;
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
+
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+            }
+        }
+        private void ExecuteHorizontalScaler(object parameter)
+        {
+            if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.HorizontalDistance)
+            {
+                Instructions = "Select two point to measure";                 
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.HorizontalDistance;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+
+            }
+            else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.HorizontalDistance)
+            {
+                Instructions = String.Empty;
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
+
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+            }
+        }
         private void ExecuteAngularDrawing(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.AngularLine)

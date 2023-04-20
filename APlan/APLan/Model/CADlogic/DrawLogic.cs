@@ -2,6 +2,7 @@
 using APLan.HelperClasses;
 using APLan.Model.CustomObjects;
 using APLan.ViewModels;
+using APLan.Views;
 using GeoJSON.Net.Geometry;
 using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Tls;
@@ -56,7 +57,134 @@ namespace APLan.Model.CADlogic
         }
         #endregion
 
-        #region drawlogic
+        #region drawlogic     
+        public static T DeepCopyReflection<T>(T input)
+        {
+            var type = input.GetType();
+            var properties = type.GetProperties();
+            T clonedObj = (T)Activator.CreateInstance(type);
+           
+            foreach (var property in properties)
+            {
+                if (property.CanWrite)
+                {
+                    object value = property.GetValue(input);
+                    if (value != null && value.GetType().IsClass && !value.GetType().FullName.StartsWith("System."))
+                    {
+                        property.SetValue(clonedObj, DeepCopyReflection(value));
+                    }
+                    else
+                    {
+                        property.SetValue(clonedObj, value);
+                    }
+                }
+            }
+            return clonedObj;
+        }
+        public void pasteSelected(ObservableCollection<object> clipboard, ObservableCollection<CustomPolyLine> lines,
+            ObservableCollection<CustomCircle> circle, ObservableCollection<CustomArc> arc, ObservableCollection<CustomTextBlock> textblocks,
+            Stack<object> Undostack)
+        {
+            if(clipboard.Count == 0)
+            {
+                MessageBox.Show("No object copied to paste");
+                return;
+            }
+            foreach(object customShape in clipboard )
+            {
+                if(customShape.GetType() == typeof(CustomPolyLine))
+                {
+                    CustomPolyLine customPolyLine = (CustomPolyLine)customShape;
+                    
+                    lines.Add(customPolyLine);
+                    Undostack.Push(customPolyLine);
+                    
+                }
+                else if(customShape.GetType() == typeof(CustomCircle))
+                {
+                    CustomCircle customCircle = (CustomCircle)customShape;
+                    circle.Add(customCircle);
+                    Undostack.Push(customCircle);
+
+                }
+                else if (customShape.GetType() == typeof(CustomArc))
+                {
+                    CustomArc customArc = (CustomArc)customShape;
+                    arc.Add(customArc);
+                    Undostack.Push(customArc);
+
+                }
+                else if (customShape.GetType() == typeof(CustomTextBlock))
+                {
+                    CustomTextBlock customTextBlock = (CustomTextBlock)customShape;
+                    textblocks.Add(customTextBlock);
+                    Undostack.Push(customTextBlock);
+
+                }
+
+            }
+        }
+        public void copySelected(ObservableCollection<UIElement> selected, ObservableCollection<object> clipboard, ObservableCollection<CustomPolyLine> lines
+            ,ObservableCollection<CustomCircle> circle, ObservableCollection<CustomArc> arc, ObservableCollection<CustomTextBlock> textblocks)
+        {
+            if(clipboard.Count > 0)
+            {
+                clipboard.Clear();
+            }
+            foreach (UIElement selectedToCopy in selected)
+            {
+                object dataContext = (selectedToCopy as FrameworkElement).DataContext;
+
+                if (dataContext != null && dataContext.GetType() == typeof(CustomPolyLine))
+                {
+                    CustomPolyLine polyline = (CustomPolyLine)dataContext;
+                    object newobject = DeepCopyReflection(polyline);
+
+                    //CustomPolyLine customPolyLine = new CustomPolyLine();
+
+                    //Point startpoint = polyline.CustomPoints[0].Point;
+                    //Point endpoint = polyline.CustomPoints[1].Point;
+                    //customPolyLine.CustomPoints.Add(new CustomPoint { Point = startpoint });
+                    //customPolyLine.CustomPoints.Add(new CustomPoint { Point = endpoint });
+                    //customPolyLine.ShapeAttributeInfo.Add(new KeyValue()
+                    //{
+                    //    Key = "StartPoint",
+                    //    Value = "" + customPolyLine.CustomPoints[0].Point + ""
+                    //});
+                    //customPolyLine.ShapeAttributeInfo.Add(new KeyValue()
+                    //{
+                    //    Key = "Endpoint",
+                    //    Value = "" + customPolyLine.CustomPoints[1].Point + ""
+
+                    //});
+                    //customPolyLine.Color = polyline.Color;
+                    clipboard.Add(polyline);                    
+                   
+                }
+                else if (dataContext != null && dataContext.GetType() == typeof(CustomCircle))
+                {
+                    CustomCircle newCircle = (CustomCircle)dataContext;
+                    object newobject = DeepCopyReflection(newCircle);
+                    clipboard.Add(newobject);
+
+                }
+                else if (dataContext != null && dataContext.GetType() == typeof(CustomArc))
+                {
+                    CustomArc newArc = (CustomArc)dataContext;
+                    object newobject = DeepCopyReflection(newArc);
+                    clipboard.Add(newobject);
+
+                }
+                else if (dataContext != null && dataContext.GetType() == typeof(CustomTextBlock))
+                {
+                    CustomTextBlock newTextBlock = (CustomTextBlock)dataContext;
+                    object newobject = DeepCopyReflection(newTextBlock);
+                    clipboard.Add(newobject);
+
+                }
+            }
+
+        }
         public void drawIndicatorLine(MouseEventArgs e, Point GLobalPoint, double canvasSize,DrawViewModel.SelectedToolForCAD drawtype)
         {
             if(clickedPoints.Count >= 1)
@@ -160,6 +288,66 @@ namespace APLan.Model.CADlogic
         {
             return Math.Sqrt(Math.Pow(pointA.X - pointB.X, 2) + Math.Pow(pointA.Y - pointB.Y, 2));
         }
+        public void drawVerticalDistance(MouseEventArgs e, double canvasSize,Point GlobalPoint,ObservableCollection<CustomArrowLine> arrows, Stack<object> UndoStack)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                addPointAccordingToEventSource(e, GlobalPoint, canvasSize);
+                if (clickedPoints.Count == 1)
+                {
+                    aplanviewModel.Instructions = "Select End Point of Line";
+                }
+                else if (clickedPoints.Count == 2)
+                {
+                    CustomArrowLine newarrowline = new CustomArrowLine();
+
+                    Point StartPoint = new Point(Math.Round(clickedPoints[0].X, 2), Math.Round(clickedPoints[0].Y, 2));
+                    Point EndPoint = new Point(Math.Round(clickedPoints[1].X, 2), Math.Round(clickedPoints[1].Y, 2));
+                    double distanceBetweenPoints = Math.Round(Distance( StartPoint, EndPoint));
+                    newarrowline.Width = 10;
+                    newarrowline.Height = distanceBetweenPoints;
+                    newarrowline.SetCanvasPoint = EndPoint;
+                    newarrowline.DistanceValue = distanceBetweenPoints;
+                    newarrowline.GeometryData = Geometry.Parse("M 5 3 7 0 L 9 3 M 7 0 L 7 10 M 5 7 L 7 10 L 9 7");
+                    newarrowline.ThicknessAttrib = new Thickness(10,distanceBetweenPoints / 2,0,0);
+                    arrows.Add(newarrowline);
+                    UndoStack.Push(newarrowline);
+                    clickedPoints.Clear();
+                    clickedPointOriginalCoord.Clear();                     
+                }
+            }
+        }
+        public void drawHorizontalDistance(MouseEventArgs e, double canvasSize, Point GLobalPoint,ObservableCollection<CustomArrowLine> arrows, Stack<object> UndoStack)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                addPointAccordingToEventSource(e, GLobalPoint, canvasSize);
+                if (clickedPoints.Count == 1)
+                {
+                    aplanviewModel.Instructions = "Select End Point of Line";                   
+                }
+                else if (clickedPoints.Count == 2)
+                {               
+                    CustomArrowLine newarrowline = new CustomArrowLine();
+                    Point StartPoint = new Point(Math.Round(clickedPoints[0].X, 2), Math.Round(clickedPoints[0].Y, 2));
+                    Point EndPoint = new Point(Math.Round(clickedPoints[1].X, 2), Math.Round(clickedPoints[1].Y, 2));
+                    double distanceBetweenPoints = Math.Round(Distance(StartPoint, EndPoint));
+                    newarrowline.Width = distanceBetweenPoints;
+                    newarrowline.Height = 10;
+                    newarrowline.DistanceValue = distanceBetweenPoints;
+                    newarrowline.SetCanvasPoint = StartPoint;
+                    newarrowline.ThicknessAttrib = new Thickness(distanceBetweenPoints / 2, 10, 0, 0);
+                    newarrowline.GeometryData = Geometry.Parse("M 4 2 L 0 4 L 4 6 M 0 4 L 20 4 M 16 2 L 20 4 L 16 6");
+                    arrows.Add(newarrowline);
+                    UndoStack.Push(newarrowline);
+                    clickedPoints.Clear();
+                    clickedPointOriginalCoord.Clear();
+                    
+                }
+            }
+           
+        }
+        
         public void drawAngularLine(MouseEventArgs e, double canvasSize, Point GlobalPoint, ObservableCollection<CustomPolyLine> polyline_List, Stack<object> UndoStack)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -440,8 +628,7 @@ namespace APLan.Model.CADlogic
                     addIndicationLineToCanvas(e);
                 }
                 else if (clickedPoints.Count == 2)
-                {
-                   
+                {                   
                     CustomPolyLine line = new() { CustomPoints = new(), Color = Brushes.Black };
                     clickedPoints.ForEach(x => line.CustomPoints.Add(new() { Point = x }));
                     line.CustomPoints[1].Point = new Point(clickedPoints[1].X, clickedPoints[0].Y);
@@ -455,7 +642,6 @@ namespace APLan.Model.CADlogic
                     {
                         Key = "EndPoint",
                         Value = "" + line.CustomPoints[1].Point + ""
-
                     });
 
                     line.Color = new SolidColorBrush() { Color = aplanviewModel.SelectedColorForACAD };

@@ -11,6 +11,7 @@ using System.Windows;
 
 namespace APLan.Model.CustomObjects
 {
+   
     public class CustomItem : INotifyPropertyChanged
     {
         #region INotify Essentials

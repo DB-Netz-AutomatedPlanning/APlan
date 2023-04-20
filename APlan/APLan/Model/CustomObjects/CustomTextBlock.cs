@@ -64,6 +64,13 @@ namespace APLan.Model.CustomObjects
                 OnPropertyChanged();
             }
         }
+
+        public double ObliqueAngle
+
+        {
+            get;
+            set;
+        }
         #endregion
         #region constructor
         public CustomTextBlock()

@@ -1,10 +1,12 @@
 ﻿using APLan.Model.CustomObjects;
 using APLan.ViewModels;
 using Newtonsoft.Json.Schema;
+using Spire.Pdf.Exporting.XPS.Schema;
 using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace APLan.Converters
 {
@@ -27,7 +29,8 @@ namespace APLan.Converters
             {
                 return new Point((((CustomPoint)value).Point.X - DrawViewModel.GlobalDrawingPoint.X) + DrawViewModel.sharedCanvasSize / 2
                           , -(((CustomPoint)value).Point.Y - DrawViewModel.GlobalDrawingPoint.Y) + DrawViewModel.sharedCanvasSize / 2);
-            }else
+            }           
+            else
             {
                 return new Point((((Point)value).X - DrawViewModel.GlobalDrawingPoint.X) + DrawViewModel.sharedCanvasSize / 2
                          , -(((Point)value).Y - DrawViewModel.GlobalDrawingPoint.Y) + DrawViewModel.sharedCanvasSize / 2);

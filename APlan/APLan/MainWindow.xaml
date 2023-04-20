@@ -13,12 +13,12 @@
         WindowState="Maximized"
         Icon="/Resources/Icons/eulynx-logo.png"
         ResizeMode="CanResize"
-        Title="MainWindow">
-    
+        Title="MainWindow">    
     <Window.DataContext>
         <!--<StaticResource ResourceKey="drawViewModel"/>-->
         <viewModels:MainWindowViewModel></viewModels:MainWindowViewModel>
     </Window.DataContext>
+     
     <i:Interaction.Triggers>
         
         <i:EventTrigger EventName="KeyDown">
@@ -63,7 +63,7 @@
                        HorizontalAlignment="Stretch" 
                        Background="{StaticResource themeColor}"
                         Panel.ZIndex="2"/>
-        <Canvas     x:Name="baseCanvas"
+        <Canvas     x:Name="baseCanvas"                     
                     Grid.Row="2" 
                     Grid.Column="0"
                     Grid.RowSpan="2" 

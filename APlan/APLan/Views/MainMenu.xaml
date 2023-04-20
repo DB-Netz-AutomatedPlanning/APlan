@@ -448,7 +448,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="PDFViewer" 
-                      Command="{Binding PdfViewer}"
+                     Command="{Binding PdfViewer}"                     
                           Style="{StaticResource Sub_MenuItem_Vertical}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Icons/viewer.png"></Image>

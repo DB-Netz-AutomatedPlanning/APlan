@@ -107,6 +107,7 @@
     <None Remove="Resources\Icons\ColorSwatchCircle.png" />
     <None Remove="Resources\Icons\ColorSwatchSquare1.png" />
     <None Remove="Resources\Icons\ColorSwatchSquare2.png" />
+    <None Remove="Resources\Icons\copy.png" />
     <None Remove="Resources\Icons\dblogo.png" />
     <None Remove="Resources\Icons\delete.png" />
     <None Remove="Resources\Icons\drag.png" />
@@ -115,6 +116,8 @@
     <None Remove="Resources\Icons\exit.png" />
     <None Remove="Resources\Icons\export.png" />
     <None Remove="Resources\Icons\export_2.png" />
+    <None Remove="Resources\Icons\gridIcon.png" />
+    <None Remove="Resources\Icons\horizontalWidth.png" />
     <None Remove="Resources\Icons\icons8-import-30.png" />
     <None Remove="Resources\Icons\img_arrow.png" />
     <None Remove="Resources\Icons\img_services_dropdown.png" />
@@ -135,6 +138,7 @@
     <None Remove="Resources\Icons\move.png" />
     <None Remove="Resources\Icons\new.png" />
     <None Remove="Resources\Icons\open.png" />
+    <None Remove="Resources\Icons\Paste.png" />
     <None Remove="Resources\Icons\plan.png" />
     <None Remove="Resources\Icons\polylines.png" />
     <None Remove="Resources\Icons\printer.png" />
@@ -143,6 +147,7 @@
     <None Remove="Resources\Icons\save.png" />
     <None Remove="Resources\Icons\save_as.png" />
     <None Remove="Resources\Icons\scale.png" />
+    <None Remove="Resources\Icons\Scaler.png" />
     <None Remove="Resources\Icons\select.png" />
     <None Remove="Resources\Icons\sidebar.png" />
     <None Remove="Resources\Icons\sidebar2.png" />
@@ -151,6 +156,7 @@
     <None Remove="Resources\Icons\text.png" />
     <None Remove="Resources\Icons\undo.png" />
     <None Remove="Resources\Icons\validate.png" />
+    <None Remove="Resources\Icons\verticalWidth.png" />
     <None Remove="Resources\Icons\viewer.png" />
     <None Remove="Resources\Image1.png" />
     <None Remove="Resources\Kabelformstein.png" />
@@ -479,7 +485,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15-beta2" />
     <PackageReference Include="NPOI" Version="2.6.0" />
-    <PackageReference Include="Pdfium.Net.SDK" Version="4.81.2704" />
     <PackageReference Include="System.Collections.NonGeneric" Version="4.3.0" />
     <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
@@ -494,6 +499,7 @@
     <Resource Include="Resources\Icons\ColorSwatchCircle.png" />
     <Resource Include="Resources\Icons\ColorSwatchSquare1.png" />
     <Resource Include="Resources\Icons\ColorSwatchSquare2.png" />
+    <Resource Include="Resources\Icons\copy.png" />
     <Resource Include="Resources\Icons\dblogo.png" />
     <Resource Include="Resources\Icons\delete.png" />
     <Resource Include="Resources\Icons\drag.png" />
@@ -502,6 +508,8 @@
     <Resource Include="Resources\Icons\exit.png" />
     <Resource Include="Resources\Icons\export.png" />
     <Resource Include="Resources\Icons\export_2.png" />
+    <Resource Include="Resources\Icons\gridIcon.png" />
+    <Resource Include="Resources\Icons\horizontalWidth.png" />
     <Resource Include="Resources\Icons\icons8-import-30.png" />
     <Resource Include="Resources\Icons\img_arrow.png" />
     <Resource Include="Resources\Icons\img_services_dropdown.png" />
@@ -520,6 +528,7 @@
     <Resource Include="Resources\Icons\move.png" />
     <Resource Include="Resources\Icons\new.png" />
     <Resource Include="Resources\Icons\open.png" />
+    <Resource Include="Resources\Icons\Paste.png" />
     <Resource Include="Resources\Icons\plan.png" />
     <Resource Include="Resources\Icons\polylines.png" />
     <Resource Include="Resources\Icons\printer.png" />
@@ -528,6 +537,7 @@
     <Resource Include="Resources\Icons\save.png" />
     <Resource Include="Resources\Icons\save_as.png" />
     <Resource Include="Resources\Icons\scale.png" />
+    <Resource Include="Resources\Icons\Scaler.png" />
     <Resource Include="Resources\Icons\select.png" />
     <Resource Include="Resources\Icons\sidebar.png" />
     <Resource Include="Resources\Icons\sidebar2.png" />
@@ -536,6 +546,7 @@
     <Resource Include="Resources\Icons\text.png" />
     <Resource Include="Resources\Icons\undo.png" />
     <Resource Include="Resources\Icons\validate.png" />
+    <Resource Include="Resources\Icons\verticalWidth.png" />
     <Resource Include="Resources\Icons\viewer.png" />
     <Resource Include="Resources\Kiel\Entwurfselement_HO.geojson" />
     <Resource Include="Resources\Kiel\Entwurfselement_KM.geojson" />

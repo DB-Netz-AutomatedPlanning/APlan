@@ -1,6 +1,7 @@
 ﻿using aplan.core;
 using APLan.HelperClasses;
 using APLan.Model.CustomObjects;
+using APLan.Views;
 using Models.TopoModels.EULYNX.generic;
 using System;
 using System.Collections.Generic;
@@ -149,7 +150,20 @@ namespace APLan.ViewModels
             get;set;
         }
 
+        
         public static ObservableCollection<SymbolObject> items
+        {
+            get;
+            set;
+        }
+
+        public static ObservableCollection<CustomArrowLine> Arrows
+        { 
+            get;
+            set;
+        }
+        
+        public static ObservableCollection<object> Clipboard
         {
             get;
             set;
@@ -175,6 +189,8 @@ namespace APLan.ViewModels
                 listsCreated = true;
                 UndoStack = new();
                 RedoStack = new();
+                Arrows = new();
+                Clipboard = new();
             }
         }
         #endregion
@@ -224,7 +240,8 @@ namespace APLan.ViewModels
             toBeStored.Clear();
             UndoStack.Clear();
             RedoStack.Clear();
-
+            Arrows.Clear();
+            Clipboard.Clear();
 
             ViewModels.DrawViewModel.GlobalDrawingPoint = new(0, 0);
         }
@@ -237,6 +254,9 @@ namespace APLan.ViewModels
             CollectionViewSource.GetDefaultView(Ellipses).Refresh();
             CollectionViewSource.GetDefaultView(Arcs).Refresh();
             CollectionViewSource.GetDefaultView(Texts).Refresh();
+            CollectionViewSource.GetDefaultView(Arrows).Refresh();
+            CollectionViewSource.GetDefaultView(Clipboard).Refresh();
+
         }
         #endregion
     }

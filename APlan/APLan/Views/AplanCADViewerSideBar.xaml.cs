@@ -122,5 +122,21 @@ namespace APLan.Views
         {
            
         }
+
+        private void Scaler_MouseLeave(object sender, MouseEventArgs e)
+        {
+            popup_uc.Visibility = Visibility.Collapsed;
+            popup_uc.IsOpen = false;
+        }
+        private void Scaler_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (Tg_Btn.IsChecked == false)
+            {
+                popup_uc.PlacementTarget = Curve;
+                popup_uc.Placement = PlacementMode.Right;
+                popup_uc.IsOpen = true;
+                Header.PopupText.Text = "Scaler";
+            }
+        }
     }
 }
