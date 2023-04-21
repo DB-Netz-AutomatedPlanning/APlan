@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-E:\ERDM\GitHub-Aplan\APlan\APLan\obj\Debug\net6.0-windows\
+C:\Users\DR-PHELZ\Source\Repos\APlan\APLan\obj\Debug\net6.0-windows\
 APLan
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-E:\ERDM\GitHub-Aplan\APlan\APLan\App.xaml
+C:\Users\DR-PHELZ\Source\Repos\APlan\APLan\App.xaml
 29-1045417721
 
-1411416788476
-229-995024561
+1481370073589
+229-2041742664
 DataTemplates.xaml;MainWindow.xaml;Resources\Symbols\Symbols.xaml;Styles.xaml;Views\AboutWPF.xaml;Views\APlanCadToolView.xaml;Views\AplanCADViewer.xaml;Views\AplanCADViewerSideBar.xaml;Views\CanvasContent.xaml;Views\CanvasToolsTab.xaml;Views\Draw.xaml;Views\DrawingLowerTab.xaml;Views\DrawingUpperLayer.xaml;Views\ExportConfirmationAndValidation.xaml;Views\ExportWindow.xaml;Views\MainMenu.xaml;Views\NewProject.xaml;Views\pdfDetail.xaml;Views\PdfViewer.xaml;Views\PlanningTab.xaml;Views\PopupUserControl.xaml;Views\RightTabs.xaml;Views\SelectedItems.xaml;Views\SignalObjectInfo.xaml;Views\SymbolsTab.xaml;Views\UpperTabs.xaml;Views\Validator.xaml;Views\VisualizedData.xaml;Views\Welcome.xaml;
 
 False
