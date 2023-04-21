@@ -23,8 +23,8 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
         public void CreateKanten(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
-            var gleisKanten = xLSreader.ReadXLSContent(edgeFile, 0);  // "C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Scheibenberg_Final\\Edges.xls"
-            var gleisKnoten = xLSreader.ReadXLSContent(nodeFile, 0);  // "C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Scheibenberg_Final\\Nodes.xls"
+            var gleisKanten = xLSreader.ReadXLSContent(edgeFile, 0);  // "Edges.xls"
+            var gleisKnoten = xLSreader.ReadXLSContent(nodeFile, 0);  // "Nodes.xls"
 
             var kanten = new GleisKanten();
             kanten.name = "GleisKanten";
@@ -33,8 +33,6 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             List<KantenFeature> features = new();
 
 
-            //List<string> coordinate = new List<string>();
-            //dict.TryGetValue("Track_Edge", out var edgeID);
             foreach (Dictionary<string, string> dict in gleisKanten)
             {
                 // Get the coordinates for edge(s)
@@ -67,9 +65,9 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
                     dict2.TryGetValue("Pkt_Height [m]", out string? z1);
                     if (nodeId == startNode)
                     {
-                        start.Add(double.Parse(x1)); //, new NumberFormatInfo() { NumberDecimalSeparator = "," })); 
-                        start.Add(double.Parse(y1)); //, new NumberFormatInfo() { NumberDecimalSeparator = "," }));
-                        start.Add(double.Parse(z1)); //, new NumberFormatInfo() { NumberDecimalSeparator = "," }));
+                        start.Add(double.Parse(x1));  
+                        start.Add(double.Parse(y1)); 
+                        start.Add(double.Parse(z1)); 
                         dict2.TryGetValue("KM [km]", out KM_A_KM);
                         coord.Add(start);
                         if (end.Count != 0) break;
@@ -103,15 +101,6 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
                 features.Add(new KantenFeature() { type = "Feature", properties = properties, geometry = geometry });
             }
 
-            //KantenGeometry geometry = new KantenGeometry() { type = "LineString", coordinates = coord };
-            //KantenProperties properties = new KantenProperties() { ID = ID, STATUS = STATUS, KN_ID_V = KN_ID_V, 
-            //    KN_ID_B = KN_ID_B, LAENGE_ENT = LAENGE_ENT, RIKZ = RIKZ, KM_A_KM = KM_A_KM, KM_E_KM = KM_E_KM,
-            //    KM_A_M = KM_A_M, KM_E_M = KM_E_M, KM_A_TEXT = KM_A_TEXT, KM_E_TEXT = KM_E_TEXT };
-
-
-
-            //features.Add(new KantenFeature() { type = "Feature", properties = properties, geometry = geometry });
-
             kanten.features = features;
 
             string output = JsonConvert.SerializeObject(kanten);
@@ -123,8 +112,7 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
         public void CreateKnoten(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
-            //var gleisKanten = xLSreader.ReadXLSContent("C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Edges.xls", 0);
-            var gleisKnoten = xLSreader.ReadXLSContent(nodeFile, 0);  // "C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Scheibenberg_Final\\Nodes.xls"
+            var gleisKnoten = xLSreader.ReadXLSContent(nodeFile, 0);  
 
             var knoten = new GleisKnoten();
             knoten.name = "Gleisknoten";
@@ -186,7 +174,7 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
         public void CreateKMLine(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
-            var kmline = xLSreader.ReadXLSContent(segmentFile, 0);  // "C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Scheibenberg_Final\\Segments.xls"
+            var kmline = xLSreader.ReadXLSContent(segmentFile, 0);  
 
             var km = new KMLine();
             km.name = "Entwurfselement_KMLinie";
@@ -220,8 +208,6 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
 
                 dict.TryGetValue("Segment ID", out ID);
                 dict.TryGetValue("Type", out ELTYP);
-                //dict.TryGetValue("KM_Begin [km]", out KM_A_KM);
-                //dict.TryGetValue("KM_End [km]", out KM_E_KM);
                 dict.TryGetValue("KM_start [km]", out KM_A_TEXT);
                 dict.TryGetValue("KM_end [km]", out KM_E_TEXT);
                 dict.TryGetValue("SegmentLength [m]", out PARAM1);
