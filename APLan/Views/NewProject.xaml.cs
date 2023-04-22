@@ -144,6 +144,9 @@ namespace APLan.Views
                             case ".mdb":
                                 item.Visibility = Visibility.Visible;
                                 break;
+                            case ".xls/.csv":
+                                item.Visibility = Visibility.Visible;
+                                break;
                             default:
                                 item.Visibility = Visibility.Collapsed;
                                 break;

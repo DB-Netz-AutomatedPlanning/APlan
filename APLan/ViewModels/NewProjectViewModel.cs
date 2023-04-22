@@ -407,9 +407,8 @@ namespace APLan.ViewModels
             }
             if (ProjectType.Equals("EULYNX"))
             {
-
                 eulynxModelHandler = new();
-
+                
                 loadingObject.LoadingReport = "Creating Eulynx Object...";
                 if (format.Contains(".json"))
                 {
@@ -425,13 +424,14 @@ namespace APLan.ViewModels
                 {
                     BaseViewModel.eulynxModel = await eulynxModelHandler.loadEuxml(XML, Lines, Ellipses, Signals);
                 }
-                //else if (format.Contains(".xls"))
-                //{
-                //    eulynxModelHandler.CreateJSONFilesFromXLS(XLS, ProjectName, ProjectPath);
-                //}
+                else if (format.Contains(".xls"))
+                {
+                    eulynxModelHandler.CreateJSONFilesFromXLS(XLS, ProjectName, ProjectPath);
+                }
             }
             if (ProjectType.Equals("ERDM"))
             {
+                //eulynxModelHandler = new();
                 ErdmModelHandler erdmHandler = new();
                 loadingObject.LoadingReport = "Creating ERDM Object...";
                 if (format.Contains(".json"))
@@ -444,6 +444,7 @@ namespace APLan.ViewModels
                 }
                 else if (format.Contains(".xls"))
                 {
+                    //eulynxModelHandler.CreateJSONFilesFromXLS(XLS, ProjectName, ProjectPath);
                     BaseViewModel.erdmModel = await erdmHandler.createERDMProject(XLS);
                 }
                 if (BaseViewModel.erdmModel != null)
