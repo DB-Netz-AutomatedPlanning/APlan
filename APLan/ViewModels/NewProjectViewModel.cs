@@ -324,6 +324,11 @@ namespace APLan.ViewModels
                     openFileDialog1.Filter = "Excel and CSV files (*.xls;*.csv)|*.xls;*.csv";
                     openFileDialog1.Multiselect = true;
                     break;
+                // Eulynx case
+                case "EULYNX":
+                    openFileDialog1.Filter = "Excel and CSV files (*.xls;*.csv)|*.xls;*.csv";
+                    openFileDialog1.Multiselect = true;
+                    break;
                 default:
                     break;
             }
@@ -402,9 +407,8 @@ namespace APLan.ViewModels
             }
             if (ProjectType.Equals("EULYNX"))
             {
-
                 eulynxModelHandler = new();
-
+                
                 loadingObject.LoadingReport = "Creating Eulynx Object...";
                 if (format.Contains(".json"))
                 {
@@ -418,12 +422,16 @@ namespace APLan.ViewModels
                 }
                 else if (format.Contains(".euxml"))
                 {
-
                     BaseViewModel.eulynxModel = await eulynxModelHandler.loadEuxml(XML, Lines, Ellipses, Signals);
+                }
+                else if (format.Contains(".xls"))
+                {
+                    eulynxModelHandler.CreateJSONFilesFromXLS(XLS, ProjectName, ProjectPath);
                 }
             }
             if (ProjectType.Equals("ERDM"))
             {
+                //eulynxModelHandler = new();
                 ErdmModelHandler erdmHandler = new();
                 loadingObject.LoadingReport = "Creating ERDM Object...";
                 if (format.Contains(".json"))
@@ -436,6 +444,7 @@ namespace APLan.ViewModels
                 }
                 else if (format.Contains(".xls"))
                 {
+                    //eulynxModelHandler.CreateJSONFilesFromXLS(XLS, ProjectName, ProjectPath);
                     BaseViewModel.erdmModel = await erdmHandler.createERDMProject(XLS);
                 }
                 if (BaseViewModel.erdmModel != null)
@@ -511,6 +520,10 @@ namespace APLan.ViewModels
                 if (Format.Contains(".euxml"))
                 {
                     File.Copy(XML, $"{path}/{Path.GetFileName(XML)}", true);
+                }
+                if (Format.Contains(".xls"))
+                {
+                    File.Copy(XLS, $"{path}/{Path.GetFileName(XLS)}", true);
                 }
             }
             if (ProjectType.Equals("ERDM"))

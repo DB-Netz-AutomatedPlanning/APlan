@@ -457,6 +457,9 @@ namespace aplan.core
 
 
 
+
+
+
         //public static (double? min, double? max) findMinMaxLinearCoordinate(LiteDatabase database)
         //{
         //    IEnumerable<double?[]> min_max;
