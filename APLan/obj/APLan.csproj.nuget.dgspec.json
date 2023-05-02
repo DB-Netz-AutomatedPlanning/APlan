@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\APLan.csproj": {}
+    "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\APLan.csproj": {
+    "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\APLan.csproj",
+        "projectUniqueName": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
         "projectName": "APLan",
-        "projectPath": "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\APLan.csproj",
-        "packagesPath": "C:\\Users\\DR-PHELZ\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\obj\\",
+        "projectPath": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+        "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
+        "outputPath": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\DR-PHELZ\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,8 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
-          "C:\\Users\\DR-PHELZ\\Desktop\\PTDF Scholarship\\Internship\\Neovendi\\Nuget Package\\Libraries": {},
+          "E:\\ERDM\\Libraries": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {

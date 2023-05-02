@@ -339,7 +339,7 @@ namespace APLan.ViewModels
             {
                 System.Windows.MessageBox.Show("project Creation needs all the files");
             }
-            else if (ProjectType.Equals("ERDM") && openFileDialog1.FileNames.Length == 4)
+            else if ((ProjectType.Equals("ERDM") || ProjectType.Equals("EULYNX")) && openFileDialog1.FileNames.Length == 4)
             {
                 var temp = "";
                 foreach (string file in openFileDialog1.FileNames)
@@ -349,6 +349,7 @@ namespace APLan.ViewModels
                 }
                 XLS = temp;
             }
+            
         }
         private void ExecuteCreate(object parameter)
         {
@@ -523,7 +524,7 @@ namespace APLan.ViewModels
                 }
                 if (Format.Contains(".xls"))
                 {
-                    File.Copy(XLS, $"{path}/{Path.GetFileName(XLS)}", true);
+                    HelperFunctions.copyFilesInString(XLS, path);
                 }
             }
             if (ProjectType.Equals("ERDM"))

@@ -261,9 +261,6 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             File.WriteAllText(filePath, output);
         }
 
-
-
-
         public void CreateHohe(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
@@ -366,8 +363,6 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             File.WriteAllText(filePath, output);
         }
 
-
-
         public void CreaeteLage(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
@@ -466,8 +461,6 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
 
             File.WriteAllText(filePath, output);
         }
-
-
 
         public void CreaeteUH(string filePath)
         {

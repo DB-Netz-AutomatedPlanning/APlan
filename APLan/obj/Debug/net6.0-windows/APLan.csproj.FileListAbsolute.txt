@@ -980,3 +980,12 @@ C:\Users\DR-PHELZ\Source\Repos\APlan\APLan\obj\Debug\net6.0-windows\APLan.csproj
 C:\Users\DR-PHELZ\Source\Repos\APlan\APLan\obj\Debug\net6.0-windows\APLan.csproj.CopyComplete
 C:\Users\DR-PHELZ\Source\Repos\APlan\APLan\obj\Debug\net6.0-windows\APLan.genruntimeconfig.cache
 C:\Users\DR-PHELZ\Source\Repos\APlan\APLan\obj\Debug\net6.0-windows\ref\APLan.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\Microsoft.Win32.SystemEvents.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\System.Configuration.ConfigurationManager.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\System.Diagnostics.PerformanceCounter.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\System.Drawing.Common.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\System.Security.AccessControl.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\System.Security.Cryptography.ProtectedData.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.Diagnostics.PerformanceCounter.dll
+E:\ERDM\GitHub-Aplan\APlan\APLan\bin\Debug\net6.0-windows\runtimes\win\lib\net6.0\System.Security.AccessControl.dll
