@@ -1176,6 +1176,8 @@ namespace APLan.ViewModels.ModelsLogic
                 var gleiskanten = files.Find(x => x.Contains("Gleiskanten"));
                 var gleisknoten = files.Find(x => x.Contains("Gleisknoten"));
 
+                 
+
                 //try
                 //{
                  eulynxModel = createEulynxModel(
@@ -1202,6 +1204,7 @@ namespace APLan.ViewModels.ModelsLogic
         /// <returns></returns>
         public void CreateJSONFilesFromXLS(string xml, string ProjectName, string ProjectPath)
         {
+            
                 var files = HelperFunctions.getFileNamesFromString(xml);
                 var edge = files.Find(x => x.Contains("Edges"));
                 var node = files.Find(x => x.Contains("Nodes"));

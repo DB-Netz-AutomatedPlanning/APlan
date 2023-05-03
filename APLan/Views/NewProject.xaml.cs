@@ -231,7 +231,7 @@ namespace APLan.Views
         private void xlsFilesBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = ((TextBox)sender);
-            if (projectType.SelectedItem != null && projectType.SelectedItem.ToString().Contains("ERDM"))
+            if (projectType.SelectedItem != null && (projectType.SelectedItem.ToString().Contains("ERDM")  || projectType.SelectedItem.ToString().Contains("EULYNX")))
             {
                 if (checkXlsFiles())
                 {

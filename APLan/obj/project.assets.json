@@ -3137,11 +3137,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\APLan.csproj",
+      "projectUniqueName": "C:\\Users\\DR-PHELZ\\source\\repos\\APlan\\APLan\\APLan.csproj",
       "projectName": "APLan",
-      "projectPath": "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\APLan.csproj",
+      "projectPath": "C:\\Users\\DR-PHELZ\\source\\repos\\APlan\\APLan\\APLan.csproj",
       "packagesPath": "C:\\Users\\DR-PHELZ\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\obj\\",
+      "outputPath": "C:\\Users\\DR-PHELZ\\source\\repos\\APlan\\APLan\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\DR-PHELZ\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Pt6YvIQfsD+n27u+MOF5RJqAaV9vp5XhekO04rRCz3h3F1qesiUTFFe9abvddgDNS32VqqL57XCVH5DknGuyCw==",
+  "dgSpecHash": "VXicOlMS/BRmuOtkj7c4qkOrDcmNZ3E4yAnZT83iQeh/bqSchPG2CM98Fr9jNEDUY6ByWcacfxrIpFI49UY45g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\DR-PHELZ\\Source\\Repos\\APlan\\APLan\\APLan.csproj",
+  "projectFilePath": "C:\\Users\\DR-PHELZ\\source\\repos\\APlan\\APLan\\APLan.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DR-PHELZ\\.nuget\\packages\\acadsharp\\1.4.3-alpha\\acadsharp.1.4.3-alpha.nupkg.sha512",
     "C:\\Users\\DR-PHELZ\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.0-preview2\\communitytoolkit.mvvm.8.2.0-preview2.nupkg.sha512",

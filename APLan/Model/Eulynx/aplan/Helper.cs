@@ -395,12 +395,18 @@ namespace aplan.core
             var hm_m = hektometerPlusMeter.Split('+');
 
             hm_m[0] = hm_m[0].Replace(",", ".");
-            hm_m[1] = hm_m[1].Replace(",", ".");
+            var m = 0.00;
+            if (hm_m.Count()  == 2)
+            {
+                hm_m[1] = hm_m[1].Replace(",", ".");
+                m = double.Parse(hm_m[1], System.Globalization.CultureInfo.InvariantCulture);
+            }
+            
 
-            if (hm_m.Count() != 2) return null;
+            //if (hm_m.Count() != 2) return null;
 
             var hm = double.Parse(hm_m[0], System.Globalization.CultureInfo.InvariantCulture);
-            var m = double.Parse(hm_m[1], System.Globalization.CultureInfo.InvariantCulture);
+            
 
             //if (double.TryParse(hm_m[0], out var hm) && double.TryParse(hm_m[1], out var m))
             return hm + m / 1000;
