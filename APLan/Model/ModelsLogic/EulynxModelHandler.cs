@@ -1200,22 +1200,26 @@ namespace APLan.ViewModels.ModelsLogic
         /// create a Eulynx object from xls files async.
         /// </summary>
         /// <returns></returns>
-        public void CreateJSONFilesFromXLS(string xml, string ProjectName, string ProjectPath)
+        public string CreateJSONFilesFromXLS(string xml, string ProjectName, string ProjectPath)
         {
+            
                 var files = HelperFunctions.getFileNamesFromString(xml);
                 var edge = files.Find(x => x.Contains("Edges"));
                 var node = files.Find(x => x.Contains("Nodes"));
                 var gradient = files.Find(x => x.Contains("Gradients"));
                 var segment = files.Find(x => x.Contains("Segments"));
-
+                    
                 BuildJson buildJson = new BuildJson(edge, node, gradient, segment);
-                buildJson.CreateKanten(ProjectPath + "/" + ProjectName + "/Gleiskanten.geojson");
-                buildJson.CreateKnoten(ProjectPath + "/" + ProjectName + "/Gleisknoten.geojson");
-                buildJson.CreateKMLine(ProjectPath + "/" + ProjectName + "/Entwurfselement_KM.geojson");
-                buildJson.CreateHohe(ProjectPath + "/" + ProjectName + "/Entwurfselement_HO.geojson");
-                buildJson.CreaeteLage(ProjectPath + "/" + ProjectName + "/Entwurfselement_LA.geojson");
-                buildJson.CreaeteUH(ProjectPath + "/" + ProjectName + "/Entwurfselement_UH.geojson");
-           
+
+                string jsonFiles = "";
+                jsonFiles += buildJson.CreateKanten(ProjectPath + "\\" + ProjectName + "\\Gleiskanten.geojson") + "+~+";
+                jsonFiles += buildJson.CreateKnoten(ProjectPath + "\\" + ProjectName + "\\Gleisknoten.geojson") + "+~+";
+                jsonFiles += buildJson.CreateKMLine(ProjectPath + "\\" + ProjectName + "\\Entwurfselement_KM.geojson") + "+~+";
+                jsonFiles += buildJson.CreateHohe(ProjectPath + "\\" + ProjectName + "\\Entwurfselement_HO.geojson") + "+~+";
+                jsonFiles += buildJson.CreaeteLage(ProjectPath + "\\" + ProjectName + "\\Entwurfselement_LA.geojson") + "+~+";
+                jsonFiles += buildJson.CreaeteUH(ProjectPath + "\\" + ProjectName + "\\Entwurfselement_UH.geojson") + "+~+"; 
+
+                return jsonFiles;
         }
 
 

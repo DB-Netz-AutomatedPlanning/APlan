@@ -20,7 +20,7 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             this.edgeFile = edgeFile; this.nodeFile = nodeFile;
             this.gradientFile = gradientFile; this.segmentFile = segmentFile;
         } 
-        public void CreateKanten(string filePath)
+        public string CreateKanten(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
             var gleisKanten = xLSreader.ReadXLSContent(edgeFile, 0);  // "Edges.xls"
@@ -106,10 +106,14 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             string output = JsonConvert.SerializeObject(kanten);
 
             File.WriteAllText(filePath, output);
+
+            if (File.Exists(filePath))
+                return filePath;
+            return null;
         }
 
 
-        public void CreateKnoten(string filePath)
+        public string CreateKnoten(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
             var gleisKnoten = xLSreader.ReadXLSContent(nodeFile, 0);  
@@ -168,10 +172,14 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             string output = JsonConvert.SerializeObject(knoten);
 
             File.WriteAllText(filePath, output);
+
+            if (File.Exists(filePath))
+                return filePath;
+            return null;
         }
 
 
-        public void CreateKMLine(string filePath)
+        public string CreateKMLine(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
             var kmline = xLSreader.ReadXLSContent(segmentFile, 0);  
@@ -259,9 +267,13 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             km.features = features;
             string output = JsonConvert.SerializeObject(km);
             File.WriteAllText(filePath, output);
+
+            if (File.Exists(filePath))
+                return filePath;
+            return null;
         }
 
-        public void CreateHohe(string filePath)
+        public string CreateHohe(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
             var hohe = xLSreader.ReadXLSContent(gradientFile, 0);  //  "C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Scheibenberg_Final\\Gradients.xls"
@@ -361,9 +373,13 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             string output = JsonConvert.SerializeObject(ho);
 
             File.WriteAllText(filePath, output);
+
+            if (File.Exists(filePath))
+                return filePath;
+            return null;
         }
 
-        public void CreaeteLage(string filePath)
+        public string CreaeteLage(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
             var _lage = xLSreader.ReadXLSContent(segmentFile, 0);  // "C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Scheibenberg_Final\\Segments.xls"
@@ -460,9 +476,13 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             string output = JsonConvert.SerializeObject(lage);
 
             File.WriteAllText(filePath, output);
+
+            if (File.Exists(filePath))
+                return filePath;
+            return null;
         }
 
-        public void CreaeteUH(string filePath)
+        public string CreaeteUH(string filePath)
         {
             XLSreader xLSreader = new XLSreader();
             var _uh = xLSreader.ReadXLSContent(segmentFile, 0);  // "C:\\Users\\DR-PHELZ\\Desktop\\Data\\ERDM_Input_output\\Scheibenberg_Final\\Segments.xls"
@@ -547,6 +567,10 @@ namespace APLan.Model.Eulynx.aplan.EULYNX.EulynxJson
             uh.features = features;
             string output = JsonConvert.SerializeObject(uh);
             File.WriteAllText(filePath, output);
+
+            if (File.Exists(filePath))
+                return filePath;
+            return null;
         }
     }
 }

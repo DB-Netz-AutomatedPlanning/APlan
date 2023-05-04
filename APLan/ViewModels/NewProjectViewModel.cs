@@ -427,7 +427,9 @@ namespace APLan.ViewModels
                 }
                 else if (format.Contains(".xls"))
                 {
-                    eulynxModelHandler.CreateJSONFilesFromXLS(XLS, ProjectName, ProjectPath);
+                    var jsonFilesPath = eulynxModelHandler.CreateJSONFilesFromXLS(XLS, ProjectName, ProjectPath);
+                    BaseViewModel.eulynxModel = await eulynxModelHandler.createJSONproject(jsonFilesPath, ".json", ProjectName, ProjectPath);
+                    await eulynxModelHandler.DrawEulyxObject(Lines, Ellipses, Signals);
                 }
             }
             if (ProjectType.Equals("ERDM"))
@@ -452,8 +454,7 @@ namespace APLan.ViewModels
                     erdmHandler.drawERDM(erdmModel, Lines, Ellipses);
             }
             if (ProjectType.Equals("CAD"))
-            {
-                
+            {   
                 if (format.Contains(".dxf"))
                 {
                     DxfHandler dxfHandler = new(firspoint,Lines, Ellipses, Texts, Arcs);
