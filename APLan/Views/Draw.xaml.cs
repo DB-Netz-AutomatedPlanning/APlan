@@ -5,6 +5,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using APLan.ViewModels;
 using Point = System.Windows.Point;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Shapes;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace APLan.Views
 {
@@ -88,5 +92,11 @@ namespace APLan.Views
                 }
             }
         }
+
+
+
+
+
+
     }
 }

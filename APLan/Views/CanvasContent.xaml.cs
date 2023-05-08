@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using APLan.HelperClasses;
+using APLan.Model.CustomObjects;
 
 namespace APLan.Views
 {
@@ -27,62 +17,48 @@ namespace APLan.Views
             InitializeComponent();
             themeColor = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
         }
-        private void GotFocus(object sender, RoutedEventArgs e)
+        private new void GotFocus(object sender, RoutedEventArgs e)
         {
 
             Point newPoint;
-            if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomPolyLine))
+            if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomPolyLine))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomPolyLine;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomPolyLine;
                 dataContext.Color = themeColor;
                 
                 Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
-                newPoint = (Point)converter.Convert(dataContext.Points[0], null, null, null);
-            }else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomNode))
+                newPoint = (Point)converter.Convert(dataContext.CustomPoints[0].Point, null, null, null);
+            }else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomCircle))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomNode;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomCircle;
                 dataContext.Color = themeColor;
                 Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
-                newPoint = (Point)converter.Convert(dataContext.NodePoint, null, null, null);
+                newPoint = (Point)converter.Convert(dataContext.Center.Point, null, null, null);
             }
-            //else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomRectangle))
-            //{
-            //    var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomRectangle;
-            //    dataContext.Color = themeColor;
-            //    Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
-            //    newPoint = (Point)converter.Convert(dataContext.Points[0], null, null, null);
-            //}
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomCircle))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomCircle))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomCircle;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomCircle;
                 dataContext.Color = themeColor;
                 Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
-                newPoint = (Point)converter.Convert(dataContext.EllipseVertexCenter, null, null, null);
-            }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomEllipse))
+                newPoint = (Point)converter.Convert(dataContext.Center, null, null, null);
+            } 
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomArc))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomEllipse;
-                dataContext.Color = themeColor;
-                Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
-                newPoint = (Point)converter.Convert(dataContext.EllipseVertexCenter, null, null, null);
-            }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomArc))
-            {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomArc;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomArc;
                 dataContext.Color = themeColor;
                 Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
                 newPoint = (Point)converter.Convert(dataContext.StartPoint, null, null, null);
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomTextBlock))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomTextBlock))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomTextBlock;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomTextBlock;
                 dataContext.Color = themeColor;
                 Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
                 newPoint = (Point)converter.Convert(dataContext.NodePoint, null, null, null);
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomImage))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomImage))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomImage;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomImage;
                 
                 Converters.CoodrinatesSinglePointConverter converter = new Converters.CoodrinatesSinglePointConverter();
                 Point recPoint = new Point(dataContext.SetLeft, dataContext.SetTop);
@@ -90,49 +66,42 @@ namespace APLan.Views
             }
 
             scrollToTarget(newPoint);
-
-            //((TextBox)sender).BorderBrush = Brushes.Red;
-            //ListViewItem listViewItem =HelperClasses.VisualTreeHelpers.FindAncestor<ListViewItem>(((TextBox)sender)) as ListViewItem;
-            //listViewItem.Focus();
         }
-
-        private void LostFocus(object sender, RoutedEventArgs e)
+        private new void LostFocus(object sender, RoutedEventArgs e)
         {
-
-
-            if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomPolyLine))
+            if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomPolyLine))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomPolyLine;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomPolyLine;
                 dataContext.Color = Brushes.Red;
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomNode))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomNode))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomNode;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomNode;
                 dataContext.Color = Brushes.Red;
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomRectangle))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomRectangle))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomRectangle;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomRectangle;
                 dataContext.Color = Brushes.Red;
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomCircle))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomCircle))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomCircle;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomCircle;
                 dataContext.Color = Brushes.Red;
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomArc))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomArc))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomArc;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomArc;
                 dataContext.Color = Brushes.Red;
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomTextBlock))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomTextBlock))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomTextBlock;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomTextBlock;
                 dataContext.Color = Brushes.Red;
             }
-            else if (((ListViewItem)sender).DataContext.GetType() == typeof(HelperClasses.CustomImage))
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(CustomImage))
             {
-                var dataContext = ((ListViewItem)sender).DataContext as HelperClasses.CustomImage;
+                var dataContext = ((ListViewItem)sender).DataContext as CustomImage;
                  
             }
         }

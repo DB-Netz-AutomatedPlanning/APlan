@@ -1,4 +1,5 @@
 ﻿using APLan.Commands;
+using APLan.Converters;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -11,6 +12,23 @@ namespace APLan.ViewModels
         private Brush _moveBrush;
         private Brush _dragBrush;
         private Brush _selectedBrush;
+        private double _drawingScale;
+        #endregion
+
+        #region properties
+        public double DrawingScale
+        {
+            get
+            {
+                return _drawingScale;
+            }
+
+            set
+            {
+                _drawingScale =value>0?value:1.0;
+                OnPropertyChanged("DrawingScale");
+            }
+        }
         public Brush SelectBrush
         {
             get
@@ -69,6 +87,7 @@ namespace APLan.ViewModels
         public ICommand SelectButton { get; set; }
         public ICommand MoveButton { get; set; }
         public ICommand DragButton { get; set; }
+        public ICommand ScaleDrawing { get; set; }
         #endregion
 
         #region constructor
@@ -77,6 +96,7 @@ namespace APLan.ViewModels
             MoveButton = new RelayCommand(ExecuteMoveButton);
             DragButton = new RelayCommand(ExecuteDragButton);
             SelectButton = new RelayCommand(ExecuteSelectButton);
+            ScaleDrawing = new RelayCommand(ExecuteScaleDrawing);
             SelectBrush = Brushes.White;
             MoveBrush = Brushes.White;
             DragBrush = Brushes.White;
@@ -85,7 +105,7 @@ namespace APLan.ViewModels
         }
         #endregion
         
-        #region logic 
+        #region  command logic 
         /// <summary>
         /// allow selection
         /// </summary>
@@ -152,10 +172,12 @@ namespace APLan.ViewModels
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
             }
         }
-        /// <summary>
-        /// allow draging for a text
-        /// </summary>
-        /// <param name="e"></param>
+        private void ExecuteScaleDrawing(object parameter)
+        {
+            CoordinatesConverter.scaleValue = DrawingScale;
+            DrawViewModel.GlobalDrawingPoint = new();
+            updateBindedCollections();
+        }
         #endregion
     }
 }

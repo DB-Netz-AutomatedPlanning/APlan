@@ -1,4 +1,5 @@
-﻿using APLan.Commands;
+﻿using aplan.eulynx;
+using APLan.Commands;
 using APLan.HelperClasses;
 using ERDM_Implementation;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using MessageBox = System.Windows.MessageBox;
 
 namespace APLan.ViewModels
 {
@@ -81,7 +83,7 @@ namespace APLan.ViewModels
         }
         #endregion
 
-        #region logic
+        #region command logic
         private void ExecuteCancelButton(object parameter)
         {
             ((Window)parameter).Close();
@@ -89,7 +91,7 @@ namespace APLan.ViewModels
         private async void ExecuteExportButton(object parameter)
         {
             startLoading();
-            LoadingReport = "exporting to Euxml";
+
             var objects = (object[])parameter;
             var exportType = ((TextBlock)objects[0]).Text;
             var exportPath = ((System.Windows.Controls.TextBox)objects[1]).Text;
@@ -102,6 +104,14 @@ namespace APLan.ViewModels
                 ERDMserializer eRDMserializer = new(BaseViewModel.erdmModel);
 
                 System.IO.File.WriteAllText(exportPath + "\\" + projectName + ".json", eRDMserializer.serializeERDM());
+                MessageBox.Show("Export was sucessfull");
+            }
+            else if (exportType.Equals("XML(ERDM)") && BaseViewModel.erdmModel != null)
+            {
+                ERDMserializer eRDMserializer = new(BaseViewModel.erdmModel);
+
+                eRDMserializer.serializeERDMtoXML(exportPath + "\\" + projectName + ".xml");
+                MessageBox.Show("Export was sucessfull");
             }
             else
             if (exportType.Equals("Eulynx") && exportType != null && projectName != null && Directory.Exists(exportPath))
@@ -109,12 +119,10 @@ namespace APLan.ViewModels
                 await exportToEuxml(projectName, exportPath);
                 Views.ExportConfirmationAndValidation exportConfirmValidate = new();
                 exportConfirmValidate.Show();
-                startLoading();
-                LoadingReport = "Loading the Euxml file.";
                 Task<string> task = readingEuxmlAsText();
                 EuxmlResult = await task;
-                stopLoading();
-                LoadingReport = "";
+
+                MessageBox.Show("Export was sucessfull");
             }
             else
             {
@@ -126,7 +134,7 @@ namespace APLan.ViewModels
         private void ExecuteSelectFolderButton(object parameter)
         {
             folderBrowserDialog1.ShowDialog();
-            OutputFolder= folderBrowserDialog1.SelectedPath;
+            OutputFolder = folderBrowserDialog1.SelectedPath;
         }
         private void ExecuteCancel(object parameter)
         {
@@ -135,22 +143,24 @@ namespace APLan.ViewModels
         private void ExecuteValidateXML(object parameter)
         {
             closeWindow(parameter);
-            Views.EulynxValidator validator = new Views.EulynxValidator();
+            Views.Validator validator = new Views.Validator();
             validator.ShowDialog();
-            LoadingReport = "loading Euxml";
         }
-        
+        #endregion
+
+        #region async logic
         private async Task<bool> exportToEuxml(string projectName, string exportPath)
         {
             await Task.Run(() =>
-            {   
-                ModelViewModel.eulynxService.serialization(ModelViewModel.eulynx, projectName, exportPath);
+            {
+                EulynxService service = new();
+                service.serialization(eulynxModel, projectName, exportPath);
                 InfoExtractor.extractExtraInfo(exportPath, projectName);
                 Successfull = "Exporting to XML was Successfull";
                 //XmlReader xmlReader = XmlReader.Create(OutputFolder + "/eulynx" + projectName + ".euxml");
             });
-            
-            
+
+
             return true;
         }
         /// <summary>
@@ -169,12 +179,12 @@ namespace APLan.ViewModels
         /// <returns></returns>
         private async Task<string> readingEuxmlAsText()
         {
-            string text=null;
+            string text = null;
             await Task.Run(() =>
             {
                 text = File.ReadAllText(OutputFolder + "/eulynx" + _projectName + ".euxml");
             });
-            
+
             return text;
         }
         #endregion

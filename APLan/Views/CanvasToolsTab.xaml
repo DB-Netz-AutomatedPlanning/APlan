@@ -94,13 +94,13 @@
         </Button>
         </Viewbox>
         <Viewbox Style="{StaticResource viewbox1}">
-            <Image x:Name="Text"
+            <!--<Image x:Name="Text"
                 Style="{StaticResource TextImageProperites}"
                 Source="/Resources/Icons/text.png" Stretch="Fill"
                 HorizontalAlignment="Center"
                 ToolTip="drag and drop a Text"
                 commands:MouseBehaviour.MouseDownCommand="{Binding Source={StaticResource canvasToolsTabViewModel}, Path=MouseDownCommand}">
-            </Image>
+            </Image>-->
         </Viewbox>
         <!--<Button ToolTip="Delete selected items (press delete)"
                 HorizontalAlignment="Center">
@@ -175,6 +175,23 @@
                             commands:SliderBehaviour.SliderCommand="{Binding RotateCanvasSlider}"/>-->
             </StackPanel>
         </Viewbox>
-
+        <Viewbox Style="{StaticResource viewbox2}">
+            <StackPanel>
+                <WrapPanel HorizontalAlignment="Center">
+                    <TextBox x:Name="CanvasRotateText2"
+                            Template="{StaticResource TextBoxBaseControlTemplate}"
+                            Width="100"   
+                            HorizontalAlignment="Center"
+                            Text="{Binding DrawingScale}">
+                    </TextBox>
+                    <Button x:Name="scaleDrawing" 
+                    ToolTip="scale drawing"
+                    HorizontalAlignment="Center"
+                    Command="{Binding ScaleDrawing}">
+                        <Image Source="/Resources/Icons/scale.png" Stretch="Fill"></Image>
+                    </Button>
+                </WrapPanel>
+            </StackPanel>
+        </Viewbox>
     </WrapPanel>
 </UserControl>

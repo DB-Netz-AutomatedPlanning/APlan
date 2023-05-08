@@ -7,15 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border BorderBrush="{StaticResource themeColor}" BorderThickness="2" CornerRadius="5">
-        <TabControl>
-            <TabItem Header="Symbols" Background="{StaticResource themeColor}" Height="20">
-                <local:SymbolsTab></local:SymbolsTab>
-            </TabItem>
+        <TabControl >
             <TabItem Header="Selected Items" Background="{StaticResource themeColor}" BorderThickness="5" Height="20">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <local:SelectedItems></local:SelectedItems>
                 </ScrollViewer>
             </TabItem>
+            <TabItem Header="Symbols" Background="{StaticResource themeColor}" Height="20">
+                <local:SymbolsTab></local:SymbolsTab>
+            </TabItem>
+
             
         </TabControl>
     </Border>

@@ -1,29 +1,20 @@
 ﻿using APLan.Commands;
-using APLan.Views;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Collections.Generic;
-using APLan.HelperClasses;
-using System.Windows.Media;
-using System.Windows.Forms;
-using aplan.eulynx;
 using System;
-using java.util;
-using System.Windows.Shapes;
-using System.Collections.ObjectModel;
-using System.Collections;
 
 namespace APLan.ViewModels
 {
     public class AplanCADViewerViewModel : BaseViewModel 
     {
-        #region attributes    
-                 
-        
+        #region attributes  
+        private DrawViewModel drawViewModel;
         private Visibility aplanCadToolViewVisibility;
+        private Visibility parallelLineContentVisibility;
+        private Visibility angularLineContentVisibility;
+        #endregion
+
+        #region properties
         public Visibility AplanCadToolViewVisibility
         {
             get => aplanCadToolViewVisibility;
@@ -33,8 +24,6 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        private Visibility parallelLineContentVisibility;
         public Visibility ParallelLineContentVisibility
         {
             get => parallelLineContentVisibility;
@@ -44,8 +33,6 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        private Visibility angularLineContentVisibility;
         public Visibility AngularLineContentVisibility
         {
             get => angularLineContentVisibility;
@@ -55,31 +42,19 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-
-        private DrawViewModel drawViewModel;
-
         #endregion
-
 
         #region commands
         public ICommand LineDrawing2Points { get; set; }
         public ICommand ParallelLineDrawing { get; set; }
-
         public ICommand HorizontalLineDrawing { get; set; }
-
         public ICommand AngularDrawing { get; set; }
-
         public ICommand VerticalLineDrawing { get; set; }
         public ICommand CircleDrawing { get; set; }
-
         public ICommand EllipseDrawing { get; set; }
-
         public ICommand PolylineDrawing { get; set; }
-
         public ICommand ArcDrawingTwoPointCenter { get; set; } 
         public ICommand threePointCurve { get; set; }
-        
-        
         #endregion
 
         #region constructor
@@ -104,8 +79,7 @@ namespace APLan.ViewModels
         }
         #endregion
 
-        #region logic        
-
+        #region logic
         private void ExecuteAngularDrawing(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.AngularLine)
@@ -184,9 +158,7 @@ namespace APLan.ViewModels
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
             }
-        }
-        
-           
+        }     
         private void ExecutePolylineDrawing(object paramter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.Polyline)
@@ -206,7 +178,6 @@ namespace APLan.ViewModels
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
             }
         }
-
         private void ExecuteEllipseDrawing(object paramter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.Ellipse)
@@ -247,7 +218,6 @@ namespace APLan.ViewModels
 
 
         }
-
         private void ExecuteLineDrawing2Points(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.TwoPointsLine)
@@ -271,7 +241,6 @@ namespace APLan.ViewModels
             
            
         }
-
         private void ExecuteParallelLineDrawing(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.ParallelLine)
@@ -296,8 +265,6 @@ namespace APLan.ViewModels
             }
 
         }
-        #endregion
-
         private void ExecuteHorizontalLineDrawing(object paramter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.HorizontalLine)
@@ -317,7 +284,7 @@ namespace APLan.ViewModels
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
             }
         }
-
+        #endregion
 
     }
 }

@@ -36,7 +36,7 @@
                 , Path=ProjectName}"></Label>
         </WrapPanel>
         <ScrollViewer Grid.Row="2">
-            <TextBox IsReadOnly="True" Text="{Binding Source={StaticResource exportWindowViewModel}, Path=EuxmlResult, IsAsync=False, FallbackValue='loadingEuxml...'}">
+            <TextBox x:Name="outputText" IsReadOnly="True" Text="{Binding Source={StaticResource exportWindowViewModel}, Path=EuxmlResult, IsAsync=False, FallbackValue='loadingEuxml...'}">
             </TextBox>
         </ScrollViewer>
         <Grid  Grid.Row="3" >

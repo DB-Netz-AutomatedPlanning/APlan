@@ -49,7 +49,7 @@ namespace APLan
 
             visualized_Data = this.visualizedData;
             Canvas_Content = this.CanvasContent;
-            aplanCADViewer = this.AplanCADViewer;
+            aplanCADViewer = this.AplanCADViewerSideBar;
 
 
 

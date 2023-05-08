@@ -23,16 +23,13 @@ namespace APLan.Views
     /// </summary>
     public partial class ExportWindow : Window
     {
-        private EulynxValidatorViewModel validatorViewModel;
         private SolidColorBrush themeColor;
         private string OutputPathHint { get; set; }
         public ExportWindow()
         {
             OutputPathHint = "please enter the output path";
-            
             InitializeComponent();
             outputBox.Text = OutputPathHint;
-            validatorViewModel = System.Windows.Application.Current.FindResource("EulynxValidatorViewModel") as EulynxValidatorViewModel;
             themeColor = System.Windows.Application.Current.FindResource("themeColor") as SolidColorBrush;
         }
 

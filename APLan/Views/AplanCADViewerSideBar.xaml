@@ -1,0 +1,787 @@
+﻿<UserControl x:Class="APLan.Views.AplanCADViewerSideBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:APLan.Views"
+            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             DataContext="{StaticResource aplanCADViewerViewModel}">
+    <UserControl.Resources>
+        <Style x:Key="icon_style"
+           TargetType="Button">
+
+            <Setter Property="Height"
+                Value="25" />
+
+            <Setter Property="Width"
+                Value="25" />
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border x:Name="border"
+                            BorderThickness="0"
+                            Background="{TemplateBinding Background}" />
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(Button.Width)"
+                                         To="50"
+                                         Duration="0:0:0.3" />
+
+                            <DoubleAnimation Storyboard.TargetProperty="(Button.Height)"
+                                         To="50"
+                                         Duration="0:0:0.3" />
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                    
+                </EventTrigger>
+
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="(Button.Width)"
+                                         To="25"
+                                         Duration="0:0:0.3" />
+
+                            <DoubleAnimation Storyboard.TargetProperty="(Button.Height)"
+                                         To="25"
+                                         Duration="0:0:0.3" />
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                 
+
+            </Style.Triggers>
+        </Style>
+        <!--// Menu Item Template //-->
+
+        <ControlTemplate x:Key="Item_Template"
+                     TargetType="{x:Type MenuItem}">
+
+            <Border x:Name="border"
+                Background="#2E333A"
+                BorderBrush="#2E333A"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                Height="50"
+                Width="230"
+               >
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="22"
+                                      Width="Auto" />
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--// Icon //-->
+
+                    <ContentPresenter x:Name="Icon"
+                                  ContentSource="Icon"
+                                  HorizontalAlignment="Center"
+                                  Height="50"
+                                  Width="50"
+                                  Margin="10,0,0,0"
+                                  VerticalAlignment="Center" />
+
+                    <!--// Menu Text //-->
+
+                    <ContentPresenter ContentSource="Header"
+                                  Grid.Column="2"
+                                  TextBlock.Foreground="White"
+                                  
+                                  TextBlock.FontSize="20"
+                                  HorizontalAlignment="Left"
+                                  RecognizesAccessKey="True"
+                                  Margin="3,0,0,0"
+                                  VerticalAlignment="Center" />
+
+
+                </Grid>
+            </Border>
+
+
+            <ControlTemplate.Triggers>
+
+                <Trigger Property="Icon"
+                     Value="{x:Null}">
+                    <Setter Property="Visibility"
+                        TargetName="Icon"
+                        Value="Visible" />
+                </Trigger>
+
+                <Trigger Property="IsChecked"
+                     Value="True">
+                    <Setter Property="Visibility"
+                        TargetName="Icon"
+                        Value="Visible" />
+                </Trigger>
+
+                <Trigger Property="IsHighlighted"
+                     Value="True">
+                    <Setter Property="Background"
+                        TargetName="border"
+                        Value="#404D5B" />
+                    <Setter Property="BorderBrush"
+                        TargetName="border"
+                        Value="#404D5B" />
+                </Trigger>
+
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!--// Menu with SubMenu Template //-->
+
+        <ControlTemplate x:Key="Menu_SubMenu_Template"
+                     TargetType="{x:Type MenuItem}">
+
+            <Border x:Name="border"
+                Background="#2E333A"
+                BorderBrush="#2E333A"
+                BorderThickness="0"
+                Height="50"
+                Width="230">
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="22"
+                                      Width="Auto" />
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--// Icon //-->
+
+                    <ContentPresenter x:Name="Icon"
+                                  ContentSource="Icon"
+                                  HorizontalAlignment="Left"
+                                  Height="50"
+                                  Width="50"
+                                  Margin="10,0,0,0"
+                                  VerticalAlignment="Center" />
+
+                    <!--// Menu Text //-->
+
+                    <ContentPresenter ContentSource="Header"
+                                  Grid.Column="2"
+                                  TextBlock.Foreground="White"
+                                  
+                                  TextBlock.FontSize="20"
+                                  HorizontalAlignment="Left"
+                                  RecognizesAccessKey="True"
+                                  Margin="3,0,0,0"
+                                  VerticalAlignment="Center" />
+
+                    <!--// Right Arrow Icon //-->
+                    <!--<Image x:Name="RightArrow1" Source="/Resources/Icons/img_arrow.png"
+                       Stretch="Uniform"
+                       Grid.Column="0"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                           Width="10" >-->
+                         
+                    <!--</Image>-->
+                    <Image x:Name="RightArrow2" Source="/Resources/Icons/img_arrow.png"
+                       Stretch="Uniform"
+                       Grid.Column="4"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                           Width="20"/>
+
+                    <!--// Popup //-->
+
+                    <Popup x:Name="PART_Popup"
+                       AllowsTransparency="true"
+                       Focusable="false"
+                       HorizontalOffset="-2"
+                       IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                       Placement="Right"
+                       PopupAnimation="{DynamicResource {x:Static SystemParameters.MenuPopupAnimationKey}}"
+                       VerticalOffset="0">
+
+                        <Border x:Name="SubMenuBorder"
+                            Background="#2E333A"
+                            BorderBrush="#2E333A">
+
+                            <ScrollViewer x:Name="SubMenuScrollViewer"
+                                      Style="{DynamicResource {ComponentResourceKey ResourceId=MenuScrollViewer, TypeInTargetAssembly={x:Type FrameworkElement}}}">
+
+                                <Grid RenderOptions.ClearTypeHint="Enabled">
+
+                                    <Canvas HorizontalAlignment="Left"
+                                        VerticalAlignment="Top" />
+
+                                    <ItemsPresenter x:Name="ItemsPresenter"
+                                                KeyboardNavigation.DirectionalNavigation="Cycle"
+                                                Grid.IsSharedSizeScope="true"
+                                                KeyboardNavigation.TabNavigation="Cycle" />
+                                </Grid>
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+
+                </Grid>
+            </Border>
+
+
+            <ControlTemplate.Triggers>
+
+                <Trigger Property="IsSuspendingPopupAnimation"
+                     Value="true">
+                    <Setter Property="PopupAnimation"
+                        TargetName="PART_Popup"
+                        Value="None" />
+                </Trigger>
+
+                <Trigger Property="Icon"
+                     Value="{x:Null}">
+                    <Setter Property="Visibility"
+                        TargetName="Icon"
+                        Value="Visible" />
+                </Trigger>
+
+                <Trigger Property="IsChecked"
+                     Value="True" >
+                    <Setter Property="Visibility"
+                        TargetName="Icon"
+                        Value="Visible" />
+                     
+                </Trigger>
+
+                <Trigger Property="IsHighlighted"
+                     Value="True">
+                    <Setter Property="Background"
+                        TargetName="border"
+                        Value="#404D5B" />
+                    <Setter Property="BorderBrush"
+                        TargetName="border"
+                        Value="#404D5B" />
+                </Trigger>
+
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!--// Main Menu Template //-->
+
+        <ControlTemplate x:Key="Menu_Template"
+                     TargetType="{x:Type MenuItem}">
+
+            <Border x:Name="border"
+                Background="#2E333A"
+                BorderBrush="#2E333A"
+                BorderThickness="0"
+                Height="50"
+                Width="230"
+                >
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="22"
+                                      Width="Auto" />
+                        <ColumnDefinition Width="13" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="30" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+
+                    <!--// Icon //-->
+
+                    <ContentPresenter x:Name="Icon"
+                                  ContentSource="Icon"
+                                  HorizontalAlignment="Left"
+                                  Height="50"
+                                  Width="50"
+                                  Margin="10,0,0,0"
+                                  VerticalAlignment="Center" />
+
+                    <!--// Menu Text //-->
+
+                    <ContentPresenter ContentSource="Header"
+                                  Grid.Column="2"
+                                  TextBlock.Foreground="#FFFFFF"
+                                   
+                                  TextBlock.FontSize="20"
+                                  HorizontalAlignment="Left"
+                                  RecognizesAccessKey="True"
+                                  Margin="3,0,0,0"
+                                  VerticalAlignment="Center" />
+
+                </Grid>
+            </Border>
+
+
+            <ControlTemplate.Triggers>
+
+                <Trigger Property="Icon"
+                     Value="{x:Null}">
+                    <Setter Property="Visibility"
+                        TargetName="Icon"
+                        Value="Visible" />
+                </Trigger>
+
+                <Trigger Property="IsChecked"
+                     Value="True">
+                    <Setter Property="Visibility"
+                        TargetName="Icon"
+                        Value="Visible" />
+                </Trigger>
+
+                <Trigger Property="IsHighlighted"
+                     Value="True">
+                    <Setter Property="Background"
+                        TargetName="border"
+                        Value="#404D5B" />
+                    <Setter Property="BorderBrush"
+                        TargetName="border"
+                        Value="#404D5B" />
+                </Trigger>
+
+
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <!--// Toggle Button Style Template //-->
+
+        <ImageBrush x:Key="tb_mouse_over"
+                     Stretch="Uniform" />
+        <!--// Text font style //-->
+
+        <Style x:Key="font_style" TargetType="TextBlock">
+
+            <!--<Setter Property="FontFamily"
+                    Value="Fonts/Roboto-Light.ttf #Roboto"/>-->
+
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+
+            <Setter Property="HorizontalAlignment"
+                    Value="Left"/>
+
+            <Setter Property="Foreground"
+                    Value="White"/>
+
+            <Setter Property="FontSize"
+                    Value="20"/>
+
+        </Style>
+        <!--// Tooltip Style Template //-->
+
+        <Style TargetType="ToolTip" x:Key="tt_style">
+
+            <Setter Property="Placement" Value="Right"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Margin" Value="20,0,0,0"/>
+            <Setter Property="Background" Value="#4A5668"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <!--<Setter Property="FontFamily" Value="Fonts/Roboto-Light.ttf #Roboto"/>-->
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="PlacementRectangle" Value="60,0,0,0"/>
+            <Setter Property="HorizontalOffset" Value="15"/>
+            <Setter Property="VerticalOffset" Value="6"/>
+            <Setter Property="HasDropShadow" Value="True"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+
+        </Style>
+
+        <Style x:Key="tb_style" TargetType="{x:Type ToggleButton}">
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+
+                        <Border  x:Name="border"
+                                 BorderThickness="{TemplateBinding BorderThickness}"
+                                 Background="{TemplateBinding Background}"
+                                 SnapsToDevicePixels="True">
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver" Value="true">
+
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource tb_mouse_over}"/>
+
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource tb_mouse_over}"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsChecked" Value="true">
+
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource tb_mouse_over}"/>
+                                
+
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource tb_mouse_over}"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+    </UserControl.Resources>
+    <Grid Background="Transparent">
+        <Grid x:Name="nav_pnl"
+                  HorizontalAlignment="Left"
+                  Width="60"
+                  Background="LightBlue">
+
+            <StackPanel x:Name="st_pnl">
+                <Grid Height="90">
+                    <!--// Menu title text //-->
+
+                    <TextBlock  Grid.Row="1"
+                                    Grid.Column="0"
+                                    Margin="73,-20,0,0"
+                                    Text="M E N U"
+                                    Foreground="White"
+                                    FontSize="22"
+                                    Background="Transparent"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource font_style}">
+                            
+                            <!--// Shadow Effect //-->
+
+                        <TextBlock.Effect>
+
+                            <DropShadowEffect  BlurRadius="10"
+                                                   ShadowDepth="1"
+                                                   Direction="-90"
+                                                   Color="White"/>
+
+                        </TextBlock.Effect>
+
+                    </TextBlock>
+                    <ToggleButton x:Name="Tg_Btn"
+                                  Grid.Column="0"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Left"
+                                  Margin="18,-20,0,0"
+                                  Height="30"
+                                  Width="30"
+                                  BorderThickness="0"
+                                  Style="{StaticResource tb_style}" Unchecked="Tg_Btn_Unchecked" Checked="Tg_Btn_Checked" >
+                        <!--<ToggleButton.Background>
+
+                            --><!--<ImageBrush ImageSource="/Resources/Icons/sidebar.png"
+                                            Stretch="Uniform"/>--><!--
+
+                        </ToggleButton.Background>-->
+                        <ToggleButton.Triggers>
+
+                            <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+
+                                <BeginStoryboard>
+
+                                    <Storyboard x:Name="HideStackPanel">
+
+                                        <DoubleAnimation    
+                                                
+                                                Storyboard.TargetName="nav_pnl"
+                                                Storyboard.TargetProperty="Width"
+                                                BeginTime="0:0:0"
+                                                From="230" To="60"
+                                                Duration="0:0:0.2">
+
+                                        </DoubleAnimation>
+
+                                    </Storyboard>
+
+                                </BeginStoryboard>
+
+                            </EventTrigger>
+
+                            <EventTrigger RoutedEvent="ToggleButton.Checked">
+
+                                <BeginStoryboard>
+
+                                    <Storyboard x:Name="ShowStackPanel">
+
+                                        <DoubleAnimation
+                                                
+                                                Storyboard.TargetName="nav_pnl"
+                                                Storyboard.TargetProperty="Width"
+                                                BeginTime="0:0:0"
+                                                From="60" To="230"
+                                                Duration="0:0:0.3">
+
+                                        </DoubleAnimation>
+
+                                    </Storyboard>
+
+                                </BeginStoryboard>
+
+                            </EventTrigger>
+
+
+                        </ToggleButton.Triggers>
+                    </ToggleButton>
+
+                </Grid>
+
+                <!--// Menu with menu list items //-->
+
+                <Menu Height="450"
+                  Background="Transparent"
+                  Margin="0,40,0,0">
+
+                    <Menu.ItemsPanel>
+
+                        <ItemsPanelTemplate>
+
+                            <VirtualizingStackPanel Orientation="Vertical" />
+
+                        </ItemsPanelTemplate>
+
+                    </Menu.ItemsPanel>
+                   
+
+                    <MenuItem Header="Line"
+                          Template="{StaticResource Menu_SubMenu_Template}">
+
+                        <MenuItem.Icon>
+                            <Button x:Name="Line"  BorderBrush="Transparent" Style="{StaticResource icon_style}"
+                                     MouseEnter="Line_MouseEnter" MouseLeave="Line_MouseLeave">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/line.png"
+                               Stretch="Uniform" />
+                                </Button.Background>
+                            
+                            </Button>
+
+                        </MenuItem.Icon>
+                       
+
+                        <MenuItem Header="2PointLine"
+                              Template="{StaticResource Item_Template}" Command="{Binding LineDrawing2Points}">
+
+                            <MenuItem.Icon>
+                                <Button  BorderBrush="Transparent" Style="{StaticResource icon_style}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Resources/Icons/2pointline.png"
+                               Stretch="Uniform" />
+                                    </Button.Background>
+
+                                </Button>
+                                 
+
+                            </MenuItem.Icon>
+
+                        </MenuItem>
+                        <MenuItem Header="_ParalleLine" Template="{StaticResource Item_Template}"
+                      Command="{Binding ParallelLineDrawing}">
+                            <MenuItem.Icon>
+                                <Button  BorderBrush="Transparent" Style="{StaticResource icon_style}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Resources/Icons/line_parallel.png"
+                               Stretch="Uniform" />
+                                    </Button.Background>
+                                </Button>                                 
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="_Angle" Template="{StaticResource Item_Template}"
+                      Command="{Binding AngularDrawing}">
+                            <MenuItem.Icon>
+                                <Button  BorderBrush="Transparent" Style="{StaticResource icon_style}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Resources/Icons/line_angle.png"
+                               Stretch="Uniform" />
+                                    </Button.Background>
+                                </Button>                                
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="_HorizontalLine" Template="{StaticResource Item_Template}"
+                     Command="{Binding HorizontalLineDrawing}">
+                            <MenuItem.Icon>
+                                <Button  BorderBrush="Transparent" Style="{StaticResource icon_style}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Resources/Icons/line_horizontal.png"
+                               Stretch="Uniform" />
+                                    </Button.Background>
+                                </Button>
+                                 
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="_VerticalLine" Template="{StaticResource Item_Template}"
+                      Command="{Binding VerticalLineDrawing}">
+                            <MenuItem.Icon>
+                                <Button  BorderBrush="Transparent" Style="{StaticResource icon_style}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Resources/Icons/line_vertical.png"
+                               Stretch="Uniform" />
+                                    </Button.Background>
+                                </Button>
+                                
+                            </MenuItem.Icon>
+                        </MenuItem>
+
+
+                    </MenuItem>
+                    <!--// Main Menu - Circle //-->
+
+                    <MenuItem Header="Circle"
+                          Template="{StaticResource Menu_Template}" Command="{Binding CircleDrawing}">
+
+                        <MenuItem.Icon>
+                            <Button x:Name="Circle"  BorderBrush="Transparent" Style="{StaticResource icon_style}"
+                                    MouseEnter="Circle_MouseEnter" MouseLeave="Circle_MouseLeave">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/circle.png"
+                               Stretch="Uniform" />
+                                </Button.Background>
+                            </Button>
+                            
+
+                        </MenuItem.Icon>
+
+                    </MenuItem>
+
+                    <!--// Main Menu - Ellipse //-->
+
+                    <MenuItem Header="Ellipse"
+                          Template="{StaticResource Menu_Template}" Command="{Binding EllipseDrawing}">
+
+                        <MenuItem.Icon>
+                            <Button x:Name="Ellipse"  BorderBrush="Transparent" Style="{StaticResource icon_style}"
+                                     MouseEnter="Ellipse_MouseEnter" MouseLeave="Ellipse_MouseLeave">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/ellipse.png"
+                               Stretch="Uniform" />
+                                </Button.Background>
+                            </Button>
+                             
+
+                        </MenuItem.Icon>
+
+                    </MenuItem>
+
+                    <!--// Main Menu - Ellipse //-->
+
+                    <MenuItem Header="Polyline"
+                          Template="{StaticResource Menu_Template}" Command="{Binding PolylineDrawing}">
+
+                        <MenuItem.Icon>
+                            <Button x:Name="Polyline" BorderBrush="Transparent" Style="{StaticResource icon_style}"
+                                     MouseEnter="Polyline_MouseEnter" MouseLeave="Polyline_MouseLeave">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/polylines.png"
+                               Stretch="Uniform" />
+                                </Button.Background>
+                            </Button>
+                             
+
+                        </MenuItem.Icon>
+
+                    </MenuItem>
+                    <MenuItem Header="Curve"
+                          Template="{StaticResource Menu_SubMenu_Template}">
+
+                        <MenuItem.Icon>
+                            <Button x:Name="Curve" BorderBrush="Transparent" Style="{StaticResource icon_style}"
+                                     MouseEnter="Curve_MouseEnter" MouseLeave="Curve_MouseLeave">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Resources/Icons/line_curve.png"
+                               Stretch="Uniform" />
+                                </Button.Background>
+                            </Button>
+                            
+
+                        </MenuItem.Icon>
+
+
+                        <MenuItem Header="_Center,Point,Angle"
+                              Template="{StaticResource Item_Template}" Command="{Binding ArcDrawingTwoPointCenter}">
+
+                            <MenuItem.Icon>
+                                <Button  BorderBrush="Transparent" Style="{StaticResource icon_style}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Resources/Icons/arc_center_point_angle.png"
+                               Stretch="Uniform" />
+                                    </Button.Background>
+                                </Button>
+                                 
+
+                            </MenuItem.Icon>
+
+                        </MenuItem>
+
+                        <MenuItem Header="_3Points"
+                              Template="{StaticResource Item_Template}" Command="{Binding threePointCurve}">
+
+                            <MenuItem.Icon>
+                                <Button  BorderBrush="Transparent" Style="{StaticResource icon_style}">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Resources/Icons/arc_3_points.png"
+                               Stretch="Uniform" />
+                                    </Button.Background>
+                                </Button>
+                               
+
+                            </MenuItem.Icon>
+
+                        </MenuItem>
+
+
+                    </MenuItem>
+
+
+                </Menu>
+                <!--add the popup user control-->
+                <Popup x:Name="popup_uc"
+                   AllowsTransparency="True"
+                   HorizontalOffset="10"
+                   VerticalOffset="-25">
+
+                    <Grid>
+                        <local:PopupUserControl x:Name="Header" Foreground="#E0FFFF"/>
+                    </Grid>
+                </Popup>
+
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</UserControl>

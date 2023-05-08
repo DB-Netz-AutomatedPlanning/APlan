@@ -151,6 +151,12 @@
   <data name="api_2_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Schematron\schxslt-1.8.6\2.0\compile\api-2.0.xsl;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="arc_3_points" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\arc_3_points.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="arc_center_point_angle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\arc_center_point_angle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="AusschaltEinschalt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\AusschaltEinschalt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -214,6 +220,9 @@
   <data name="BuSchaltkontakt" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\BuSchaltkontakt.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="circle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\circle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="compile_1_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Schematron\schxslt-1.8.6\1.0\compile\compile-1.0.xsl;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -249,6 +258,9 @@
   </data>
   <data name="EinzelbaliseUngesteuert" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\EinzelbaliseUngesteuert.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ellipse" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\ellipse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Entwurfselement_HO" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Meggen\Entwurfselement_HO.geojson;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -409,6 +421,12 @@
   <data name="Hektometerangabe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Hektometerangabe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="img_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\img_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="img_services_dropdown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\img_services_dropdown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="import" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\import.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -453,6 +471,27 @@
   </data>
   <data name="Lichtzeichen" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Lichtzeichen.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="line" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\line.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lineicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\lineicon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="line_angle" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\line_angle.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="line_curve" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\line_curve.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="line_horizontal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\line_horizontal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="line_parallel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\line_parallel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="line_vertical" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\line_vertical.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="LinienleiterschleifeNummer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\LinienleiterschleifeNummer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -499,6 +538,9 @@
   <data name="mehraZugoderStellwerksbedientArrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\mehraZugoderStellwerksbedientArrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\merge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Merkpfahl" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Merkpfahl.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -531,6 +573,9 @@
   </data>
   <data name="plan" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\plan.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="polylines" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\polylines.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="printer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\printer.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -595,6 +640,12 @@
   <data name="SiBetonschalthaus" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\SiBetonschalthaus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="sidebar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\sidebar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sidebar2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\sidebar2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SignalElOne" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\SignalElOne.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -603,6 +654,9 @@
   </data>
   <data name="Signalhaltmelder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Signalhaltmelder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="snapshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\snapshot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Speisegerat" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Speisegerat.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -774,6 +828,9 @@
   </data>
   <data name="zweiReflektierenden" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\zweiReflektierenden.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="_2pointLine" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\2pointLine.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="_new" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\new.png;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
