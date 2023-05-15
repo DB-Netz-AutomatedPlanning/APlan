@@ -9,6 +9,7 @@ using Org.BouncyCastle.Tls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Net;
@@ -41,10 +42,12 @@ namespace APLan.Model.CADlogic
         private static ArcSegment indicationArcSegment;
         #endregion
 
-
+        
+        
         #region constructor
         public DrawLogic()
         {
+            
             clickedPoints = new();
             clickedPointOriginalCoord = new();
             newCanvas = new();
@@ -853,8 +856,7 @@ namespace APLan.Model.CADlogic
                 if (clickedPoints.Count == 2)
                 {                 
                     CustomPolyLine line = new() { CustomPoints = new(),Color=Brushes.Black};
-                    clickedPoints.ForEach(x => line.CustomPoints.Add(new() { Point = x }));
-
+                    clickedPoints.ForEach(x => line.CustomPoints.Add(new() { Point = x }));                    
                     line.Color = new SolidColorBrush() { Color = aplanviewModel.SelectedColorForACAD };
                     line.ShapeAttributeInfo.Add(new KeyValue()
                     {
@@ -916,11 +918,13 @@ namespace APLan.Model.CADlogic
             indicatorLine.X2 = 0;
             indicatorLine.Y1 = 0;
             indicatorLine.Y2 = 0;
+            AplanCADViewerViewModel.DrawingPointVisibility = Visibility.Visible;
         }
         private void resetIndicationEllipse()
         {
             indicatorEllipse.Height = 0;
             indicatorEllipse.Width = 0;
+            AplanCADViewerViewModel.DrawingPointVisibility = Visibility.Visible;
         }
         private void resetIndicationArcPath()
         {
@@ -928,7 +932,8 @@ namespace APLan.Model.CADlogic
             indicationArcSegment.Size = new System.Windows.Size(0, 0);
             indicationArcSegment.IsLargeArc = false;
             indicationArcSegment.SweepDirection = SweepDirection.Clockwise;
-            
+            AplanCADViewerViewModel.DrawingPointVisibility = Visibility.Visible;
+
         }
         private void addIndicationLineToCanvas(MouseEventArgs e)
         {
@@ -941,6 +946,7 @@ namespace APLan.Model.CADlogic
             indicatorLine.Stroke = new SolidColorBrush { Color = aplanviewModel.SelectedColorForACAD };
             indicatorLine.Visibility = Visibility.Collapsed;
             newCanvas.Children.Add(indicatorLine);
+            
         }
         #endregion
     }

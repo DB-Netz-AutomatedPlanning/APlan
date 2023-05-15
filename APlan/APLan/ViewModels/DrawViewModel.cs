@@ -20,6 +20,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json;
 using static ACadSharp.Objects.MLStyle;
+using ERDM_Implementation;
+using APLan.ViewModels.ModelsLogic;
 
 namespace APLan.ViewModels
 {
@@ -53,7 +55,7 @@ namespace APLan.ViewModels
             TwoPointArc,
             ThreePointArc,
             HorizontalDistance,
-            VerticalDistance
+            VerticalDistance            
         }
         #endregion
          
@@ -98,10 +100,15 @@ namespace APLan.ViewModels
         private RectangleGeometry recGeometry;
 
         private Canvas _drawCanvas;
-
-        #endregion
         
+        private static Point contextMenuPoint;
+
+        
+        #endregion
+
         #region properties
+
+
         public double CanvasRotation
         {
             get => canvasRotation;
@@ -250,13 +257,18 @@ namespace APLan.ViewModels
 
 
             RecGeometry = new RectangleGeometry();
-            
+
+            TrackEdge = new RelayCommand(DrawTrackEdge);
+            contextMenuPoint = new Point(-1, -1);
+             
 
 
         }
         #endregion
 
         #region commands
+
+      
 
         private ICommand _MouseleftButtonDownCommand;
         private ICommand _MouserightButtonDownCommand;
@@ -268,6 +280,7 @@ namespace APLan.ViewModels
 
         private ICommand _ObjectLodaded;
 
+        public ICommand TrackEdge { get; set; }
         public ICommand GridColorActivation { get; set; }
         private ICommand _RotateCanvasSlider { get; set; }
         private ICommand _RotateItemSlider { get; set; }
@@ -386,6 +399,40 @@ namespace APLan.ViewModels
             }
         }
         #endregion
+
+        private async void DrawTrackEdge(object parameter)
+        {
+            string XLS;
+            Microsoft.Win32.OpenFileDialog openFileDialog1 = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog1.Filter = "Types (*.xls)|*.xls";
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.ShowDialog();
+            XLS = openFileDialog1.FileName;
+            var temp = "";
+            foreach (string file in openFileDialog1.FileNames)
+            {
+                temp += file;
+                temp += "+~+";
+            }
+
+            XLS = temp;
+
+            ErdmModelHandler newErdmModelHandeler = new ErdmModelHandler();
+            ERDM.ERDMmodel newErdmlModel = await newErdmModelHandeler.createERDMProject(XLS);
+            List<ERDM.Tier_1.TrackNode> trackNodes =  newErdmlModel.Tier1.TrackNode;
+            foreach (ERDM.Tier_1.TrackNode trackNode in trackNodes)
+            {
+                TrackEdgeWithNodesList.Add(trackNode);
+            }
+            List<ERDM.Tier_1.TrackEdge> trackEdges = newErdmlModel.Tier1.TrackEdge;
+            foreach (ERDM.Tier_1.TrackEdge trackEdge in trackEdges)
+            {
+                TrackEdgeWithNodesList.Add(trackEdge);
+            }
+
+
+
+        }
 
         #region mouse events logic
         /// <summary>
@@ -544,8 +591,34 @@ namespace APLan.ViewModels
         /// apply RightMouseDown on the drawing canvas.
         /// </summary>
         /// <param name="e"></param>
+        /// 
+        private Point coordianteConverter(Point point, Point globalPoint, double canvasSize)
+        {
+            double xCoordinatesAdjust = globalPoint.X - canvasSize / 2;
+            double yCoordinatesAdjust = canvasSize / 2 + globalPoint.Y;
+
+            point.X = point.X + xCoordinatesAdjust;
+
+            point.Y = -point.Y + yCoordinatesAdjust;
+
+            return point;
+        }
         private void ExecuteMouseRightButtonDownDrawingCanvas(MouseEventArgs e)
-        {             
+        {
+            Canvas newCanvas;
+            if (e.OriginalSource is Canvas)
+            {
+                 
+                contextMenuPoint = coordianteConverter(Mouse.GetPosition((Canvas)e.OriginalSource), GlobalDrawingPoint, canvasSize);
+                
+            }
+            else
+            {
+                newCanvas = VisualTreeHelpers.FindAncestor<Canvas>((DependencyObject)e.OriginalSource);
+               
+                contextMenuPoint = coordianteConverter(Mouse.GetPosition(newCanvas), GlobalDrawingPoint, canvasSize);
+                
+            }
 
             switch (toolCAD)
             {                

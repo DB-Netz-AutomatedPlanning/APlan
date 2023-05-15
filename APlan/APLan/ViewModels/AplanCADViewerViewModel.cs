@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Input;
 using System;
 using System.Windows.Media;
+using System.ComponentModel;
+using Microsoft.Xaml.Behaviors;
 
 namespace APLan.ViewModels
 {
@@ -17,13 +19,17 @@ namespace APLan.ViewModels
         private double angleLine;
         private Color selectedColorForACAD;
         private string Instruction = String.Empty;
+        private static Visibility _visible;
 
-        
         #endregion
 
         #region properties
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyPointVisibilityChanged;
+        public static void RaiseStaticPropertyPointVisibilityChanged(string PropertyName)
+        {
+            StaticPropertyPointVisibilityChanged?.Invoke(null, new PropertyChangedEventArgs(PropertyName));
+        }
 
-        
         public Visibility AplanCadToolViewVisibility
         {
             get => aplanCadToolViewVisibility;
@@ -90,10 +96,27 @@ namespace APLan.ViewModels
                 }
             }
         }
+
+        public static Visibility DrawingPointVisibility
+        {
+            get => _visible;
+            set
+            {                
+                    _visible = value;
+                    RaiseStaticPropertyPointVisibilityChanged("DrawingPointVisibility");               
+            }
+        }
+
+
         #endregion
 
         #region commands
-        public ICommand LineDrawing2Points { get; set; }
+        public ICommand LineDrawing2Points
+        {
+            get;
+            set;             
+            
+        }
         public ICommand ParallelLineDrawing { get; set; }
         public ICommand HorizontalLineDrawing { get; set; }
         public ICommand AngularDrawing { get; set; }
@@ -124,12 +147,13 @@ namespace APLan.ViewModels
             threePointCurve = new RelayCommand(ExecutethreePointCurve);
             AngularDrawing = new RelayCommand(ExecuteAngularDrawing);
             horizontalScaler = new RelayCommand(ExecuteHorizontalScaler);
-            verticalScaler = new RelayCommand(ExecuteVerticalScaler);
-            
+            verticalScaler = new RelayCommand(ExecuteVerticalScaler);            
 
             DistanceForParallelLine = 20d;
             AngleForAngularLine = 45d;
             SelectedColorForACAD = Colors.Black;
+
+            DrawingPointVisibility = Visibility.Visible;
 
         }
         #endregion
@@ -142,6 +166,7 @@ namespace APLan.ViewModels
                 Instructions = "Select two point to measure";
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.VerticalDistance;
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+                
 
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.VerticalDistance)
@@ -208,6 +233,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteVerticalLineDrawing(object parameter)
@@ -227,6 +253,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteArcDrawing2Points(object paramter)
@@ -246,6 +273,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }     
         private void ExecutePolylineDrawing(object paramter)
@@ -265,6 +293,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteEllipseDrawing(object paramter)
@@ -284,6 +313,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteCircleDrawing(object parameter)
@@ -303,6 +333,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
 
 
@@ -316,7 +347,7 @@ namespace APLan.ViewModels
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.TwoPointsLine;
                
-                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;                
 
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.TwoPointsLine)
@@ -326,6 +357,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
                 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
             
            
@@ -351,6 +383,7 @@ namespace APLan.ViewModels
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
                 AplanCadToolViewVisibility = Visibility.Collapsed;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
 
         }
@@ -371,6 +404,7 @@ namespace APLan.ViewModels
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         #endregion

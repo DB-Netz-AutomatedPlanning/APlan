@@ -7,7 +7,7 @@
              xmlns:helperClasses="clr-namespace:APLan.HelperClasses"
              xmlns:customObjects="clr-namespace:APLan.Model.CustomObjects"
              xmlns:commands="clr-namespace:APLan.Commands"
-             xmlns:viewModels="clr-namespace:APLan.ViewModels"
+             xmlns:viewModels="clr-namespace:APLan.ViewModels" xmlns:converters1="clr-namespace:APLan.Model.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -48,8 +48,8 @@
             <converters:PdfDetailSizeConverter x:Key="PdfDetailSizeConverter"></converters:PdfDetailSizeConverter>
             <converters:AplanCadToolViewerSizeConverter x:Key="AplanCadToolViewerSizeConverter"></converters:AplanCadToolViewerSizeConverter>
             <converters:PathToPathFigureConverter x:Key="pathToPathFigureConverter"></converters:PathToPathFigureConverter>
-
-
+            <converters1:GetGeoCoordinatesConverter x:Key="getGeoCoordinatesConverter"></converters1:GetGeoCoordinatesConverter>
+            <converters1:GetTrackNodeFromTrackEdgeAttributeConverter x:Key="getTrackNodeFromTrackEdgeAttributeConverter"></converters1:GetTrackNodeFromTrackEdgeAttributeConverter>
             <!--export-->
             <viewModels:ExportWindowViewModel x:Key="exportWindowViewModel"/>
 
@@ -235,6 +235,8 @@
                 <TextBlock  Name="myText" Width="100" HorizontalAlignment="Stretch" Text="{Binding ElementName=myText, Path=DataContext, Converter={StaticResource TitleConverter}}">
                 </TextBlock>
             </DataTemplate>
+
+             
         </ResourceDictionary>  
       
 

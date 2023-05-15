@@ -36,6 +36,14 @@ namespace APLan.Converters
                     return Data.FirstOrDefault(x => x.Key.Equals("Name")).Value;
                 }
             }
+            else if(value is ERDM.Tier_1.TrackNode)
+            {
+                return "TrackNode";
+            }
+            else if(value is ERDM.Tier_1.TrackEdge)
+            {
+                return "TrackEdge";
+            }
             return "Item";
         }
 

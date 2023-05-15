@@ -31,7 +31,7 @@ namespace APLan.Converters
                     // remove from the point the GlobalDrawingPoint which represent the first point in the whole drawing to make the drawing near.
                     // then convert it to be represented as cartesian coodrinate
                     // then transalte it to the middle of the canvas
-                    var x = (((PointCollection)value)[i].X - DrawViewModel.GlobalDrawingPoint.X) + DrawViewModel.sharedCanvasSize / 2;
+                    var x = ((((PointCollection)value)[i].X - DrawViewModel.GlobalDrawingPoint.X) + DrawViewModel.sharedCanvasSize / 2);
                     var y = -(((PointCollection)value)[i].Y - DrawViewModel.GlobalDrawingPoint.Y) + DrawViewModel.sharedCanvasSize / 2;
                     points.Add(
                              new Point()

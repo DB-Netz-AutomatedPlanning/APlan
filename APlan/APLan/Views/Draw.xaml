@@ -10,6 +10,7 @@
              xmlns:customObjects="clr-namespace:APLan.Model.CustomObjects"
              xmlns:commands="clr-namespace:APLan.Commands"
              xmlns:converters="clr-namespace:APLan.Converters"
+             xmlns:RCAObjects="clr-namespace:ERDM.Tier_1;assembly=ERDMlibrary"
              xmlns:APLan="clr-namespace:APLan" x:Class="APLan.Views.Draw"
              mc:Ignorable="d"
              Cursor="{DynamicResource arrow}"
@@ -78,7 +79,22 @@
                             UseLayoutRounding="False"
                             SnapsToDevicePixels="False"
                             DragOver="drawingCanvas_DragOver">
-               
+                
+                    <Canvas.ContextMenu>
+                        <ContextMenu>
+                        <MenuItem Header="RCA">
+                            <MenuItem Header="TrackEdgeWithPoints" 
+                  Command="{Binding  TrackEdge}"  
+                                      CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                      IsEnabled="True">
+                                <MenuItem.Icon>
+                                    <Image Source="/Resources/Icons/open.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                    </ContextMenu>
+                    </Canvas.ContextMenu>
+                 
                 <Canvas.LayoutTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -111,7 +127,7 @@
                     <ItemsControl ItemsSource="{Binding Lines}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <Canvas />
+                                <Canvas /> 
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -259,7 +275,7 @@
                                         </ItemsControl.ItemContainerStyle>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Path Fill="{Binding Color}" Visibility="Visible" >
+                                                <Path Fill="{Binding Color}" Visibility="{Binding Visibility}" >
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="MouseEnter" >
                                                             <i:InvokeCommandAction Command="{Binding PointMouseEnter}"
@@ -363,7 +379,40 @@
                 </ItemsControl>
 
 
+                <ItemsControl  ItemsSource="{Binding TrackEdgeWithNodesList}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>                     
+                    <ItemsControl.Resources>
+                        <DataTemplate DataType="{x:Type RCAObjects:TrackNode}">
+                            <Grid>
+                                <Path Stroke="Black" StrokeThickness="2" Visibility="Visible" Fill="Yellow">
+                                    <Path.Data>                                         
+                                         
+                                            <EllipseGeometry  RadiusX="5" RadiusY="5" Center="{Binding isLocatedAtGeoCoordinates,Converter={StaticResource getGeoCoordinatesConverter } }" />
+                                        
+                                    </Path.Data>
+                                </Path>
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type RCAObjects:TrackEdge}">
+                            <Grid>
+                                <Path Stroke="Black" StrokeThickness="2" Visibility="Visible" Fill="Yellow">
+                                    <Path.Data>
 
+                                        <LineGeometry  StartPoint="{Binding hasStartTrackNode,Converter={StaticResource getTrackNodeFromTrackEdgeAttributeConverter },ConverterParameter=StartNode}" EndPoint="{Binding hasEndTrackNode,Converter={StaticResource getTrackNodeFromTrackEdgeAttributeConverter},ConverterParameter=EndNode}" />
+
+
+
+                                    </Path.Data>
+                                </Path>
+                            </Grid>
+                        </DataTemplate>
+
+                    </ItemsControl.Resources>
+                </ItemsControl>
 
 
                 <ItemsControl  ItemsSource="{Binding Texts}">

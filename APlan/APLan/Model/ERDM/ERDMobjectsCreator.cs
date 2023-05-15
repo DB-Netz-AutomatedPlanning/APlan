@@ -1,4 +1,6 @@
-﻿using ERDM.Tier_0;
+﻿using APLan.Model.Converters;
+using APLan.ViewModels;
+using ERDM.Tier_0;
 using ERDM.Tier_1;
 using ERDM.Tier_2;
 using ERDM.Tier_3;
@@ -10,12 +12,12 @@ using System.Collections.Generic;
 namespace ERDM_Implementation
 {
     public class ERDMobjectsCreator
-    {
+    {    
         public ERDM.ERDMmodel createModel(string SegmentsPath, string GradientsPath, string NodesPath, string EdgesPath)
         {
-
+           
             XLSreader reader = new XLSreader();
-
+        
             var horizotanSegments = reader.ReadXLSContent(SegmentsPath, 0);
             var gradients = reader.ReadXLSContent(GradientsPath, 0);
             var nodes = reader.ReadXLSContent(NodesPath, 0); // simulated information till we get the correct one.
@@ -65,6 +67,8 @@ namespace ERDM_Implementation
             erdmModel.Tier2 = new();
             erdmModel.Tier3 = new();
 
+            GetGeoCoordinatesConverter.erdmmodel = erdmModel;
+            GetTrackNodeFromTrackEdgeAttributeConverter.erdmmodel = erdmModel;
             erdmModel.Tier0.Version.Add(version);
             erdmModel.Tier0.MapData.Add(mapData);
             erdmModel.Tier2.AreaOfControl.Add(areaOfControl);

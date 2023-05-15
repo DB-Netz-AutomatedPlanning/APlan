@@ -1,6 +1,7 @@
 ﻿using aplan.core;
 using APLan.HelperClasses;
 using APLan.Model.CustomObjects;
+ 
 using APLan.Views;
 using Models.TopoModels.EULYNX.generic;
 using System;
@@ -168,6 +169,12 @@ namespace APLan.ViewModels
             get;
             set;
         }
+
+        public static ObservableCollection<object> TrackEdgeWithNodesList
+        {
+            get;
+            set;
+        }
         #endregion
         
         #region constructor
@@ -191,6 +198,7 @@ namespace APLan.ViewModels
                 RedoStack = new();
                 Arrows = new();
                 Clipboard = new();
+                TrackEdgeWithNodesList = new();
             }
         }
         #endregion
@@ -242,6 +250,7 @@ namespace APLan.ViewModels
             RedoStack.Clear();
             Arrows.Clear();
             Clipboard.Clear();
+            TrackEdgeWithNodesList.Clear();
 
             ViewModels.DrawViewModel.GlobalDrawingPoint = new(0, 0);
         }
@@ -256,7 +265,7 @@ namespace APLan.ViewModels
             CollectionViewSource.GetDefaultView(Texts).Refresh();
             CollectionViewSource.GetDefaultView(Arrows).Refresh();
             CollectionViewSource.GetDefaultView(Clipboard).Refresh();
-
+            CollectionViewSource.GetDefaultView(TrackEdgeWithNodesList).Refresh();
         }
         #endregion
     }
