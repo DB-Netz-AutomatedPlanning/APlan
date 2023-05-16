@@ -1,6 +1,5 @@
 # Ignore everything
-*
-APlan/bin/
-APlan/obj/
-APlanTest/bin/
-APlanTest/obj/
+APlan/bin/**
+APlan/obj/**
+APlanTest/bin/**
+APlanTest/obj/**
