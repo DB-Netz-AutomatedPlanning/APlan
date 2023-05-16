@@ -2,14 +2,5 @@
 *
 APlan/bin/
 APlan/obj/
-# But not these files...
-!.gitignore
-!.cs
-!.xaml
-!.xaml.cs
-!.csproj.user
-!.xml
-!.xsd
-!.json
-!.csproj
-!.rar
+APlanTest/bin/
+APlanTest/obj/
