@@ -421,6 +421,9 @@
   <data name="Hektometerangabe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Hektometerangabe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="horizontalWidth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\horizontalWidth.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="img_arrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\img_arrow.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -616,6 +619,9 @@
   <data name="scale" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icons\scale.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Scaler" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\Scaler.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Schachbretttafel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Schachbretttafel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -726,6 +732,9 @@
   </data>
   <data name="Verstarker" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\Verstarker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="verticalWidth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icons\verticalWidth.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="VorsichtsignalHauptsignalschirm" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SymbolsImages\VorsichtsignalHauptsignalschirm.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

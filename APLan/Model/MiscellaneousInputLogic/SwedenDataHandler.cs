@@ -196,23 +196,23 @@ namespace C_sharp_learning
                 var point1 = addTrackEdgePoint(startCoor, edge, offset1, erdmModel);
                 var point2 = addTrackEdgePoint(endCoor, edge, offset2, erdmModel);
 
-                //for (int i = 0; i < coordiantes.Count - 1; i++)
-                //{
-                //    var coor1 = addCoordianteToERDM(coordiantes[i], erdmModel);
-                //    var coor2 = addCoordianteToERDM(coordiantes[i + 1], erdmModel);
-                //    //update offsets of coor1 and coor2 on the edge
-                //    offset1 += offset2;
-                //    offset2 += distanceBetweenTwoCoordinates2D(coor1, coor2);
+                for (int i = 0; i < coordiantes.Count - 1; i++)
+                {
+                    var coor1 = addCoordianteToERDM(coordiantes[i], erdmModel);
+                    var coor2 = addCoordianteToERDM(coordiantes[i + 1], erdmModel);
+                    //update offsets of coor1 and coor2 on the edge
+                    offset1 += offset2;
+                    offset2 += distanceBetweenTwoCoordinates2D(coor1, coor2);
 
-                //    var point1 = addTrackEdgePoint(coor1, edge, offset1, erdmModel);
-                //    var point2 = addTrackEdgePoint(coor2, edge, offset2, erdmModel);
+                    var point11 = addTrackEdgePoint(coor1, edge, offset1, erdmModel);
+                    var point22 = addTrackEdgePoint(coor2, edge, offset2, erdmModel);
 
-                //    var section = addTrackEdgeSection(point1, point2, offset2 - offset1, edge, erdmModel);
+                    var section = addTrackEdgeSection(point11, point22, offset2 - offset1, edge, erdmModel);
 
-                //    var azimuth = calculateAzimuthAngleFromTwoPoints(coor1, coor2);
+                    var azimuth = calculateAzimuthAngleFromTwoPoints(coor1, coor2);
 
-                //    addCurveSegmentLine(point1, point2, azimuth, $"{UniversalId} {coordiantes[i][0]} {coordiantes[i][1]} {coordiantes[i + 1][0]} {coordiantes[i + 1][1]}", erdmModel);
-                //}
+                    addCurveSegmentLine(point11, point22, azimuth, $"{UniversalId} {coordiantes[i][0]} {coordiantes[i][1]} {coordiantes[i + 1][0]} {coordiantes[i + 1][1]}", erdmModel);
+                }
 
             }
         }

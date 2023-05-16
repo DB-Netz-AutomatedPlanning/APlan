@@ -1,8 +1,21 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using APLan.HelperClasses;
 using APLan.Model.CustomObjects;
+using APLan.Converters;
+using System.ComponentModel;
 
 namespace APLan.Views
 {
@@ -64,8 +77,29 @@ namespace APLan.Views
                 Point recPoint = new Point(dataContext.SetLeft, dataContext.SetTop);
                 newPoint = (Point)converter.Convert(recPoint, null, null, null);
             }
+            else if(((ListViewItem)sender).DataContext.GetType() == typeof(ERDM.Tier_1.TrackNode))
+            {
+                var dataContext = ((ListViewItem)sender).DataContext as ERDM.Tier_1.TrackNode;
+                APLan.Model.Converters.GetGeoCoordinatesConverter converter = new APLan.Model.Converters.GetGeoCoordinatesConverter();
+
+               
+               newPoint = (Point)converter.Convert(dataContext.isLocatedAtGeoCoordinates, null, null, null);
+            }
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(ERDM.Tier_1.TrackEdge))
+            {
+                var dataContext = ((ListViewItem)sender).DataContext as ERDM.Tier_1.TrackEdge;
+                APLan.Model.Converters.GetTrackNodeFromTrackEdgeAttributeConverter converter = new APLan.Model.Converters.GetTrackNodeFromTrackEdgeAttributeConverter();
+
+
+                newPoint = (Point)converter.Convert(dataContext.hasStartTrackNode, null, null, null);
+            }
+
 
             scrollToTarget(newPoint);
+
+            //((TextBox)sender).BorderBrush = Brushes.Red;
+            //ListViewItem listViewItem =VisualTreeHelpers.FindAncestor<ListViewItem>(((TextBox)sender)) as ListViewItem;
+            //listViewItem.Focus();
         }
         private new void LostFocus(object sender, RoutedEventArgs e)
         {
@@ -104,6 +138,17 @@ namespace APLan.Views
                 var dataContext = ((ListViewItem)sender).DataContext as CustomImage;
                  
             }
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(ERDM.Tier_1.TrackNode))
+            {
+                var dataContext = ((ListViewItem)sender).DataContext as ERDM.Tier_1.TrackNode;
+
+            }
+            else if (((ListViewItem)sender).DataContext.GetType() == typeof(ERDM.Tier_1.TrackEdge))
+            {
+                var dataContext = ((ListViewItem)sender).DataContext as ERDM.Tier_1.TrackEdge;
+
+            }
+
         }
         private void scrollToTarget(Point newPoint)
         {

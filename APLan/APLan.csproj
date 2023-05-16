@@ -115,6 +115,7 @@
     <None Remove="Resources\Icons\exit.png" />
     <None Remove="Resources\Icons\export.png" />
     <None Remove="Resources\Icons\export_2.png" />
+    <None Remove="Resources\Icons\horizontalWidth.png" />
     <None Remove="Resources\Icons\icons8-import-30.png" />
     <None Remove="Resources\Icons\img_arrow.png" />
     <None Remove="Resources\Icons\img_services_dropdown.png" />
@@ -143,6 +144,7 @@
     <None Remove="Resources\Icons\save.png" />
     <None Remove="Resources\Icons\save_as.png" />
     <None Remove="Resources\Icons\scale.png" />
+    <None Remove="Resources\Icons\Scaler.png" />
     <None Remove="Resources\Icons\select.png" />
     <None Remove="Resources\Icons\sidebar.png" />
     <None Remove="Resources\Icons\sidebar2.png" />
@@ -151,6 +153,7 @@
     <None Remove="Resources\Icons\text.png" />
     <None Remove="Resources\Icons\undo.png" />
     <None Remove="Resources\Icons\validate.png" />
+    <None Remove="Resources\Icons\verticalWidth.png" />
     <None Remove="Resources\Icons\viewer.png" />
     <None Remove="Resources\Image1.png" />
     <None Remove="Resources\Kabelformstein.png" />
@@ -502,6 +505,7 @@
     <Resource Include="Resources\Icons\exit.png" />
     <Resource Include="Resources\Icons\export.png" />
     <Resource Include="Resources\Icons\export_2.png" />
+    <Resource Include="Resources\Icons\horizontalWidth.png" />
     <Resource Include="Resources\Icons\icons8-import-30.png" />
     <Resource Include="Resources\Icons\img_arrow.png" />
     <Resource Include="Resources\Icons\img_services_dropdown.png" />
@@ -528,6 +532,7 @@
     <Resource Include="Resources\Icons\save.png" />
     <Resource Include="Resources\Icons\save_as.png" />
     <Resource Include="Resources\Icons\scale.png" />
+    <Resource Include="Resources\Icons\Scaler.png" />
     <Resource Include="Resources\Icons\select.png" />
     <Resource Include="Resources\Icons\sidebar.png" />
     <Resource Include="Resources\Icons\sidebar2.png" />
@@ -536,6 +541,7 @@
     <Resource Include="Resources\Icons\text.png" />
     <Resource Include="Resources\Icons\undo.png" />
     <Resource Include="Resources\Icons\validate.png" />
+    <Resource Include="Resources\Icons\verticalWidth.png" />
     <Resource Include="Resources\Icons\viewer.png" />
     <Resource Include="Resources\Kiel\Entwurfselement_HO.geojson" />
     <Resource Include="Resources\Kiel\Entwurfselement_KM.geojson" />

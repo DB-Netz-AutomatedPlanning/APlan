@@ -180,17 +180,15 @@ namespace APLan.ViewModels
             {
 
                 string fileName = System.IO.Path.GetRandomFileName();
-
+                var drawViewModel = System.Windows.Application.Current.FindResource("drawViewModel") as DrawViewModel;
                 try
                 {
                     Application.Current.MainWindow.WindowState = WindowState.Maximized;
 
                     PdfDetailViewerVisibility = Visibility.Visible;
                     //getting static resource to remove the tile in canvas                  
-                    object resourceCanvasGrid = Draw.drawing.TryFindResource("canvasGrid");
-                    DrawingBrush gridBrush = (DrawingBrush)resourceCanvasGrid;
+                    DrawingBrush gridBrush = (DrawingBrush)drawViewModel.LayoutCanvas.TryFindResource("canvasGrid");
                     gridBrush.TileMode = TileMode.None;
-                    gridBrush.Viewport = new Rect(0, 0, 0, 0);
 
 
 
@@ -219,8 +217,8 @@ namespace APLan.ViewModels
 
                     //adding the tile in canvas again
 
+
                     gridBrush.TileMode = TileMode.Tile;
-                    gridBrush.Viewport = new Rect(0, 0, 100, 100);
 
                 }
                 finally

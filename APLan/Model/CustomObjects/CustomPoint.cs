@@ -102,6 +102,8 @@ namespace APLan.Model.CustomObjects
             Radius = 1.5;             
             Color = Brushes.Red;
             VisualizedDataViewModel.StaticPropertyPointVisibilityChanged += PropertiesChange;
+            AplanCADViewerViewModel.StaticPropertyPointVisibilityChanged += PropertiesChangeCustomPoint;
+
         }
 
         [DllImport("user32.dll")]
@@ -128,6 +130,18 @@ namespace APLan.Model.CustomObjects
             {
                 Visibility = VisualizedDataViewModel.Entwurfselement_UH_PointsVisibility;
             }
+        }
+        private void PropertiesChangeCustomPoint(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName.Equals("DrawingPointVisibility"))
+            {
+                Visibility = AplanCADViewerViewModel.DrawingPointVisibility;
+            }
+        }
+
+        private void PropertiesChangeAcadDrawing(object sender, PropertyChangedEventArgs e)
+        {
+            Visibility = Visibility.Visible;
         }
         private void ExecutePointMouseEnter(MouseEventArgs e)
         {

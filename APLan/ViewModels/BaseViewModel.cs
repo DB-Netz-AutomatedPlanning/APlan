@@ -1,7 +1,8 @@
 ﻿using aplan.core;
-using aplan.eulynx;
 using APLan.HelperClasses;
 using APLan.Model.CustomObjects;
+ 
+using APLan.Views;
 using Models.TopoModels.EULYNX.generic;
 using System;
 using System.Collections.Generic;
@@ -29,12 +30,12 @@ namespace APLan.ViewModels
         private static string projectName;
         public static ERDM.ERDMmodel erdmModel;
         public static EulynxDataPrepInterface eulynxModel;
-        public static Database db { get; set; }
 
 
         public static Loading loadingObject;
         private static bool listsCreated = false; // to lock creation of new lists for binding.
         private Visibility _welcomeVisibility = Visibility.Visible;
+        public static Database db { get; set; }
         #endregion
 
         #region properites
@@ -151,7 +152,26 @@ namespace APLan.ViewModels
             get;set;
         }
 
+        
         public static ObservableCollection<SymbolObject> items
+        {
+            get;
+            set;
+        }
+
+        public static ObservableCollection<CustomArrowLine> Arrows
+        { 
+            get;
+            set;
+        }
+        
+        public static ObservableCollection<object> Clipboard
+        {
+            get;
+            set;
+        }
+
+        public static ObservableCollection<object> TrackEdgeWithNodesList
         {
             get;
             set;
@@ -175,10 +195,15 @@ namespace APLan.ViewModels
                 loadedObjects = new();
                 items = new();
                 listsCreated = true;
+                UndoStack = new();
+                RedoStack = new();
+                Arrows = new();
+                Clipboard = new();
+                TrackEdgeWithNodesList = new();
             }
         }
         #endregion
-        
+
         #region logic
         public static void clearModelsParameters()
         {
@@ -228,7 +253,11 @@ namespace APLan.ViewModels
 
             Signals.Clear();
             toBeStored.Clear();
-
+            UndoStack.Clear();
+            RedoStack.Clear();
+            Arrows.Clear();
+            Clipboard.Clear();
+            TrackEdgeWithNodesList.Clear();
 
             ViewModels.DrawViewModel.GlobalDrawingPoint = new(0, 0);
         }
@@ -241,7 +270,9 @@ namespace APLan.ViewModels
             CollectionViewSource.GetDefaultView(Ellipses).Refresh();
             CollectionViewSource.GetDefaultView(Arcs).Refresh();
             CollectionViewSource.GetDefaultView(Texts).Refresh();
-            CollectionViewSource.GetDefaultView(Signals).Refresh();
+            CollectionViewSource.GetDefaultView(Arrows).Refresh();
+            CollectionViewSource.GetDefaultView(Clipboard).Refresh();
+            CollectionViewSource.GetDefaultView(TrackEdgeWithNodesList).Refresh();
         }
         #endregion
     }

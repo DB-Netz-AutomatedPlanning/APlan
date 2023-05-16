@@ -2,7 +2,8 @@
 using ERDM.Tier_1;
 using ERDM.Tier_2;
 using ERDM.Tier_3;
-
+using APLan.Model.Converters;
+using APLan.ViewModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,6 +65,9 @@ namespace ERDM_Implementation
             erdmModel.Tier1 = new();
             erdmModel.Tier2 = new();
             erdmModel.Tier3 = new();
+
+            GetGeoCoordinatesConverter.erdmmodel = erdmModel;
+            GetTrackNodeFromTrackEdgeAttributeConverter.erdmmodel = erdmModel;
 
             erdmModel.Tier0.Version.Add(version);
             erdmModel.Tier0.MapData.Add(mapData);

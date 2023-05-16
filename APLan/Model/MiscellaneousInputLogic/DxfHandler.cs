@@ -35,7 +35,7 @@ namespace APLan.Model.MiscellaneousInputLogic
         }
         private void createLineObjectDxf(netDxf.Entities.Line l)
         {
-            netDxf.Entities.Line newline = new netDxf.Entities.Line();
+           
             double X1 = l.StartPoint.X;
             double Y1 = l.StartPoint.Y;
             double X2 = l.EndPoint.X;
@@ -342,6 +342,86 @@ namespace APLan.Model.MiscellaneousInputLogic
             }
         }
 
+       
+        private void createInsertObjDxf(netDxf.Entities.Insert insert)
+        {
+            List<netDxf.Entities.EntityObject> boundary2 = new List<netDxf.Entities.EntityObject>();
+            boundary2 = insert.Explode();
+            foreach (netDxf.Entities.EntityObject e in boundary2)
+            {
+                // if the entities is circle type
+                if (e is netDxf.Entities.Circle circle)
+                {
+                    createCircleObjDxf(circle);
+
+                }
+                //if the entiites is text type
+                else if (e is netDxf.Entities.Text txt)
+                {
+                    if (txt.Layer.Name != "0")
+                    {
+                        createTextObjxf(txt);
+                    }
+
+                }
+                // if the entities is of image type
+                else if (e is netDxf.Entities.Image Im)
+                {
+
+                }
+                // if the entities is of arc type
+                else if (e is netDxf.Entities.Arc arc)
+                {
+                    createArcObjectDxf(arc);
+                }
+
+                //if the entities is of lwpolyline
+                else if (e is netDxf.Entities.LwPolyline lwpline1)
+                {
+                    List<netDxf.Entities.EntityObject> listOfEntity = new List<netDxf.Entities.EntityObject>();
+                    // checking if the lwpolyline is enclosed or not.
+                    if (lwpline1.IsClosed == true)
+                    {
+                        //splitting the lwpolyline in to small entities
+                        listOfEntity = lwpline1.Explode();
+
+                        foreach (netDxf.Entities.EntityObject lwpoylineEntity in listOfEntity)
+                        {
+                            if (lwpoylineEntity is netDxf.Entities.Line newline)
+                            {
+                                createLineObjectDxf(newline);
+                            }
+                            else if (lwpoylineEntity is netDxf.Entities.Arc arcLwPolyline)
+                            {
+                                createArcObjectDxf(arcLwPolyline);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        createLwPolylineObjectDxf(lwpline1);
+                    }
+
+                }
+                //if entities is of type line
+                else if (e is netDxf.Entities.Line lines)
+                {
+
+                    createLineObjectDxf(lines);
+                }
+
+                else if (e is netDxf.Entities.Ellipse l)
+                {
+                    createEllipseObjectDxf(l);
+
+                }
+                else if(e is netDxf.Entities.Insert insertRec)
+                {
+                   createInsertObjDxf(insertRec);
+                }
+
+            }
+        }
         public void createDxfProject(string DXF)
         {
 
@@ -352,7 +432,7 @@ namespace APLan.Model.MiscellaneousInputLogic
                 return;
             }
             DxfDocument dxfReader = DxfDocument.Load(DXF);
-            List<netDxf.Entities.EntityObject> boundary2 = new List<netDxf.Entities.EntityObject>();
+           
             #region POINTSDXF
             if (dxfReader.Points.Count() > 0)
             {
@@ -377,77 +457,9 @@ namespace APLan.Model.MiscellaneousInputLogic
                 foreach (netDxf.Entities.Insert lwpline in dxfReader.Inserts)
                 {
                     //splitting the Inserts entities in to netDXF recognizable entities
-                    boundary2 = lwpline.Explode();
-                    foreach (netDxf.Entities.EntityObject e in boundary2)
-                    {
-                        // if the entities is circle type
-                        if (e is netDxf.Entities.Circle circle)
-                        {
-                            createCircleObjDxf(circle);
+                   
+                    createInsertObjDxf(lwpline);
 
-                        }
-                        //if the entiites is text type
-                        if (e is netDxf.Entities.Text txt)
-                        {
-                            if (txt.Layer.Name != "0")
-                            {
-                                createTextObjxf(txt);
-                            }
-
-                        }
-                        // if the entities is of image type
-                        if (e is netDxf.Entities.Image Im)
-                        {
-
-                        }
-                        // if the entities is of arc type
-                        if (e is netDxf.Entities.Arc arc)
-                        {
-                            createArcObjectDxf(arc);
-                        }
-
-                        //if the entities is of lwpolyline
-                        if (e is netDxf.Entities.LwPolyline lwpline1)
-                        {
-                            List<netDxf.Entities.EntityObject> listOfEntity = new List<netDxf.Entities.EntityObject>();
-                            // checking if the lwpolyline is enclosed or not.
-                            if (lwpline1.IsClosed == true)
-                            {
-                                //splitting the lwpolyline in to small entities
-                                listOfEntity = lwpline1.Explode();
-
-                                foreach (netDxf.Entities.EntityObject lwpoylineEntity in listOfEntity)
-                                {
-                                    if (lwpoylineEntity is netDxf.Entities.Line newline)
-                                    {
-                                         createLineObjectDxf(newline);
-                                    }
-                                    else if (lwpoylineEntity is netDxf.Entities.Arc arcLwPolyline)
-                                    {
-                                        createArcObjectDxf(arcLwPolyline);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                createLwPolylineObjectDxf(lwpline1);
-                            }
-
-                        }
-                        //if entities is of type line
-                        if (e is netDxf.Entities.Line lines)
-                        {
-
-                            createLineObjectDxf(lines);
-                        }
-
-                        if (e is netDxf.Entities.Ellipse l)
-                        {
-                             createEllipseObjectDxf(l);
-
-                        }
-
-                    }
 
                 }
             }

@@ -27,5 +27,6 @@
         <TextBlock  Grid.Column="1" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding  Xlocation}" />
         <TextBlock  Grid.Column="2" Text="Y" TextAlignment="Center"  Background="{StaticResource themeColor}" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
         <TextBlock  Grid.Column="3"  TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding  Ylocation}"/>
+        <Label Grid.Column="4" Content="{Binding Instructions}" DataContext="{StaticResource aplanCADViewerViewModel}"  VerticalAlignment="Center" HorizontalAlignment="Center" />
     </Grid>
 </UserControl>

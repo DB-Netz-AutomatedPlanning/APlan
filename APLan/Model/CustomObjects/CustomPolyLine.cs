@@ -14,15 +14,16 @@ namespace APLan.Model.CustomObjects
     /// <summary>
     /// object to contain all information about the polylines.
     /// </summary>
+    /// 
+    
     public class CustomPolyLine : CustomItem
     {
-
         #region attributes
         public string LineType { get; set; }
         // name as in the Eulynx Object.
-        private string name;
-        
+        private string name;        
         private SolidColorBrush color;
+        private List<CustomPoint> customPoints;
         public string Name
         {
             get => name;
@@ -33,6 +34,7 @@ namespace APLan.Model.CustomObjects
             }
         }
         //color is selective
+        
         public SolidColorBrush Color
         {
             get => color;
@@ -51,8 +53,12 @@ namespace APLan.Model.CustomObjects
 
         public List<CustomPoint> CustomPoints
         {
-            get;
-            set;
+            get => customPoints;
+            set
+            {
+                customPoints = value;
+                OnPropertyChanged();
+            }
         }
         //global point represent first point found when drawing all the drawing.
         public Point GlobalPoint
@@ -72,6 +78,7 @@ namespace APLan.Model.CustomObjects
             }
 
         }
+       
         #endregion
 
         #region constructor
@@ -81,6 +88,7 @@ namespace APLan.Model.CustomObjects
             ShapeAttributeInfo = new ObservableCollection<KeyValue>();
             Points = new();
             CustomPoints = new();
+            
             VisualizedDataViewModel.StaticPropertyChanged += PropertiesChange;
         }
 

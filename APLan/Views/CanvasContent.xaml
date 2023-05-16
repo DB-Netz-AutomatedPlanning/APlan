@@ -101,6 +101,14 @@
                     ItemsSource="{Binding Images}">
                 </ListView>
             </TreeViewItem>
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <TextBlock Text="ERDM" FontWeight="Bold"></TextBlock>
+                </TreeViewItem.Header>
+                <ListView ItemTemplate="{Binding Source={StaticResource CanvaContentTemplate}}"
+                    ItemsSource="{Binding TrackEdgeWithNodesList}">
+                </ListView>
+            </TreeViewItem>
         </TreeView>
     </Border>
 </UserControl>

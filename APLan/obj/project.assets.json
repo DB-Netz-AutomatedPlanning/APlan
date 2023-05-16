@@ -3137,11 +3137,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+      "projectUniqueName": "F:\\Aplan-GIT\\Old\\APlan\\APLan\\APLan.csproj",
       "projectName": "APLan",
-      "projectPath": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\APLan.csproj",
+      "projectPath": "F:\\Aplan-GIT\\Old\\APlan\\APLan\\APLan.csproj",
       "packagesPath": "C:\\Users\\k7ada\\.nuget\\packages\\",
-      "outputPath": "E:\\ERDM\\GitHub-Aplan\\APlan\\APLan\\obj\\",
+      "outputPath": "F:\\Aplan-GIT\\Old\\APlan\\APLan\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\k7ada\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -2,6 +2,9 @@
 using System.Windows;
 using System.Windows.Input;
 using System;
+using System.Windows.Media;
+using System.ComponentModel;
+using Microsoft.Xaml.Behaviors;
 
 namespace APLan.ViewModels
 {
@@ -12,9 +15,21 @@ namespace APLan.ViewModels
         private Visibility aplanCadToolViewVisibility;
         private Visibility parallelLineContentVisibility;
         private Visibility angularLineContentVisibility;
+        private double distanceForParallelLine;
+        private double angleLine;
+        private Color selectedColorForACAD;
+        private string Instruction = String.Empty;
+        private static Visibility _visible;
+
         #endregion
 
         #region properties
+        public static event EventHandler<PropertyChangedEventArgs> StaticPropertyPointVisibilityChanged;
+        public static void RaiseStaticPropertyPointVisibilityChanged(string PropertyName)
+        {
+            StaticPropertyPointVisibilityChanged?.Invoke(null, new PropertyChangedEventArgs(PropertyName));
+        }
+
         public Visibility AplanCadToolViewVisibility
         {
             get => aplanCadToolViewVisibility;
@@ -42,10 +57,66 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
+        public Color SelectedColorForACAD
+        {
+            get => selectedColorForACAD;
+            set
+            {
+                selectedColorForACAD = value;
+                OnPropertyChanged("SelectedColorForACAD");
+            }
+        }
+        public double DistanceForParallelLine
+        {
+            get => distanceForParallelLine;
+            set
+            {
+                distanceForParallelLine = value;
+                OnPropertyChanged("DistanceForParallelLine");
+            }
+        }
+        public double AngleForAngularLine
+        {
+            get => angleLine;
+            set
+            {
+                angleLine = value;
+                OnPropertyChanged("AngleForAngularLine");
+            }
+        }
+        public string Instructions
+        {
+            get => Instruction;
+            set
+            {
+                if (Instruction != value)
+                {
+                    Instruction = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public static Visibility DrawingPointVisibility
+        {
+            get => _visible;
+            set
+            {                
+                    _visible = value;
+                    RaiseStaticPropertyPointVisibilityChanged("DrawingPointVisibility");               
+            }
+        }
+
+
         #endregion
 
         #region commands
-        public ICommand LineDrawing2Points { get; set; }
+        public ICommand LineDrawing2Points
+        {
+            get;
+            set;             
+            
+        }
         public ICommand ParallelLineDrawing { get; set; }
         public ICommand HorizontalLineDrawing { get; set; }
         public ICommand AngularDrawing { get; set; }
@@ -55,6 +126,8 @@ namespace APLan.ViewModels
         public ICommand PolylineDrawing { get; set; }
         public ICommand ArcDrawingTwoPointCenter { get; set; } 
         public ICommand threePointCurve { get; set; }
+        public ICommand horizontalScaler { get; set; }
+        public ICommand verticalScaler { get; set; }
         #endregion
 
         #region constructor
@@ -73,18 +146,59 @@ namespace APLan.ViewModels
             ArcDrawingTwoPointCenter = new RelayCommand(ExecuteArcDrawing2Points);
             threePointCurve = new RelayCommand(ExecutethreePointCurve);
             AngularDrawing = new RelayCommand(ExecuteAngularDrawing);
-            drawViewModel = System.Windows.Application.Current.FindResource("drawViewModel") as DrawViewModel;
+            horizontalScaler = new RelayCommand(ExecuteHorizontalScaler);
+            verticalScaler = new RelayCommand(ExecuteVerticalScaler);            
 
+            DistanceForParallelLine = 20d;
+            AngleForAngularLine = 45d;
+            SelectedColorForACAD = Colors.Black;
+
+            DrawingPointVisibility = Visibility.Visible;
 
         }
         #endregion
 
         #region logic
+        private void ExecuteVerticalScaler(object parameter)
+        {
+            if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.VerticalDistance)
+            {
+                Instructions = "Select two point to measure";
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.VerticalDistance;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+                
+
+            }
+            else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.VerticalDistance)
+            {
+                Instructions = String.Empty;
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
+
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+            }
+        }
+        private void ExecuteHorizontalScaler(object parameter)
+        {
+            if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.HorizontalDistance)
+            {
+                Instructions = "Select two point to measure";                 
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.HorizontalDistance;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+
+            }
+            else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.HorizontalDistance)
+            {
+                Instructions = String.Empty;
+                DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
+
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+            }
+        }
         private void ExecuteAngularDrawing(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.AngularLine)
             {
-                drawViewModel.Instructions = "Select a point in line and angle";
+                Instructions = "Select a point in line and angle";
                 ParallelLineContentVisibility = Visibility.Collapsed;
                 AngularLineContentVisibility = Visibility.Visible;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.AngularLine;
@@ -95,7 +209,7 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.AngularLine)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
@@ -106,7 +220,7 @@ namespace APLan.ViewModels
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.ThreePointArc)
             {
-                drawViewModel.Instructions = "Select a start point for curve";
+                Instructions = "Select a start point for curve";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.ThreePointArc;
 
@@ -115,17 +229,18 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.ThreePointArc)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteVerticalLineDrawing(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.VerticalLine)
             {
-                drawViewModel.Instructions = "Select a Start Point";
+                Instructions = "Select a Start Point";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.VerticalLine;
 
@@ -134,17 +249,18 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.VerticalLine)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteArcDrawing2Points(object paramter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.TwoPointArc)
             {
-                drawViewModel.Instructions = "Select a center Point for arc";
+                Instructions = "Select a center Point for arc";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.TwoPointArc;
 
@@ -153,17 +269,18 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.TwoPointArc)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }     
         private void ExecutePolylineDrawing(object paramter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.Polyline)
             {
-                drawViewModel.Instructions = "Drag the points";
+                Instructions = "Left Mouse click to draw lines";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.Polyline;
 
@@ -172,17 +289,18 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.Polyline)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteEllipseDrawing(object paramter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.Ellipse)
             {
-                drawViewModel.Instructions = "Select a center point";
+                Instructions = "Select a center point";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.Ellipse;
 
@@ -191,17 +309,18 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.Ellipse)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         private void ExecuteCircleDrawing(object parameter)
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.Circle)
             {
-                drawViewModel.Instructions = "Select a center point";
+                Instructions = "Select a center point";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.Circle;
 
@@ -210,10 +329,11 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.Circle)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
 
 
@@ -223,20 +343,21 @@ namespace APLan.ViewModels
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.TwoPointsLine)
             {
                  
-                drawViewModel.Instructions = "Select StartPoint";
+                Instructions = "Select StartPoint";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.TwoPointsLine;
                
-                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;
+                System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Cross;                
 
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.TwoPointsLine)
             {
                  
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
                 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
             
            
@@ -245,7 +366,7 @@ namespace APLan.ViewModels
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.ParallelLine)
             {                
-                drawViewModel.Instructions = "Select a line and distance";
+                Instructions = "Select a line and distance";
                 ParallelLineContentVisibility = Visibility.Visible;
                 AngularLineContentVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.ParallelLine;
@@ -257,11 +378,12 @@ namespace APLan.ViewModels
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.ParallelLine)
             {
                 
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
                 AplanCadToolViewVisibility = Visibility.Collapsed;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
 
         }
@@ -269,7 +391,7 @@ namespace APLan.ViewModels
         {
             if (DrawViewModel.toolCAD != DrawViewModel.SelectedToolForCAD.HorizontalLine)
             {
-                drawViewModel.Instructions = "Select StartPoint";
+                Instructions = "Select StartPoint";
                 AplanCadToolViewVisibility = Visibility.Collapsed;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.HorizontalLine;
 
@@ -278,10 +400,11 @@ namespace APLan.ViewModels
             }
             else if (DrawViewModel.toolCAD == DrawViewModel.SelectedToolForCAD.HorizontalLine)
             {
-                drawViewModel.Instructions = String.Empty;
+                Instructions = String.Empty;
                 DrawViewModel.toolCAD = DrawViewModel.SelectedToolForCAD.None;
 
                 System.Windows.Application.Current.Resources["arrow"] = System.Windows.Input.Cursors.Arrow;
+                DrawingPointVisibility = Visibility.Collapsed;
             }
         }
         #endregion

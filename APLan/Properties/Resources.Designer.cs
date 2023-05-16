@@ -1151,6 +1151,16 @@ namespace APLan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap horizontalWidth {
+            get {
+                object obj = ResourceManager.GetObject("horizontalWidth", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap img_arrow {
             get {
                 object obj = ResourceManager.GetObject("img_arrow", resourceCulture);
@@ -1823,6 +1833,16 @@ namespace APLan.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Scaler {
+            get {
+                object obj = ResourceManager.GetObject("Scaler", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Schachbretttafel {
             get {
                 object obj = ResourceManager.GetObject("Schachbretttafel", resourceCulture);
@@ -2215,6 +2235,16 @@ namespace APLan.Properties {
         public static System.Drawing.Bitmap Verstarker {
             get {
                 object obj = ResourceManager.GetObject("Verstarker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap verticalWidth {
+            get {
+                object obj = ResourceManager.GetObject("verticalWidth", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

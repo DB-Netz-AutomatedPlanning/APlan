@@ -10,8 +10,18 @@ using System.Collections;
 using System.Collections.Generic;
 using APLan.HelperClasses;
 using APLan.Model.CADlogic;
+
 using APLan.Model.CustomObjects;
-using APLan.Converters;
+using System.Windows.Markup;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using NPOI.SS.Formula.Functions;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.Json;
+using static ACadSharp.Objects.MLStyle;
+using ERDM_Implementation;
+using APLan.ViewModels.ModelsLogic;
 
 namespace APLan.ViewModels
 {
@@ -25,7 +35,11 @@ namespace APLan.ViewModels
             Drag,
             Move,
             Rotate,
-            Scale
+            Scale,
+            Grid,
+            Copy,
+            Cut,
+            Paste
         }
         public enum SelectedToolForCAD
         {
@@ -39,13 +53,15 @@ namespace APLan.ViewModels
             Ellipse,
             Polyline,
             TwoPointArc,
-            ThreePointArc
+            ThreePointArc,
+            HorizontalDistance,
+            VerticalDistance            
         }
         #endregion
          
         #region attributes
         //canvas data
-        private DrawLogic drawLogic;
+        public DrawLogic drawLogic;
         private double canvasRotation;
         private double xdiff;
         private double ydiff;
@@ -55,22 +71,17 @@ namespace APLan.ViewModels
         private static double canvasScale = 1;
         private double gridThicnkess = 0.5;
         private double lineThicnkess = 2;
-        private double canvasSize = 1000000;
+        private double canvasSize = 100000;
         private double signalSize;
-        public static double sharedCanvasSize = 1000000; //this should be always equal canvasSize.
+        public static double sharedCanvasSize = 100000; //this should be always equal canvasSize.
         public static double drawingScale = 1;
         public static double signalSizeForConverter;
         public static Point GlobalDrawingPoint = new Point(0, 0);
-        public static Line indicationLine;
-        private Ellipse indicationEllipse;
-        private Path indicationArcPath;
-        private PathGeometry indicationPathGeometry;
-        private PathFigure indicationPathFigure;
-        private ArcSegment indicationArcSegment;
+        public static Line indicationLine;       
         //for mouse location.
         private System.Windows.Point pointer;
         //mouse location info.
-        private string Instruction = String.Empty;
+       
         //multiselection rectangle info.
         public static Rectangle selectionRectangle = null;
         private static System.Windows.Point firsPoint;
@@ -79,33 +90,25 @@ namespace APLan.ViewModels
         private static Point MoveOffest;
         private static Point DraOffset;
 
-        public static Point InitialLinePoint;
-        bool captureLine;
-        bool captureEllipseCenterPoint;
-         
+        public static Point InitialLinePoint;         
         public ArrayList Multiselected;
         public ArrayList tempSelected;
 
         public static SelectedTool tool;
         public static SelectedToolForCAD toolCAD;
-
-        private double distanceForParallelLine;
-        private double angleLine;
-        private Point centerPoint;
-        private double height;
-        private double width;
-        private int twoPointEllipse;
-        private CustomPolyLine polyineDrawing;
-        private int previousSignificantPoint;
-        private Point StartPointForArc;
-        private CustomBezierCurve curve;
-
-        private  Color selectedColorForACAD;
+ 
         private RectangleGeometry recGeometry;
 
-        #endregion
+        private Canvas _drawCanvas;
         
+        private static Point contextMenuPoint;
+
+        
+        #endregion
+
         #region properties
+
+
         public double CanvasRotation
         {
             get => canvasRotation;
@@ -185,18 +188,7 @@ namespace APLan.ViewModels
                 signalSizeForConverter = value;
             }
         }
-        public string Instructions
-        {
-            get => Instruction;
-            set
-            {
-                if(Instruction != value)
-                {
-                    Instruction = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        
         public SolidColorBrush GridColor
         {
             get => gridColor;
@@ -206,33 +198,8 @@ namespace APLan.ViewModels
                 OnPropertyChanged();
             }
         }
-        public double DistanceForParallelLine
-        {
-            get => distanceForParallelLine;
-            set
-            {
-                distanceForParallelLine = value;
-                OnPropertyChanged("DistanceForParallelLine");
-            }
-        }
-        public double AngleForAngularLine
-        {
-            get => angleLine;
-            set
-            {
-                angleLine = value;
-                OnPropertyChanged("AngleForAngularLine");
-            }
-        }
-        public  Color SelectedColorForACAD
-        {
-            get => selectedColorForACAD;
-            set
-            {
-                selectedColorForACAD = value;
-                OnPropertyChanged("SelectedColorForACAD");
-            }
-        }
+       
+       
         public RectangleGeometry RecGeometry
         {
             get => recGeometry;
@@ -240,6 +207,16 @@ namespace APLan.ViewModels
             {
                 recGeometry = value;
                 OnPropertyChanged("RecGeometry");
+            }
+        }
+
+        public Canvas LayoutCanvas
+        {
+            get => _drawCanvas;
+            set
+            {
+                _drawCanvas = value;
+                OnPropertyChanged("LayoutCanvas");
             }
         }
 
@@ -268,38 +245,30 @@ namespace APLan.ViewModels
             DraOffset = new Point(-1, -1);
 
             InitialLinePoint = new Point(-1, -1);
-            captureLine = false;
-            captureEllipseCenterPoint = false;
-            centerPoint = new Point(-1, -1);
-            
-
-
-
+             
+             
             SignalSize = 10;
 
             RotateSelectionButton = new RelayCommand(ExecuteRotateSelectionButton);
-            
             GridColorActivation = new RelayCommand(ExecuteGridColorActivation);
             GridColor = Brushes.Gray;
+            LayoutCanvas = new Canvas();
 
-            distanceForParallelLine = 20d;
-            AngleForAngularLine = 45d;
-            height = 0d;
-            width = 0d;
-            twoPointEllipse = 0;
-            previousSignificantPoint = 0;
 
-            StartPointForArc = new Point(-1, -1);
-
-            UndoStack = new Stack<object>();
-            RedoStack = new Stack<object>();
-            SelectedColorForACAD = Colors.Black;
 
             RecGeometry = new RectangleGeometry();
+
+            TrackEdge = new RelayCommand(DrawTrackEdge);
+            contextMenuPoint = new Point(-1, -1);
+             
+
+
         }
         #endregion
 
         #region commands
+
+      
 
         private ICommand _MouseleftButtonDownCommand;
         private ICommand _MouserightButtonDownCommand;
@@ -311,12 +280,12 @@ namespace APLan.ViewModels
 
         private ICommand _ObjectLodaded;
 
+        public ICommand TrackEdge { get; set; }
         public ICommand GridColorActivation { get; set; }
         private ICommand _RotateCanvasSlider { get; set; }
         private ICommand _RotateItemSlider { get; set; }
         private ICommand _ScaleItemSlider { get; set; }
         public ICommand RotateSelectionButton { get; set; }
-        
 
 
         public ICommand LeftMouseButtonDown
@@ -348,7 +317,7 @@ namespace APLan.ViewModels
                 return _MouserightButtonDownCommand ??= new RelayCommand(
                    x =>
                    {
-                       MessageBox.Show("RightPressed");
+                       ExecuteMouseRightButtonDownDrawingCanvas((MouseEventArgs)x);
                    });
             }
         }
@@ -429,9 +398,38 @@ namespace APLan.ViewModels
                    });
             }
         }
-
-
         #endregion
+
+        private async void DrawTrackEdge(object parameter)
+        {
+            string XLS;
+            Microsoft.Win32.OpenFileDialog openFileDialog1 = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog1.Filter = "Types (*.xls)|*.xls";
+            openFileDialog1.Multiselect = true;
+            openFileDialog1.ShowDialog();
+            XLS = openFileDialog1.FileName;
+            var temp = "";
+            foreach (string file in openFileDialog1.FileNames)
+            {
+                temp += file;
+                temp += "+~+";
+            }
+
+            XLS = temp;
+
+            ErdmModelHandler newErdmModelHandeler = new ErdmModelHandler();
+            ERDM.ERDMmodel newErdmlModel = await newErdmModelHandeler.createERDMProject(XLS);
+            List<ERDM.Tier_1.TrackNode> trackNodes =  newErdmlModel.Tier1.TrackNode;
+            foreach (ERDM.Tier_1.TrackNode trackNode in trackNodes)
+            {
+                TrackEdgeWithNodesList.Add(trackNode);
+            }
+            List<ERDM.Tier_1.TrackEdge> trackEdges = newErdmlModel.Tier1.TrackEdge;
+            foreach (ERDM.Tier_1.TrackEdge trackEdge in trackEdges)
+            {
+                TrackEdgeWithNodesList.Add(trackEdge);
+            }
+        }
 
         #region mouse events logic
         /// <summary>
@@ -467,86 +465,26 @@ namespace APLan.ViewModels
 
             //update the mouse coordinates.
 
-            DrawingLowerTabViewModel.Xlocation = (((e.GetPosition(element).X  - canvasSize / 2)+ GlobalDrawingPoint.X) * (1 / CoordinatesConverter.scaleValue)).ToString();
-            DrawingLowerTabViewModel.Ylocation = (((-e.GetPosition(element).Y + canvasSize / 2) + GlobalDrawingPoint.Y) * (1 / CoordinatesConverter.scaleValue)).ToString();
-     
-            //DrawingLowerTabViewModel.Xlocation = (e.GetPosition(element).X).ToString();
-            //DrawingLowerTabViewModel.Ylocation = (e.GetPosition(element).Y).ToString();
+            DrawingLowerTabViewModel.Xlocation = ((e.GetPosition(element).X - canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.X).ToString();
+            DrawingLowerTabViewModel.Ylocation = ((-e.GetPosition(element).Y + canvasSize / 2) * (1 / drawingScale) + GlobalDrawingPoint.Y).ToString();
+
+            //Xlocation = (e.GetPosition(element).X).ToString();
+            //Ylocation = (e.GetPosition(element).Y).ToString();
 
             if (element.Children.Contains(indicationLine))
             {
-                indicationLine.X2= Mouse.GetPosition(element).X;
-                indicationLine.Y2 = Mouse.GetPosition(element).Y;
-            }
-
-                                     
-            if(element.Children.Contains(indicationLine) && toolCAD == SelectedToolForCAD.TwoPointArc)
-            {                
                 indicationLine.X2 = Mouse.GetPosition(element).X;
                 indicationLine.Y2 = Mouse.GetPosition(element).Y;
-            }
-            else if(element.Children.Contains(indicationArcPath) && toolCAD == SelectedToolForCAD.TwoPointArc)
-            {
-                Point endPoint = e.GetPosition(element);       
-                 
-                indicationArcSegment.Point = endPoint;                               
-                
-            }
-                        
-            double xCoordinatesAdjust = DrawViewModel.GlobalDrawingPoint.X - (DrawViewModel.sharedCanvasSize / 2);
-            double yCoordinatesAdjust = (DrawViewModel.sharedCanvasSize) / 2 + DrawViewModel.GlobalDrawingPoint.Y;
-            if(toolCAD == SelectedToolForCAD.ThreePointArc && twoPointEllipse == 2)
-            {
-                curve.AnyPoint = new Point(e.GetPosition(element).X + xCoordinatesAdjust, -e.GetPosition(element).Y + yCoordinatesAdjust);
-            }
-
-            if (toolCAD == SelectedToolForCAD.Polyline)
-            {
-                if (polyineDrawing == null) return;
-                if (e.LeftButton != MouseButtonState.Pressed)
-                {
-                    polyineDrawing.Color = new SolidColorBrush() { Color = SelectedColorForACAD };
-                    polyineDrawing.Points.Freeze();
-                    polyineDrawing.Color.Freeze();
-                    Lines.Add(polyineDrawing);
-                    UndoStack.Push(polyineDrawing);
-                    polyineDrawing = null;
-                    return;
-                }
-
-                // Get previous significant point to determine distance
-                if (e.LeftButton == MouseButtonState.Pressed)
-                {
-                    Point previousPoint = polyineDrawing.CustomPoints[previousSignificantPoint].Point;
-                    Point currentPoint = e.GetPosition(element);
-                    currentPoint.X = currentPoint.X + xCoordinatesAdjust;
-                    currentPoint.Y = -currentPoint.Y + yCoordinatesAdjust;
-
-                    // If we have a new significant point (distance > 10) remove all intermediate points
-                    if (Distance(currentPoint, previousPoint) > 10)
-                    {
-                        for (int i = polyineDrawing.CustomPoints.Count - 1; i > previousSignificantPoint; i--)
-                            polyineDrawing.CustomPoints.RemoveAt(i);
-
-                        // and set the new point as the latest significant point
-                        previousSignificantPoint = polyineDrawing.CustomPoints.Count;
-                    }
-                    polyineDrawing.ShapeAttributeInfo.Add(new KeyValue()
-                    {
-                        Key = "Points",
-                        Value = "" + currentPoint + ""
-
-                    });
-
-                    polyineDrawing.CustomPoints.Add(new() { Point = currentPoint });
-                }
-                
-            }
+            }        
+            
+             
             //dragging
             if (tool == SelectedTool.Drag && e.LeftButton == MouseButtonState.Pressed)
             {
                 dragSelection(e);
+               
             }
+            
 
             if (tool == SelectedTool.MultiSelect)
             {
@@ -590,14 +528,18 @@ namespace APLan.ViewModels
             }
             if (e.LeftButton == MouseButtonState.Released)
             {
-                InitialDragPoint = new Point(-1, -1);
-                polyineDrawing = null;
+                InitialDragPoint = new Point(-1, -1);               
+            }
+
+            if(toolCAD == SelectedToolForCAD.TwoPointsLine||toolCAD == SelectedToolForCAD.HorizontalLine || toolCAD == SelectedToolForCAD.VerticalLine
+                ||toolCAD == SelectedToolForCAD.Polyline||toolCAD == SelectedToolForCAD.Ellipse || toolCAD == SelectedToolForCAD.Circle
+                ||toolCAD == SelectedToolForCAD.TwoPointArc)
+            {
+                drawLogic.drawIndicatorLine(e,GlobalDrawingPoint,sharedCanvasSize,toolCAD);
             }
 
             
         }
-
- 
 
         /// <summary>
         /// apply the mouseWheel action on the drawing canvas.
@@ -641,6 +583,49 @@ namespace APLan.ViewModels
                 scroll.LineUp();
             }
         }
+
+        /// <summary>
+        /// apply RightMouseDown on the drawing canvas.
+        /// </summary>
+        /// <param name="e"></param>
+        /// 
+        private Point coordianteConverter(Point point, Point globalPoint, double canvasSize)
+        {
+            double xCoordinatesAdjust = globalPoint.X - canvasSize / 2;
+            double yCoordinatesAdjust = canvasSize / 2 + globalPoint.Y;
+
+            point.X = point.X + xCoordinatesAdjust;
+
+            point.Y = -point.Y + yCoordinatesAdjust;
+
+            return point;
+        }
+        private void ExecuteMouseRightButtonDownDrawingCanvas(MouseEventArgs e)
+        {
+            Canvas newCanvas;
+            if (e.OriginalSource is Canvas)
+            {
+                 
+                contextMenuPoint = coordianteConverter(Mouse.GetPosition((Canvas)e.OriginalSource), GlobalDrawingPoint, canvasSize);
+                
+            }
+            else
+            {
+                newCanvas = VisualTreeHelpers.FindAncestor<Canvas>((DependencyObject)e.OriginalSource);
+               
+                contextMenuPoint = coordianteConverter(Mouse.GetPosition(newCanvas), GlobalDrawingPoint, canvasSize);
+                
+            }
+
+            switch (toolCAD)
+            {                
+                case SelectedToolForCAD.Polyline:
+                    drawPolyline(e);
+                    break;                 
+                default:
+                    break;
+            }
+        }
         /// <summary>
         /// apply leftMouseDown on the drawing canvas.
         /// </summary>
@@ -651,8 +636,7 @@ namespace APLan.ViewModels
             {
                 case SelectedTool.Move:
                     moveSelection(e); //moving the selected items
-                    break;
-                
+                    break;               
                 default:
                     singleSelection(e); // select an item.
                     break;
@@ -664,7 +648,7 @@ namespace APLan.ViewModels
                     drawTwoPointLine(e);
                     break;
                 case SelectedToolForCAD.ParallelLine:
-                    drawParallelLine(e, DistanceForParallelLine);
+                    drawParallelLine(e);
                     break;
                 case SelectedToolForCAD.Circle:
                     drawCircle(e);
@@ -688,7 +672,13 @@ namespace APLan.ViewModels
                     drawThreePointArc(e);
                     break;
                 case SelectedToolForCAD.AngularLine:
-                    drawAngularLine(e,AngleForAngularLine);
+                    drawAngularLine(e);
+                    break;
+                case SelectedToolForCAD.HorizontalDistance:
+                    drawHorizontalDistance(e);
+                    break;
+                case SelectedToolForCAD.VerticalDistance:
+                    drawVerticalDistance(e);
                     break;
                 default:
                     break;
@@ -815,348 +805,57 @@ namespace APLan.ViewModels
         }
         #endregion
 
-        #region CAD drawing logic
+        #region CAD drawing logic             
+            
+        private void drawVerticalDistance(MouseEventArgs e)
+        {
+            drawLogic.drawVerticalDistance(e, sharedCanvasSize, GlobalDrawingPoint, Arrows, UndoStack);
+        }
+        private void drawHorizontalDistance(MouseEventArgs e)
+        {
+            drawLogic.drawHorizontalDistance(e, sharedCanvasSize, GlobalDrawingPoint ,Arrows, UndoStack);
+        }
         private void drawTwoPointLine(MouseEventArgs e)
         {
-            drawLogic.drawTwoPointLine(e, sharedCanvasSize, GlobalDrawingPoint, Lines);
+            drawLogic.drawTwoPointLine(e, sharedCanvasSize, GlobalDrawingPoint, Lines,UndoStack);
         }
         private void drawThreePointArc(MouseEventArgs e)
         {
-            drawLogic.drawThreePointArc(e, sharedCanvasSize, GlobalDrawingPoint, BezierCurves);    
+            drawLogic.drawThreePointArc(e, sharedCanvasSize, GlobalDrawingPoint, BezierCurves, UndoStack);    
         }
         private void drawTwoPointArc(MouseEventArgs e)
         {
-            Canvas drawingCanvas = null;
-            if (e.Source.GetType() != typeof(Canvas))
-            {
-                drawingCanvas = (Canvas)VisualTreeHelper.GetParent((DependencyObject)e.Source);
-            }
-            else
-            {
-                drawingCanvas = (Canvas)e.Source;
-            }
-            if (captureEllipseCenterPoint == false && centerPoint.X == -1)
-            {
-                centerPoint = e.GetPosition(drawingCanvas);
-                //double Radius = Math.Abs(Point.Subtract(circumPoint, centerPoint).Length);
-                indicationLine = new Line();
-                indicationLine.X1 = centerPoint.X;
-                indicationLine.Y1 = centerPoint.Y;
-                indicationLine.StrokeThickness = 2;
-                indicationLine.Opacity = 0.5;
-                IEnumerable<double> dashing = new double[] { 10, 10 };
-                indicationLine.StrokeDashArray = new DoubleCollection(dashing);
-                indicationLine.Stroke = new SolidColorBrush { Color = SelectedColorForACAD };
-                captureEllipseCenterPoint = true;
-                drawingCanvas.Children.Add(indicationLine);
-                Instructions = "Select Start Point";
-            }
-
-
-            if (twoPointEllipse == 2 && (centerPoint.X != Mouse.GetPosition(drawingCanvas).X || centerPoint.Y != Mouse.GetPosition(drawingCanvas).Y) && captureEllipseCenterPoint == true && e.LeftButton == MouseButtonState.Pressed)
-            {
-                drawingCanvas.Children.Remove(indicationArcPath);
-                Point endPoint = e.GetPosition(drawingCanvas);
-                double distance = Distance(StartPointForArc, endPoint);
-
-
-                //Path arc_path = new Path();
-                //arc_path.Stroke = Brushes.Gray;
-                //arc_path.StrokeThickness = 2;
-                //PathGeometry pathGeometry = new PathGeometry();
-                //PathFigure pathFigure = new PathFigure();
-                //ArcSegment arcSegment = new ArcSegment();
-
-                //pathFigure.StartPoint = StartPointForArc;
-                double radius = Distance(centerPoint, StartPointForArc);
-                //arcSegment.Size = new Size(radius, radius);
-                //arcSegment.Point = endPoint;
-                //arcSegment.SweepDirection = SweepDirection.Clockwise;
-
-                //if (distance >= 2* radius)
-                //{
-                //    arcSegment.IsLargeArc = true;
-                //}
-
-
-                //pathFigure.Segments.Add(arcSegment);
-                //pathGeometry.Figures.Add(pathFigure);
-                //arc_path.Data = pathGeometry;
-
-                //drawingCanvas.Children.Add(arc_path);
-                if (NewProjectViewModel.firspoint.X == 0)
-                {
-                    NewProjectViewModel.firspoint.X = StartPointForArc.X;
-                    NewProjectViewModel.firspoint.Y = StartPointForArc.Y;
-                    DrawViewModel.GlobalDrawingPoint = NewProjectViewModel.firspoint;
-                }
-
-                double xCoordinatesAdjust = DrawViewModel.GlobalDrawingPoint.X - (DrawViewModel.sharedCanvasSize / 2);
-                double yCoordinatesAdjust = (DrawViewModel.sharedCanvasSize) / 2 + DrawViewModel.GlobalDrawingPoint.Y;
-
-                CustomArc newArc = new CustomArc();
-
-                newArc.StartPoint = new() { Point = new Point(StartPointForArc.X + xCoordinatesAdjust, -StartPointForArc.Y + yCoordinatesAdjust) };
-                newArc.EndPoint = new() { Point = new Point(endPoint.X + xCoordinatesAdjust, -endPoint.Y + yCoordinatesAdjust) };
-                newArc.Radius = radius;
-                newArc.Center = new() { Point = new Point(centerPoint.X + xCoordinatesAdjust, -centerPoint.Y + yCoordinatesAdjust) };
-                double EndAngle = (180 / Math.PI) * Math.Acos((newArc.EndPoint.Point.X - newArc.Center.Point.X) / newArc.Radius);
-                double StartAngle = (180 / Math.PI) * Math.Acos((newArc.StartPoint.Point.X - newArc.Center.Point.X) / newArc.Radius);
-
-                //double sweep = 0.0;
-                //if (EndAngle < StartAngle)
-                //    sweep = (360 + EndAngle) - StartAngle;
-                //else sweep = Math.Abs(EndAngle - StartAngle);
-                //bool IsLargeArc = sweep >= 180;
-                newArc.Normal = new netDxf.Vector3(0, 0, -1);
-                SweepDirection sweepDirection = SweepDirection.Clockwise;
-
-
-                newArc.Thickness = 2;
-                newArc.Color = new SolidColorBrush() { Color = SelectedColorForACAD };
-                newArc.Size = new Size(newArc.Radius, newArc.Radius);
-                newArc.SweepDirection = sweepDirection;
-
-
-                newArc.IsLargeArc = false;
-
-
-                Arcs.Add(newArc);
-                UndoStack.Push(newArc);
-
-
-                twoPointEllipse += 1;
-            }
-
-
-            if (twoPointEllipse == 0)
-            {
-                twoPointEllipse = 1;
-            }
-            else if (twoPointEllipse == 1)
-            {
-                drawingCanvas.Children.Remove(indicationLine);
-                indicationArcPath = new Path();
-
-                indicationArcPath.Stroke = new SolidColorBrush { Color = SelectedColorForACAD };
-                indicationArcPath.StrokeThickness = 2;
-                indicationArcPath.Opacity = 0.5;
-
-                indicationPathGeometry = new PathGeometry();
-                indicationPathFigure = new PathFigure();
-                indicationArcSegment = new ArcSegment();
-                StartPointForArc = e.GetPosition(drawingCanvas);
-                indicationPathFigure.StartPoint = StartPointForArc;
-                double radius = Distance(centerPoint, StartPointForArc);
-                indicationArcSegment.Size = new Size(radius, radius);
-                indicationArcSegment.SweepDirection = SweepDirection.Clockwise;
-                IEnumerable<double> dashing = new double[] { 10, 10 };
-                indicationArcPath.StrokeDashArray = new DoubleCollection(dashing);
-
-
-                indicationPathFigure.Segments.Add(indicationArcSegment);
-                indicationPathGeometry.Figures.Add(indicationPathFigure);
-                indicationArcPath.Data = indicationPathGeometry;
-                //StartPointForArc = e.GetPosition(drawingCanvas);
-                drawingCanvas.Children.Add(indicationArcPath);
-
-                Instructions = "Select endPoint for arc";
-
-                //Canvas.SetLeft(indicationArcPath, centerPoint.X - (radius));
-                //Canvas.SetTop(indicationArcPath, centerPoint.Y - (radius));
-
-
-                twoPointEllipse += 1;
-            }
-            else if (twoPointEllipse == 3)
-            {
-                captureEllipseCenterPoint = false;
-                centerPoint = new Point(-1, -1);
-                StartPointForArc = new Point(-1, -1);
-                twoPointEllipse = 0;
-                Instructions = "Select Center Point for Arc";
-
-            }
+            drawLogic.drawArc(e, sharedCanvasSize, GlobalDrawingPoint, Arcs, UndoStack);
 
         }
         private void drawPolyline(MouseEventArgs e)
         {
-            drawLogic.drawPolyline(e, sharedCanvasSize, GlobalDrawingPoint, Lines);
+            drawLogic.drawPolyline(e, sharedCanvasSize, GlobalDrawingPoint, Lines, UndoStack);
         }
         private void drawEllipse(MouseEventArgs e)
         {
-            drawLogic.drawEllipse(e, sharedCanvasSize, GlobalDrawingPoint, Ellipses);
+            drawLogic.drawEllipse(e, sharedCanvasSize, GlobalDrawingPoint, Ellipses, UndoStack);
         }
         private void drawCircle(MouseEventArgs e)
         {
              
-            drawLogic.drawCircle(e, sharedCanvasSize, GlobalDrawingPoint, Ellipses);
+            drawLogic.drawCircle(e, sharedCanvasSize, GlobalDrawingPoint, Ellipses, UndoStack);
         }
         private void drawVerticalLine(MouseEventArgs e)
         {
-            drawLogic.drawVerticalLine(e,sharedCanvasSize,GlobalDrawingPoint,Lines);            
+            drawLogic.drawVerticalLine(e,sharedCanvasSize,GlobalDrawingPoint,Lines, UndoStack);            
         }
         private void drawHorizontalLine(MouseEventArgs e)
         {
-            drawLogic.drawHorizontalLine(e, sharedCanvasSize, GlobalDrawingPoint, Lines);
+            drawLogic.drawHorizontalLine(e, sharedCanvasSize, GlobalDrawingPoint, Lines, UndoStack);
         }
-        private void drawAngularLine(MouseEventArgs e, double angularDistance)
+        private void drawAngularLine(MouseEventArgs e)
         {
-            if (e.Source.GetType() != typeof(Canvas))
-            {
-                Canvas c = (Canvas)VisualTreeHelper.GetParent((DependencyObject)e.Source);
-                Point pt = e.GetPosition(c);
-
-
-                HitTestResult result = VisualTreeHelper.HitTest(c, pt);
-                if (result != null && ((UIElement)result.VisualHit).IsVisible == true)
-                {
-                    UIElement element = (UIElement)result.VisualHit;
-                    if (element.GetType() == typeof(System.Windows.Shapes.Path))
-                    {
-                        Path selectedPath = (Path)element;
-                        PathGeometry parentGeometry = selectedPath.Data.GetFlattenedPathGeometry();
-                        PathFigureCollection parentFigure = parentGeometry.Figures;
-
-
-
-                        Point startPoint = parentFigure[0].StartPoint;
-                        PathSegmentCollection pathSegmentCollection = parentFigure[0].Segments;
-                        LineSegment newLineSegment = (LineSegment)pathSegmentCollection[0];
-
-
-                        Point endPoint = newLineSegment.Point;
-                        double length = Distance(endPoint, startPoint);
-
-
-                        Point newStartPoint = e.GetPosition(element);
-                        Point newEndPoint = new Point(newStartPoint.X + Math.Cos(angularDistance * (Math.PI / 180)) * length, newStartPoint.Y + Math.Sin(angularDistance * (Math.PI / 180)) * length);
-                        if (NewProjectViewModel.firspoint.X == 0)
-                        {
-                            NewProjectViewModel.firspoint.X = newStartPoint.X;
-                            NewProjectViewModel.firspoint.Y = newStartPoint.Y;
-                            DrawViewModel.GlobalDrawingPoint = NewProjectViewModel.firspoint;
-                        }
-                        double xCoordinatesAdjust = DrawViewModel.GlobalDrawingPoint.X - (DrawViewModel.sharedCanvasSize / 2);
-                        double yCoordinatesAdjust = (DrawViewModel.sharedCanvasSize) / 2 + DrawViewModel.GlobalDrawingPoint.Y;
-                        CustomPolyLine newLine = new CustomPolyLine();
-
-                        newLine.CustomPoints.Add(new() { Point = new Point(newStartPoint.X + xCoordinatesAdjust, -newStartPoint.Y + yCoordinatesAdjust) });
-
-
-
-                        newLine.ShapeAttributeInfo.Add(new KeyValue()
-                        {
-                            Key = "StartPoint",
-                            Value = "" + newLine.CustomPoints[0].Point + ""
-
-                        });
-
-
-                        newLine.CustomPoints.Add(new() { Point = new Point(newEndPoint.X + xCoordinatesAdjust, -newEndPoint.Y + yCoordinatesAdjust) });
-                        newLine.ShapeAttributeInfo.Add(new KeyValue()
-                        {
-                            Key = "EndPoint",
-                            Value = "" + newLine.CustomPoints[1].Point + ""
-
-                        });
-                        newLine.ShapeAttributeInfo.Add(new KeyValue()
-                        {
-                            Key = "Angle",
-                            Value = "" + angularDistance + ""
-
-                        });
-
-
-                        newLine.Color = new SolidColorBrush() { Color = SelectedColorForACAD };
-                        newLine.Color.Freeze();
-                        Lines.Add(newLine);
-                        UndoStack.Push(newLine);
-
-                    }
-                }
-            }
+            drawLogic.drawAngularLine(e, sharedCanvasSize, GlobalDrawingPoint, Lines, UndoStack);
         }
-        private void drawParallelLine(MouseEventArgs e, double distanceForParallelLine)
+        private void drawParallelLine(MouseEventArgs e)
         {
-            if (e.Source.GetType() != typeof(Canvas))
-            {
-                Canvas c = (Canvas)VisualTreeHelper.GetParent((DependencyObject)e.Source);
-                Point pt = e.GetPosition(c);
-
-
-                HitTestResult result = VisualTreeHelper.HitTest(c, pt);
-                if (result != null && ((UIElement)result.VisualHit).IsVisible == true)
-                {
-                    UIElement element = (UIElement)result.VisualHit;
-                    if (element.GetType() == typeof(System.Windows.Shapes.Path))
-                    {
-                        Path selectedPath = (Path)element;
-                        PathGeometry parentGeometry = selectedPath.Data.GetFlattenedPathGeometry();
-                        PathFigureCollection parentFigure = parentGeometry.Figures;
-
-
-
-                        Point startPoint = parentFigure[0].StartPoint;
-                        PathSegmentCollection pathSegmentCollection = parentFigure[0].Segments;
-                        LineSegment newLineSegment = (LineSegment)pathSegmentCollection[0];
-
-
-                        Point endPoint = newLineSegment.Point;
-                        var v = endPoint - startPoint;
-                        var n = new Vector(v.Y, -v.X);
-                        n.Normalize();
-                        var distance = distanceForParallelLine;
-                        var p3 = startPoint + n * distance;
-                        var p4 = p3 + v;
-                        //Line newParallelLine = new Line();
-                        //newParallelLine.X1 = p3.X;
-                        //newParallelLine.Y1 = p3.Y;
-                        //newParallelLine.X2 = p4.X;
-                        //newParallelLine.Y2 = p4.Y;
-                        //newParallelLine.Stroke = SystemColors.WindowFrameBrush;
-                        //toBeStored.Add(newParallelLine);
-                        //c.Children.Add(newParallelLine);
-                        if (NewProjectViewModel.firspoint.X == 0)
-                        {
-                            NewProjectViewModel.firspoint.X = p3.X;
-                            NewProjectViewModel.firspoint.Y = p3.Y;
-                            DrawViewModel.GlobalDrawingPoint = NewProjectViewModel.firspoint;
-                        }
-                        double xCoordinatesAdjust = DrawViewModel.GlobalDrawingPoint.X - (DrawViewModel.sharedCanvasSize / 2);
-                        double yCoordinatesAdjust = (DrawViewModel.sharedCanvasSize) / 2 + DrawViewModel.GlobalDrawingPoint.Y;
-                        CustomPolyLine newLine = new CustomPolyLine();
-
-                        newLine.CustomPoints.Add(new() { Point = new Point(p3.X + xCoordinatesAdjust, -p3.Y + yCoordinatesAdjust) });
-
-
-
-                        newLine.ShapeAttributeInfo.Add(new KeyValue()
-                        {
-                            Key = "StartPoint",
-                            Value = "" + newLine.CustomPoints[0].Point + ""
-
-                        });
-
-
-                        newLine.CustomPoints.Add(new() { Point = new Point(p4.X + xCoordinatesAdjust, -p4.Y + yCoordinatesAdjust) });
-                        newLine.ShapeAttributeInfo.Add(new KeyValue()
-                        {
-                            Key = "EndPoint",
-                            Value = "" + newLine.CustomPoints[1].Point + ""
-
-                        });
-
-
-                        newLine.Color = new SolidColorBrush() { Color = SelectedColorForACAD };
-                        newLine.Color.Freeze();
-                        Lines.Add(newLine);
-                        UndoStack.Push(newLine);
-
-                    }
-                }
-            }
-
+            drawLogic.drawParallelLine(e, sharedCanvasSize, GlobalDrawingPoint, Lines, UndoStack);
         }
 
         #endregion
@@ -1283,6 +982,8 @@ namespace APLan.ViewModels
         /// select a single item.
         /// </summary>
         /// <param name="e"></param>
+        /// 
+       
         private void singleSelection(MouseEventArgs e)
         {
 
@@ -1297,7 +998,7 @@ namespace APLan.ViewModels
                 {
                     ClearSelection(selected);
                 }
-
+                
                 if (result != null && ((UIElement)result.VisualHit).IsVisible == true)
                 {
                     UIElement element = (UIElement)result.VisualHit;
@@ -1314,6 +1015,7 @@ namespace APLan.ViewModels
                     {
                         removeItemFromSelection(selected, element);
                     }
+                    
                 }
             }
 
@@ -1381,7 +1083,8 @@ namespace APLan.ViewModels
             }
             DraOffset.X = Mouse.GetPosition(drawingCanvas).X - InitialDragPoint.X;
             DraOffset.Y = Mouse.GetPosition(drawingCanvas).Y - InitialDragPoint.Y;
-            updateSelectionMoveOperation(DraOffset.X, DraOffset.Y);
+            updateSelectionMoveOperation(DraOffset.X, DraOffset.Y);                        
+            
             InitialDragPoint = Mouse.GetPosition(drawingCanvas);
 
         }
@@ -1412,11 +1115,46 @@ namespace APLan.ViewModels
                     MatrixTransform m = new MatrixTransform();
                     m.Matrix = oldMatrix * newMatrix;
                     element.RenderTransform = m;
+                    //changeCustomObjectPropeties(element, offsetX, offsetY);
                 }
 
             }
         }
 
+        //private void changeCustomObjectPropeties(UIElement element, double offsetX, double offsetY)
+        //{
+            
+        //        object customShape = (element as FrameworkElement).DataContext;
+        //        if (customShape.GetType() == typeof(CustomPolyLine))
+        //        {
+        //            CustomPolyLine customPolyLine = (CustomPolyLine)customShape;
+        //            Point startpoint = customPolyLine.CustomPoints[0].Point;
+        //            Point endpoint = customPolyLine.CustomPoints[1].Point;
+        //            startpoint.X -= offsetX;
+        //            startpoint.Y -= offsetY;
+        //            endpoint.X -= offsetX;
+        //            endpoint.Y -= offsetY;
+        //            customPolyLine.CustomPoints[0] = new CustomPoint { Point = startpoint };
+        //            customPolyLine.CustomPoints[1] = new CustomPoint { Point = endpoint };
+        //            customPolyLine.ShapeAttributeInfo.Clear();
+        //            customPolyLine.ShapeAttributeInfo.Add(new KeyValue()
+        //            {
+        //                Key = "NewStartPoint",
+        //                Value = "" + customPolyLine.CustomPoints[0].Point + ""
+        //            });
+        //            customPolyLine.ShapeAttributeInfo.Add(new KeyValue()
+        //            {
+        //                Key = "NewEndpoint",
+        //                Value = "" + customPolyLine.CustomPoints[1].Point + ""
+
+        //            });
+
+                
+        //    }
+              
+
+          
+        //}
         /// <summary>
         /// filtering the selection for a specific objects only.
         /// </summary>

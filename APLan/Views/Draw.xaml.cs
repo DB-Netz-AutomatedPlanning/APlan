@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Shapes;
 using Brushes = System.Windows.Media.Brushes;
+using Color = System.Windows.Media.Color;
+using System;
 
 namespace APLan.Views
 {
@@ -38,6 +40,8 @@ namespace APLan.Views
             drawingScrollViewer = DrawingViewer;
             signalresultsRow = this.SignalOutput;
             canvasGridColor = System.Windows.Application.Current.Resources["gridColor"] as SolidColorBrush;
+
+             
         }
         private void drawingCanvas_DragOver(object sender, DragEventArgs e)
         {

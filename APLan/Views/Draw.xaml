@@ -10,36 +10,36 @@
              xmlns:customObjects="clr-namespace:APLan.Model.CustomObjects"
              xmlns:commands="clr-namespace:APLan.Commands"
              xmlns:converters="clr-namespace:APLan.Converters"
+             xmlns:RCAObjects="clr-namespace:ERDM.Tier_1;assembly=ERDMlibrary"
              xmlns:APLan="clr-namespace:APLan" x:Class="APLan.Views.Draw"
              mc:Ignorable="d"
              Cursor="{DynamicResource arrow}"
              VerticalAlignment="Stretch"
              HorizontalAlignment="Stretch"
              Background="White">
+    <UserControl.DataContext>
+        <StaticResource ResourceKey="drawViewModel"/>
+    </UserControl.DataContext>
     <UserControl.Resources>
-
         <TextBlock x:Key="newLine"><LineBreak/></TextBlock>
+        
         <DrawingBrush x:Key="canvasGrid" 
                       TileMode="Tile" 
-                      Viewport="0,0,100,100"                  
-                      ViewportUnits="Absolute">
+                      Viewport="40,40,200,200"                  
+                      ViewportUnits="Absolute"
+                       >
             <DrawingBrush.Drawing>
-                <GeometryDrawing>
-                    <GeometryDrawing.Geometry>
-                        <RectangleGeometry Rect="0,0,50,50"/>
-                    </GeometryDrawing.Geometry>
+                <GeometryDrawing Geometry="M 0 0 L 200 0 L 200 200">                     
                     <GeometryDrawing.Pen>
-                        <Pen x:Name="gridPen"
+                        <Pen x:Name="gridPen1"
                              Brush="Gray"
-                             Thickness="{Binding GridThicnkess}" />
+                              Thickness="0.5"/>
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
             </DrawingBrush.Drawing>
         </DrawingBrush>
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <StaticResource ResourceKey="drawViewModel"/>
-    </UserControl.DataContext>
+    
     <Grid x:Name="CanvasGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="30*"/>
@@ -69,165 +69,269 @@
                                                                     />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>-->
-            <Canvas x:Name="mycanvas" 
-                            Background="White" 
+          
+                <Canvas x:Name="mycanvas" 
+                        Background="{StaticResource canvasGrid}"
+                             DataContext="{StaticResource drawViewModel}"
                             Width="{Binding CanvasSize}" 
                             Height="{Binding CanvasSize}"
                             AllowDrop="True"
                             UseLayoutRounding="False"
                             SnapsToDevicePixels="False"
                             DragOver="drawingCanvas_DragOver">
+                
+                    <Canvas.ContextMenu>
+                        <ContextMenu>
+                        <MenuItem Header="RCA">
+                            <MenuItem Header="TrackEdgeWithPoints" 
+                  Command="{Binding  TrackEdge}"  
+                                      CommandParameter="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                      IsEnabled="True">
+                                <MenuItem.Icon>
+                                    <Image Source="/Resources/Icons/open.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                    </ContextMenu>
+                    </Canvas.ContextMenu>
+                 
                 <Canvas.LayoutTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <RotateTransform/>
-                    </TransformGroup>
-                </Canvas.LayoutTransform>
-                <Canvas.RenderTransform>
-                    <MatrixTransform/>
-                </Canvas.RenderTransform>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="MouseWheel" >
-                        <i:InvokeCommandAction Command="{Binding MouseWheelCommand}"
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <RotateTransform/>
+                        </TransformGroup>
+                    </Canvas.LayoutTransform>
+                    <Canvas.RenderTransform>
+                        <MatrixTransform/>
+                    </Canvas.RenderTransform>
+                
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseWheel" >
+                            <i:InvokeCommandAction Command="{Binding MouseWheelCommand}"
                                                                 PassEventArgsToCommand="True"/>
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseLeftButtonDown" >
-                        <i:InvokeCommandAction Command="{Binding LeftMouseButtonDown}"
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseLeftButtonDown" >
+                            <i:InvokeCommandAction Command="{Binding LeftMouseButtonDown}"
                                                                 PassEventArgsToCommand="True"/>
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseMove" >
-                        <i:InvokeCommandAction Command="{Binding DrawingMouseMoveCommand}"
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseRightButtonDown" >
+                            <i:InvokeCommandAction Command="{Binding RightMouseButtonDown}"
                                                                 PassEventArgsToCommand="True"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <ItemsControl ItemsSource="{Binding Lines, IsAsync=True}" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate >
-                            <Grid>
-                                <Path x:Name="myPath" Visibility="{Binding Visibility}" Stroke="{Binding Color}" StrokeThickness="0.5">
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="MouseMove" >
+                            <i:InvokeCommandAction Command="{Binding DrawingMouseMoveCommand}"
+                                                                PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+                    <ItemsControl ItemsSource="{Binding Lines}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas /> 
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Path x:Name="myPath" Visibility="{Binding Visibility}" Stroke="{Binding Color}" StrokeThickness="0.5">
+                                        <Path.Data>
+                                            <PathGeometry>
+                                                <PathGeometry.Figures>
+                                                    <PathFigureCollection>
+                                                        <PathFigure StartPoint="{Binding CustomPoints[0], Converter={StaticResource SingleCoordinateConverter}}">
+                                                            <PathFigure.Segments>
+                                                                <PathSegmentCollection>
+                                                                    <PolyLineSegment Points="{Binding CustomPoints, Converter={StaticResource coordinateConverter}}"/>
+                                                                </PathSegmentCollection>
+                                                            </PathFigure.Segments>
+                                                        </PathFigure>
+                                                    </PathFigureCollection>
+                                                </PathGeometry.Figures>
+                                            </PathGeometry>
+                                        </Path.Data>
+                                        <Path.ToolTip>
+                                            <ToolTip>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </ToolTip>
+                                        </Path.ToolTip>
+                                    </Path>
+                                    <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints, IsAsync=True}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <Canvas/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ContentPresenter}">
+                                                <Setter Property="Panel.ZIndex" Value="2"/>
+                                                <Setter Property="Canvas.Left" Value="{Binding Point.X, Converter={StaticResource xValueConverter}}"/>
+                                                <Setter Property="Canvas.Top" Value="{Binding Point.Y, Converter={StaticResource yValueConverter}}"/>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Path Fill="{Binding Color}" Visibility="{Binding Visibility}" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="MouseEnter" >
+                                                            <i:InvokeCommandAction Command="{Binding PointMouseEnter}"
+                                                                PassEventArgsToCommand="True"/>
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="MouseLeave" >
+                                                            <i:InvokeCommandAction Command="{Binding PointMouseLeave}"
+                                                                PassEventArgsToCommand="True"/>
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="MouseDown" >
+                                                            <i:InvokeCommandAction Command="{Binding PointMouseDown}"
+                                                                PassEventArgsToCommand="True"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                    <Path.Data>
+                                                        <EllipseGeometry RadiusX="{Binding Radius}" RadiusY="{Binding Radius}"/>
+                                                    </Path.Data>
+                                                    <Path.ToolTip>
+                                                        <ToolTip>
+                                                            <StackPanel>
+                                                                <Label Content="X"/>
+                                                                <TextBlock Text="{Binding Point.X}"/>
+                                                                <Label Content="Y"/>
+                                                                <TextBlock Text="{Binding Point.Y}"/>
+                                                            </StackPanel>
+                                                        </ToolTip>
+                                                    </Path.ToolTip>
+                                                </Path>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <ItemsControl  ItemsSource="{Binding Ellipses}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Path Stroke="{Binding Color}" StrokeThickness="2" Visibility="{Binding Visibility}">
                                     <Path.Data>
-                                        <PathGeometry>
-                                            <PathGeometry.Figures>
-                                                <PathFigureCollection>
-                                                    <PathFigure StartPoint="{Binding CustomPoints[0], Converter={StaticResource SingleCoordinateConverter}}">
-                                                        <PathFigure.Segments>
-                                                            <PathSegmentCollection>
-                                                                <PolyLineSegment Points="{Binding CustomPoints, Converter={StaticResource coordinateConverter}}"/>
-                                                            </PathSegmentCollection>
-                                                        </PathFigure.Segments>
-                                                    </PathFigure>
-                                                </PathFigureCollection>
-                                            </PathGeometry.Figures>
-                                        </PathGeometry>
+                                        <EllipseGeometry Center="{Binding Center, Converter={StaticResource SingleCoordinateConverter}}" RadiusX="{Binding RadiusX}"  RadiusY="{Binding RadiusY}"/>
                                     </Path.Data>
                                     <Path.ToolTip>
                                         <ToolTip>
-                                            <TextBlock Text="{Binding Name}"/>
+                                            <StackPanel>
+                                                <Label Content="{Binding Data[0].Value}"/>
+                                            </StackPanel>
                                         </ToolTip>
                                     </Path.ToolTip>
                                 </Path>
-                                <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints , IsAsync=True}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <Canvas/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ContentPresenter}">
-                                            <Setter Property="Panel.ZIndex" Value="2"/>
-                                            <Setter Property="Canvas.Left" Value="{Binding Point.X, Converter={StaticResource xValueConverter}}"/>
-                                            <Setter Property="Canvas.Top" Value="{Binding Point.Y, Converter={StaticResource yValueConverter}}"/>
-                                        </Style>
-                                    </ItemsControl.ItemContainerStyle>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Path Fill="{Binding Color}" Visibility="{Binding Visibility}" >
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="MouseEnter" >
-                                                        <i:InvokeCommandAction Command="{Binding PointMouseEnter}"
-                                                                PassEventArgsToCommand="True"/>
-                                                    </i:EventTrigger>
-                                                    <i:EventTrigger EventName="MouseLeave" >
-                                                        <i:InvokeCommandAction Command="{Binding PointMouseLeave}"
-                                                                PassEventArgsToCommand="True"/>
-                                                    </i:EventTrigger>
-                                                    <i:EventTrigger EventName="MouseDown" >
-                                                        <i:InvokeCommandAction Command="{Binding PointMouseDown}"
-                                                                PassEventArgsToCommand="True"/>
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                                        <Path.Data>
-                                                    <EllipseGeometry RadiusX="{Binding Radius}" RadiusY="{Binding Radius}"/>
-                                                </Path.Data>
-                                                <Path.ToolTip>
-                                                    <ToolTip>
-                                                        <StackPanel>
-                                                            <Label Content="X"/>
-                                                            <TextBlock Text="{Binding Point.X}"/>
-                                                            <Label Content="Y"/>
-                                                            <TextBlock Text="{Binding Point.Y}"/>
-                                                        </StackPanel>
-                                                    </ToolTip>
-                                                </Path.ToolTip>
-                                            </Path>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <ItemsControl  ItemsSource="{Binding Ellipses , IsAsync=True}" >
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Path Stroke="{Binding Color}" StrokeThickness="2" Visibility="{Binding Visibility}">
-                                <Path.Data>
-                                    <EllipseGeometry Center="{Binding Center, Converter={StaticResource SingleCoordinateConverter}}" RadiusX="{Binding RadiusX}"  RadiusY="{Binding RadiusY}"/>
-                                </Path.Data>
-                                <Path.ToolTip>
-                                    <ToolTip>
-                                        <StackPanel>
-                                            <Label Content="{Binding Data[0].Value}"/>
-                                        </StackPanel>
-                                    </ToolTip>
-                                </Path.ToolTip>
-                            </Path>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    <ItemsControl  ItemsSource="{Binding BezierCurves}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
 
-                <ItemsControl  ItemsSource="{Binding BezierCurves}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Path x:Name="myPath" Visibility="Visible" Stroke="{Binding Color}"  StrokeThickness="2">
+                                        <Path.Data>
+                                            <PathGeometry>
+                                                <PathGeometry.Figures>
+                                                    <PathFigureCollection>
+                                                        <PathFigure StartPoint="{Binding CustomPoints[0],Converter ={StaticResource SingleCoordinateConverter}}">
+                                                            <PathFigure.Segments>
+                                                                <PathSegmentCollection>
+                                                                    <QuadraticBezierSegment Point1="{Binding CustomPoints[2],Converter={StaticResource SingleCoordinateConverter}}"
+                                                                Point2="{Binding CustomPoints[1],Converter={StaticResource SingleCoordinateConverter}}"                                               
+                                                                />
+                                                                </PathSegmentCollection>
+                                                            </PathFigure.Segments>
+                                                        </PathFigure>
+                                                    </PathFigureCollection>
+                                                </PathGeometry.Figures>
+                                            </PathGeometry>
+                                        </Path.Data>
+                                    </Path>
+                                    <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints, IsAsync=True}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <Canvas/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style TargetType="{x:Type ContentPresenter}">
+                                                <Setter Property="Panel.ZIndex" Value="2"/>
+                                                <Setter Property="Canvas.Left" Value="{Binding Point.X, Converter={StaticResource xValueConverter}}"/>
+                                                <Setter Property="Canvas.Top" Value="{Binding Point.Y, Converter={StaticResource yValueConverter}}"/>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Path Fill="{Binding Color}" Visibility="{Binding Visibility}" >
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="MouseEnter" >
+                                                            <i:InvokeCommandAction Command="{Binding PointMouseEnter}"
+                                                                PassEventArgsToCommand="True"/>
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="MouseLeave" >
+                                                            <i:InvokeCommandAction Command="{Binding PointMouseLeave}"
+                                                                PassEventArgsToCommand="True"/>
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="MouseDown" >
+                                                            <i:InvokeCommandAction Command="{Binding PointMouseDown}"
+                                                                PassEventArgsToCommand="True"/>
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                    <Path.Data>
+                                                        <EllipseGeometry RadiusX="{Binding Radius}" RadiusY="{Binding Radius}"/>
+                                                    </Path.Data>
+                                                    <Path.ToolTip>
+                                                        <ToolTip>
+                                                            <StackPanel>
+                                                                <Label Content="X"/>
+                                                                <TextBlock Text="{Binding Point.X}"/>
+                                                                <Label Content="Y"/>
+                                                                <TextBlock Text="{Binding Point.Y}"/>
+                                                            </StackPanel>
+                                                        </ToolTip>
+                                                    </Path.ToolTip>
+                                                </Path>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                        <DataTemplate>
-                            <Grid>
+                    <ItemsControl  ItemsSource="{Binding Arcs}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
                                 <Path x:Name="myPath" Visibility="Visible" Stroke="{Binding Color}"  StrokeThickness="2">
                                     <Path.Data>
                                         <PathGeometry>
                                             <PathGeometry.Figures>
                                                 <PathFigureCollection>
-                                                    <PathFigure StartPoint="{Binding CustomPoints[0],Converter ={StaticResource SingleCoordinateConverter}}">
+                                                    <PathFigure StartPoint="{Binding StartPoint,Converter ={StaticResource SingleCoordinateConverter}}">
                                                         <PathFigure.Segments>
                                                             <PathSegmentCollection>
-                                                                <QuadraticBezierSegment Point1="{Binding CustomPoints[2],Converter={StaticResource SingleCoordinateConverter}}"
-                                                                Point2="{Binding CustomPoints[1],Converter={StaticResource SingleCoordinateConverter}}"                                               
-                                                                />
+                                                                <ArcSegment Size="{Binding Size}" 
+                                            IsLargeArc="{Binding IsLargeArc}"
+                                            SweepDirection="{Binding SweepDirection}"
+                                            Point="{Binding EndPoint,Converter ={StaticResource SingleCoordinateConverter}}" />
                                                             </PathSegmentCollection>
                                                         </PathFigure.Segments>
                                                     </PathFigure>
@@ -236,89 +340,80 @@
                                         </PathGeometry>
                                     </Path.Data>
                                 </Path>
-                                <ItemsControl x:Name="KantenLines" ItemsSource="{Binding CustomPoints}">
-                                    <ItemsControl.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <Canvas/>
-                                        </ItemsPanelTemplate>
-                                    </ItemsControl.ItemsPanel>
-                                    <ItemsControl.ItemContainerStyle>
-                                        <Style TargetType="{x:Type ContentPresenter}">
-                                            <Setter Property="Panel.ZIndex" Value="2"/>
-                                            <Setter Property="Canvas.Left" Value="{Binding Point.X, Converter={StaticResource xValueConverter}}"/>
-                                            <Setter Property="Canvas.Top" Value="{Binding Point.Y, Converter={StaticResource yValueConverter}}"/>
-                                        </Style>
-                                    </ItemsControl.ItemContainerStyle>
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Path Fill="{Binding Color}" Visibility="Visible" >
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="MouseEnter" >
-                                                        <i:InvokeCommandAction Command="{Binding PointMouseEnter}"
-                                                                PassEventArgsToCommand="True"/>
-                                                    </i:EventTrigger>
-                                                    <i:EventTrigger EventName="MouseLeave" >
-                                                        <i:InvokeCommandAction Command="{Binding PointMouseLeave}"
-                                                                PassEventArgsToCommand="True"/>
-                                                    </i:EventTrigger>
-                                                    <i:EventTrigger EventName="MouseDown" >
-                                                        <i:InvokeCommandAction Command="{Binding PointMouseDown}"
-                                                                PassEventArgsToCommand="True"/>
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                                <Path.Data>
-                                                    <EllipseGeometry RadiusX="{Binding Radius}" RadiusY="{Binding Radius}"/>
-                                                </Path.Data>
-                                                <Path.ToolTip>
-                                                    <ToolTip>
-                                                        <StackPanel>
-                                                            <Label Content="X"/>
-                                                            <TextBlock Text="{Binding Point.X}"/>
-                                                            <Label Content="Y"/>
-                                                            <TextBlock Text="{Binding Point.Y}"/>
-                                                        </StackPanel>
-                                                    </ToolTip>
-                                                </Path.ToolTip>
-                                            </Path>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                <ItemsControl  ItemsSource="{Binding Arcs}">
+
+
+                <ItemsControl  ItemsSource="{Binding Arrows}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type ContentPresenter}">
+                            <Setter Property="Canvas.Left" Value="{Binding SetCanvasPoint.X,Converter={StaticResource xValueConverter}}" />
+                            <Setter Property="Canvas.Top" Value="{Binding SetCanvasPoint.Y,Converter={StaticResource yValueConverter}}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Path x:Name="myPath" Visibility="Visible" Stroke="{Binding Color}"  StrokeThickness="2">
-                                <Path.Data>
-                                    <PathGeometry>
-                                        <PathGeometry.Figures>
-                                            <PathFigureCollection>
-                                                <PathFigure StartPoint="{Binding StartPoint,Converter ={StaticResource SingleCoordinateConverter}}">
-                                                    <PathFigure.Segments>
-                                                        <PathSegmentCollection>
-                                                            <ArcSegment Size="{Binding Size}" 
-                                                                        IsLargeArc="{Binding IsLargeArc}"
-                                                                        SweepDirection="{Binding SweepDirection}"
-                                                                        Point="{Binding EndPoint,Converter ={StaticResource SingleCoordinateConverter}}" />
-                                                        </PathSegmentCollection>
-                                                    </PathFigure.Segments>
-                                                </PathFigure>
-                                            </PathFigureCollection>
-                                        </PathGeometry.Figures>
-                                    </PathGeometry>
-                                </Path.Data>
-                            </Path>
+                            <Grid>                              
+                                <Path x:Name="Container"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Top"
+                                      Data="{Binding GeometryData}"            
+                                      Fill="Black"
+                                      Height="{Binding Height}"
+                                      Width="{Binding Width}"
+                                      Stroke="Black"
+                                      Stretch="Fill">          
+
+                                </Path>
+                                <TextBlock x:Name="Distance" HorizontalAlignment="Left" Margin="{Binding ThicknessAttrib}" TextWrapping="Wrap" Text="{Binding DistanceValue}"></TextBlock>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+
+                <ItemsControl  ItemsSource="{Binding TrackEdgeWithNodesList}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>                     
+                    <ItemsControl.Resources>
+                        <DataTemplate DataType="{x:Type RCAObjects:TrackNode}">
+                            <Grid>
+                                <Path Stroke="Black" StrokeThickness="2" Visibility="Visible" Fill="Yellow">
+                                    <Path.Data>                                         
+                                         
+                                            <EllipseGeometry  RadiusX="5" RadiusY="5" Center="{Binding isLocatedAtGeoCoordinates,Converter={StaticResource getGeoCoordinatesConverter } }" />
+                                        
+                                    </Path.Data>
+                                </Path>
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate DataType="{x:Type RCAObjects:TrackEdge}">
+                            <Grid>
+                                <Path Stroke="Black" StrokeThickness="2" Visibility="Visible" Fill="Yellow">
+                                    <Path.Data>
+
+                                        <LineGeometry  StartPoint="{Binding hasStartTrackNode,Converter={StaticResource getTrackNodeFromTrackEdgeAttributeConverter },ConverterParameter=StartNode}" EndPoint="{Binding hasEndTrackNode,Converter={StaticResource getTrackNodeFromTrackEdgeAttributeConverter},ConverterParameter=EndNode}" />
+
+
+
+                                    </Path.Data>
+                                </Path>
+                            </Grid>
+                        </DataTemplate>
+
+                    </ItemsControl.Resources>
+                </ItemsControl>
+
 
                 <ItemsControl  ItemsSource="{Binding Texts}">
                     <ItemsControl.ItemsPanel>
@@ -328,17 +423,27 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemContainerStyle>
                         <Style TargetType="{x:Type ContentPresenter}">
-                            <Setter Property="Canvas.Left"  Value="{Binding NodePoint.Point.X, Converter={StaticResource xValueConverterSignal}}"/>
-                            <Setter Property="Canvas.Top"  Value="{Binding NodePoint.Point.Y, Converter={StaticResource yValueConverterSignal}}"/>
+                            <Setter Property="Canvas.Left"  Value="{Binding NodePoint.Point.X, Converter={StaticResource xValueConverter} }"/>
+                            <Setter Property="Canvas.Top"  Value="{Binding NodePoint.Point.Y, Converter={StaticResource yValueConverter}}"/>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <WrapPanel>
-                                <TextBlock Text="{Binding Name}" FontSize="{Binding Height}" HorizontalAlignment="{Binding TxtHoriAlignment}"  >
-                                    <TextBlock.LayoutTransform>
-                                        <RotateTransform Angle="{Binding RotationAngle}" />
-                                    </TextBlock.LayoutTransform>
+                                <TextBlock  Visibility="Visible" Text="{Binding Name}" FontSize="{Binding Height}" HorizontalAlignment="{Binding TxtHoriAlignment}"  >
+                                    <!--<TextBlock.LayoutTransform>
+                                        <RotateTransform  CenterX="{Binding NodePoint.Point.X,Converter={StaticResource xValueConverterSignal}}"
+                                                          CenterY="{Binding NodePoint.Point.Y,Converter={StaticResource yValueConverterSignal}}"
+                                                         Angle="{Binding RotationAngle}" />
+                                    </TextBlock.LayoutTransform>-->
+                                    <TextBlock.RenderTransform>
+                                        <TransformGroup>
+                                            <SkewTransform AngleX="{Binding ObliqueAngle}" />
+                                            <RotateTransform Angle="{Binding RotationAngle}"/>
+                                        </TransformGroup>
+                                        
+                                    </TextBlock.RenderTransform>
+                                    
                                 </TextBlock>
                             </WrapPanel>
                         </DataTemplate>
@@ -346,109 +451,110 @@
                 </ItemsControl>
 
                 <ItemsControl  ItemsSource="{Binding Images}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="{x:Type ContentPresenter}">
-                            <Setter Property="Canvas.Left"  Value="{Binding SetLeft}"/>
-                            <Setter Property="Canvas.Top"  Value="{Binding SetTop}"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type ContentPresenter}">
+                                <Setter Property="Canvas.Left"  Value="{Binding SetLeft}"/>
+                                <Setter Property="Canvas.Top"  Value="{Binding SetTop}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
 
-                            <Image Visibility="Visible" Source="{Binding Name}" Height="{Binding Height}" Width="{Binding Width}"  >
+                                <Image Visibility="Visible" Source="{Binding Name}" Height="{Binding Height}" Width="{Binding Width}"  >
 
-                            </Image>
+                                </Image>
 
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-       
-                <!--plannedSignals-->
-                <ItemsControl  ItemsSource="{Binding Signals, Source={StaticResource baseViewModel}}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="{x:Type ContentPresenter}">
-                            <Setter Property="Canvas.Left"  Value="{Binding LocationCoordinate.X, Converter={StaticResource xValueConverterSignal}}"/>
-                            <Setter Property="Canvas.Top"  Value="{Binding LocationCoordinate.Y, Converter={StaticResource yValueConverterSignal}}"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <customObjects:CustomSignal customObjects:CustomSignal.Adjust="false"  Width="{Binding SignalSize, Source={StaticResource drawViewModel}}" Height="{Binding Width, RelativeSource={RelativeSource self}}"  Source="{Binding SignalImageSource}" RenderTransformOrigin="0.5,0.5">
-                                <customObjects:CustomSignal.RenderTransform>
-                                    <RotateTransform Angle="{Binding Orientation}"/>
-                                </customObjects:CustomSignal.RenderTransform>
-                                <customObjects:CustomSignal.ToolTip>
-                                    <StackPanel>
-                                        <WrapPanel>
-                                            <TextBlock Text="DB Signal Function : "/>
-                                            <TextBlock Text="{Binding Name}"/>
-                                        </WrapPanel>
-                                        <WrapPanel>
-                                            <TextBlock Text="Coordinates : "/>
-                                            <TextBlock>
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}{0} , {1}">
-                                                        <Binding Path="LocationCoordinate.X"/>
-                                                        <Binding Path="LocationCoordinate.Y"/>
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                        </WrapPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
 
-                                        <WrapPanel>
-                                            <TextBlock Text="Linear Coordiante (KM) : "/>
-                                            <TextBlock Text="{Binding IntrinsicValue}"/>
-                                        </WrapPanel>
+                    <!--plannedSignals-->
+                    <ItemsControl  ItemsSource="{Binding Signals, Source={StaticResource baseViewModel}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type ContentPresenter}">
+                                <Setter Property="Canvas.Left"  Value="{Binding LocationCoordinate.X, Converter={StaticResource xValueConverterSignal}}"/>
+                                <Setter Property="Canvas.Top"  Value="{Binding LocationCoordinate.Y, Converter={StaticResource yValueConverterSignal}}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <customObjects:CustomSignal customObjects:CustomSignal.Adjust="false"  Width="{Binding SignalSize, Source={StaticResource drawViewModel}}" Height="{Binding Width, RelativeSource={RelativeSource self}}"  Source="{Binding SignalImageSource}" RenderTransformOrigin="0.5,0.5">
+                                    <customObjects:CustomSignal.RenderTransform>
+                                        <RotateTransform Angle="{Binding Orientation}"/>
+                                    </customObjects:CustomSignal.RenderTransform>
+                                    <customObjects:CustomSignal.ToolTip>
+                                        <StackPanel>
+                                            <WrapPanel>
+                                                <TextBlock Text="DB Signal Function : "/>
+                                                <TextBlock Text="{Binding Name}"/>
+                                            </WrapPanel>
+                                            <WrapPanel>
+                                                <TextBlock Text="Coordinates : "/>
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} , {1}">
+                                                            <Binding Path="LocationCoordinate.X"/>
+                                                            <Binding Path="LocationCoordinate.Y"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </WrapPanel>
 
-                                        <WrapPanel>
-                                            <TextBlock Text="Lateral Side : "/>
-                                            <TextBlock Text="{Binding Side}"/>
-                                        </WrapPanel>
+                                            <WrapPanel>
+                                                <TextBlock Text="Linear Coordiante (KM) : "/>
+                                                <TextBlock Text="{Binding IntrinsicValue}"/>
+                                            </WrapPanel>
 
-                                        <WrapPanel>
-                                            <TextBlock Text="Lateral Distance : "/>
-                                            <TextBlock Text="{Binding LateralDistance}"/>
-                                        </WrapPanel>
+                                            <WrapPanel>
+                                                <TextBlock Text="Lateral Side : "/>
+                                                <TextBlock Text="{Binding Side}"/>
+                                            </WrapPanel>
 
-                                        <WrapPanel>
-                                            <TextBlock Text="Direction : "/>
-                                            <TextBlock Text="{Binding Direction}"/>
-                                        </WrapPanel>
+                                            <WrapPanel>
+                                                <TextBlock Text="Lateral Distance : "/>
+                                                <TextBlock Text="{Binding LateralDistance}"/>
+                                            </WrapPanel>
 
-                                    </StackPanel>
-                                </customObjects:CustomSignal.ToolTip>
-                            </customObjects:CustomSignal>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                                            <WrapPanel>
+                                                <TextBlock Text="Direction : "/>
+                                                <TextBlock Text="{Binding Direction}"/>
+                                            </WrapPanel>
 
-                <!--loaded objects not from database-->
-                <ItemsControl  ItemsSource="{Binding loadedObjects, Source={StaticResource baseViewModel}}"
+                                        </StackPanel>
+                                    </customObjects:CustomSignal.ToolTip>
+                                </customObjects:CustomSignal>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!--loaded objects not from database-->
+                    <ItemsControl  ItemsSource="{Binding loadedObjects, Source={StaticResource baseViewModel}}"
                                        ItemTemplateSelector="{StaticResource selectedTemplateSelectorForLoadedObjects}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Canvas/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="{x:Type ContentPresenter}">
-                            <Setter Property="Canvas.Left"  Value="{Binding LocationInCanvas.X}"/>
-                            <Setter Property="Canvas.Top"  Value="{Binding LocationInCanvas.Y}"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                </ItemsControl>
-
-            </Canvas>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type ContentPresenter}">
+                                <Setter Property="Canvas.Left"  Value="{Binding LocationInCanvas.X}"/>
+                                <Setter Property="Canvas.Top"  Value="{Binding LocationInCanvas.Y}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </ItemsControl>
+                <ContentPresenter DataContext="{StaticResource drawViewModel}" Content="{Binding Path=LayoutCanvas}" />
+                
+            </Canvas>            
         </ScrollViewer>
     </Grid>
 </UserControl>
