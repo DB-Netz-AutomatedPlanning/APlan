@@ -1,6 +1,7 @@
 # Ignore everything
 *
-
+APlan/bin/
+APlan/obj/
 # But not these files...
 !.gitignore
 !.cs
@@ -10,3 +11,5 @@
 !.xml
 !.xsd
 !.json
+!.csproj
+!.rar
