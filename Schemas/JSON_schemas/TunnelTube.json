@@ -1,0 +1,63 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackArea": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        },
+        "hasStartTunnelPortal": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            ]
+        },
+        "hasEndTunnelPortal": {
+            "anyOf": [
+                {
+                    "type": "null"
+                },
+                {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            ]
+        },
+        "length": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 999999.999,
+            "multipleOf": 0.001
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackArea",
+        "hasStartTunnelPortal",
+        "hasEndTunnelPortal",
+        "length"
+    ],
+    "additionalProperties": false
+}

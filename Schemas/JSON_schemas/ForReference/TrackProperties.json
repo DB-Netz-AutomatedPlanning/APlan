@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"lineCategory": {},"loadingGauge": {},"appliesToTrackEdgeSection": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"lineCategory"
+            ,"loadingGauge"
+            ,"appliesToTrackEdgeSection"
+            ],
+    "additionalProperties": false
+    }

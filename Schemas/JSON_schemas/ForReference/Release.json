@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"refersToMapDataVersion": {},"insertsMapDataObjects": {},"modifiesMapDataObjects": {},"deletesMapDataObjects": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"refersToMapDataVersion"
+            ,"insertsMapDataObjects"
+            ,"modifiesMapDataObjects"
+            ,"deletesMapDataObjects"
+            ],
+    "additionalProperties": false
+    }

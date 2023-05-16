@@ -1,0 +1,40 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackEdgePoint": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        },
+        "function": {
+            "type": "string",
+            "enum": [
+                "ETCS Stop Marker",
+                "ETCS Location Marker"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackEdgePoint",
+        "function"
+    ],
+    "additionalProperties": false
+}

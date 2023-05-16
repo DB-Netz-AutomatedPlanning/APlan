@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackArea": {},"length": {},"width": {},"height": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackArea"
+            ,"length"
+            ,"width"
+            ,"height"
+            ],
+    "additionalProperties": false
+    }

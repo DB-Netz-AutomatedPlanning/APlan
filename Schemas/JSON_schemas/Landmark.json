@@ -1,0 +1,53 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackEdgePoint": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "Catenary Post",
+                "Building",
+                "Sign Post",
+                "Signal Post",
+                "Radio Post",
+                "Mileage Stone",
+                "Hectometre Sign",
+                "Other Post"
+            ]
+        },
+        "label": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9]*$"
+            }
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackEdgePoint",
+        "type",
+        "label"
+    ],
+    "additionalProperties": false
+}

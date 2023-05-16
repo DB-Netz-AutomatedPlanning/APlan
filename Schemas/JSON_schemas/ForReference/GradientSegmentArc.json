@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"startAltitude": {},"appliesToTrackEdgeSection": {},"radius": {},"initialGradientAngle": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"startAltitude"
+            ,"appliesToTrackEdgeSection"
+            ,"radius"
+            ,"initialGradientAngle"
+            ],
+    "additionalProperties": false
+    }

@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"hasStartTrackEdgePoint": {},"hasEndTrackEdgePoint": {},"length": {},"lateralOffset": {},"verticalOffset": {},"isPartOfTrackEdge": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"hasStartTrackEdgePoint"
+            ,"hasEndTrackEdgePoint"
+            ,"length"
+            ,"lateralOffset"
+            ,"verticalOffset"
+            ,"isPartOfTrackEdge"
+            ],
+    "additionalProperties": false
+    }

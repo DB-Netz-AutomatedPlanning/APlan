@@ -1,0 +1,13 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgeSection": {},"speed": {},"trainEndApplicability": {},"axleLoadCategory": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgeSection"
+            ,"speed"
+            ,"trainEndApplicability"
+            ,"axleLoadCategory"
+            ],
+    "additionalProperties": false
+    }

@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"consistsOfTunnelTube": {},"tunnelType": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"consistsOfTunnelTube"
+            ,"tunnelType"
+            ],
+    "additionalProperties": false
+    }

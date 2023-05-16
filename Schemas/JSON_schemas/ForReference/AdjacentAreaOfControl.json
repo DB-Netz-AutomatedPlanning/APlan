@@ -1,0 +1,10 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"locatedAtSystemBorder": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"locatedAtSystemBorder"
+            ],
+    "additionalProperties": false
+    }

@@ -1,0 +1,15 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackArea": {},"appliesToAllocationSection": {},"appliesToDpsGroup": {},"appliesToDpsRight": {},"appliesToDpsLeft": {},"reversalTime": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackArea"
+            ,"appliesToAllocationSection"
+            ,"appliesToDpsGroup"
+            ,"appliesToDpsRight"
+            ,"appliesToDpsLeft"
+            ,"reversalTime"
+            ],
+    "additionalProperties": false
+    }

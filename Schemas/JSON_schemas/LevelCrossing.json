@@ -1,0 +1,33 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackArea": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToDpsGroup": {
+            "type": "string",
+            "format": "uuid"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackArea",
+        "appliesToDpsGroup"
+    ],
+    "additionalProperties": false
+}

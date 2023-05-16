@@ -1,0 +1,90 @@
+{
+    "type": "object",
+    "properties": {
+
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackEdgeSection": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        },
+        "trainEndApplicability": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "enum": [
+                "Train length delay on validity end point of profile element.",
+                "No Train length delay on validity end point of profile element."
+            ]
+        },
+        "speed": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 600
+        },
+        "cantDeficiencyCategory": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "enum": [
+                "80mm",
+                "100mm",
+                "130mm",
+                "150mm",
+                "165mm",
+                "180mm",
+                "210mm",
+                "225mm",
+                "245mm",
+                "275mm",
+                "300mm"
+            ]
+        },
+        "specificStaticSpeedProfileType": {
+            "type": "string",
+            "enum": [
+                "Cant Deficiency",
+                "Other Specific SSP"
+            ]
+        },
+        "otherSpecificStaticSpeedProfileCategory": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "enum": [
+                "Specific Freight Train P",
+                "Specific Freight Train G",
+                "Specific Passenger Train"
+            ]
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackEdgeSection",
+        "trainEndApplicability",
+        "speed",
+        "cantDeficiencyCategory",
+        "specificStaticSpeedProfileType",
+        "otherSpecificStaticSpeedProfileCategory"
+    ],
+    "additionalProperties": false
+}

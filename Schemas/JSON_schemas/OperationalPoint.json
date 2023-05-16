@@ -1,0 +1,69 @@
+{
+    "type": "object",
+    "properties": {
+
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "identifier": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "station",
+                "small station",
+                "passenger terminal",
+                "passenger stop",
+                "freight terminal",
+                "depot",
+                "train technical services",
+                "junction",
+                "point",
+                "shunting yard",
+                "technical change",
+                "private siding",
+                "border point",
+                "domestic border point"
+            ]
+        },
+        "lineReference": {
+            "type": [
+                "array",
+                "null"
+            ],
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            }
+        },
+        "isLocatedAtGeoCoordinates": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "isWithinAreaOfControl": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "identifier",
+        "type",
+        "lineReference",
+        "isLocatedAtGeoCoordinates",
+        "isWithinAreaOfControl"
+    ],
+    "additionalProperties": false
+}

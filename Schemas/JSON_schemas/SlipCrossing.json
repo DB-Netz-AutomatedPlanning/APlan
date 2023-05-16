@@ -1,0 +1,135 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "name": {
+            "type": "string",
+            "pattern": "^[a-zA-Z_0-9]*$"
+        },
+        "version": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToTrackNode": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 1,
+                    "maxItems": 1
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 2,
+                    "maxItems": 2
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "minItems": 4,
+                    "maxItems": 4
+                }
+            ]
+        },
+        "appliesToTrackArea": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToAllocationSection": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "reversalTime": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 20
+        },
+        "appliesToDpsGroupA": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToDpsRightA": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "appliesToDpsLeftA": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "appliesToDpsGroupB": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "appliesToDpsRightB": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "appliesToDpsLeftB": {
+            "type": "array",
+            "items": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "minItems": 1,
+            "maxItems": 2
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "Single Slip",
+                "Double Slip"
+            ]
+        },
+        "speedBranchRoute": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 600
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "version",
+        "appliesToTrackNode",
+        "appliesToTrackArea",
+        "appliesToAllocationSection",
+        "reversalTime",
+        "appliesToDpsGroupA",
+        "appliesToDpsRightA",
+        "appliesToDpsLeftA",
+        "appliesToDpsGroupB",
+        "appliesToDpsRightB",
+        "appliesToDpsLeftB",
+        "type",
+        "speedBranchRoute"
+    ],
+    "additionalProperties": false
+}

@@ -1,0 +1,12 @@
+{
+    "type": "object",
+    "properties": {"id": {},"name": {},"version": {},"appliesToTrackEdgePoint": {},"type": {},"label": {    }},
+        "required": [
+            "id","name"
+            ,"version"
+            ,"appliesToTrackEdgePoint"
+            ,"type"
+            ,"label"
+            ],
+    "additionalProperties": false
+    }
